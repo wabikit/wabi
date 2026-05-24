@@ -26,19 +26,33 @@ module Wabi
       cached = read_cache(component_name)
       return JSON.parse(cached) if cached
 
-      uri = URI.parse("#{@base_url}/#{component_name}.json")
-      response = Net::HTTP.get_response(uri)
+      body =
+        if @base_url.start_with?("file://")
+          fetch_local(component_name)
+        else
+          fetch_http(component_name)
+        end
 
-      unless response.is_a?(Net::HTTPSuccess)
-        raise Wabi::Error, "Failed to fetch #{component_name}: HTTP #{response.code}"
-      end
-
-      body = response.body
       write_cache(component_name, body)
       JSON.parse(body)
     end
 
     private
+
+    def fetch_local(name)
+      path = File.join(@base_url.sub("file://", ""), "#{name}.json")
+      raise Wabi::Error, "Component #{name} not found at #{path}" unless File.exist?(path)
+      File.read(path)
+    end
+
+    def fetch_http(name)
+      uri = URI.parse("#{@base_url}/#{name}.json")
+      response = Net::HTTP.get_response(uri)
+      unless response.is_a?(Net::HTTPSuccess)
+        raise Wabi::Error, "Failed to fetch #{name}: HTTP #{response.code}"
+      end
+      response.body
+    end
 
     def cache_path(name)
       File.join(cache_dir, "#{name}.json")

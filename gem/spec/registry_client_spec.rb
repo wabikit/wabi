@@ -70,4 +70,17 @@ RSpec.describe Wabi::RegistryClient do
       expect { client.fetch("nonexistent") }.to raise_error(Wabi::Error, /404/)
     end
   end
+
+  describe "#fetch with file:// scheme" do
+    around { |ex| FakeFS.with_fresh { ex.run } }
+
+    it "reads JSON from a local filesystem path" do
+      FileUtils.mkdir_p("/tmp/registry")
+      File.write("/tmp/registry/button.json", '{"name":"button","version":"0.1.0"}')
+
+      client = described_class.new(base_url: "file:///tmp/registry")
+      result = client.fetch("button")
+      expect(result["name"]).to eq("button")
+    end
+  end
 end
