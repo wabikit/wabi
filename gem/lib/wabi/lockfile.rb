@@ -1,0 +1,42 @@
+# frozen_string_literal: true
+
+require "json"
+require "fileutils"
+
+module Wabi
+  # Manages config/wabi.lock.json in a user's Rails app.
+  # Tracks installed components, versions, hashes, and registry origin.
+  class Lockfile
+    DEFAULT_REGISTRY = "https://wabikit.dev/r"
+
+    attr_reader :path, :registry, :components
+
+    def self.load(path)
+      data =
+        if File.exist?(path)
+          JSON.parse(File.read(path))
+        else
+          {}
+        end
+      new(path: path, data: data)
+    end
+
+    def initialize(path:, data: {})
+      @path       = path
+      @registry   = data["registry"]   || DEFAULT_REGISTRY
+      @components = data["components"] || {}
+    end
+
+    def record(name, version:, hash:)
+      @components[name] = { "version" => version, "hash" => hash }
+    end
+
+    def save
+      FileUtils.mkdir_p(File.dirname(@path))
+      File.write(@path, JSON.pretty_generate({
+        "registry"   => @registry,
+        "components" => @components,
+      }))
+    end
+  end
+end
