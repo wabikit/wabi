@@ -14,4 +14,5 @@ end
 # Generators are only loaded under Rails (which triggers them via convention)
 if defined?(Rails::Generators)
   require_relative "wabi/generators/install_generator"
+  require_relative "wabi/generators/add_generator"
 end
