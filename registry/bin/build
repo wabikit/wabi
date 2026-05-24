@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "builder"
+
+root = File.expand_path("..", __dir__)
+components = Wabi::Registry::Builder.new(root: root).build
+puts "Built #{components.size} component(s) to #{root}/dist/r/"
