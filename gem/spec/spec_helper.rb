@@ -14,3 +14,7 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
   config.warnings = true
 end
+
+require "webmock/rspec"
+require "fakefs/safe"
+WebMock.disable_net_connect!(allow_localhost: false)
