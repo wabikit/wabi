@@ -61,4 +61,23 @@ RSpec.describe Wabi::Variants do
 
     expect(klass.new.tokens(appearance: :secondary, size: :sm)).to eq("btn bg-gray h-8")
   end
+
+  it "child class can override parent variants when extending Wabi::Base" do
+    parent = Class.new(Wabi::Base) do
+      variants do
+        base "btn"
+        variant :size, { sm: "h-8", md: "h-10" }, default: :md
+      end
+    end
+
+    child = Class.new(parent) do
+      variants do
+        base "btn-large"
+        variant :size, { xl: "h-16" }, default: :xl
+      end
+    end
+
+    expect(parent.new.tokens).to eq("btn h-10")
+    expect(child.new.tokens).to eq("btn-large h-16")
+  end
 end
