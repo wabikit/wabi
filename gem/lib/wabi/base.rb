@@ -2,11 +2,16 @@
 
 require "phlex"
 require_relative "variants"
+require_relative "class_merge"
 
 module Wabi
-  # Base class for all Wabi UI components.
-  # Subclasses inherit from Phlex::HTML and get the Variants DSL.
   class Base < Phlex::HTML
     extend Wabi::Variants
+
+    private
+
+    def merge_class(*classes)
+      Wabi::ClassMerge.call(*classes)
+    end
   end
 end

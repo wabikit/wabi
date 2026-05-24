@@ -33,4 +33,25 @@ RSpec.describe Wabi::Base do
     output = klass.new.call
     expect(output).to include('class="inline-flex h-8"')
   end
+
+  describe "#merge_class" do
+    it "merges user-supplied class with internal tokens" do
+      klass = Class.new(Wabi::Base) do
+        variants do
+          base "btn"
+          variant :size, { sm: "h-8" }, default: :sm
+        end
+
+        def initialize(class: nil) = @user_class = binding.local_variable_get(:class)
+
+        def view_template
+          button(class: merge_class(tokens, @user_class)) { "x" }
+        end
+      end
+
+      output = klass.new(class: "h-12 shadow").call
+      # User's h-12 overrides base h-8, shadow is preserved
+      expect(output).to include('class="btn h-12 shadow"')
+    end
+  end
 end
