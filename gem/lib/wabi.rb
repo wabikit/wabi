@@ -2,7 +2,10 @@
 
 require_relative "wabi/version"
 require_relative "wabi/base"
+require_relative "wabi/class_merge"
+require_relative "wabi/variants"
 require_relative "wabi/registry_client"
+require_relative "wabi/lockfile"
 
 module Wabi
   class Error < StandardError; end
