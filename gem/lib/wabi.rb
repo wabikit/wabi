@@ -10,3 +10,8 @@ require_relative "wabi/lockfile"
 module Wabi
   class Error < StandardError; end
 end
+
+# Generators are only loaded under Rails (which triggers them via convention)
+if defined?(Rails::Generators)
+  require_relative "wabi/generators/install_generator"
+end
