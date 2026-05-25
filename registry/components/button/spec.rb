@@ -6,7 +6,7 @@
 require "wabi"
 require_relative "button"
 
-RSpec.describe UI::Button do
+RSpec.describe Components::UI::Button do
   it "renders a button element with default variant classes" do
     output = described_class.new.call { "Click me" }
     expect(output).to include('<button')
