@@ -18,18 +18,16 @@ module Views
             end
 
             section(class: "mt-12") do
-              h2(class: "text-2xl font-semibold mb-4") { "Input" }
-              div(class: "max-w-sm space-y-2") do
-                render Components::UI::Input.new(placeholder: "Email")
-                render Components::UI::Input.new(type: :password, placeholder: "Password")
-                render Components::UI::Input.new(disabled: true, value: "Disabled")
-              end
-            end
-
-            section(class: "mt-12") do
-              h2(class: "text-2xl font-semibold mb-4") { "Textarea" }
-              div(class: "max-w-sm") do
-                render Components::UI::Textarea.new(rows: 4, placeholder: "Type a message...")
+              h2(class: "text-2xl font-semibold mb-4") { "Form fields" }
+              div(class: "max-w-sm space-y-4") do
+                div(class: "space-y-2") do
+                  render Components::UI::Label.new(for_: "email") { "Email" }
+                  render Components::UI::Input.new(id: "email", type: :email, placeholder: "you@example.com")
+                end
+                div(class: "space-y-2") do
+                  render Components::UI::Label.new(for_: "bio") { "Bio" }
+                  render Components::UI::Textarea.new(id: "bio", rows: 4)
+                end
               end
             end
           end
