@@ -48,6 +48,16 @@ module Views
                 end
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Badge" }
+              div(class: "flex gap-2") do
+                render Components::UI::Badge.new                            { "Primary" }
+                render Components::UI::Badge.new(appearance: :secondary)    { "Secondary" }
+                render Components::UI::Badge.new(appearance: :destructive)  { "Destructive" }
+                render Components::UI::Badge.new(appearance: :outline)      { "Outline" }
+              end
+            end
           end
         end
       end
