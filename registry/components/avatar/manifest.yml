@@ -1,0 +1,13 @@
+name: avatar
+version: 0.1.0
+type: registry:display
+description: A user avatar with image and a text/initials fallback.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

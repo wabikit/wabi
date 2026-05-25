@@ -81,6 +81,19 @@ module Views
                 end
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Avatar" }
+              div(class: "flex gap-4 items-center") do
+                render Components::UI::Avatar.new do
+                  render Components::UI::AvatarImage.new(src: "https://github.com/OscarOrtega.png", alt: "Oscar")
+                  render Components::UI::AvatarFallback.new { "OO" }
+                end
+                render Components::UI::Avatar.new(class: "h-16 w-16") do
+                  render Components::UI::AvatarFallback.new { "JD" }
+                end
+              end
+            end
           end
         end
       end
