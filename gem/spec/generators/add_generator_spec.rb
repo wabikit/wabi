@@ -67,4 +67,41 @@ RSpec.describe Wabi::Generators::AddGenerator do
     expect(File.exist?(File.join(destination, "app/components/ui/card.rb"))).to be true
     expect(File.exist?(File.join(destination, "app/components/ui/button.rb"))).to be true
   end
+
+  describe "JS dependency instructions" do
+    it "prints bin/importmap pin commands when js_dependencies present" do
+      FileUtils.rm_rf([destination, fake_registry])
+      FileUtils.mkdir_p(File.join(destination, "config"))
+      FileUtils.mkdir_p(fake_registry)
+      File.write(File.join(destination, "config/wabi.lock.json"), JSON.generate({
+        "registry"   => "file://#{fake_registry}",
+        "components" => {}
+      }))
+      File.write(File.join(fake_registry, "switch.json"), JSON.generate({
+        "name" => "switch",
+        "version" => "0.1.0",
+        "registry_dependencies" => [],
+        "js_dependencies" => { "@zag-js/switch" => "^0.50", "@zag-js/dom-query" => "^0.50" },
+        "files" => [{
+          "path" => "app/components/ui/switch.rb",
+          "type" => "ruby:phlex",
+          "content" => "module Components; module UI; class Switch < Wabi::Base; end; end; end\n"
+        }]
+      }))
+
+      output = capture_stdout { described_class.start(["switch"], destination_root: destination) }
+      expect(output).to include("bin/importmap pin @zag-js/switch")
+      expect(output).to include("bin/importmap pin @zag-js/dom-query")
+    end
+
+    def capture_stdout
+      captured = StringIO.new
+      original = $stdout
+      $stdout = captured
+      yield
+      captured.string
+    ensure
+      $stdout = original
+    end
+  end
 end

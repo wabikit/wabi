@@ -13,8 +13,11 @@ module Wabi
       desc "Add one or more Wabi components to this app."
 
       def add_components
+        @js_deps_to_pin = {}
+        lockfile # eager-init via accessor
         components.each { |name| install_component(name) }
-        @lockfile.save
+        lockfile.save
+        print_js_pin_instructions
       end
 
       private
@@ -28,7 +31,7 @@ module Wabi
       end
 
       def install_component(name)
-        return if @lockfile&.components&.key?(name)
+        return if lockfile.components.key?(name)
         say "  fetching  #{name}", :cyan
         data = client.fetch(name)
 
@@ -41,8 +44,18 @@ module Wabi
           say "  create    #{file["path"]}", :green
         end
 
+        (data["js_dependencies"] || {}).each { |pkg, ver| @js_deps_to_pin[pkg] = ver }
+
         hash = Digest::SHA256.hexdigest(JSON.generate(data["files"]))
         lockfile.record(name, version: data["version"], hash: hash)
+      end
+
+      def print_js_pin_instructions
+        return if @js_deps_to_pin.empty?
+        say "\n  This component requires JS packages. Pin them with:", :yellow
+        @js_deps_to_pin.each_key do |pkg|
+          say "    bin/importmap pin #{pkg}"
+        end
       end
     end
   end
