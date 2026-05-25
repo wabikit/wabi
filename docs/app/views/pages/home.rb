@@ -67,6 +67,20 @@ module Views
                 p { "Below separator" }
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Alert" }
+              div(class: "max-w-xl space-y-4") do
+                render Components::UI::Alert.new do
+                  render Components::UI::AlertTitle.new       { "Heads up!" }
+                  render Components::UI::AlertDescription.new { "You can add components to your app using the CLI." }
+                end
+                render Components::UI::Alert.new(appearance: :destructive) do
+                  render Components::UI::AlertTitle.new       { "Error" }
+                  render Components::UI::AlertDescription.new { "Your session has expired. Please log in again." }
+                end
+              end
+            end
           end
         end
       end
