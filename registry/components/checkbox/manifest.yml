@@ -1,0 +1,15 @@
+name: checkbox
+version: 0.1.0
+type: registry:form
+description: Accessible checkbox powered by Zag.js with focus ring and disabled state.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/checkbox": "^0.50"
+  "@zag-js/dom-query": "^0.50"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
