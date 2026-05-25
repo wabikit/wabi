@@ -1,3 +1,3 @@
-registry: cd registry && mise exec -- bundle exec ./bin/build && fswatch -o components themes | xargs -n1 -I{} mise exec -- bundle exec ./bin/build
+registry: cd registry && mise exec -- bundle exec ./bin/build && if command -v fswatch >/dev/null 2>&1; then fswatch -o components themes | xargs -n1 -I{} mise exec -- bundle exec ./bin/build; else echo "[fswatch not installed — registry will not auto-rebuild. Run 'brew install fswatch' to enable.]"; tail -f /dev/null; fi
 tailwind: cd docs && mise exec -- bin/rails tailwindcss:watch[always]
 web:      cd docs && mise exec -- bin/rails server -p 3000
