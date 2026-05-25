@@ -21,7 +21,7 @@ module Components
           head do
             title { "#{@title} — Wabi" }
             meta(name: "viewport", content: "width=device-width, initial-scale=1")
-            stylesheet_link_tag("application")
+            stylesheet_link_tag("tailwind", "data-turbo-track": "reload")
             javascript_importmap_tags
           end
           body(class: "bg-background text-foreground antialiased min-h-screen") do
