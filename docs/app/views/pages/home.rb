@@ -30,6 +30,24 @@ module Views
                 end
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Card" }
+              div(class: "max-w-md") do
+                render Components::UI::Card.new do
+                  render Components::UI::CardHeader.new do
+                    render Components::UI::CardTitle.new { "Onboarding" }
+                    render Components::UI::CardDescription.new { "Complete your profile to continue." }
+                  end
+                  render Components::UI::CardContent.new do
+                    p { "This is the card body content." }
+                  end
+                  render Components::UI::CardFooter.new do
+                    render Components::UI::Button.new { "Continue" }
+                  end
+                end
+              end
+            end
           end
         end
       end
