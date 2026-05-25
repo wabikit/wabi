@@ -1,0 +1,3 @@
+registry: cd registry && mise exec -- bundle exec ./bin/build && fswatch -o components themes | xargs -n1 -I{} mise exec -- bundle exec ./bin/build
+tailwind: cd docs && mise exec -- bin/rails tailwindcss:watch
+web:      cd docs && mise exec -- bin/rails server -p 3000
