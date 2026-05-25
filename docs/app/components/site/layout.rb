@@ -8,6 +8,9 @@
 module Components
   module Site
     class Layout < Components::Base
+      include Phlex::Rails::Helpers::StyleSheetLinkTag
+      include Phlex::Rails::Helpers::JavaScriptImportmapTags
+
       def initialize(title:)
         @title = title
       end
