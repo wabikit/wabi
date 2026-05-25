@@ -32,4 +32,42 @@ RSpec.describe Wabi::Generators::InstallGenerator do
     expect(lock["registry"]).to eq("https://wabikit.dev/r")
     expect(lock["components"]).to eq({})
   end
+
+  it "overwrites existing tokens.css when --force is passed" do
+    target = File.join(destination, "app/assets/tailwind/wabi/tokens.css")
+    FileUtils.mkdir_p(File.dirname(target))
+    File.write(target, "/* OLD CONTENT */")
+
+    described_class.start(["--force"], destination_root: destination)
+
+    expect(File.read(target)).not_to include("OLD CONTENT")
+    expect(File.read(target)).to include("--background") # real tokens content
+  end
+
+  it "preserves existing wabi.lock.json even when --force is passed" do
+    lock_path = File.join(destination, "config/wabi.lock.json")
+    FileUtils.mkdir_p(File.dirname(lock_path))
+    File.write(lock_path, JSON.generate({
+      "registry" => "http://custom.example/r",
+      "components" => { "button" => { "version" => "0.1.0", "hash" => "abc" } }
+    }))
+
+    described_class.start(["--force"], destination_root: destination)
+
+    lock = JSON.parse(File.read(lock_path))
+    expect(lock["registry"]).to eq("http://custom.example/r")
+    expect(lock["components"]).to have_key("button")
+  end
+
+  it "does NOT overwrite tokens.css without --force" do
+    target = File.join(destination, "app/assets/tailwind/wabi/tokens.css")
+    FileUtils.mkdir_p(File.dirname(target))
+    File.write(target, "/* OLD CONTENT */")
+
+    # Thor's copy_file with no force option will prompt or skip when file exists.
+    # In test context with no TTY, it skips (the file_collision_behavior defaults to :skip).
+    described_class.start([], destination_root: destination)
+
+    expect(File.read(target)).to include("OLD CONTENT")
+  end
 end
