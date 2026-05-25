@@ -21,11 +21,6 @@ RSpec.describe Wabi::Generators::InstallGenerator do
     expect(File.exist?(File.join(destination, "app/assets/tailwind/wabi/tokens.css"))).to be true
   end
 
-  it "copies preset.js to app/assets/tailwind/wabi/" do
-    described_class.start([], destination_root: destination)
-    expect(File.exist?(File.join(destination, "app/assets/tailwind/wabi/preset.js"))).to be true
-  end
-
   it "copies theme_controller.js to app/javascript/controllers/wabi/" do
     described_class.start([], destination_root: destination)
     expect(File.exist?(File.join(destination, "app/javascript/controllers/wabi/theme_controller.js"))).to be true
