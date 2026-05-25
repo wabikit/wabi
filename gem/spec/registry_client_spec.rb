@@ -83,4 +83,62 @@ RSpec.describe Wabi::RegistryClient do
       expect(result["name"]).to eq("button")
     end
   end
+
+  describe "#fetch cache behavior for dev-context registries" do
+    around { |ex| FakeFS.with_fresh { ex.run } }
+
+    it "does not write to cache when base_url is file://" do
+      FileUtils.mkdir_p("/tmp/registry")
+      File.write("/tmp/registry/button.json", '{"name":"button","version":"0.1.0"}')
+
+      client = described_class.new(base_url: "file:///tmp/registry")
+      client.fetch("button")
+
+      expect(File.exist?(File.join(client.cache_dir, "button.json"))).to be false
+    end
+
+    it "does not write to cache when base_url is http://localhost" do
+      stub_request(:get, "http://localhost:3000/r/button.json")
+        .to_return(status: 200, body: '{"name":"button","version":"0.1.0"}')
+
+      client = described_class.new(base_url: "http://localhost:3000/r")
+      client.fetch("button")
+
+      expect(File.exist?(File.join(client.cache_dir, "button.json"))).to be false
+    end
+
+    it "does not write to cache when base_url is http://127.*" do
+      stub_request(:get, "http://127.0.0.1:3000/r/button.json")
+        .to_return(status: 200, body: '{"name":"button","version":"0.1.0"}')
+
+      client = described_class.new(base_url: "http://127.0.0.1:3000/r")
+      client.fetch("button")
+
+      expect(File.exist?(File.join(client.cache_dir, "button.json"))).to be false
+    end
+
+    it "always fetches fresh for file:// even when a cache file exists" do
+      FileUtils.mkdir_p("/tmp/registry")
+      File.write("/tmp/registry/button.json", '{"name":"button","version":"0.1.0","files":[]}')
+
+      client = described_class.new(base_url: "file:///tmp/registry")
+      # Manually plant a stale cache entry
+      FileUtils.mkdir_p(client.cache_dir)
+      File.write(File.join(client.cache_dir, "button.json"), '{"name":"stale","version":"0.0.0"}')
+
+      result = client.fetch("button")
+      expect(result["name"]).to eq("button")
+      expect(result["version"]).to eq("0.1.0")
+    end
+
+    it "still uses cache for production https:// URLs" do
+      stub_request(:get, "https://wabikit.dev/r/button.json")
+        .to_return(status: 200, body: '{"name":"button","version":"0.1.0"}')
+
+      client = described_class.new  # default base_url = "https://wabikit.dev/r"
+      client.fetch("button")
+
+      expect(File.exist?(File.join(client.cache_dir, "button.json"))).to be true
+    end
+  end
 end

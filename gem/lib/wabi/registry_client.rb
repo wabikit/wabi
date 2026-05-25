@@ -23,8 +23,10 @@ module Wabi
     end
 
     def fetch(component_name)
-      cached = read_cache(component_name)
-      return JSON.parse(cached) if cached
+      unless dev_context?
+        cached = read_cache(component_name)
+        return JSON.parse(cached) if cached
+      end
 
       body =
         if @base_url.start_with?("file://")
@@ -33,11 +35,15 @@ module Wabi
           fetch_http(component_name)
         end
 
-      write_cache(component_name, body)
+      write_cache(component_name, body) unless dev_context?
       JSON.parse(body)
     end
 
     private
+
+    def dev_context?
+      @base_url.start_with?("file://", "http://localhost", "http://127.")
+    end
 
     def fetch_local(name)
       path = File.join(@base_url.sub("file://", ""), "#{name}.json")
