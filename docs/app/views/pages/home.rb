@@ -25,6 +25,13 @@ module Views
                 render Components::UI::Input.new(disabled: true, value: "Disabled")
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Textarea" }
+              div(class: "max-w-sm") do
+                render Components::UI::Textarea.new(rows: 4, placeholder: "Type a message...")
+              end
+            end
           end
         end
       end
