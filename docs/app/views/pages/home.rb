@@ -16,6 +16,15 @@ module Views
               render Components::UI::Button.new(appearance: :ghost)       { "Ghost" }
               render Components::UI::Button.new(appearance: :link)        { "Link" }
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Input" }
+              div(class: "max-w-sm space-y-2") do
+                render Components::UI::Input.new(placeholder: "Email")
+                render Components::UI::Input.new(type: :password, placeholder: "Password")
+                render Components::UI::Input.new(disabled: true, value: "Disabled")
+              end
+            end
           end
         end
       end
