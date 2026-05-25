@@ -58,6 +58,15 @@ module Views
                 render Components::UI::Badge.new(appearance: :outline)      { "Outline" }
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Separator" }
+              div(class: "max-w-md") do
+                p { "Above separator" }
+                render Components::UI::Separator.new(class: "my-4")
+                p { "Below separator" }
+              end
+            end
           end
         end
       end
