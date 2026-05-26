@@ -1,0 +1,15 @@
+name: tabs
+version: 0.1.0
+type: registry:nav
+description: Accessible tabs with keyboard arrow navigation, automatic and manual activation.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/tabs": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

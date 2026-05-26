@@ -21,3 +21,4 @@ pin "@zag-js/dialog",   to: "https://cdn.jsdelivr.net/npm/@zag-js/dialog@1.41.0/
 pin "@zag-js/tooltip",  to: "https://cdn.jsdelivr.net/npm/@zag-js/tooltip@1.41.0/+esm"
 pin "@zag-js/popover",  to: "https://cdn.jsdelivr.net/npm/@zag-js/popover@1.41.0/+esm"
 pin "@zag-js/menu",     to: "https://cdn.jsdelivr.net/npm/@zag-js/menu@1.41.0/+esm"
+pin "@zag-js/tabs",     to: "https://cdn.jsdelivr.net/npm/@zag-js/tabs@1.41.0/+esm"

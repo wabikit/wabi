@@ -83,6 +83,28 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Tabs" }
+              div(class: "max-w-md") do
+                render Components::UI::Tabs.new(value: "account") do
+                  render Components::UI::TabsList.new do
+                    render Components::UI::TabsTrigger.new(value: "account")  { "Account" }
+                    render Components::UI::TabsTrigger.new(value: "password") { "Password" }
+                    render Components::UI::TabsTrigger.new(value: "billing")  { "Billing" }
+                  end
+                  render Components::UI::TabsContent.new(value: "account") do
+                    p(class: "text-sm text-muted-foreground") { "Manage your account settings here." }
+                  end
+                  render Components::UI::TabsContent.new(value: "password") do
+                    p(class: "text-sm text-muted-foreground") { "Change your password." }
+                  end
+                  render Components::UI::TabsContent.new(value: "billing") do
+                    p(class: "text-sm text-muted-foreground") { "Update your billing info." }
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "DropdownMenu" }
               render Components::UI::DropdownMenu.new do
                 render Components::UI::DropdownMenuTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2") { "Actions ▾" }
