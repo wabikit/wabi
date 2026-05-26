@@ -18,6 +18,13 @@ export default class extends Controller {
       },
       onOpenChange: ({ open }) => {
         this.openValue = open
+        // inert toggle: synchronous in onOpenChange so it lands before Zag's
+        // setInitialFocus action moves focus into the menu. The initial
+        // Phlex render carries `inert` on the content.
+        if (this.hasContentTarget) {
+          if (open) this.contentTarget.removeAttribute("inert")
+          else      this.contentTarget.setAttribute("inert", "")
+        }
         this.dispatch("change", { detail: { open } })
       },
     })

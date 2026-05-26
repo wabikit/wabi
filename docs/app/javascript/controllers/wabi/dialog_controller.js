@@ -16,6 +16,15 @@ export default class extends Controller {
       modal: this.modalValue,
       onOpenChange: ({ open }) => {
         this.openValue = open
+        // Toggle inert SYNCHRONOUSLY inside the state transition so the
+        // attribute clears before Zag's setInitialFocus action runs. If we
+        // toggled it from render() (the subscriber) instead, focus would hit
+        // an inert content target on first open and silently fail. The
+        // initial Phlex render carries `inert` (everything starts closed).
+        if (this.hasContentTarget) {
+          if (open) this.contentTarget.removeAttribute("inert")
+          else      this.contentTarget.setAttribute("inert", "")
+        }
         this.dispatch("change", { detail: { open } })
       },
     })
@@ -58,9 +67,8 @@ export default class extends Controller {
       spreadProps(this.contentTarget, api.getContentProps())
       // Visibility lives on `data-state` (CSS opacity + pointer-events). We
       // force `hidden=false` so the fade-out can actually run instead of
-      // display:none cutting it off. inert is left to the user for now --
-      // setting it timing-correctly with Zag's focus trap is fiddly (a v0.2
-      // a11y task).
+      // display:none cutting it off. The `inert` attribute is managed from
+      // onOpenChange (synchronous, runs before Zag's setInitialFocus).
       this.contentTarget.hidden = false
     }
   }

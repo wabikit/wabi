@@ -29,6 +29,7 @@ RSpec.describe "DropdownMenu composition" do
     output = Components::UI::DropdownMenuContent.new.call { "" }
     expect(output).to include('data-wabi--dropdown-menu-target="positioner"')
     expect(output).to include('data-wabi--dropdown-menu-target="content" data-state="closed"')
+    expect(output).to match(/data-wabi--dropdown-menu-target="content"[^>]*\binert\b/)
     expect(output).not_to match(/data-wabi--dropdown-menu-target="positioner"[^>]*hidden/)
   end
 

@@ -79,7 +79,7 @@ The three new pitfalls (now numbered 7-9 in `feedback_zag_js_pattern.md`):
 
 ### Sprint 3 deferrals to v0.1 polish / v0.2
 
-- **Enter/exit animations.** Mixing `hidden: !open` with CSS transitions doesn't work — `display: none` snaps the element off-screen the instant Zag toggles hidden, so neither enter nor exit transitions complete. Tailwind 4 has no `tailwindcss-animate` equivalent installed; Sprint 3 ships with simple `transition-opacity` on Dialog (enter only) and no motion on Drawer/Tooltip/Popover. v0.2 strategy: swap `hidden` for an `inert` + class-driven approach so transitions can run before display:none kicks in.
+- **Enter/exit animations.** Mixing `hidden: !open` with CSS transitions doesn't work — `display: none` snaps the element off-screen the instant Zag toggles hidden, so neither enter nor exit transitions complete. Tailwind 4 has no `tailwindcss-animate` equivalent installed; Sprint 3 shipped with simple `transition-opacity` on Dialog (enter only) and no motion on Drawer/Tooltip/Popover. **Resolved in Sprint 4 cleanup pass + v0.1 polish:** visibility moved to `data-state` + Tailwind `data-[state=*]:` variants for opacity/translate/pointer-events, and `inert` is toggled in `onOpenChange` for tab-order + screen-reader correctness.
 - **Portal pattern.** Disabled in v0.1 (see trap #9). Components are still usable in the vast majority of layouts because `position: fixed` escapes normal flow; only matters when an ancestor has `transform`, `filter`, `will-change`, or `contain`, in which case fixed positioning is trapped.
 - **Sprint 3 Task 1 (install tailwindcss-animate)** marked obsolete: that task's preset.js was Tailwind 3 specific and we migrated to TW4 in Sprint 0.
 

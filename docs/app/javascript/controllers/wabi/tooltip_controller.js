@@ -18,6 +18,12 @@ export default class extends Controller {
       closeDelay:  this.closeDelayValue,
       onOpenChange: ({ open }) => {
         this.openValue = open
+        // inert toggle: synchronous in onOpenChange so it lands before Zag's
+        // internal focus moves. The initial Phlex render carries `inert`.
+        if (this.hasContentTarget) {
+          if (open) this.contentTarget.removeAttribute("inert")
+          else      this.contentTarget.setAttribute("inert", "")
+        }
         this.dispatch("change", { detail: { open } })
       },
     })

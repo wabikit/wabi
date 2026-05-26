@@ -37,15 +37,16 @@ are all resolved. This document tracks what remains.
 
 ## Still open — should land before v0.1 ships
 
-1. **Overlay `inert` toggling for tab-order + screen-reader correctness.**
-   The closed overlay content is currently `opacity: 0` + `pointer-events:
-   none`, but still tabbable + announced by screen readers. Initial attempt
-   in the Sprint 4 cleanup pass set `inert` on close — it raced with Zag's
-   focus-trap initialization on open and broke the dialog's interactivity.
-   Need to toggle `inert` on the controller AFTER Zag's `setInitialFocus`
-   action completes (or use a `closed`-state phase signal Zag exposes via
-   subscribe). Investigation needed: inspect Zag dialog machine state
-   ordering, possibly hook into `onOpenChange` instead of subscribe.
+1. ~~**Overlay `inert` toggling for tab-order + screen-reader correctness.**~~
+   **Resolved during v0.1 polish.** All six overlays (Dialog, Drawer,
+   Popover, Tooltip, DropdownMenu, Select) now carry `inert` on closed
+   content. The toggle lives in each controller's `onOpenChange` callback —
+   that fires *inside* Zag's state transition (synchronously) and so lands
+   before the entry-phase `setInitialFocus` action. The previous Sprint 4
+   attempt put the toggle in `render()` (the subscriber callback), which
+   fires *after* setInitialFocus had already tried (and failed) to focus an
+   inert element. Phlex sources emit `inert` initially since everything
+   starts closed; the controller flips it on every open/close.
 
 2. **DropdownMenu — Submenu.** Nested menu (`triggerItem` part in Zag's
    anatomy). Requires a child `wabi--dropdown-menu` controller whose machine

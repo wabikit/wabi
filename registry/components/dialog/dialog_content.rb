@@ -54,6 +54,7 @@ module Components
               "aria-modal": "true",
               "data-state": "closed",
               data: { "wabi--dialog-target": "content" },
+              inert: true,
               class: merge_class(tokens, user_class)
             ) do
               yield if block_given?

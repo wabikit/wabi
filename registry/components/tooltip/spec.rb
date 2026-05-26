@@ -24,6 +24,7 @@ RSpec.describe "Tooltip composition" do
     output = Components::UI::TooltipContent.new.call { "Hi" }
     expect(output).to include('data-wabi--tooltip-target="positioner"')
     expect(output).to include('data-wabi--tooltip-target="content" data-state="closed"')
+    expect(output).to match(/data-wabi--tooltip-target="content"[^>]*\binert\b/)
     expect(output).not_to match(/data-wabi--tooltip-target="positioner"[^>]*hidden/)
   end
 

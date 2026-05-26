@@ -37,6 +37,15 @@ export default class extends Controller {
         this.valueValue = value[0] || ""
         this.dispatch("change", { detail: { value: value[0] } })
       },
+      onOpenChange: ({ open }) => {
+        // inert toggle: synchronous in onOpenChange so it lands before Zag's
+        // setInitialFocus moves focus to the highlighted item. The initial
+        // Phlex render carries `inert` on the content.
+        if (this.hasContentTarget) {
+          if (open) this.contentTarget.removeAttribute("inert")
+          else      this.contentTarget.setAttribute("inert", "")
+        }
+      },
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()

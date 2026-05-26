@@ -25,6 +25,7 @@ RSpec.describe "Popover composition" do
     output = Components::UI::PopoverContent.new.call { "" }
     expect(output).to include('data-wabi--popover-target="positioner"')
     expect(output).to include('data-wabi--popover-target="content" data-state="closed"')
+    expect(output).to match(/data-wabi--popover-target="content"[^>]*\binert\b/)
     expect(output).not_to match(/data-wabi--popover-target="positioner"[^>]*hidden/)
   end
 

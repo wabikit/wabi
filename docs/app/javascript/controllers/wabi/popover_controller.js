@@ -16,6 +16,12 @@ export default class extends Controller {
       modal: this.modalValue,
       onOpenChange: ({ open }) => {
         this.openValue = open
+        // inert toggle: synchronous in onOpenChange so it lands before Zag's
+        // setInitialFocus action. The initial Phlex render carries `inert`.
+        if (this.hasContentTarget) {
+          if (open) this.contentTarget.removeAttribute("inert")
+          else      this.contentTarget.setAttribute("inert", "")
+        }
         this.dispatch("change", { detail: { open } })
       },
     })

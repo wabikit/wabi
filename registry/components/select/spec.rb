@@ -43,6 +43,7 @@ RSpec.describe "Select composition" do
     # v0.1.x: visibility moved off `hidden` onto `data-state` so transitions
     # can run. Initial render has `data-state="closed"` + `inert` on content.
     expect(output).to include('data-wabi--select-target="content" data-state="closed"')
+    expect(output).to match(/data-wabi--select-target="content"[^>]*\binert\b/)
   end
 
   it "renders SelectItem with role=option, item target, and item value" do

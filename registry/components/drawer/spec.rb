@@ -38,11 +38,14 @@ RSpec.describe "Drawer composition" do
     end
   end
 
-  it "DrawerContent starts with backdrop AND content hidden, portal NOT hidden" do
+  it "DrawerContent starts with backdrop AND content closed, content inert, portal NOT hidden" do
     # v0.1.x: visibility moved to `data-state` for animation support.
+    # Content carries `inert` initial so a closed drawer stays out of tab order
+    # and the a11y tree; the dialog controller toggles it via onOpenChange.
     output = Components::UI::DrawerContent.new.call { "" }
     expect(output).to include('data-wabi--dialog-target="backdrop" data-state="closed"')
     expect(output).to include('data-state="closed" data-wabi--dialog-target="content"')
+    expect(output).to match(/data-wabi--dialog-target="content"\s+inert\b/)
     expect(output).not_to match(/data-wabi--dialog-target="portal"[^>]*hidden/)
   end
 

@@ -45,6 +45,7 @@ RSpec.describe "Dialog composition" do
     output = Components::UI::DialogContent.new.call { "" }
     expect(output).to include('data-wabi--dialog-target="backdrop" data-state="closed"')
     expect(output).to include('data-state="closed" data-wabi--dialog-target="content"')
+    expect(output).to match(/data-wabi--dialog-target="content"\s+inert\b/)
     expect(output).not_to match(/data-wabi--dialog-target="portal"[^>]*hidden/)
   end
 

@@ -51,6 +51,7 @@ module Components
             "aria-modal": "true",
             "data-state": "closed",
             data: { "wabi--dialog-target": "content" },
+            inert: true,
             class: merge_class(BASE, SIDE_CLASSES.fetch(@side), user_class)
           ) do
             yield if block_given?

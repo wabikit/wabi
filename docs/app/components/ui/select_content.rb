@@ -26,6 +26,7 @@ module Components
           div(
             data: { "wabi--select-target": "content" },
             "data-state": "closed",
+            inert: true,
             class: merge_class(tokens, user_class)
           ) do
             ul(
