@@ -29,6 +29,8 @@ module Components
               div(class: "container mx-auto flex h-14 items-center justify-between px-4") do
                 a(href: "/", class: "font-bold text-lg") { "Wabi" }
                 div(class: "flex items-center gap-2") do
+                  a(href: "/docs/components",
+                    class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Components" }
                   a(href: "/docs/themes",
                     class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Themes" }
                   render Components::Site::ThemePicker.new
