@@ -1,0 +1,13 @@
+name: drawer
+version: 0.1.0
+type: registry:overlay
+description: Side-anchored dialog (top/right/bottom/left). Shares the dialog state machine and controller.
+registry_dependencies: ["dialog"]
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

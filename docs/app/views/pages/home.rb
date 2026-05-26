@@ -48,6 +48,27 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Drawer" }
+              div(class: "flex gap-2 flex-wrap") do
+                [:top, :right, :bottom, :left].each do |side|
+                  render Components::UI::Drawer.new(side: side) do
+                    render Components::UI::DrawerTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2") { "Open #{side.to_s}" }
+                    render Components::UI::DrawerContent.new(side: side) do
+                      render Components::UI::DrawerHeader.new do
+                        render Components::UI::DrawerTitle.new       { "Drawer (#{side})" }
+                        render Components::UI::DrawerDescription.new { "Side-anchored dialog variant. Esc and click-outside dismiss work as in Dialog." }
+                      end
+                      div(class: "flex-1") { p { "Drawer body content goes here." } }
+                      render Components::UI::DrawerFooter.new do
+                        render Components::UI::DrawerClose.new { "Close" }
+                      end
+                    end
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Dialog" }
               render Components::UI::Dialog.new do
                 render Components::UI::DialogTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2") { "Open dialog" }
