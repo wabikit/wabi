@@ -14,4 +14,16 @@ class PagesController < ApplicationController
   def themes
     render Views::Pages::Themes.new
   end
+
+  def getting_started
+    render Views::Pages::Docs::GettingStarted.new
+  end
+
+  def philosophy
+    render Views::Pages::Docs::Philosophy.new
+  end
+
+  def theming
+    render Views::Pages::Docs::Theming.new
+  end
 end

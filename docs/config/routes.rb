@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root "pages#home"
   get "/preview",                     to: "pages#preview"
+  get "/docs/getting-started",        to: "pages#getting_started", as: :getting_started_doc
+  get "/docs/philosophy",             to: "pages#philosophy",      as: :philosophy_doc
+  get "/docs/theming",                to: "pages#theming",         as: :theming_doc
   get "/docs/themes",                 to: "pages#themes"
   get "/docs/components",             to: "components#index", as: :component_index
   get "/docs/components/:name",       to: "components#show",  as: :component_doc,
