@@ -2,6 +2,52 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] — 2026-05-26
+
+Sprint 7 (docs site polish). The docs site stops being a one-page kitchen
+sink and starts behaving like real documentation: marketing landing,
+components index, detailed pages for the 4 exemplar components, and
+prose docs for onboarding / theming / philosophy. Sprint 8 (v0.4) is
+queued to fill in the remaining 16 component detail pages + Pagefind
+search.
+
+### Added
+
+- **`Components::Site::CodeBlock`** — Phlex `<pre><code>` wrapper with server-side Rouge syntax highlighting and a clipboard-copy button. Backed by a tiny `site--copy` Stimulus controller that hands the literal source (not the highlighted HTML) to `navigator.clipboard`.
+- **`Components::Site::ComponentPreview`** — Tabbed Preview/Code view around an example. Block-provided live render in the Preview tab; literal source string rendered via CodeBlock in the Code tab. Backed by `site--preview-tabs` Stimulus controller that toggles panels and flips `data-active` on the tab buttons.
+- **`ComponentsController` + `/docs/components` index** — Routes a components landing that lists all 20 v0.2 components with their manifest-derived descriptions. Cards for the 4 exemplars with detailed docs (Button / DropdownMenu / Dialog / Tabs) link out; cards for the remaining 16 show description + a "Source only" affordance until v0.4 fills them in. Nav header gains a "Components" link.
+- **4 detailed component doc pages**: `/docs/components/button` (single-element variants), `/docs/components/dropdown_menu` (compound with submenu), `/docs/components/dialog` (overlay), `/docs/components/tabs` (in-flow navigation). Each ships: breadcrumb back-link, title, description, installation snippet, live `ComponentPreview` example, Source `CodeBlock(s)` reading the actual .rb files at request time, Accessibility bullets.
+- **Marketing landing at `/`** — Hero ("Beautifully imperfect components for Rails") with Get-started + Browse-components CTAs, theming-aware live demo (two Cards that repaint with the theme picker), 30-second install snippet, "Why Wabi" 3-up feature grid, footer.
+- **`/preview`** — The Sprint 1-6 kitchen sink home is preserved verbatim here for dev-time component browsing. 22 component demo sections.
+- **`/docs/getting-started`** — 5-step onboarding (gem add → install generator → wire Tailwind 4 → mount theme controller → add components). Cross-links to /docs/components, /docs/theming, /docs/themes, /docs/philosophy.
+- **`/docs/theming`** — How to switch palettes, available palette list, dark-mode toggle pattern, customizing tokens (HSL var space), Tailwind 4 notes (no preset.js, `@theme inline`, `@source` for autodetection).
+- **`/docs/philosophy`** — 5-section rationale: "you own the code", Phlex-native composition, accessible-by-default, brand-neutral, Hotwire-friendly.
+
+### Changed
+
+- **Dependencies**: `docs/Gemfile` gains `rouge ~> 4.5` for server-side syntax highlighting in `CodeBlock`. No new gems beyond that.
+- **`docs/app/views/pages/home.rb` REPLACED** with the marketing landing; the old kitchen-sink home was moved to `docs/app/views/pages/preview.rb` (class renamed `Home` → `Preview`) and routed at `/preview`.
+- **Nav layout**: header gains a "Components" link alongside the existing "Themes" link. ThemePicker dropdown stays.
+
+### Fixed
+
+- **Constant resolution shadow under `Views::Pages::Components`.** Introducing the new `Views::Pages::Components::*` namespace (for the components index and 4 detailed pages) shadowed the top-level `Components::*` from anything else under `Views::Pages`. Ruby's constant lookup found `Views::Pages::Components` first and failed to find `Site` or `UI` inside it. Three views needed leading-`::` prefix on their `render` calls: `Home`, `Preview`, `Themes`. The `Themes` view (Sprint 6) had been silently broken since the components namespace was introduced — discovered and fixed in the same task.
+
+### Spec totals
+
+- Registry: 125/125 unchanged (Sprint 7 doesn't touch registry).
+- Gem: 66/66 unchanged.
+- Doc-site smoke (Rack::Test): 11/11 routes return 200 — `/`, `/preview`, `/docs/themes`, `/docs/components`, `/docs/components/{button,dropdown_menu,dialog,tabs}`, `/docs/getting-started`, `/docs/theming`, `/docs/philosophy`.
+
+### Known v0.3 deferrals → v0.4
+
+- **Detailed doc pages for the remaining 16 components** (input, textarea, label, card, badge, separator, alert, avatar, checkbox, switch, select, drawer, tooltip, popover, toast, accordion). The index lists them with descriptions + "Source only" affordance; v0.4 fills in the per-component pages.
+- **Pagefind static search** — Needs Node/bun + pre-rendered HTML. Not yet worth the infrastructure for ~25 docs pages.
+- **Sidebar nav** with active-section state — Header-only nav is fine for 5 top-level pages; sidebar makes sense once components have their own subsection.
+- Same v0.2 deferrals still standing: `@zag-js/toast` group machine, real portal pattern, `wabi:update` generator, multi-level DropdownMenu nesting, `tailwind-merge`-equivalent class dedup edge cases, Phlex 2.4.1 Ruby 4 warnings.
+
+---
+
 ## [0.2.0] — 2026-05-26
 
 Sprint 6 (themes). 8 palettes ship, live theme switcher in the docs nav,
