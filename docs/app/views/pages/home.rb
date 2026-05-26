@@ -48,6 +48,27 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "DropdownMenu" }
+              render Components::UI::DropdownMenu.new do
+                render Components::UI::DropdownMenuTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2") { "Actions ▾" }
+                render Components::UI::DropdownMenuContent.new do
+                  render Components::UI::DropdownMenuLabel.new { "Actions" }
+                  render Components::UI::DropdownMenuItem.new(value: "edit") do
+                    plain "Edit"
+                    render Components::UI::DropdownMenuShortcut.new { "⌘E" }
+                  end
+                  render Components::UI::DropdownMenuItem.new(value: "duplicate") do
+                    plain "Duplicate"
+                    render Components::UI::DropdownMenuShortcut.new { "⌘D" }
+                  end
+                  render Components::UI::DropdownMenuSeparator.new
+                  render Components::UI::DropdownMenuItem.new(value: "archive") { "Archive" }
+                  render Components::UI::DropdownMenuItem.new(value: "delete", disabled: true) { "Delete (disabled)" }
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Popover" }
               render Components::UI::Popover.new do
                 render Components::UI::PopoverTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2") { "Open popover" }

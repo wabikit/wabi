@@ -1,0 +1,15 @@
+name: dropdown_menu
+version: 0.1.0
+type: registry:overlay
+description: Floating menu with keyboard navigation, type-ahead, and click/Escape dismiss.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/menu": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
