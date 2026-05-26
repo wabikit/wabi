@@ -1,0 +1,15 @@
+name: popover
+version: 0.1.0
+type: registry:overlay
+description: Floating panel anchored to a trigger. Opens on click; click-outside and Escape dismiss.
+registry_dependencies: ["button"]
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/popover": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

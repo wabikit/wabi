@@ -1,0 +1,56 @@
+# frozen_string_literal: true
+
+require "wabi"
+require_relative "../button/button"
+require_relative "popover"
+require_relative "popover_trigger"
+require_relative "popover_content"
+require_relative "popover_close"
+
+RSpec.describe "Popover composition" do
+  it "wires the root with controller + open/modal values" do
+    output = Components::UI::Popover.new(modal: true).call { "" }
+    expect(output).to include('data-controller="wabi--popover"')
+    expect(output).to include('data-wabi--popover-open-value="false"')
+    expect(output).to include('data-wabi--popover-modal-value="true"')
+  end
+
+  it "PopoverTrigger emits <button> with the trigger target" do
+    output = Components::UI::PopoverTrigger.new.call { "Open" }
+    expect(output).to include('<button')
+    expect(output).to include('data-wabi--popover-target="trigger"')
+  end
+
+  it "PopoverContent starts hidden on content, NOT on positioner" do
+    output = Components::UI::PopoverContent.new.call { "" }
+    expect(output).to include('data-wabi--popover-target="positioner"')
+    expect(output).to include('data-wabi--popover-target="content"')
+    expect(output).to match(/data-wabi--popover-target="content"[^>]*hidden/)
+    expect(output).not_to match(/data-wabi--popover-target="positioner"[^>]*hidden/)
+  end
+
+  it "PopoverClose renders an outlined Button tagged as closeTrigger" do
+    output = Components::UI::PopoverClose.new.call { "Done" }
+    expect(output).to include('<button')
+    expect(output).to include('data-wabi--popover-target="closeTrigger"')
+  end
+
+  it "composes into a full popover" do
+    composed = Class.new(Phlex::HTML) do
+      def view_template
+        render Components::UI::Popover.new do
+          render Components::UI::PopoverTrigger.new { "Open" }
+          render Components::UI::PopoverContent.new do
+            p { "Popover body content." }
+            render Components::UI::PopoverClose.new { "Close" }
+          end
+        end
+      end
+    end.new.call
+
+    expect(composed).to include('data-controller="wabi--popover"')
+    expect(composed).to include('data-wabi--popover-target="trigger"')
+    expect(composed).to include('data-wabi--popover-target="content"')
+    expect(composed).to include("Popover body content.")
+  end
+end

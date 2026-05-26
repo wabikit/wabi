@@ -48,6 +48,22 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Popover" }
+              render Components::UI::Popover.new do
+                render Components::UI::PopoverTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2") { "Open popover" }
+                render Components::UI::PopoverContent.new do
+                  div(class: "grid gap-3") do
+                    h3(class: "font-medium leading-none") { "Dimensions" }
+                    p(class: "text-sm text-muted-foreground") { "Set the dimensions for the layer." }
+                    div(class: "flex justify-end") do
+                      render Components::UI::PopoverClose.new { "Done" }
+                    end
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Tooltip" }
               p(class: "text-sm text-muted-foreground mb-2") { "Hover or focus the buttons below — tooltip appears after a short delay." }
               div(class: "flex gap-4 items-center") do
