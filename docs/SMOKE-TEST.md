@@ -101,3 +101,24 @@ Browser-verified on `docs/` home page:
 - **Toast deviates from the plan**: the original called for `@zag-js/toast` + group machine + `createToastStore`. v0.1 ships a self-contained vanilla controller (no Zag) — simpler, covers 99% of the use case, and avoids another API API-mismatch debugging cycle. Cross-toast coordination (max stack, advanced stacking animations) deferred to v0.2.
 - **Sprint 4 Task 3** (gem-level `wabi:toast` Turbo Stream action helper) deferred. The current pattern (`turbo_stream.append "wabi-toaster", Components::UI::Toast.new(...)`) works without it.
 - **`<template>` inside Phlex view_template**: appears to work in isolation (Phlex emits `<template>...</template>` correctly) but interacts badly with the layout's `yield_content` capture path. Demos use Stimulus String values + `insertAdjacentHTML` instead. Worth a focused investigation in v0.2.
+
+## Sprint 5 (2026-05-26)
+
+Two navigation components added: **Tabs** (List/Trigger/Content) and **Accordion** (Item/Trigger/Content). **20 components total now in the registry — v0.1 component coverage milestone reached.** CI verifies all 20 dist artifacts on every push.
+
+Browser-verified on `docs/` home page:
+- **Tabs** — click switches the active panel; left/right arrows navigate triggers with automatic activation; `data-[state=active]` styling on triggers shows the active background + shadow; only one panel visible at a time.
+- **Accordion** — click expand/collapse with smooth height animation; `single` mode with `collapsible: true` so the open item can be closed; arrow-up/down + Home/End keyboard nav on triggers; chevron rotates 180° via the `[&[data-state=open]>svg]:rotate-180` selector on the trigger.
+
+### Sprint 5 patterns / decisions
+
+- **Accordion animation = CSS grid-template-rows trick (NOT keyframes).** Original plan referenced `tailwindcss-animate`'s `accordion-down/up` keyframes; those don't exist in our TW4 setup (Sprint 3 moved off preset.js). Solution: `grid grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]` on the content wrapper + inner `overflow-hidden` div. Browser support: Chrome 117+, Safari 17.4+, Firefox 119+. Smooth, no global CSS, no JS height measurement.
+- **`el.hidden = false` forced after Zag spreadProps.** Same pattern as Sprint 4 cleanup adopted for overlays. Zag emits `hidden: !open` on the content part; if we let it through, `display: none` cuts the CSS transition mid-frame. Forcing `hidden` off keeps the grid-row transition alive.
+- **Sprint 5 surfaces no new Zag traps** — entries 1-10 in `feedback_zag_js_pattern.md` cover every gotcha encountered. Tabs and Accordion are the cleanest interactive-component implementations in the repo so far. Future Sprint 6+ components can be modeled directly on Tabs (for sibling-panel patterns) or Accordion (for grouped-disclosure patterns).
+
+### v0.1 component coverage
+
+20 components installable via `bin/rails g wabi:add <name>`:
+button, input, textarea, label, card, badge, separator, alert, avatar,
+checkbox, switch, select, dialog, drawer, tooltip, popover, dropdown_menu,
+toast, **tabs**, **accordion**.
