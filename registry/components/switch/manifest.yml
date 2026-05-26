@@ -5,8 +5,8 @@ description: Toggle switch powered by Zag.js, accessible via keyboard.
 registry_dependencies: []
 ruby_dependencies: []
 js_dependencies:
-  "@zag-js/switch": "^0.50"
-  "@zag-js/dom-query": "^0.50"
+  "@zag-js/switch": "^1.41"
+  "@zag-js/vanilla": "^1.41"
 tailwind:
   extend: {}
 metadata:

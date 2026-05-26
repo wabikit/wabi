@@ -52,10 +52,16 @@ module Wabi
 
       def print_js_pin_instructions
         return if @js_deps_to_pin.empty?
-        say "\n  This component requires JS packages. Pin them with:", :yellow
-        @js_deps_to_pin.each_key do |pkg|
-          say "    bin/importmap pin #{pkg}"
+        say "\n  This component requires JS packages. Add these pins to config/importmap.rb:", :yellow
+        @js_deps_to_pin.each do |pkg, version|
+          v = version.to_s.sub(/\A[~^]/, "")
+          v = "1.0.0" if v.empty?
+          say %(    pin "#{pkg}", to: "https://cdn.jsdelivr.net/npm/#{pkg}@#{v}/+esm")
         end
+        say "\n  NOTE: `bin/importmap pin <pkg>` is NOT recommended for packages with submodule"
+        say "  imports (like @zag-js/*) — it only downloads the entry file, leaving relative"
+        say "  imports unresolved. The `+esm` endpoint above ships a single bundle with all"
+        say "  transitive deps resolved to absolute URLs.", :yellow
       end
     end
   end

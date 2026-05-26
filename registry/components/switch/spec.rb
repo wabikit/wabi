@@ -4,38 +4,39 @@ require "wabi"
 require_relative "switch"
 
 RSpec.describe Components::UI::Switch do
-  it "renders role=switch button" do
-    output = described_class.new.call
-    expect(output).to include('role="switch"')
-  end
-
-  it "starts with aria-checked=false and data-state=unchecked" do
-    output = described_class.new.call
-    expect(output).to include('aria-checked="false"')
-    expect(output).to include('data-state="unchecked"')
-  end
-
-  it "renders Stimulus controller wiring" do
+  it "renders a <label> wrapper wired to the Stimulus controller" do
     output = described_class.new.call
     expect(output).to include('data-controller="wabi--switch"')
-    expect(output).to include('data-wabi--switch-target="root"')
+    expect(output).to start_with("<label")
   end
 
-  it "renders thumb span" do
+  it "renders a real <input type=checkbox> (visually hidden) for keyboard + form submission" do
+    output = described_class.new(name: "notifications").call
+    expect(output).to include('type="checkbox"')
+    expect(output).to include('name="notifications"')
+    expect(output).to include('class="sr-only"')
+  end
+
+  it "renders the visual control with data-state=unchecked by default" do
+    output = described_class.new.call
+    expect(output).to include('data-state="unchecked"')
+    expect(output).to include('aria-hidden="true"')
+    expect(output).to include('data-wabi--switch-target="control"')
+  end
+
+  it "renders the thumb span with matching data-state" do
     output = described_class.new.call
     expect(output).to include('data-wabi--switch-target="thumb"')
   end
 
-  it "sets aria-checked=true and data-state=checked when checked: true" do
+  it "flips state=checked + sets input checked when checked: true" do
     output = described_class.new(checked: true).call
-    expect(output).to include('aria-checked="true"')
     expect(output).to include('data-state="checked"')
+    expect(output).to match(/<input[^>]*type="checkbox"[^>]*checked/)
   end
 
-  it "renders hidden input with name for form submission" do
-    output = described_class.new(name: "notifications", checked: true).call
-    expect(output).to include('<input type="hidden"')
-    expect(output).to include('name="notifications"')
-    expect(output).to include('value="1"')
+  it "carries id through to the hidden input for label association" do
+    output = described_class.new(id: "notifications").call
+    expect(output).to match(/<input[^>]*type="checkbox"[^>]*id="notifications"/)
   end
 end

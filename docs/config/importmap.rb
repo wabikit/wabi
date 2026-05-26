@@ -5,11 +5,14 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
-pin "@zag-js/dom-query", to: "@zag-js--dom-query.js" # @1.41.0
-pin "@zag-js/checkbox", to: "@zag-js--checkbox.js" # @1.41.0
-pin "@zag-js/anatomy", to: "@zag-js--anatomy.js" # @1.41.0
-pin "@zag-js/core", to: "@zag-js--core.js" # @1.41.0
-pin "@zag-js/focus-visible", to: "@zag-js--focus-visible.js" # @1.41.0
-pin "@zag-js/types", to: "@zag-js--types.js" # @1.41.0
-pin "@zag-js/utils", to: "@zag-js--utils.js" # @1.41.0
-pin "@zag-js/switch", to: "@zag-js--switch.js" # @1.41.0
+# Zag.js machines: pinned to jsdelivr's `+esm` bundle endpoint, which resolves
+# all transitive submodule imports to absolute URLs on the same CDN. The previous
+# `--from jsdelivr` download mode only fetched each package's `dist/index.mjs`
+# and left its sibling submodules (`*.machine.mjs`, `*.connect.mjs`, etc.)
+# unresolved -- 404 in the browser, controllers never connected. Only specifiers
+# imported directly by our Stimulus controllers need a pin; transitive Zag.js
+# packages (anatomy/core/focus-visible/types/utils) ride the absolute URLs
+# inside the bundle.
+pin "@zag-js/vanilla",  to: "https://cdn.jsdelivr.net/npm/@zag-js/vanilla@1.41.0/+esm"
+pin "@zag-js/checkbox", to: "https://cdn.jsdelivr.net/npm/@zag-js/checkbox@1.41.0/+esm"
+pin "@zag-js/switch",   to: "https://cdn.jsdelivr.net/npm/@zag-js/switch@1.41.0/+esm"

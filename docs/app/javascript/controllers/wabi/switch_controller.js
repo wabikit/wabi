@@ -1,39 +1,43 @@
 import { Controller } from "@hotwired/stimulus"
 import * as switchMachine from "@zag-js/switch"
-import { normalizeProps, spreadProps } from "@zag-js/dom-query"
+import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["root", "thumb", "hiddenInput"]
+  static targets = ["control", "thumb", "hiddenInput"]
   static values  = {
     checked:  { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
+    inputId:  String,
+    name:     String,
   }
 
   connect() {
-    this.service = switchMachine.machine({
+    this.machine = new VanillaMachine(switchMachine.machine, {
       id: this.element.id || crypto.randomUUID(),
-      checked: this.checkedValue,
+      ids: this.inputIdValue ? { hiddenInput: this.inputIdValue } : undefined,
+      defaultChecked: this.checkedValue,
       disabled: this.disabledValue,
+      name: this.nameValue || undefined,
       onCheckedChange: ({ checked }) => {
         this.checkedValue = checked
-        if (this.hasHiddenInputTarget) {
-          this.hiddenInputTarget.value = checked ? "1" : "0"
-        }
         this.dispatch("change", { detail: { checked } })
       },
     })
-    this.service.subscribe(() => this.render())
-    this.service.start()
+    this.unsubscribe = this.machine.subscribe(() => this.render())
+    this.machine.start()
+    this.render()
   }
 
-  disconnect() { this.service.stop() }
+  disconnect() {
+    this.unsubscribe?.()
+    this.machine?.stop()
+  }
 
   render() {
-    const api = switchMachine.connect(this.service.state, this.service.send, normalizeProps)
-    spreadProps(this.rootTarget, api.getControlProps())
-    this.rootTarget.dataset.state = api.checked ? "checked" : "unchecked"
-    if (this.hasThumbTarget) {
-      this.thumbTarget.dataset.state = api.checked ? "checked" : "unchecked"
-    }
+    const api = switchMachine.connect(this.machine.service, normalizeProps)
+    spreadProps(this.element,           api.getRootProps())
+    if (this.hasControlTarget)     spreadProps(this.controlTarget,     api.getControlProps())
+    if (this.hasThumbTarget)       spreadProps(this.thumbTarget,       api.getThumbProps())
+    if (this.hasHiddenInputTarget) spreadProps(this.hiddenInputTarget, api.getHiddenInputProps())
   }
 }

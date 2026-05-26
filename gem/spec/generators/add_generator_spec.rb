@@ -90,8 +90,9 @@ RSpec.describe Wabi::Generators::AddGenerator do
       }))
 
       output = capture_stdout { described_class.start(["switch"], destination_root: destination) }
-      expect(output).to include("bin/importmap pin @zag-js/switch")
-      expect(output).to include("bin/importmap pin @zag-js/dom-query")
+      expect(output).to include('pin "@zag-js/switch", to: "https://cdn.jsdelivr.net/npm/@zag-js/switch@')
+      expect(output).to include("/+esm")
+      expect(output).to include('pin "@zag-js/dom-query", to: "https://cdn.jsdelivr.net/npm/@zag-js/dom-query@')
     end
 
     def capture_stdout

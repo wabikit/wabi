@@ -9,10 +9,12 @@ module Components
         base "peer h-4 w-4 shrink-0 rounded-sm border border-primary " \
              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 " \
              "focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed " \
-             "disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+             "disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground " \
+             "inline-flex items-center justify-center"
       end
 
-      def initialize(name: nil, value: "1", checked: false, disabled: false, **attrs)
+      def initialize(id: nil, name: nil, value: "1", checked: false, disabled: false, **attrs)
+        @id       = id
         @name     = name
         @value    = value
         @checked  = checked
@@ -22,31 +24,43 @@ module Components
 
       def view_template
         user_class = @attrs.delete(:class)
-        div(
+        label(
           data: {
             controller: "wabi--checkbox",
             "wabi--checkbox-checked-value": @checked,
             "wabi--checkbox-disabled-value": @disabled,
+            "wabi--checkbox-input-id-value": @id,
+            "wabi--checkbox-name-value": @name,
+            "wabi--checkbox-value-value": @value,
           },
           class: "inline-flex items-center"
         ) do
-          button(
-            type: "button",
-            role: "checkbox",
-            "aria-checked": @checked.to_s,
-            "data-state": @checked ? "checked" : "unchecked",
+          # Native <input type=checkbox> is visually hidden but receives focus,
+          # keyboard events, and is the source of truth for form submission.
+          # Zag.js spreads handlers and aria-* onto it at hydration.
+          input(
+            type: "checkbox",
+            id: @id,
+            name: @name,
+            value: @value,
+            checked: @checked,
             disabled: @disabled,
-            data: { "wabi--checkbox-target": "root" },
+            data: { "wabi--checkbox-target": "hiddenInput" },
+            class: "sr-only"
+          )
+          span(
+            "data-state": @checked ? "checked" : "unchecked",
+            "aria-hidden": "true",
+            data: { "wabi--checkbox-target": "control" },
             class: merge_class(tokens, user_class)
           ) do
-            span(data: { "wabi--checkbox-target": "indicator" }) do
-              # rendered when checked — heroicons "check" inline SVG
+            span(
+              data: { "wabi--checkbox-target": "indicator" },
+              hidden: !@checked
+            ) do
               raw(safe('<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>'))
             end
           end
-          # Hidden input mirrors the state for form submission
-          input(type: "hidden", name: @name, value: (@checked ? @value : nil),
-                data: { "wabi--checkbox-target": "hiddenInput" })
         end
       end
     end

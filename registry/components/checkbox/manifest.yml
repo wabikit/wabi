@@ -5,8 +5,8 @@ description: Accessible checkbox powered by Zag.js with focus ring and disabled 
 registry_dependencies: []
 ruby_dependencies: []
 js_dependencies:
-  "@zag-js/checkbox": "^0.50"
-  "@zag-js/dom-query": "^0.50"
+  "@zag-js/checkbox": "^1.41"
+  "@zag-js/vanilla": "^1.41"
 tailwind:
   extend: {}
 metadata:

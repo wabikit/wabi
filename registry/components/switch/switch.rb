@@ -17,7 +17,8 @@ module Components
                     "ring-0 transition-transform data-[state=checked]:translate-x-5 " \
                     "data-[state=unchecked]:translate-x-0"
 
-      def initialize(name: nil, checked: false, disabled: false, **attrs)
+      def initialize(id: nil, name: nil, checked: false, disabled: false, **attrs)
+        @id       = id
         @name     = name
         @checked  = checked
         @disabled = disabled
@@ -26,21 +27,29 @@ module Components
 
       def view_template
         user_class = @attrs.delete(:class)
-        div(
+        label(
           data: {
             controller: "wabi--switch",
             "wabi--switch-checked-value": @checked,
             "wabi--switch-disabled-value": @disabled,
+            "wabi--switch-input-id-value": @id,
+            "wabi--switch-name-value": @name,
           },
           class: "inline-flex items-center"
         ) do
-          button(
-            type: "button",
-            role: "switch",
-            "aria-checked": @checked.to_s,
-            "data-state": @checked ? "checked" : "unchecked",
+          input(
+            type: "checkbox",
+            id: @id,
+            name: @name,
+            checked: @checked,
             disabled: @disabled,
-            data: { "wabi--switch-target": "root" },
+            data: { "wabi--switch-target": "hiddenInput" },
+            class: "sr-only"
+          )
+          span(
+            "data-state": @checked ? "checked" : "unchecked",
+            "aria-hidden": "true",
+            data: { "wabi--switch-target": "control" },
             class: merge_class(tokens, user_class)
           ) do
             span(
@@ -49,8 +58,6 @@ module Components
               class: THUMB_CLASS
             )
           end
-          input(type: "hidden", name: @name, value: (@checked ? "1" : "0"),
-                data: { "wabi--switch-target": "hiddenInput" })
         end
       end
     end
