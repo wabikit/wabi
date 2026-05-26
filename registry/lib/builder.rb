@@ -15,8 +15,17 @@ module Wabi
         ".js" => "javascript:stimulus",
       }.freeze
 
-      def initialize(root:)
+      # All 8 v0.2 theme palettes. The docs tokens.css concatenates every
+      # entry; the gem tokens.css only carries the default.
+      THEME_SLUGS = %w[default slate stone zinc rose blue green violet].freeze
+
+      def initialize(root:, gem_tokens_path: nil, docs_tokens_path: nil)
         @root = root
+        # Tokens output paths are configurable so the spec can sandbox them.
+        # Defaults point at the monorepo's gem template + docs Tailwind
+        # source — every `bin/build` run regenerates both.
+        @gem_tokens_path  = gem_tokens_path  || File.expand_path("../gem/templates/tokens.css", root)
+        @docs_tokens_path = docs_tokens_path || File.expand_path("../docs/app/assets/tailwind/wabi/tokens.css", root)
       end
 
       def build
@@ -24,13 +33,32 @@ module Wabi
         components = component_dirs.map { |dir| build_component(dir) }
         validate_all(components)
         write_index(components)
+        build_themes
         components
+      end
+
+      def build_themes
+        shared  = File.read(File.join(themes_dir, "_shared.css"))
+        default = File.read(File.join(themes_dir, "default.css"))
+        all     = THEME_SLUGS.map { |slug| File.read(File.join(themes_dir, "#{slug}.css")) }.join("\n")
+
+        FileUtils.mkdir_p(File.dirname(@gem_tokens_path))
+        FileUtils.mkdir_p(File.dirname(@docs_tokens_path))
+
+        # Gem template: shared base + default theme only. wabi:install copies
+        # this into user apps; users opt into other palettes via wabi:theme.
+        File.write(@gem_tokens_path, [shared, default].join("\n"))
+
+        # Docs site: shared base + all 8 themes concatenated. Lets the docs
+        # theme picker live-switch between palettes on the same page.
+        File.write(@docs_tokens_path, [shared, all].join("\n"))
       end
 
       private
 
       def dist_dir = File.join(@root, "dist/r")
       def components_dir = File.join(@root, "components")
+      def themes_dir = File.join(@root, "themes")
       def schema_path = File.join(@root, "schema/component.v1.json")
 
       def component_dirs

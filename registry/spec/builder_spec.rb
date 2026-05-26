@@ -7,6 +7,20 @@ require "json"
 
 RSpec.describe Wabi::Registry::Builder do
   let(:tmp) { File.expand_path("../tmp_build", __dir__) }
+  let(:sandbox_gem)  { File.join(tmp, "sandbox_gem_tokens.css") }
+  let(:sandbox_docs) { File.join(tmp, "sandbox_docs_tokens.css") }
+
+  # Helper: every Builder in this suite uses sandboxed tokens paths so the
+  # tests never clobber the real gem/templates/tokens.css or the docs site's
+  # canonical tokens.css.
+  def new_builder(**overrides)
+    described_class.new(
+      root: tmp,
+      gem_tokens_path:  sandbox_gem,
+      docs_tokens_path: sandbox_docs,
+      **overrides,
+    )
+  end
 
   before do
     FileUtils.rm_rf(tmp)
@@ -41,13 +55,23 @@ RSpec.describe Wabi::Registry::Builder do
         end
       end
     RUBY
+
+    # Minimal themes/ skeleton so the post-Sprint-6 build_themes step
+    # doesn't blow up when these older #build specs run without setting
+    # up their own theme files. The #build_themes describe block below
+    # overrides this with realistic fixtures.
+    FileUtils.mkdir_p(File.join(tmp, "themes"))
+    File.write(File.join(tmp, "themes/_shared.css"), "/* shared stub */\n")
+    %w[default slate stone zinc rose blue green violet].each do |slug|
+      File.write(File.join(tmp, "themes/#{slug}.css"), "/* #{slug} stub */\n")
+    end
   end
 
   after { FileUtils.rm_rf(tmp) }
 
   describe "#build" do
     it "writes a per-component JSON to dist/r/" do
-      described_class.new(root: tmp).build
+      new_builder.build
       output = JSON.parse(File.read(File.join(tmp, "dist/r/button.json")))
       expect(output["name"]).to eq("button")
       expect(output["version"]).to eq("0.1.0")
@@ -57,7 +81,7 @@ RSpec.describe Wabi::Registry::Builder do
     end
 
     it "writes an index.json listing all components" do
-      described_class.new(root: tmp).build
+      new_builder.build
       index = JSON.parse(File.read(File.join(tmp, "dist/r/index.json")))
       expect(index["components"]).to include(
         a_hash_including("name" => "button", "version" => "0.1.0")
@@ -65,9 +89,53 @@ RSpec.describe Wabi::Registry::Builder do
     end
 
     it "validates output against the v1 schema" do
-      described_class.new(root: tmp).build
+      new_builder.build
       # If validation fails inside #build, it raises. Reaching here = validation passed.
       expect(File.exist?(File.join(tmp, "dist/r/button.json"))).to be true
+    end
+  end
+
+  describe "#build_themes" do
+    let(:slugs) { %w[default slate stone zinc rose blue green violet] }
+
+    before do
+      # Overwrite the stubs from the outer `before` with realistic fixtures.
+      File.write(File.join(tmp, "themes/_shared.css"),
+                 "@custom-variant dark (&:where([data-mode=\"dark\"]));\n@theme inline { --color-primary: hsl(var(--primary)); }")
+      slugs.each do |slug|
+        File.write(File.join(tmp, "themes/#{slug}.css"),
+                   ":root, [data-theme=\"#{slug}\"] { --primary: 0 0% 50%; }\n" \
+                   "[data-theme=\"#{slug}\"][data-mode=\"dark\"] { --primary: 0 0% 50%; }")
+      end
+    end
+
+    it "writes the gem tokens.css combining _shared.css + default.css only" do
+      new_builder.build_themes
+      output = File.read(sandbox_gem)
+      expect(output).to include("@custom-variant dark")
+      expect(output).to include("@theme inline")
+      expect(output).to include('[data-theme="default"]')
+      expect(output).to include('[data-theme="default"][data-mode="dark"]')
+      # Default-only artifact must NOT carry the other 7 themes:
+      expect(output).not_to include('[data-theme="slate"]')
+      expect(output).not_to include('[data-theme="violet"]')
+    end
+
+    it "writes the docs tokens.css combining _shared.css + all 8 themes" do
+      new_builder.build_themes
+      output = File.read(sandbox_docs)
+      expect(output).to include("@custom-variant dark")
+      expect(output).to include("@theme inline")
+      slugs.each do |slug|
+        expect(output).to include(%([data-theme="#{slug}"]))
+        expect(output).to include(%([data-theme="#{slug}"][data-mode="dark"]))
+      end
+    end
+
+    it "build runs build_themes as part of the full pipeline" do
+      new_builder.build
+      expect(File.exist?(sandbox_gem)).to be true
+      expect(File.exist?(sandbox_docs)).to be true
     end
   end
 end
