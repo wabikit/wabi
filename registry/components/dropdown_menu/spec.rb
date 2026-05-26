@@ -11,6 +11,9 @@ require_relative "dropdown_menu_shortcut"
 require_relative "dropdown_menu_checkbox_item"
 require_relative "dropdown_menu_radio_group"
 require_relative "dropdown_menu_radio_item"
+require_relative "dropdown_menu_sub"
+require_relative "dropdown_menu_sub_trigger"
+require_relative "dropdown_menu_sub_content"
 
 RSpec.describe "DropdownMenu composition" do
   it "wires the root with controller and open value" do
@@ -88,6 +91,61 @@ RSpec.describe "DropdownMenu composition" do
     expect(output).to include('data-wabi-name="sort"')
     expect(output).to include('data-wabi-type="radio"')
     expect(output).to include("Ascending")
+  end
+
+  it "DropdownMenuSub marks the boundary with the sub target and display:contents" do
+    output = Components::UI::DropdownMenuSub.new.call { "" }
+    expect(output).to include('data-wabi--dropdown-menu-target="sub"')
+    expect(output).to include('class="contents"')
+  end
+
+  it "DropdownMenuSubTrigger emits role=menuitem with aria-haspopup=menu + chevron" do
+    output = Components::UI::DropdownMenuSubTrigger.new(value: "share").call { "Share" }
+    expect(output).to include('role="menuitem"')
+    expect(output).to include('aria-haspopup="menu"')
+    expect(output).to include('data-wabi--dropdown-menu-target="subTrigger"')
+    expect(output).to include('data-wabi-value="share"')
+    expect(output).to include('data-wabi-disabled="false"')
+    expect(output).to include('Share')
+    expect(output).to include('<svg')
+  end
+
+  it "DropdownMenuSubContent renders positioner + content with initial data-state=closed + inert" do
+    output = Components::UI::DropdownMenuSubContent.new.call { "" }
+    expect(output).to include('data-wabi--dropdown-menu-target="subPositioner"')
+    expect(output).to include('data-wabi--dropdown-menu-target="subContent"')
+    expect(output).to match(/data-wabi--dropdown-menu-target="subContent"[^>]*data-state="closed"/)
+    expect(output).to match(/data-wabi--dropdown-menu-target="subContent"[^>]*\binert\b/)
+  end
+
+  it "composes a menu with a nested submenu containing items + checkboxes" do
+    composed = Class.new(Phlex::HTML) do
+      def view_template
+        render Components::UI::DropdownMenu.new do
+          render Components::UI::DropdownMenuTrigger.new { "Open" }
+          render Components::UI::DropdownMenuContent.new do
+            render Components::UI::DropdownMenuItem.new(value: "edit") { "Edit" }
+            render Components::UI::DropdownMenuSub.new do
+              render Components::UI::DropdownMenuSubTrigger.new(value: "share") { "Share" }
+              render Components::UI::DropdownMenuSubContent.new do
+                render Components::UI::DropdownMenuItem.new(value: "email") { "Email" }
+                render Components::UI::DropdownMenuCheckboxItem.new(value: "notify_team", checked: true) { "Notify team" }
+              end
+            end
+          end
+        end
+      end
+    end.new.call
+
+    expect(composed).to include('data-wabi--dropdown-menu-target="sub"')
+    expect(composed).to include('data-wabi--dropdown-menu-target="subTrigger"')
+    expect(composed).to include('data-wabi--dropdown-menu-target="subContent"')
+    expect(composed).to include('Share')
+    expect(composed).to include('Email')
+    expect(composed).to include('Notify team')
+    # CheckboxItem inside a sub still uses `optionItem` target -- the
+    # controller routes by closest sub ancestor at render time.
+    expect(composed).to include('data-wabi--dropdown-menu-target="optionItem"')
   end
 
   it "composes into a full menu" do

@@ -48,14 +48,25 @@ are all resolved. This document tracks what remains.
    inert element. Phlex sources emit `inert` initially since everything
    starts closed; the controller flips it on every open/close.
 
-2. **DropdownMenu — Submenu.** Nested menu (`triggerItem` part in Zag's
-   anatomy). Requires a child `wabi--dropdown-menu` controller whose machine
-   is connected to the parent's via `triggerItem` ↔ child's `trigger`. Zag's
-   `getTriggerItemProps` merges parent's `getItemProps` with child's
-   `getTriggerProps` so the submenu opens on hover/arrow-right.
+2. ~~**DropdownMenu — Submenu.**~~ **Resolved during v0.1 polish.** Three
+   new sub-components (`DropdownMenuSub` / `DropdownMenuSubTrigger` /
+   `DropdownMenuSubContent`) plus a controller rewrite that owns one Zag
+   menu machine per `sub` boundary. setChild / setParent take MenuService
+   (verified against the published 1.41 types), so the wiring runs after
+   start() once both services exist. The parent and sub machines live in
+   the *same* Stimulus controller because nested same-id controllers
+   would hide each other's targets via Stimulus scoping. Item / option
+   targets inside a sub are routed at render time via
+   `closest("[...-target='sub']")` -> the matching sub machine's api.
+   v0.1 limit: single-level nesting only -- a sub-inside-a-sub would need
+   another controller pass we haven't put in yet.
 
-3. **DropdownMenu — Submenu CheckboxItem / RadioItem**, if needed. Probably
-   inherits the same option-item machinery as the top-level menu.
+3. ~~**DropdownMenu — Submenu CheckboxItem / RadioItem.**~~ **Resolved
+   alongside #2.** The route-by-closest-sub-ancestor strategy means the
+   existing `DropdownMenuCheckboxItem` / `DropdownMenuRadioItem` work
+   inside a `SubContent` with no new components -- the controller picks
+   the sub's API for `getOptionItemProps` when the option item lives
+   under a `sub` element.
 
 4. **Toast — integrate `@zag-js/toast` group machine + per-toast machine.**
    The v0.1 implementation is a vanilla `setTimeout`-based controller per

@@ -158,6 +158,16 @@ module Views
                     render Components::UI::DropdownMenuRadioItem.new(value: "date", name: "sort") { "Date" }
                     render Components::UI::DropdownMenuRadioItem.new(value: "size", name: "sort") { "Size" }
                   end
+                  render Components::UI::DropdownMenuSeparator.new
+                  render Components::UI::DropdownMenuSub.new do
+                    render Components::UI::DropdownMenuSubTrigger.new(value: "share") { "Share" }
+                    render Components::UI::DropdownMenuSubContent.new do
+                      render Components::UI::DropdownMenuItem.new(value: "share_email")  { "Email" }
+                      render Components::UI::DropdownMenuItem.new(value: "share_slack")  { "Slack" }
+                      render Components::UI::DropdownMenuSeparator.new
+                      render Components::UI::DropdownMenuCheckboxItem.new(value: "share_notify_team", checked: true) { "Notify team" }
+                    end
+                  end
                 end
               end
             end
