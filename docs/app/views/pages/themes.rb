@@ -6,7 +6,7 @@ module Views
       THEMES = %w[default slate stone zinc rose blue green violet].freeze
 
       def view_template
-        render Components::Site::Layout.new(title: "Themes") do
+        render ::Components::Site::Layout.new(title: "Themes") do
           main(class: "container mx-auto py-12 px-4 max-w-5xl") do
             h1(class: "text-4xl font-bold mb-2") { "Themes" }
             p(class: "text-muted-foreground mb-8") do
@@ -28,12 +28,12 @@ module Views
                 ) do
                   h3(class: "text-lg font-semibold mb-3 text-foreground") { slug.capitalize }
                   div(class: "flex flex-col gap-2") do
-                    render Components::UI::Button.new                        { "Primary" }
-                    render Components::UI::Button.new(appearance: :secondary) { "Secondary" }
-                    render Components::UI::Button.new(appearance: :outline)   { "Outline" }
+                    render ::Components::UI::Button.new                        { "Primary" }
+                    render ::Components::UI::Button.new(appearance: :secondary) { "Secondary" }
+                    render ::Components::UI::Button.new(appearance: :outline)   { "Outline" }
                     div(class: "flex gap-2 mt-1") do
-                      render Components::UI::Badge.new                         { "Badge" }
-                      render Components::UI::Badge.new(appearance: :secondary) { "Secondary" }
+                      render ::Components::UI::Badge.new                         { "Badge" }
+                      render ::Components::UI::Badge.new(appearance: :secondary) { "Secondary" }
                     end
                   end
                   button(

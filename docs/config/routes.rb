@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root "pages#home"
+  get "/preview",                     to: "pages#preview"
   get "/docs/themes",                 to: "pages#themes"
   get "/docs/components",             to: "components#index", as: :component_index
   get "/docs/components/:name",       to: "components#show",  as: :component_doc,
