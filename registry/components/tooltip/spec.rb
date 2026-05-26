@@ -20,11 +20,10 @@ RSpec.describe "Tooltip composition" do
     expect(output).to include("Info")
   end
 
-  it "TooltipContent starts hidden on the content div, NOT on positioner" do
+  it "TooltipContent starts with data-state=closed + inert on content (positioner stays interactive)" do
     output = Components::UI::TooltipContent.new.call { "Hi" }
     expect(output).to include('data-wabi--tooltip-target="positioner"')
-    expect(output).to include('data-wabi--tooltip-target="content"')
-    expect(output).to match(/data-wabi--tooltip-target="content"[^>]*hidden/)
+    expect(output).to include('data-wabi--tooltip-target="content" data-state="closed"')
     expect(output).not_to match(/data-wabi--tooltip-target="positioner"[^>]*hidden/)
   end
 

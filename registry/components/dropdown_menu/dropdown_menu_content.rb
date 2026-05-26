@@ -7,7 +7,10 @@ module Components
     class DropdownMenuContent < Wabi::Base
       variants do
         base "z-50 min-w-[8rem] overflow-hidden rounded-md border-input bg-popover p-1 " \
-             "text-popover-foreground shadow-md outline-none"
+             "text-popover-foreground shadow-md outline-none " \
+             "transition-opacity duration-150 ease-out " \
+             "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
+             "data-[state=closed]:pointer-events-none"
       end
 
       def initialize(**attrs)
@@ -16,17 +19,13 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        # Positioner uses Zag floating-ui (position:absolute anchored to trigger),
-        # NOT a full-viewport overlay -- same shape as Tooltip/Popover. `pointer-
-        # events-none` on the positioner is defensive. `hidden: !open` lives on
-        # the content per Zag's `getContentProps`.
         div(
           data: { "wabi--dropdown-menu-target": "positioner" },
           class: "z-50 pointer-events-none"
         ) do
           div(
             data: { "wabi--dropdown-menu-target": "content" },
-            hidden: true,
+            "data-state": "closed",
             class: merge_class(tokens, user_class)
           ) do
             yield if block_given?

@@ -36,17 +36,15 @@ RSpec.describe "Dialog composition" do
     expect(output).to include('aria-modal="true"')
   end
 
-  it "starts with backdrop and content hidden, but NOT the portal wrapper" do
-    # Zag toggles `hidden` on backdrop+content via getBackdropProps/getContentProps.
-    # Putting hidden on the portal would cascade display:none and prevent the
-    # dialog from ever becoming visible -- this spec locks in the fix.
+  it "starts backdrop and content with data-state=closed, content also inert" do
+    # v0.1.x: visibility moved off the `hidden` attribute and onto `data-state`.
+    # Closed state -> CSS opacity-0 (transition runs); the controller toggles
+    # `inert` on the content to keep it out of tab order + accessibility tree.
+    # Positioner is `pointer-events-none` so it never blocks clicks even when
+    # the dialog is closed -- no `hidden` needed there.
     output = Components::UI::DialogContent.new.call { "" }
-    expect(output).to match(/data-wabi--dialog-target="backdrop"[^>]*hidden/)
-    expect(output).to match(/data-wabi--dialog-target="content"[^>]*hidden/)
-    # Positioner ALSO starts hidden (the controller mirrors the open state).
-    # Without this the fixed-inset-0 z-50 layer intercepts every click on the
-    # page whenever the dialog is closed.
-    expect(output).to match(/data-wabi--dialog-target="positioner"[^>]*hidden/)
+    expect(output).to include('data-wabi--dialog-target="backdrop" data-state="closed"')
+    expect(output).to include('data-state="closed" data-wabi--dialog-target="content"')
     expect(output).not_to match(/data-wabi--dialog-target="portal"[^>]*hidden/)
   end
 

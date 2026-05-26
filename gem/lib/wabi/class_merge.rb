@@ -60,6 +60,21 @@ module Wabi
     AXIS_FAMILIES = %w[translate -translate scale skew rotate space border].to_set.freeze
     AXIS_SUFFIXES = %w[x y z t b l r s e].to_set.freeze
 
+    # Families whose first non-family segment can be EITHER a width/size value
+    # OR a color name. Tailwind treats these as different CSS properties so
+    # they must dedup independently. Without this, `border-2 border-input`
+    # collapses to just `border-input` (loses the width), or `ring-2 ring-ring
+    # ring-offset-2` collapses to one of them (the focus ring vanishes).
+    WIDTH_COLOR_FAMILIES = %w[border ring text outline divide].to_set.freeze
+
+    # Tail tokens that unambiguously identify a size/length utility. Anything
+    # that doesn't match these AND doesn't look numeric is assumed to be a
+    # color (or other named theme token).
+    SIZE_TOKENS = %w[
+      xs sm base md lg xl 2xl 3xl 4xl 5xl 6xl 7xl 8xl 9xl
+      auto full screen min max fit none px
+    ].to_set.freeze
+
     def utility_group(utility)
       return "atom:#{utility}" if ATOM_UTILITIES.include?(utility)
 
@@ -67,9 +82,29 @@ module Wabi
       head = utility.start_with?("-") ? "-#{segments.first}" : segments.first
       tail = utility.start_with?("-") ? segments[1] : segments[1]
 
+      # `ring-offset-*` is its own family: `ring-offset-2` (width) and
+      # `ring-offset-input` (color) must NOT collide with bare `ring-*`.
+      if head == "ring" && tail == "offset"
+        sub_tail = utility.start_with?("-") ? segments[2] : segments[2]
+        return "ring-offset:size"  if sub_tail && size_or_numeric?(sub_tail)
+        return "ring-offset:color" if sub_tail
+        return "ring-offset"
+      end
+
       return "#{head}-#{tail}" if AXIS_FAMILIES.include?(head) && AXIS_SUFFIXES.include?(tail)
 
+      if WIDTH_COLOR_FAMILIES.include?(head) && tail
+        return "#{head}:size"  if size_or_numeric?(tail)
+        return "#{head}:color"
+      end
+
       head
+    end
+
+    def size_or_numeric?(tail)
+      return true if SIZE_TOKENS.include?(tail)
+      return true if tail.match?(/\A-?\d+(\/\d+)?\z/)
+      false
     end
 
     # The last `:` that lives outside any `[...]` block. Arbitrary-value variants

@@ -13,7 +13,6 @@ export default class extends Controller {
   connect() {
     this.machine = new VanillaMachine(tooltip.machine, {
       id: this.element.id || crypto.randomUUID(),
-      // `defaultOpen` keeps the bindable uncontrolled so hover/focus toggle it.
       defaultOpen: this.openValue,
       openDelay:   this.openDelayValue,
       closeDelay:  this.closeDelayValue,
@@ -36,6 +35,12 @@ export default class extends Controller {
     const api = tooltip.connect(this.machine.service, normalizeProps)
     if (this.hasTriggerTarget)    spreadProps(this.triggerTarget,    api.getTriggerProps())
     if (this.hasPositionerTarget) spreadProps(this.positionerTarget, api.getPositionerProps())
-    if (this.hasContentTarget)    spreadProps(this.contentTarget,    api.getContentProps())
+    if (this.hasContentTarget) {
+      spreadProps(this.contentTarget, api.getContentProps())
+      // Visibility moved off `hidden` so the opacity transition can run; inert
+      // keeps the content out of the accessibility tree + tab order when
+      // closed. See zag-js-pattern memory note #6 + Sprint 4 cleanup.
+      this.contentTarget.hidden = false
+    }
   }
 }

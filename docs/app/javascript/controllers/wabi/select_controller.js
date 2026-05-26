@@ -57,7 +57,10 @@ export default class extends Controller {
     if (this.hasIndicatorTarget)    spreadProps(this.indicatorTarget,    api.getIndicatorProps())
     if (this.hasValueTextTarget)    spreadProps(this.valueTextTarget,    api.getValueTextProps())
     if (this.hasPositionerTarget)   spreadProps(this.positionerTarget,   api.getPositionerProps())
-    if (this.hasContentTarget)      spreadProps(this.contentTarget,      api.getContentProps())
+    if (this.hasContentTarget) {
+      spreadProps(this.contentTarget, api.getContentProps())
+      this.contentTarget.hidden = false
+    }
     if (this.hasListTarget)         spreadProps(this.listTarget,         api.getListProps())
 
     // ValueText content: api.valueAsString shows the selected label(s) or empty.

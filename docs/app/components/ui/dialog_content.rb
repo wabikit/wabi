@@ -6,19 +6,25 @@ module Components
   module UI
     class DialogContent < Wabi::Base
       variants do
+        # `data-[state=closed]:pointer-events-none` is critical: when closed,
+        # the content is `opacity-0` (invisible) but STILL `fixed` with a
+        # centered footprint. Without disabling pointer events when closed,
+        # the invisible box intercepts clicks in the center of the viewport.
+        # Same trap as the original positioner-covers-everything bug.
         base "fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 " \
              "gap-4 border-input bg-background p-6 shadow-lg sm:rounded-lg " \
-             "transition-opacity duration-200 " \
-             "data-[state=open]:opacity-100 data-[state=closed]:opacity-0"
+             "transition-opacity duration-200 ease-out " \
+             "data-[state=open]:opacity-100 data-[state=open]:pointer-events-auto " \
+             "data-[state=closed]:opacity-0 data-[state=closed]:pointer-events-none"
       end
 
+      # Backdrop also needs the pointer-events flip -- it's `fixed inset-0`
+      # which covers the entire viewport even at opacity 0.
       BACKDROP_CLASS = "fixed inset-0 z-40 bg-black/80 " \
-                       "transition-opacity duration-200 " \
-                       "data-[state=open]:opacity-100 data-[state=closed]:opacity-0"
+                       "transition-opacity duration-200 ease-out " \
+                       "data-[state=open]:opacity-100 data-[state=open]:pointer-events-auto " \
+                       "data-[state=closed]:opacity-0 data-[state=closed]:pointer-events-none"
 
-      # `pointer-events-none` so the wrapper never intercepts clicks on the page
-      # below when the dialog is closed -- without this AND the `hidden` toggle
-      # the fixed-inset-0 z-50 layer captures every click on the document.
       POSITIONER_CLASS = "fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
 
       def initialize(**attrs)
@@ -27,27 +33,28 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        # Portal wrapper has NO `hidden` -- children (backdrop, content) carry
-        # their own `hidden: !open` from Zag. A hidden portal would cascade
-        # display:none over the whole tree and the dialog could never show.
-        # The controller moves this subtree into <body> on connect().
+        # Visibility now lives on `data-state` rather than the `hidden`
+        # attribute. The controller force-clears `hidden` after spreadProps
+        # (Zag still sets it from getContentProps/getBackdropProps) and
+        # applies `inert` on the content when closed so tab order skips it.
+        # Without that switch, `hidden` cascades display:none and CSS
+        # transitions never run (the element snaps off-screen mid-fade).
         div(data: { "wabi--dialog-target": "portal" }) do
           div(
             data: { "wabi--dialog-target": "backdrop" },
-            hidden: true,
+            "data-state": "closed",
             class: BACKDROP_CLASS
           )
           div(
             data: { "wabi--dialog-target": "positioner" },
-            hidden: true,
             class: POSITIONER_CLASS
           ) do
             div(
               role: "dialog",
               "aria-modal": "true",
+              "data-state": "closed",
               data: { "wabi--dialog-target": "content" },
-              hidden: true,
-              class: merge_class("pointer-events-auto", tokens, user_class)
+              class: merge_class(tokens, user_class)
             ) do
               yield if block_given?
             end

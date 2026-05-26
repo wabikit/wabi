@@ -7,7 +7,10 @@ module Components
     class SelectContent < Wabi::Base
       variants do
         base "z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border-input " \
-             "bg-popover text-popover-foreground shadow-md"
+             "bg-popover text-popover-foreground shadow-md " \
+             "transition-opacity duration-150 ease-out " \
+             "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
+             "data-[state=closed]:pointer-events-none"
       end
 
       def initialize(**attrs)
@@ -16,18 +19,13 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        # Positioner is the floating wrapper Zag positions via floating-ui.
-        # Content is the toggled surface (Zag spreads `hidden: !open` here, NOT
-        # on the positioner -- if you set `hidden` on the positioner it cascades
-        # via display:none and the content can never become visible). List wraps
-        # the role=listbox.
         div(
           data: { "wabi--select-target": "positioner" },
           class: "z-50"
         ) do
           div(
             data: { "wabi--select-target": "content" },
-            hidden: true,
+            "data-state": "closed",
             class: merge_class(tokens, user_class)
           ) do
             ul(

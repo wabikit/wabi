@@ -6,7 +6,10 @@ module Components
   module UI
     class TooltipContent < Wabi::Base
       variants do
-        base "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground shadow-md"
+        base "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground shadow-md " \
+             "transition-opacity duration-150 ease-out " \
+             "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
+             "data-[state=closed]:pointer-events-none"
       end
 
       def initialize(**attrs)
@@ -15,18 +18,16 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        # Positioner is `position: absolute` (set by Zag via popperStyles.floating)
-        # anchored to the trigger -- NOT a full-viewport overlay like Dialog --
-        # so `pointer-events-none` on it just ensures we never block clicks at
-        # the trigger's footprint when the tooltip is hidden but the wrapper
-        # element still exists in the layout.
+        # Visibility via data-state + opacity transition rather than `hidden`,
+        # so fade-in / fade-out actually run instead of snapping. Controller
+        # mirrors `inert` on the content based on api.open.
         div(
           data: { "wabi--tooltip-target": "positioner" },
           class: "z-50 pointer-events-none"
         ) do
           div(
             data: { "wabi--tooltip-target": "content" },
-            hidden: true,
+            "data-state": "closed",
             class: merge_class(tokens, user_class)
           ) do
             yield if block_given?

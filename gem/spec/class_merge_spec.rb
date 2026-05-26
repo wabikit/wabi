@@ -70,5 +70,39 @@ RSpec.describe Wabi::ClassMerge do
       expect(described_class.call("-translate-x-1/2 -translate-x-full"))
         .to eq("-translate-x-full")
     end
+
+    it "distinguishes border-width from border-color" do
+      expect(described_class.call("border-2 border-input")).to eq("border-2 border-input")
+    end
+
+    it "distinguishes ring-width, ring-color, and ring-offset-width" do
+      # All three are independent CSS properties; the focus ring needs all of
+      # them (width + color + offset). Naive dedup would let one wipe the
+      # others.
+      expect(described_class.call("ring-2 ring-ring ring-offset-2"))
+        .to eq("ring-2 ring-ring ring-offset-2")
+    end
+
+    it "distinguishes text-size from text-color" do
+      expect(described_class.call("text-sm text-foreground"))
+        .to eq("text-sm text-foreground")
+    end
+
+    it "still dedups within the same category" do
+      expect(described_class.call("text-sm text-base")).to eq("text-base")
+      expect(described_class.call("ring-2 ring-4")).to eq("ring-4")
+      expect(described_class.call("text-foreground text-muted-foreground"))
+        .to eq("text-muted-foreground")
+    end
+
+    it "handles `ring-offset-{color}` separately from `ring-offset-{width}`" do
+      expect(described_class.call("ring-offset-2 ring-offset-input"))
+        .to eq("ring-offset-2 ring-offset-input")
+    end
+
+    it "preserves negative-axis translates" do
+      expect(described_class.call("-translate-x-1/2 -translate-y-1/2"))
+        .to eq("-translate-x-1/2 -translate-y-1/2")
+    end
   end
 end

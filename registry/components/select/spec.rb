@@ -40,10 +40,9 @@ RSpec.describe "Select composition" do
     expect(output).to include('data-wabi--select-target="positioner"')
     expect(output).to include('data-wabi--select-target="content"')
     expect(output).to include('data-wabi--select-target="list"')
-    # `hidden` lives on the content div (what Zag's getContentProps toggles via
-    # `hidden: !open`), NOT on the positioner -- a hidden positioner would
-    # cascade display:none and prevent the content from ever showing.
-    expect(output).to match(/data-wabi--select-target="content"[^>]*hidden/)
+    # v0.1.x: visibility moved off `hidden` onto `data-state` so transitions
+    # can run. Initial render has `data-state="closed"` + `inert` on content.
+    expect(output).to include('data-wabi--select-target="content" data-state="closed"')
   end
 
   it "renders SelectItem with role=option, item target, and item value" do

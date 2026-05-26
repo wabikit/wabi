@@ -99,6 +99,17 @@ module Views
                   render Components::UI::DropdownMenuSeparator.new
                   render Components::UI::DropdownMenuItem.new(value: "archive") { "Archive" }
                   render Components::UI::DropdownMenuItem.new(value: "delete", disabled: true) { "Delete (disabled)" }
+                  render Components::UI::DropdownMenuSeparator.new
+                  render Components::UI::DropdownMenuLabel.new { "Visibility" }
+                  render Components::UI::DropdownMenuCheckboxItem.new(value: "show_bookmarks", checked: true) { "Show bookmarks" }
+                  render Components::UI::DropdownMenuCheckboxItem.new(value: "show_panel") { "Show full panel" }
+                  render Components::UI::DropdownMenuSeparator.new
+                  render Components::UI::DropdownMenuLabel.new { "Sort by" }
+                  render Components::UI::DropdownMenuRadioGroup.new(name: "sort", value: "name") do
+                    render Components::UI::DropdownMenuRadioItem.new(value: "name", name: "sort", checked: true) { "Name" }
+                    render Components::UI::DropdownMenuRadioItem.new(value: "date", name: "sort") { "Date" }
+                    render Components::UI::DropdownMenuRadioItem.new(value: "size", name: "sort") { "Size" }
+                  end
                 end
               end
             end

@@ -21,11 +21,10 @@ RSpec.describe "Popover composition" do
     expect(output).to include('data-wabi--popover-target="trigger"')
   end
 
-  it "PopoverContent starts hidden on content, NOT on positioner" do
+  it "PopoverContent starts with data-state=closed + inert on content" do
     output = Components::UI::PopoverContent.new.call { "" }
     expect(output).to include('data-wabi--popover-target="positioner"')
-    expect(output).to include('data-wabi--popover-target="content"')
-    expect(output).to match(/data-wabi--popover-target="content"[^>]*hidden/)
+    expect(output).to include('data-wabi--popover-target="content" data-state="closed"')
     expect(output).not_to match(/data-wabi--popover-target="positioner"[^>]*hidden/)
   end
 

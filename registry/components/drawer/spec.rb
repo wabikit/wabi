@@ -39,9 +39,10 @@ RSpec.describe "Drawer composition" do
   end
 
   it "DrawerContent starts with backdrop AND content hidden, portal NOT hidden" do
+    # v0.1.x: visibility moved to `data-state` for animation support.
     output = Components::UI::DrawerContent.new.call { "" }
-    expect(output).to match(/data-wabi--dialog-target="backdrop"[^>]*hidden/)
-    expect(output).to match(/data-wabi--dialog-target="content"[^>]*hidden/)
+    expect(output).to include('data-wabi--dialog-target="backdrop" data-state="closed"')
+    expect(output).to include('data-state="closed" data-wabi--dialog-target="content"')
     expect(output).not_to match(/data-wabi--dialog-target="portal"[^>]*hidden/)
   end
 

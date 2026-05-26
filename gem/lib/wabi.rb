@@ -6,6 +6,7 @@ require_relative "wabi/class_merge"
 require_relative "wabi/variants"
 require_relative "wabi/registry_client"
 require_relative "wabi/lockfile"
+require_relative "wabi/turbo_stream_extensions"
 
 module Wabi
   class Error < StandardError; end

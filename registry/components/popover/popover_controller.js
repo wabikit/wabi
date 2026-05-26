@@ -12,8 +12,6 @@ export default class extends Controller {
   connect() {
     this.machine = new VanillaMachine(popover.machine, {
       id: this.element.id || crypto.randomUUID(),
-      // `defaultOpen` keeps the open bindable uncontrolled so the machine can
-      // toggle it on trigger click / Escape / click-outside.
       defaultOpen: this.openValue,
       modal: this.modalValue,
       onOpenChange: ({ open }) => {
@@ -35,7 +33,10 @@ export default class extends Controller {
     const api = popover.connect(this.machine.service, normalizeProps)
     if (this.hasTriggerTarget)    spreadProps(this.triggerTarget,    api.getTriggerProps())
     if (this.hasPositionerTarget) spreadProps(this.positionerTarget, api.getPositionerProps())
-    if (this.hasContentTarget)    spreadProps(this.contentTarget,    api.getContentProps())
+    if (this.hasContentTarget) {
+      spreadProps(this.contentTarget, api.getContentProps())
+      this.contentTarget.hidden = false
+    }
     this.closeTriggerTargets.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
   }
 }
