@@ -48,6 +48,28 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Select" }
+              fruits = [
+                { value: "apple",  label: "Apple" },
+                { value: "banana", label: "Banana" },
+                { value: "cherry", label: "Cherry" },
+                { value: "date",   label: "Date" },
+              ]
+              div(class: "max-w-xs") do
+                render Components::UI::Select.new(name: "fruit", items: fruits, placeholder: "Pick a fruit") do
+                  render Components::UI::SelectTrigger.new do
+                    render Components::UI::SelectValue.new
+                  end
+                  render Components::UI::SelectContent.new do
+                    fruits.each do |item|
+                      render Components::UI::SelectItem.new(value: item[:value]) { item[:label] }
+                    end
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Card" }
               div(class: "max-w-md") do
                 render Components::UI::Card.new do
