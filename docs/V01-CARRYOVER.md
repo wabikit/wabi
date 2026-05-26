@@ -74,10 +74,10 @@ are all resolved. This document tracks what remains.
    with `template do ... end` blocks inside the main body, see if the rest
    of the body renders.
 
-6. **`bin/dev` cold-start polish** — `tmp/pids/server.pid` lingers if a
-   previous run was killed unclean. Often the user has to `rm -f
-   docs/tmp/pids/server.pid` to recover. A `bin/dev` wrapper that clears
-   stale pid files on launch would smooth this out.
+6. ~~**`bin/dev` cold-start polish**~~ — **resolved during v0.1 polish.**
+   `bin/dev` now pre-flights `docs/tmp/pids/server.pid`: if the recorded
+   pid is no longer alive, it removes the stale file; if it points to a
+   running process, it exits loudly so we don't stomp an active server.
 
 7. **Phlex 2.4.1 emits Ruby 4.0.5 warnings (`assigned but unused variable -
    stack`) at load time.** Not blocking; revisit if Phlex 2.5+ doesn't fix

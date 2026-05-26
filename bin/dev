@@ -10,6 +10,21 @@ if ! command -v overmind &> /dev/null && ! command -v foreman &> /dev/null; then
   exit 1
 fi
 
+# Clean up a stale Rails server pidfile from a previous unclean shutdown.
+# Only removes it when the recorded PID is no longer alive -- if a real
+# server is running we exit loudly instead of stomping on it.
+PID_FILE="docs/tmp/pids/server.pid"
+if [ -f "$PID_FILE" ]; then
+  STALE_PID=$(cat "$PID_FILE")
+  if kill -0 "$STALE_PID" 2>/dev/null; then
+    echo "[bin/dev] $PID_FILE points to a running process (pid $STALE_PID)."
+    echo "         Stop that server first, or remove the pidfile manually."
+    exit 1
+  fi
+  rm -f "$PID_FILE"
+  echo "[bin/dev] removed stale $PID_FILE (pid $STALE_PID no longer running)"
+fi
+
 if command -v overmind &> /dev/null; then
   overmind start -f Procfile.dev
 else
