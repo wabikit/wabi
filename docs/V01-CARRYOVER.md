@@ -76,15 +76,18 @@ are all resolved. This document tracks what remains.
    `wabi--toast-target="connectedTarget"` is queried on `targetConnected` and
    registered with the group via `service.start({ ...config, id })`.
 
-5. **Phlex `<template>` ↔ layout capture interaction.** During Sprint 4 Toast
-   debugging, putting `<template>...</template>` blocks inside a Phlex view
-   that's rendered through `Components::Site::Layout`'s `yield_content`
-   appeared to interact badly with the captured buffer — the surrounding
-   content disappeared. Root-causing this would unlock the cleaner
-   `<template>` + `cloneNode` Stimulus pattern (currently we side-step with
-   Stimulus String values + `insertAdjacentHTML`). Repro: simple Phlex view
-   with `template do ... end` blocks inside the main body, see if the rest
-   of the body renders.
+5. ~~**Phlex `<template>` ↔ layout capture interaction.**~~ **Investigated
+   during v0.1 polish — the Sprint 4 cleanup already fixed it.** Three
+   repros (minimal Phlex view; fake layout with yield_content +
+   sibling-after-capture; full-fat Toast components inside `<template>`
+   blocks) all rendered cleanly with surrounding content intact. Rack-test
+   hit of `/` returned status 200 with all 22 `<h2>` sections present and
+   3 `<template>` elements correctly server-rendered. The Sprint 4
+   discovery (entry 10 in `feedback_zag_js_pattern.md`) — that adding a
+   sibling render after `yield_content` drops the captured content unless
+   you `raw safe(yield_content(&block))` — fully covers this case. The
+   demo refactor is in (`<template>` + cloneNode replaces the
+   insertAdjacentHTML workaround in toast_demo_controller).
 
 6. ~~**`bin/dev` cold-start polish**~~ — **resolved during v0.1 polish.**
    `bin/dev` now pre-flights `docs/tmp/pids/server.pid`: if the recorded
