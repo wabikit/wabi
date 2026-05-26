@@ -86,7 +86,7 @@
   --popover-foreground: 0 0% 98%;
 }
 
-:root, [data-theme="slate"] {
+[data-theme="slate"] {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
   --primary: 222.2 47.4% 11.2%;
@@ -131,7 +131,7 @@
   --popover-foreground: 210 40% 98%;
 }
 
-:root, [data-theme="stone"] {
+[data-theme="stone"] {
   --background: 0 0% 100%;
   --foreground: 20 14.3% 4.1%;
   --primary: 24 9.8% 10%;
@@ -176,7 +176,7 @@
   --popover-foreground: 60 9.1% 97.8%;
 }
 
-:root, [data-theme="zinc"] {
+[data-theme="zinc"] {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --primary: 240 5.9% 10%;
@@ -221,7 +221,7 @@
   --popover-foreground: 0 0% 98%;
 }
 
-:root, [data-theme="rose"] {
+[data-theme="rose"] {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --primary: 346.8 77.2% 49.8%;
@@ -266,7 +266,7 @@
   --popover-foreground: 0 0% 95%;
 }
 
-:root, [data-theme="blue"] {
+[data-theme="blue"] {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
   --primary: 221.2 83.2% 53.3%;
@@ -311,7 +311,7 @@
   --popover-foreground: 210 40% 98%;
 }
 
-:root, [data-theme="green"] {
+[data-theme="green"] {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --primary: 142.1 76.2% 36.3%;
@@ -356,7 +356,7 @@
   --popover-foreground: 0 0% 95%;
 }
 
-:root, [data-theme="violet"] {
+[data-theme="violet"] {
   --background: 0 0% 100%;
   --foreground: 224 71.4% 4.1%;
   --primary: 262.1 83.3% 57.8%;

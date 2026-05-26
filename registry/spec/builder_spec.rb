@@ -102,9 +102,15 @@ RSpec.describe Wabi::Registry::Builder do
       # Overwrite the stubs from the outer `before` with realistic fixtures.
       File.write(File.join(tmp, "themes/_shared.css"),
                  "@custom-variant dark (&:where([data-mode=\"dark\"]));\n@theme inline { --color-primary: hsl(var(--primary)); }")
+      # Default ships `:root, [data-theme="default"]`; every other theme
+      # ships only `[data-theme="<slug>"]` (no :root). Mirrors the real
+      # registry/themes/ files -- a regression spec below asserts only ONE
+      # :root in the docs output, which is the bug that broke light-mode
+      # theme switching on first try.
       slugs.each do |slug|
+        selector = (slug == "default") ? ":root, [data-theme=\"#{slug}\"]" : "[data-theme=\"#{slug}\"]"
         File.write(File.join(tmp, "themes/#{slug}.css"),
-                   ":root, [data-theme=\"#{slug}\"] { --primary: 0 0% 50%; }\n" \
+                   "#{selector} { --primary: 0 0% 50%; }\n" \
                    "[data-theme=\"#{slug}\"][data-mode=\"dark\"] { --primary: 0 0% 50%; }")
       end
     end
@@ -136,6 +142,18 @@ RSpec.describe Wabi::Registry::Builder do
       new_builder.build
       expect(File.exist?(sandbox_gem)).to be true
       expect(File.exist?(sandbox_docs)).to be true
+    end
+
+    it "docs tokens.css contains exactly ONE :root block (no clobber)" do
+      # Regression: the first pass had every theme ship `:root, [data-theme=
+      # "<slug>"]`, so :root was redefined 8 times. :root and [data-theme=X]
+      # have equal specificity (0,1,0); later :root in source order clobbered
+      # earlier [data-theme=X] rules in light mode (dark blocks had higher
+      # specificity (0,2,0) and so escaped). Only default theme owns :root.
+      new_builder.build_themes
+      output = File.read(sandbox_docs)
+      root_blocks = output.scan(/^:root[,\s{]/).length
+      expect(root_blocks).to eq(1)
     end
   end
 end
