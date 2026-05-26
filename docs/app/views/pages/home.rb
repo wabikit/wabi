@@ -48,6 +48,21 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Tooltip" }
+              p(class: "text-sm text-muted-foreground mb-2") { "Hover or focus the buttons below — tooltip appears after a short delay." }
+              div(class: "flex gap-4 items-center") do
+                render Components::UI::Tooltip.new do
+                  render Components::UI::TooltipTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2") { "Hover me" }
+                  render Components::UI::TooltipContent.new { "Got it — this is a tooltip." }
+                end
+                render Components::UI::Tooltip.new(open_delay: 200) do
+                  render Components::UI::TooltipTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2") { "Fast tooltip" }
+                  render Components::UI::TooltipContent.new { "200ms openDelay." }
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Drawer" }
               div(class: "flex gap-2 flex-wrap") do
                 [:top, :right, :bottom, :left].each do |side|
