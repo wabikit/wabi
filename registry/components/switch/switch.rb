@@ -30,8 +30,8 @@ module Components
         label(
           data: {
             controller: "wabi--switch",
-            "wabi--switch-checked-value": @checked,
-            "wabi--switch-disabled-value": @disabled,
+            "wabi--switch-checked-value":  @checked.to_s,
+            "wabi--switch-disabled-value": @disabled.to_s,
             "wabi--switch-input-id-value": @id,
             "wabi--switch-name-value": @name,
           },

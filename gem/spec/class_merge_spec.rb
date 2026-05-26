@@ -49,5 +49,26 @@ RSpec.describe Wabi::ClassMerge do
       classes = "data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
       expect(described_class.call(classes)).to eq(classes)
     end
+
+    it "treats atom utilities like `flex` as separate from their compound siblings" do
+      # `flex` = display:flex; `flex-col` = flex-direction:column. Different
+      # CSS properties -- they must coexist on the same element.
+      expect(described_class.call("flex flex-col")).to eq("flex flex-col")
+      expect(described_class.call("border border-input")).to eq("border border-input")
+    end
+
+    it "keeps directional axes distinct for translate/scale/border" do
+      # x-axis vs y-axis translate are independent transforms; both must stay.
+      expect(described_class.call("-translate-x-1/2 -translate-y-1/2"))
+        .to eq("-translate-x-1/2 -translate-y-1/2")
+      expect(described_class.call("border-l border-r")).to eq("border-l border-r")
+    end
+
+    it "still dedups compound siblings within the same axis family" do
+      # `-translate-x-1/2` and `-translate-x-full` are both x-axis translates;
+      # last wins.
+      expect(described_class.call("-translate-x-1/2 -translate-x-full"))
+        .to eq("-translate-x-full")
+    end
   end
 end

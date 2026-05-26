@@ -27,8 +27,8 @@ module Components
         label(
           data: {
             controller: "wabi--checkbox",
-            "wabi--checkbox-checked-value": @checked,
-            "wabi--checkbox-disabled-value": @disabled,
+            "wabi--checkbox-checked-value":  @checked.to_s,
+            "wabi--checkbox-disabled-value": @disabled.to_s,
             "wabi--checkbox-input-id-value": @id,
             "wabi--checkbox-name-value": @name,
             "wabi--checkbox-value-value": @value,

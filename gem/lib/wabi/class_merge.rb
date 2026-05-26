@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "set"
+
 module Wabi
   # Minimal Tailwind class deduplication. Later tokens win for the same group key.
   #
@@ -35,7 +37,39 @@ module Wabi
         prefix  = ""
         utility = token
       end
-      "#{prefix}#{utility.split("-").first}"
+      "#{prefix}#{utility_group(utility)}"
+    end
+
+    # Single-word "atom" utilities that name a CSS property whose compound
+    # siblings (e.g. `flex` vs `flex-col`, `border` vs `border-input`) target
+    # an entirely different property and must NOT share a dedup bucket. Without
+    # this distinction, `flex flex-col` collapses to just `flex-col` -- the
+    # display:flex rule is lost and the children don't lay out as a flex row.
+    ATOM_UTILITIES = %w[
+      flex grid block inline hidden visible
+      border ring rounded outline
+      transition truncate
+      absolute relative fixed static sticky
+    ].to_set.freeze
+
+    # Directional / axial suffix segments that distinguish utilities in the
+    # same family (e.g. `-translate-x-1/2` vs `-translate-y-1/2` are different
+    # axes, `border-l` vs `border-r` are different sides). When the first
+    # segment after the family root matches one of these, keep the family root
+    # PLUS the direction segment as the group key.
+    AXIS_FAMILIES = %w[translate -translate scale skew rotate space border].to_set.freeze
+    AXIS_SUFFIXES = %w[x y z t b l r s e].to_set.freeze
+
+    def utility_group(utility)
+      return "atom:#{utility}" if ATOM_UTILITIES.include?(utility)
+
+      segments = utility.split("-").reject(&:empty?)
+      head = utility.start_with?("-") ? "-#{segments.first}" : segments.first
+      tail = utility.start_with?("-") ? segments[1] : segments[1]
+
+      return "#{head}-#{tail}" if AXIS_FAMILIES.include?(head) && AXIS_SUFFIXES.include?(tail)
+
+      head
     end
 
     # The last `:` that lives outside any `[...]` block. Arbitrary-value variants

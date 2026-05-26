@@ -25,7 +25,7 @@ module Components
             "wabi--select-items-value": @items.to_json,
             "wabi--select-name-value": @name,
             "wabi--select-value-value": @value,
-            "wabi--select-disabled-value": @disabled,
+            "wabi--select-disabled-value": @disabled.to_s,
             "wabi--select-placeholder-value": @placeholder,
           },
           class: merge_class("relative inline-block", user_class)

@@ -48,6 +48,23 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Dialog" }
+              render Components::UI::Dialog.new do
+                render Components::UI::DialogTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2") { "Open dialog" }
+                render Components::UI::DialogContent.new do
+                  render Components::UI::DialogHeader.new do
+                    render Components::UI::DialogTitle.new       { "Delete account" }
+                    render Components::UI::DialogDescription.new { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." }
+                  end
+                  render Components::UI::DialogFooter.new do
+                    render Components::UI::DialogCancel.new { "Cancel" }
+                    render Components::UI::DialogAction.new(appearance: :destructive, data: { action: "click->wabi--dialog#close" }) { "Delete" }
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Select" }
               fruits = [
                 { value: "apple",  label: "Apple" },
