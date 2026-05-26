@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.metadata["bug_tracker_uri"] = "https://github.com/wabikit/wabi/issues"
   spec.metadata["changelog_uri"]   = "https://github.com/wabikit/wabi/blob/main/CHANGELOG.md"
 
-  spec.files = Dir["lib/**/*", "templates/**/*", "LICENSE", "README.md"]
+  spec.files = Dir["lib/**/*", "templates/**/*", "LICENSE", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "phlex-rails", "~> 2.4"
