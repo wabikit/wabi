@@ -12,3 +12,4 @@ pin "@zag-js/core", to: "@zag-js--core.js" # @1.41.0
 pin "@zag-js/focus-visible", to: "@zag-js--focus-visible.js" # @1.41.0
 pin "@zag-js/types", to: "@zag-js--types.js" # @1.41.0
 pin "@zag-js/utils", to: "@zag-js--utils.js" # @1.41.0
+pin "@zag-js/switch", to: "@zag-js--switch.js" # @1.41.0

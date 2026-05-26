@@ -1,0 +1,15 @@
+name: switch
+version: 0.1.0
+type: registry:form
+description: Toggle switch powered by Zag.js, accessible via keyboard.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/switch": "^0.50"
+  "@zag-js/dom-query": "^0.50"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

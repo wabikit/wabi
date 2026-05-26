@@ -40,6 +40,14 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Switch" }
+              div(class: "flex items-center gap-2") do
+                render Components::UI::Switch.new(id: "notifications", name: "notifications")
+                render Components::UI::Label.new(for_: "notifications") { "Email notifications" }
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "Card" }
               div(class: "max-w-md") do
                 render Components::UI::Card.new do
