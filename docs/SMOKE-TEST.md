@@ -54,3 +54,31 @@ Within a single variant scope, utilities that share a prefix but represent diffe
 - `ring-2` vs `ring-ring` vs `ring-offset-2` → all group under `focus-visible:ring`, offset wins.
 
 Components keep working (the visible cues are driven by `data-state` attributes, not by these utilities), but the focus ring is weaker than designed and the checkbox/select-trigger borders are color-only with no width. Full tailwind-merge-equivalent dedup is a post-v0.1 task.
+
+(Updated 2026-05-26 mid-Sprint-3: `class_merge` now distinguishes *atom* utilities (`flex`, `border`, `ring`, `rounded`, `outline`, `transition`, `truncate`, plus the display + position keywords) from their compound siblings — `flex flex-col` and `border border-input` both survive. It also handles axis suffixes for `translate`/`scale`/`skew`/`rotate`/`space`/`border` — `-translate-x` and `-translate-y` are independent groups. The residual cases above are the unhandled families.)
+
+## Sprint 3 (2026-05-26)
+
+Four overlays added: **Dialog**, **Drawer** (lateral Dialog variant — reuses `wabi--dialog` controller), **Tooltip** (hover + focus + delay), **Popover** (click). All powered by `@zag-js/*@1.41` machines through the `@zag-js/vanilla` binding. 16 components total now in the registry.
+
+Browser-verified on `docs/` home page (`bin/dev`, Firefox):
+- **Dialog** — trigger opens with backdrop + centering; Esc dismisses; click-outside dismisses; Cancel auto-closes (Zag closeTrigger); Delete uses a manual `data-action` so callers can persist before dismissing; focus trap engages inside.
+- **Drawer** — all four side variants (top/right/bottom/left) anchor correctly; Esc + backdrop + Close button dismiss; reuses the Dialog controller and machine (no new JS).
+- **Tooltip** — hover and focus trigger; `openDelay` (default 700ms) / `closeDelay` (default 300ms) tunable per-instance via Stimulus values; Esc dismisses while open.
+- **Popover** — click trigger opens; click-outside + Esc dismiss; modal opt-in (focus trap + scroll lock); Close button via Zag closeTrigger.
+
+### Sprint 3 patterns / traps (memo for Sprint 4+)
+
+The three new pitfalls (now numbered 7-9 in `feedback_zag_js_pattern.md`):
+
+7. **Stimulus Boolean data-values must serialize to `"true"`/`"false"` strings, not bare attributes.** Phlex emits `data: { foo-value: true }` as a value-less `data-foo-value`, and Stimulus's Boolean reader treats anything ≠ `"true"` as `false`. Always cast with `.to_s`. Affects every interactive component — Sprint 2 silently shipped Checkbox/Switch/Select with the bug because all demos passed `false`.
+
+8. **Positioner needs `pointer-events-none` + an initial `hidden`, mirrored from `api.open` by the controller.** Zag emits `hidden: !open` on backdrop and content but NOT on positioner. A `fixed inset-0 z-50` positioner left visible covers the whole viewport and intercepts every click on the page — symptom: the entire UI "freezes" once the overlay's markup is on the page. Fix: (a) initial Phlex render carries `hidden: true` on the positioner; (b) Stimulus controller sets `positionerTarget.hidden = !api.open` in `render()`; (c) class includes `pointer-events-none` (content carries `pointer-events-auto`).
+
+9. **Do NOT `document.body.appendChild(portalTarget)` in `connect()`.** Moving the portal subtree out of the Stimulus controller's scope breaks target resolution: `hasBackdropTarget`, `hasContentTarget`, etc. all return false, so the render guards short-circuit and the dialog opens internally (preventScroll fires, body locks) but nothing visible. v0.1 ships without the portal move — `position: fixed` + high z-index covers the common case. v0.2 path: capture native DOM refs to nested elements BEFORE the move, then call `spreadProps`/set `hidden` on those refs instead of through Stimulus targets.
+
+### Sprint 3 deferrals to v0.1 polish / v0.2
+
+- **Enter/exit animations.** Mixing `hidden: !open` with CSS transitions doesn't work — `display: none` snaps the element off-screen the instant Zag toggles hidden, so neither enter nor exit transitions complete. Tailwind 4 has no `tailwindcss-animate` equivalent installed; Sprint 3 ships with simple `transition-opacity` on Dialog (enter only) and no motion on Drawer/Tooltip/Popover. v0.2 strategy: swap `hidden` for an `inert` + class-driven approach so transitions can run before display:none kicks in.
+- **Portal pattern.** Disabled in v0.1 (see trap #9). Components are still usable in the vast majority of layouts because `position: fixed` escapes normal flow; only matters when an ancestor has `transform`, `filter`, `will-change`, or `contain`, in which case fixed positioning is trapped.
+- **Sprint 3 Task 1 (install tailwindcss-animate)** marked obsolete: that task's preset.js was Tailwind 3 specific and we migrated to TW4 in Sprint 0.

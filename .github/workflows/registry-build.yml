@@ -28,9 +28,9 @@ jobs:
           working-directory: registry
       - run: bundle exec rspec
       - run: bundle exec ./bin/build
-      - name: Verify dist artifacts exist for all Sprint 0-2 components
+      - name: Verify dist artifacts exist for all Sprint 0-3 components
         run: |
           test -f dist/r/index.json
-          for name in button input textarea label card badge separator alert avatar checkbox switch select; do
+          for name in button input textarea label card badge separator alert avatar checkbox switch select dialog drawer tooltip popover; do
             test -f dist/r/${name}.json || (echo "Missing: ${name}.json" && exit 1)
           done
