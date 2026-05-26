@@ -48,6 +48,41 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Toast" }
+              p(class: "text-sm text-muted-foreground mb-2") { "Click a button to spawn a toast in the top-right corner. Hover to pause auto-dismiss." }
+              # Pre-render the three toast variants and stash the HTML on the
+              # demo controller as Stimulus String values. `insertAdjacentHTML`
+              # injects on click. Avoiding <template> tags: Phlex's `template`
+              # element method renders, but combined with the layout's capture
+              # path it has edge cases worth dodging for a docs demo.
+              div(
+                data: {
+                  controller: "wabi--toast-demo",
+                  "wabi--toast-demo-info-html-value":        Components::UI::Toast.new(title: "Heads up", description: "This is an informational message.", appearance: :info).call,
+                  "wabi--toast-demo-success-html-value":     Components::UI::Toast.new(title: "Saved", description: "Profile updated successfully.", appearance: :success).call,
+                  "wabi--toast-demo-destructive-html-value": Components::UI::Toast.new(title: "Error", description: "Something went wrong, try again.", appearance: :destructive).call,
+                }
+              ) do
+                div(class: "flex gap-2 flex-wrap") do
+                  [
+                    { key: "info",        label: "Info toast",    css: "border-input bg-background hover:bg-accent" },
+                    { key: "success",     label: "Success toast", css: "bg-primary text-primary-foreground hover:bg-primary/90" },
+                    { key: "destructive", label: "Error toast",   css: "bg-destructive text-destructive-foreground hover:bg-destructive/90" },
+                  ].each do |opt|
+                    button(
+                      type: "button",
+                      data: {
+                        action: "click->wabi--toast-demo#spawn",
+                        "wabi--toast-demo-key-param": opt[:key],
+                      },
+                      class: "inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 border #{opt[:css]}"
+                    ) { opt[:label] }
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "DropdownMenu" }
               render Components::UI::DropdownMenu.new do
                 render Components::UI::DropdownMenuTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2") { "Actions ▾" }

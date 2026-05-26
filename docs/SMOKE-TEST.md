@@ -82,3 +82,22 @@ The three new pitfalls (now numbered 7-9 in `feedback_zag_js_pattern.md`):
 - **Enter/exit animations.** Mixing `hidden: !open` with CSS transitions doesn't work — `display: none` snaps the element off-screen the instant Zag toggles hidden, so neither enter nor exit transitions complete. Tailwind 4 has no `tailwindcss-animate` equivalent installed; Sprint 3 ships with simple `transition-opacity` on Dialog (enter only) and no motion on Drawer/Tooltip/Popover. v0.2 strategy: swap `hidden` for an `inert` + class-driven approach so transitions can run before display:none kicks in.
 - **Portal pattern.** Disabled in v0.1 (see trap #9). Components are still usable in the vast majority of layouts because `position: fixed` escapes normal flow; only matters when an ancestor has `transform`, `filter`, `will-change`, or `contain`, in which case fixed positioning is trapped.
 - **Sprint 3 Task 1 (install tailwindcss-animate)** marked obsolete: that task's preset.js was Tailwind 3 specific and we migrated to TW4 in Sprint 0.
+
+## Sprint 4 (2026-05-26)
+
+Two component families added: **DropdownMenu** (core 7 sub-components: root, Trigger, Content, Item, Label, Separator, Shortcut) and **Toast** (Toaster + Toast + vanilla JS controller for auto-dismiss / pause-on-hover). 18 components total now in the registry.
+
+Browser-verified on `docs/` home page:
+- **DropdownMenu** — click trigger opens, arrow keys and type-ahead navigate items, Enter/click fires the controller's `wabi--dropdown-menu:select` event (with `value` in the detail), Escape/click-outside dismiss, disabled items inert.
+- **Toast / Toaster** — Toaster sits as a singleton `<ol>` near `</body>` via the Layout. The docs demo spawns three variants (info/success/destructive) via `insertAdjacentHTML` on click. Each toast auto-dismisses after 5s with hover/focus pause; manual `×` close button removes immediately.
+
+### Sprint 4 traps memo (entry 10 added to zag-js-pattern memory)
+
+10. **Phlex layout `yield_content` returns a captured string; only the surrounding element method uses it if it's the LAST expression.** Adding a sibling render after `yield_content` (e.g. the Toaster near `</body>`) drops the captured content silently — the page goes mostly blank with only the new sibling visible, no errors. Fix: `raw safe(yield_content(&block))` so the captured HTML is explicitly written to the buffer. Burned ~40min on this when Toaster was added to the layout.
+
+### Sprint 4 deferrals / deviations
+
+- **Submenu / CheckboxItem / RadioGroup / RadioItem** for DropdownMenu are deferred to v0.1 cleanup. Each adds non-trivial state coordination (nested machines for submenus, item-state binding for checkbox/radio) that warrants a focused commit.
+- **Toast deviates from the plan**: the original called for `@zag-js/toast` + group machine + `createToastStore`. v0.1 ships a self-contained vanilla controller (no Zag) — simpler, covers 99% of the use case, and avoids another API API-mismatch debugging cycle. Cross-toast coordination (max stack, advanced stacking animations) deferred to v0.2.
+- **Sprint 4 Task 3** (gem-level `wabi:toast` Turbo Stream action helper) deferred. The current pattern (`turbo_stream.append "wabi-toaster", Components::UI::Toast.new(...)`) works without it.
+- **`<template>` inside Phlex view_template**: appears to work in isolation (Phlex emits `<template>...</template>` correctly) but interacts badly with the layout's `yield_content` capture path. Demos use Stimulus String values + `insertAdjacentHTML` instead. Worth a focused investigation in v0.2.

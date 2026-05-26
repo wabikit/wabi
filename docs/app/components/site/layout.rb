@@ -25,7 +25,16 @@ module Components
             javascript_importmap_tags
           end
           body(class: "bg-background text-foreground antialiased min-h-screen") do
-            yield_content(&block)
+            # `yield_content` uses Phlex::Rails capture, which returns the
+            # captured HTML as a string. Phlex's element method uses that
+            # return value as content ONLY when it's the last expression in
+            # the block AND the buffer didn't grow inside. To compose
+            # additional siblings (the Toaster) we must `raw(safe(...))` the
+            # captured string explicitly, then render the others.
+            raw safe(yield_content(&block))
+            # Singleton toaster container. Toasts are appended here at runtime
+            # (in production: via `turbo_stream.append "wabi-toaster", ...`).
+            render Components::UI::Toaster.new
           end
         end
       end

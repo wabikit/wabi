@@ -1,0 +1,13 @@
+name: toast
+version: 0.1.0
+type: registry:feedback
+description: Notification toaster + Toast component. Auto-dismiss + pause-on-hover, Turbo-Stream friendly.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
