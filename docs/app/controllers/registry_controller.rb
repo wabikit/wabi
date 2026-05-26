@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class RegistryController < ApplicationController
-  REGISTRY_DIST = Rails.root.join("..", "registry", "dist", "r").realpath
+  REGISTRY_DIST   = Rails.root.join("..", "registry", "dist", "r").realpath
+  REGISTRY_THEMES = Rails.root.join("..", "registry", "themes").realpath
 
   def show
     name = params[:name]
@@ -10,6 +11,18 @@ class RegistryController < ApplicationController
     path = REGISTRY_DIST.join("#{name}.json")
     if path.exist? && path.to_s.start_with?(REGISTRY_DIST.to_s)
       send_file path, type: "application/json", disposition: "inline"
+    else
+      head :not_found
+    end
+  end
+
+  def theme
+    slug = params[:slug]
+    raise ActionController::BadRequest, "Invalid theme slug" unless slug =~ /\A(_shared|[a-z][a-z0-9_]*)\z/
+
+    path = REGISTRY_THEMES.join("#{slug}.css")
+    if path.exist? && path.to_s.start_with?(REGISTRY_THEMES.to_s)
+      send_file path, type: "text/css", disposition: "inline"
     else
       head :not_found
     end
