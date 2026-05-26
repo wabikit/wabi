@@ -105,6 +105,32 @@ module Views
             end
 
             section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Accordion" }
+              div(class: "max-w-md") do
+                render Components::UI::Accordion.new(type: :single, collapsible: true) do
+                  render Components::UI::AccordionItem.new(value: "item-1") do
+                    render Components::UI::AccordionTrigger.new(value: "item-1") { "Is it accessible?" }
+                    render Components::UI::AccordionContent.new(value: "item-1") do
+                      "Yes. It adheres to the WAI-ARIA design pattern."
+                    end
+                  end
+                  render Components::UI::AccordionItem.new(value: "item-2") do
+                    render Components::UI::AccordionTrigger.new(value: "item-2") { "Is it styled?" }
+                    render Components::UI::AccordionContent.new(value: "item-2") do
+                      "Yes. Wabi components come with default Tailwind styling, customizable via your tokens."
+                    end
+                  end
+                  render Components::UI::AccordionItem.new(value: "item-3") do
+                    render Components::UI::AccordionTrigger.new(value: "item-3") { "Is it animated?" }
+                    render Components::UI::AccordionContent.new(value: "item-3") do
+                      "Yes. Height animates via the CSS grid-template-rows trick — no keyframes required."
+                    end
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
               h2(class: "text-2xl font-semibold mb-4") { "DropdownMenu" }
               render Components::UI::DropdownMenu.new do
                 render Components::UI::DropdownMenuTrigger.new(class: "inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2") { "Actions ▾" }

@@ -1,0 +1,15 @@
+name: accordion
+version: 0.1.0
+type: registry:nav
+description: Accessible accordion with single/multiple open modes and keyboard navigation.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/accordion": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
