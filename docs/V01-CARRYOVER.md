@@ -120,27 +120,18 @@ are all resolved. This document tracks what remains.
 
 ---
 
-## Sprint 5 launchpad
+## Sprint 5 closed (2026-05-26)
 
-Sprint 5 (navigation: Tabs / Accordion / NavigationMenu / Breadcrumb) starts
-from this baseline:
+Tabs + Accordion shipped (`d7822d1`, `2a5f108`); CI verifies all 20 v0.1
+dist artifacts (`99edec4`). Registry suite 115/115, gem 64/64. Sprint 5
+deviated from its plan in one place worth keeping in mind: Accordion
+content animation uses a CSS `grid grid-rows-[0fr] →
+data-[state=open]:grid-rows-[1fr] transition-[grid-template-rows]`
+trick instead of the plan's `tailwindcss-animate` keyframes (which we
+don't have in TW4). The inner wrapper is `overflow-hidden`; controller
+forces `el.hidden = false` after Zag's spreadProps so the transition
+runs — same pattern Sprint 4 overlay cleanup adopted.
 
-- 18 components live, registry suite 101/101, gem suite 64/64.
-- Zag.js 1.x conventions are documented in
-  `memory/feedback_zag_js_pattern.md` (entries 1-10). Apply ALL when adding
-  a new interactive component, especially:
-  - `+esm` URL pin pattern (NEVER `bin/importmap pin`).
-  - `@zag-js/vanilla` for `VanillaMachine` / `normalizeProps` / `spreadProps`.
-  - `defaultX`, not `X`, for initial state to keep the bindable
-    uncontrolled.
-  - `data-state` + opacity/translate/pointer-events for visibility — NOT
-    the `hidden` attribute.
-  - `raw safe(yield_content(&block))` in layouts when composing siblings
-    around the content yield.
-- Class names emitted: `ClassMerge` now correctly preserves
-  variant-scoped utilities, axis-aware utilities, and width-vs-color
-  utilities. Most v0.1 visual bugs from this layer are gone.
-
-When in doubt while adding a Sprint 5 component, search the existing
-overlays (`Dialog`, `Popover`, `DropdownMenu`) for the canonical
-pattern; they encode all the Zag.js 1.x conventions.
+With the **v0.1 component-coverage milestone reached (20 components)**,
+the remaining open items above are the v0.1 polish punch-list. Sprint 6
+(themes + docs polish) plan is the next natural step.
