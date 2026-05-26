@@ -25,6 +25,16 @@ module Components
             javascript_importmap_tags
           end
           body(class: "bg-background text-foreground antialiased min-h-screen") do
+            header(class: "border-b border-border") do
+              div(class: "container mx-auto flex h-14 items-center justify-between px-4") do
+                a(href: "/", class: "font-bold text-lg") { "Wabi" }
+                div(class: "flex items-center gap-2") do
+                  a(href: "/docs/themes",
+                    class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Themes" }
+                  render Components::Site::ThemePicker.new
+                end
+              end
+            end
             # `yield_content` uses Phlex::Rails capture, which returns the
             # captured HTML as a string. Phlex's element method uses that
             # return value as content ONLY when it's the last expression in

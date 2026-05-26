@@ -44,6 +44,30 @@ RSpec.describe "DropdownMenu composition" do
     expect(output).to include('data-wabi-disabled="false"')
   end
 
+  it "DropdownMenuItem merges user-supplied data attrs into the emitted hash" do
+    output = Components::UI::DropdownMenuItem.new(
+      value: "edit",
+      data: { action: "click->wabi--foo#bar", "wabi-extra": "yes" }
+    ).call { "Edit" }
+    # User data + component data both render. Component keys still emit.
+    expect(output).to include('data-action="click->wabi--foo#bar"')
+    expect(output).to include('data-wabi-extra="yes"')
+    expect(output).to include('data-wabi--dropdown-menu-target="item"')
+    expect(output).to include('data-wabi-value="edit"')
+  end
+
+  it "DropdownMenuRadioItem merges user-supplied data attrs into the emitted hash" do
+    output = Components::UI::DropdownMenuRadioItem.new(
+      value: "rose",
+      name:  "wabi-theme",
+      data: { action: "click->wabi--theme#setTheme", "wabi--theme-theme-param": "rose" }
+    ).call { "Rose" }
+    expect(output).to include('data-action="click->wabi--theme#setTheme"')
+    expect(output).to include('data-wabi--theme-theme-param="rose"')
+    expect(output).to include('data-wabi--dropdown-menu-target="optionItem"')
+    expect(output).to include('data-wabi-value="rose"')
+  end
+
   it "DropdownMenuLabel is non-interactive (no role=menuitem)" do
     output = Components::UI::DropdownMenuLabel.new.call { "Actions" }
     expect(output).not_to include("menuitem")

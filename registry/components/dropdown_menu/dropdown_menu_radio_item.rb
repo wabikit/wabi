@@ -27,11 +27,17 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
+        user_data  = @attrs.delete(:data) || {}
         div(
           role: "menuitemradio",
           "data-state": @checked ? "checked" : "unchecked",
           "aria-checked": @checked.to_s,
+          # User data first, component data second -- component keys win on
+          # collision so callers can add `data: { action: "click->..." }`
+          # without clobbering the wabi target attributes the controller
+          # relies on for state routing.
           data: {
+            **user_data,
             "wabi--dropdown-menu-target": "optionItem",
             "wabi-value":    @value,
             "wabi-name":     @name,
