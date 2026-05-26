@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root "pages#home"
+  get "/docs/themes", to: "pages#themes"
 
   # Registry endpoints — consumed by the wabi CLI in user apps
   get "/r/:name", to: "registry#show", as: :registry_component, constraints: { name: /[a-z][a-z0-9_]*/ }

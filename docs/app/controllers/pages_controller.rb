@@ -6,4 +6,8 @@ class PagesController < ApplicationController
   def home
     render Views::Pages::Home.new
   end
+
+  def themes
+    render Views::Pages::Themes.new
+  end
 end
