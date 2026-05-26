@@ -1,11 +1,11 @@
-# v0.1 Carryover
+# v0.1 Carryover — closed 2026-05-26
 
-Consolidated list of items deferred past Sprint 4 — to address before tagging
-v0.1 OR explicitly punt to v0.2. Updated 2026-05-26 at the end of the Sprint
-4 cleanup pass.
+This doc tracked work that had to land before tagging v0.1. **All blocking
+items are resolved. v0.1.0 was tagged on 2026-05-26.** See
+[CHANGELOG.md](../CHANGELOG.md) at the repo root for the release entry.
 
-The Sprint 0/1 carryovers (numbered #1-#6 in `memory/project_v01_carryover.md`)
-are all resolved. This document tracks what remains.
+The Sprint 0/1 carryovers (numbered #1-#6 in
+`memory/project_v01_carryover.md`) are all resolved separately.
 
 ---
 
@@ -35,118 +35,96 @@ are all resolved. This document tracks what remains.
 
 ---
 
-## Still open — should land before v0.1 ships
+## Resolved during v0.1 polish (2026-05-26, post-Sprint-5)
 
-1. ~~**Overlay `inert` toggling for tab-order + screen-reader correctness.**~~
-   **Resolved during v0.1 polish.** All six overlays (Dialog, Drawer,
-   Popover, Tooltip, DropdownMenu, Select) now carry `inert` on closed
-   content. The toggle lives in each controller's `onOpenChange` callback —
-   that fires *inside* Zag's state transition (synchronously) and so lands
-   before the entry-phase `setInitialFocus` action. The previous Sprint 4
-   attempt put the toggle in `render()` (the subscriber callback), which
-   fires *after* setInitialFocus had already tried (and failed) to focus an
-   inert element. Phlex sources emit `inert` initially since everything
-   starts closed; the controller flips it on every open/close.
+1. **Overlay `inert` toggling** (`d778d95`). All six overlays carry
+   `inert` on closed content; the toggle lives in each controller's
+   `onOpenChange` callback (synchronous inside Zag's state transition,
+   so it lands before the entry-phase `setInitialFocus` action — the
+   earlier Sprint 4 attempt put it in `render()` and lost the race).
+   Phlex sources emit `inert` initially; controller flips it on every
+   open/close.
 
-2. ~~**DropdownMenu — Submenu.**~~ **Resolved during v0.1 polish.** Three
-   new sub-components (`DropdownMenuSub` / `DropdownMenuSubTrigger` /
-   `DropdownMenuSubContent`) plus a controller rewrite that owns one Zag
+2. **DropdownMenu nested submenus** (`6720445`). Three new components
+   (`DropdownMenuSub` / `DropdownMenuSubTrigger` / `DropdownMenuSubContent`)
+   + a controller rewrite that owns the parent menu machine plus one Zag
    menu machine per `sub` boundary. setChild / setParent take MenuService
-   (verified against the published 1.41 types), so the wiring runs after
-   start() once both services exist. The parent and sub machines live in
-   the *same* Stimulus controller because nested same-id controllers
-   would hide each other's targets via Stimulus scoping. Item / option
-   targets inside a sub are routed at render time via
-   `closest("[...-target='sub']")` -> the matching sub machine's api.
-   v0.1 limit: single-level nesting only -- a sub-inside-a-sub would need
-   another controller pass we haven't put in yet.
+   (verified against `@zag-js/menu@1.41` type defs), called after start()
+   once both services exist. Parent and sub machines share one Stimulus
+   controller because nested same-id controllers would hide each other's
+   targets via Stimulus scoping. v0.1 limit: single-level nesting.
 
-3. ~~**DropdownMenu — Submenu CheckboxItem / RadioItem.**~~ **Resolved
-   alongside #2.** The route-by-closest-sub-ancestor strategy means the
-   existing `DropdownMenuCheckboxItem` / `DropdownMenuRadioItem` work
-   inside a `SubContent` with no new components -- the controller picks
-   the sub's API for `getOptionItemProps` when the option item lives
-   under a `sub` element.
+3. **Submenu CheckboxItem / RadioItem** (also `6720445`). Free for
+   nothing: the route-by-closest-sub-ancestor strategy in the controller
+   picks the right machine's API for option items, so existing
+   `DropdownMenuCheckboxItem` / `DropdownMenuRadioItem` work inside a
+   `SubContent` with no new components.
 
-4. **Toast — integrate `@zag-js/toast` group machine + per-toast machine.**
-   The v0.1 implementation is a vanilla `setTimeout`-based controller per
-   toast, no cross-toast coordination. Migrating gives us `max` (stack
-   limit), `gap`/`offset` spacing, and pause-on-group-hover. Architecture:
-   the Toaster element runs the group machine; each Toast's
-   `wabi--toast-target="connectedTarget"` is queried on `targetConnected` and
-   registered with the group via `service.start({ ...config, id })`.
+5. **Phlex `<template>` ↔ layout capture interaction** (`ebcc495`).
+   Investigated and found NOT to reproduce after the Sprint 4
+   `raw safe(yield_content(&block))` cleanup. Three repros (minimal
+   Phlex view; fake layout with yield_content + sibling-after-capture;
+   full-fat Toast inside `<template>` blocks) all rendered cleanly with
+   surrounding content intact. The docs Toast demo is back on the
+   cleaner `<template>` + cloneNode pattern.
 
-5. ~~**Phlex `<template>` ↔ layout capture interaction.**~~ **Investigated
-   during v0.1 polish — the Sprint 4 cleanup already fixed it.** Three
-   repros (minimal Phlex view; fake layout with yield_content +
-   sibling-after-capture; full-fat Toast components inside `<template>`
-   blocks) all rendered cleanly with surrounding content intact. Rack-test
-   hit of `/` returned status 200 with all 22 `<h2>` sections present and
-   3 `<template>` elements correctly server-rendered. The Sprint 4
-   discovery (entry 10 in `feedback_zag_js_pattern.md`) — that adding a
-   sibling render after `yield_content` drops the captured content unless
-   you `raw safe(yield_content(&block))` — fully covers this case. The
-   demo refactor is in (`<template>` + cloneNode replaces the
-   insertAdjacentHTML workaround in toast_demo_controller).
-
-6. ~~**`bin/dev` cold-start polish**~~ — **resolved during v0.1 polish.**
-   `bin/dev` now pre-flights `docs/tmp/pids/server.pid`: if the recorded
-   pid is no longer alive, it removes the stale file; if it points to a
-   running process, it exits loudly so we don't stomp an active server.
-
-7. **Phlex 2.4.1 emits Ruby 4.0.5 warnings (`assigned but unused variable -
-   stack`) at load time.** Not blocking; revisit if Phlex 2.5+ doesn't fix
-   upstream. Workaround: `config.warnings = false` in spec_helper, but we
-   keep it on for now to catch genuine issues.
+6. **`bin/dev` cold-start polish** (`8bef116`). `bin/dev` pre-flights
+   `docs/tmp/pids/server.pid` — if the recorded pid isn't running, the
+   stale file is removed; if it IS running, `bin/dev` exits loudly
+   rather than stomping the active server.
 
 ---
 
-## Likely deferrals to v0.2
+## Deferred to v0.2
 
-1. **Real portal pattern.** Currently disabled — `position: fixed` + high
-   z-index escapes normal flow for ~99% of layouts. Edge case: a transformed
-   ancestor traps fixed positioning. v0.2 path: capture native DOM refs to
-   nested elements BEFORE appending to body, and call `spreadProps` / set
-   visibility state on those captured refs instead of through Stimulus
-   targets (which lose tracking when the subtree moves out of scope).
+These are items that did not block v0.1 and are either architectural
+follow-ups or wait-for-upstream:
 
-2. **ClassMerge — full `tailwind-merge`-equivalent dedup.** Current
-   heuristics cover the common conflicts (atoms, axes, width-vs-color in a
-   handful of families). Edge cases that still collide:
+1. **Toast — `@zag-js/toast` group machine.** Current v0.1 implementation
+   is a vanilla `setTimeout`-based per-toast controller; no cross-toast
+   coordination. Migrating gives `max` (stack limit), `gap`/`offset`
+   spacing, pause-on-group-hover. Architecture: Toaster element runs the
+   group machine; each Toast's `wabi--toast-target="connectedTarget"` is
+   queried on `targetConnected` and registered via
+   `service.start({ ...config, id })`.
+
+2. **Phlex 2.4.1 Ruby 4.0.5 warnings.** Phlex emits `assigned but unused
+   variable - stack` at load time on Ruby 4. Not blocking; revisit if
+   Phlex 2.5+ doesn't fix upstream. Workaround: `config.warnings = false`
+   in `spec_helper`, but we keep it on for now to catch genuine issues.
+
+3. **Real portal pattern.** Currently disabled — `position: fixed` + high
+   z-index escapes normal flow for ~99% of layouts. Edge case: a
+   transformed ancestor traps fixed positioning. v0.2 path: capture
+   native DOM refs to nested elements BEFORE appending to body, and call
+   `spreadProps` / set visibility state on those captured refs instead of
+   through Stimulus targets (which lose tracking when the subtree moves
+   out of scope).
+
+4. **ClassMerge — full `tailwind-merge`-equivalent dedup.** Current
+   heuristics cover the common conflicts. Edge cases that still collide:
    - `bg-{utility}` non-color modifiers like `bg-cover`/`bg-contain`/
      `bg-no-repeat` collapse under the generic `bg` family.
-   - `text-{font-style}` like `text-italic` (rare in Tailwind 4 — usually
-     `italic` atom) — not currently handled.
-   - The font-size keyword set (`SIZE_TOKENS`) is curated by hand; new
-     keywords like `text-2xs` if they ship would need to be added.
+   - `text-{font-style}` like `text-italic` (rare in TW4) not handled.
+   - `SIZE_TOKENS` is curated by hand; new keywords (e.g. `text-2xs`)
+     would need to be added.
 
-3. **Portal-driven overlay positioning for layouts with transformed
-   ancestors** — see #1 above.
+5. **DropdownMenu multi-level nesting.** v0.1 supports single-level
+   submenus only. Sub-inside-a-sub would need another controller pass
+   since a child sub's items aren't routed beyond the parent controller's
+   reach. Realistic use cases for 2+ levels are rare in well-designed
+   menus.
 
-4. **Wabi `wabi:update` generator** (diff-aware, fetches latest tokens,
-   runs `tailwindcss:build`). `wabi:install --force` is the v0.1 minimum
-   but a proper update flow with confirmation prompts and conflict
-   detection is missed.
+6. **`wabi:update` generator** (diff-aware, fetches latest tokens, runs
+   `tailwindcss:build`). `wabi:install --force` is the v0.1 minimum; a
+   proper update flow with confirmation prompts and conflict detection
+   is the v0.2 path.
 
-5. **Component theming with multiple palettes.** `wabi:install` ships one
-   default theme; the architecture supports more via `data-theme="..."`
-   on `<html>` and CSS variable swaps. Sprint 6 is supposed to ship a
-   theme picker UI and a documented theme-extension flow.
+7. **Component theming with multiple palettes.** `wabi:install` ships
+   one default theme; the architecture supports more via
+   `data-theme="..."` on `<html>` and CSS variable swaps. Sprint 6
+   (themes + docs polish) is the planned home for the theme picker UI
+   and the documented theme-extension flow.
 
----
-
-## Sprint 5 closed (2026-05-26)
-
-Tabs + Accordion shipped (`d7822d1`, `2a5f108`); CI verifies all 20 v0.1
-dist artifacts (`99edec4`). Registry suite 115/115, gem 64/64. Sprint 5
-deviated from its plan in one place worth keeping in mind: Accordion
-content animation uses a CSS `grid grid-rows-[0fr] →
-data-[state=open]:grid-rows-[1fr] transition-[grid-template-rows]`
-trick instead of the plan's `tailwindcss-animate` keyframes (which we
-don't have in TW4). The inner wrapper is `overflow-hidden`; controller
-forces `el.hidden = false` after Zag's spreadProps so the transition
-runs — same pattern Sprint 4 overlay cleanup adopted.
-
-With the **v0.1 component-coverage milestone reached (20 components)**,
-the remaining open items above are the v0.1 polish punch-list. Sprint 6
-(themes + docs polish) plan is the next natural step.
+8. **Portal-driven overlay positioning for layouts with transformed
+   ancestors** — see #3 above.

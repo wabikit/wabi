@@ -122,3 +122,16 @@ Browser-verified on `docs/` home page:
 button, input, textarea, label, card, badge, separator, alert, avatar,
 checkbox, switch, select, dialog, drawer, tooltip, popover, dropdown_menu,
 toast, **tabs**, **accordion**.
+
+## v0.1.0 polish + tag (2026-05-26)
+
+Carryover punch-list closed; v0.1.0 tagged. See [CHANGELOG.md](../CHANGELOG.md).
+
+- **#1 Overlay `inert` toggling** (`d778d95`) — all 6 overlays carry `inert` on closed content; toggle lives in each controller's `onOpenChange` (synchronous inside Zag's state transition, lands before `setInitialFocus`). The previous Sprint 4 attempt put it in `render()` and lost the race.
+- **#2 DropdownMenu Submenu + #3 sub-CheckboxItem/RadioItem** (`6720445`) — three new sub-components plus a controller rewrite owning one Zag menu machine per `sub` boundary. setChild/setParent take MenuService (verified against `@zag-js/menu@1.41` types). Option items route by closest sub ancestor at render time so existing CheckboxItem/RadioItem work inside submenus for free. v0.1 limit: single-level nesting.
+- **#5 Phlex `<template>` ↔ layout capture** (`ebcc495`) — investigated, found NOT to reproduce after Sprint 4's `raw safe(yield_content(&block))` fix. Toast demo refactored back to the cleaner `<template>` + cloneNode pattern.
+- **#6 `bin/dev` cold-start polish** (`8bef116`) — pre-flights `docs/tmp/pids/server.pid` removal when the recorded pid isn't alive; exits loudly when it is.
+
+Spec totals: registry 119/119 (was 115; +4 from new submenu components), gem 64/64 (unchanged). 20 dist artifacts produced on every CI run.
+
+v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` group machine for `max`/gap/pause-on-group-hover, real portal pattern, theme picker UI + multi-palette flow.
