@@ -4,15 +4,15 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.3.0 alpha. 20 components, 8 theme palettes, WCAG-AA targeted. Not yet on RubyGems.
+🎉 **Status:** v0.3.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 20 components, 8 theme palettes, WCAG-AA targeted.
 
 ---
 
 ## Quick start
 
 ```bash
-# 1. Add the gem (path-based for now; RubyGems push pending)
-bundle add wabi --git https://github.com/wabikit/wabi --glob 'gem/*'
+# 1. Add the gem
+bundle add wabi
 
 # 2. Run the installer (copies tokens.css + theme controller + lockfile)
 bin/rails g wabi:install
