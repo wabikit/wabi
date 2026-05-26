@@ -33,6 +33,9 @@ gem "thruster", require: false
 # Phlex view layer
 gem "phlex-rails", "~> 2.4"
 
+# Server-side syntax highlighting for the docs CodeBlock component
+gem "rouge", "~> 4.5"
+
 # Local wabi gem (path during dev; switch to released gem at v0.1 launch)
 gem "wabi", path: "../gem"
 
