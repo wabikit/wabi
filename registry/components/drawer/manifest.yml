@@ -5,6 +5,8 @@ description: Side-anchored dialog (top/right/bottom/left). Shares the dialog sta
 registry_dependencies: ["dialog"]
 ruby_dependencies: []
 js_dependencies: {}
+shared_files:
+  - "_shared/portal_registry.js"
 tailwind:
   extend: {}
 metadata:

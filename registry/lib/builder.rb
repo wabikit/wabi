@@ -62,7 +62,10 @@ module Wabi
       def schema_path = File.join(@root, "schema/component.v1.json")
 
       def component_dirs
-        Dir[File.join(components_dir, "*")].select { |p| File.directory?(p) }.sort
+        Dir[File.join(components_dir, "*")]
+          .select { |p| File.directory?(p) }
+          .reject { |p| File.basename(p).start_with?("_") }
+          .sort
       end
 
       def build_component(dir)
@@ -74,7 +77,15 @@ module Wabi
           .sort
           .map { |path| file_entry(path) }
 
-        output = manifest.merge("files" => files)
+        # shared_files: entries in manifest.yml are paths relative to the
+        # components/ root (e.g. "_shared/portal_registry.js"). They land in
+        # the user's app under app/javascript/controllers/wabi/_shared/.
+        shared = Array(manifest.delete("shared_files")).map do |rel|
+          shared_path = File.join(components_dir, rel)
+          shared_file_entry(shared_path, rel)
+        end
+
+        output = manifest.merge("files" => files + shared)
         File.write(File.join(dist_dir, "#{name}.json"), JSON.pretty_generate(output))
         output
       end
@@ -95,6 +106,20 @@ module Wabi
           "path"    => rails_path,
           "type"    => type,
           "content" => File.read(path),
+        }
+      end
+
+      # shared_file_entry maps a shared JS file to its destination in the user's
+      # app. The relative path (e.g. "_shared/portal_registry.js") is appended
+      # under app/javascript/controllers/wabi/ so the relative import in the
+      # controller ("./_shared/portal_registry.js") resolves correctly.
+      def shared_file_entry(abs_path, rel)
+        ext  = File.extname(rel)
+        type = EXTENSION_TO_TYPE[ext] || "unknown"
+        {
+          "path"    => "app/javascript/controllers/wabi/#{rel}",
+          "type"    => type,
+          "content" => File.read(abs_path),
         }
       end
 
