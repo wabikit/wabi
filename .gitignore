@@ -41,3 +41,6 @@ gem/pkg/
 
 # Local planning (per author preference: never push specs/plans)
 docs/superpowers/
+
+# Brainstorming companion (visual mockups, persists locally)
+.superpowers/
