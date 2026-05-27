@@ -75,7 +75,7 @@ module Views
 
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
-                h3(class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
+                h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
                 render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
               end
 
