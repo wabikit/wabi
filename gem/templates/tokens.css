@@ -9,6 +9,30 @@
 
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 
+/* Tailwind 4 Preflight removed the legacy `cursor: pointer` on <button>.
+ * Wabi's stance: any element that's interactive (button, role=button,
+ * Zag-machine triggers like role=switch / role=tab / role=option /
+ * role=menuitem*) should signal that on hover. Disabled / aria-disabled
+ * elements opt out — their pointer-events are suppressed elsewhere but
+ * we also want the cursor to reflect "not clickable" for clarity. */
+@layer base {
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]),
+  [role="checkbox"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]),
+  [role="menuitem"]:not([aria-disabled="true"]),
+  [role="menuitemradio"]:not([aria-disabled="true"]),
+  [role="menuitemcheckbox"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  button[disabled],
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));

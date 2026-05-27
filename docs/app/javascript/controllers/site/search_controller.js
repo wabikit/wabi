@@ -37,6 +37,18 @@ export default class extends Controller {
         element: this.element,
         showSubResults: true,
         resetStyles: false,
+        // Pagefind builds URLs from file paths under the crawl input dir
+        // (e.g. docs/components/button.html). Our routes are clean — no
+        // .html suffix — so strip it before display. /index → /.
+        processResult: (result) => {
+          if (!result.url) return result
+          result.url = result.url
+            .replace(/\.html$/, "")
+            .replace(/\/index$/, "/")
+            .replace(/^\/$/, "/")
+          if (result.url === "") result.url = "/"
+          return result
+        },
       })
     } catch (err) {
       console.error("[site--search] PagefindUI failed to load:", err)

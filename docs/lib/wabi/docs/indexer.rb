@@ -41,7 +41,9 @@ module Wabi
         ROUTES_TO_INDEX.each do |path|
           get path, {}, CRAWL_HEADERS
           raise "Crawl failed for #{path}: HTTP #{last_response.status}" unless last_response.ok?
-          File.write(File.join(output_dir, sanitize(path)), last_response.body)
+          file_path = File.join(output_dir, sanitize(path))
+          FileUtils.mkdir_p(File.dirname(file_path))
+          File.write(file_path, last_response.body)
         end
       end
 
@@ -51,9 +53,15 @@ module Wabi
         Rails.application
       end
 
+      # Mirror the URL structure into the filesystem so Pagefind's URL inference
+      # produces clickable links: "/docs/components/button" -> docs/components/
+      # button.html (with intermediate dirs). PagefindUI strips the trailing
+      # `.html` at result-display time. Underscores in slugs (dropdown_menu,
+      # getting_started) are preserved.
       def sanitize(path)
-        slug = path == "/" ? "index" : path.tr("/", "_").sub(/\A_/, "")
-        "#{slug}.html"
+        return "index.html" if path == "/"
+
+        "#{path.sub(%r{\A/}, '')}.html"
       end
     end
   end
