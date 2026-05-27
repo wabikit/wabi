@@ -6,13 +6,14 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class Select < Wabi::Base
-      def initialize(id: nil, name: nil, value: nil, disabled: false, items: [], placeholder: "Select an option", **attrs)
+      def initialize(id: nil, name: nil, value: nil, disabled: false, items: [], placeholder: "Select an option", portal: true, **attrs)
         @id          = id
         @name        = name
         @value       = value
         @disabled    = disabled
         @items       = items
         @placeholder = placeholder
+        @portal      = portal
         @attrs       = attrs
       end
 
@@ -22,11 +23,12 @@ module Components
           id: @id,
           data: {
             controller: "wabi--select",
-            "wabi--select-items-value": @items.to_json,
-            "wabi--select-name-value": @name,
-            "wabi--select-value-value": @value,
-            "wabi--select-disabled-value": @disabled.to_s,
+            "wabi--select-items-value":       @items.to_json,
+            "wabi--select-name-value":        @name,
+            "wabi--select-value-value":       @value,
+            "wabi--select-disabled-value":    @disabled.to_s,
             "wabi--select-placeholder-value": @placeholder,
+            "wabi--select-portal-value":      @portal.to_s,
           },
           class: merge_class("relative inline-block", user_class)
         ) do

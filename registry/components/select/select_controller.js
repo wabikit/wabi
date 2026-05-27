@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as select from "@zag-js/select"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
+import { WabiPortalRegistry } from "./_shared/portal_registry.js"
 
 export default class extends Controller {
   static targets = [
@@ -13,10 +14,21 @@ export default class extends Controller {
     name:        String,
     value:       String,
     disabled:    { type: Boolean, default: false },
-    placeholder: { type: String, default: "Select an option" },
+    placeholder: { type: String,  default: "Select an option" },
+    portal:      { type: Boolean, default: true },
   }
 
   connect() {
+    this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
+    this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
+    this.originalParents = {
+      content:    this.contentEl?.parentNode,
+      positioner: this.positionerEl?.parentNode,
+    }
+
+    this.portaled = this.portalValue
+    if (this.portaled) this.attachToBody()
+
     const items = this.itemsValue
     const collection = select.collection({
       items,
@@ -38,23 +50,36 @@ export default class extends Controller {
         this.dispatch("change", { detail: { value: value[0] } })
       },
       onOpenChange: ({ open }) => {
-        // inert toggle: synchronous in onOpenChange so it lands before Zag's
-        // setInitialFocus moves focus to the highlighted item. The initial
-        // Phlex render carries `inert` on the content.
-        if (this.hasContentTarget) {
-          if (open) this.contentTarget.removeAttribute("inert")
-          else      this.contentTarget.setAttribute("inert", "")
-        }
+        this.isOpenValue = open
+        WabiPortalRegistry.onOpenChange()
       },
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
+    if (this.portaled) WabiPortalRegistry.register(this)
     this.render()
   }
 
   disconnect() {
     this.unsubscribe?.()
     this.machine?.stop()
+    if (this.portaled) {
+      WabiPortalRegistry.unregister(this)
+      this.restoreFromBody()
+    }
+  }
+
+  isOpen() { return !!this.isOpenValue }
+
+  attachToBody() {
+    [this.contentEl, this.positionerEl].forEach((el) => {
+      if (el && el.parentNode !== document.body) document.body.appendChild(el)
+    })
+  }
+
+  restoreFromBody() {
+    if (this.contentEl    && this.originalParents.content)    this.originalParents.content.appendChild(this.contentEl)
+    if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
   }
 
   render() {
@@ -65,10 +90,10 @@ export default class extends Controller {
     if (this.hasTriggerTarget)      spreadProps(this.triggerTarget,      api.getTriggerProps())
     if (this.hasIndicatorTarget)    spreadProps(this.indicatorTarget,    api.getIndicatorProps())
     if (this.hasValueTextTarget)    spreadProps(this.valueTextTarget,    api.getValueTextProps())
-    if (this.hasPositionerTarget)   spreadProps(this.positionerTarget,   api.getPositionerProps())
-    if (this.hasContentTarget) {
-      spreadProps(this.contentTarget, api.getContentProps())
-      this.contentTarget.hidden = false
+    if (this.positionerEl)          spreadProps(this.positionerEl,       api.getPositionerProps())
+    if (this.contentEl) {
+      spreadProps(this.contentEl, api.getContentProps())
+      this.contentEl.hidden = false
     }
     if (this.hasListTarget)         spreadProps(this.listTarget,         api.getListProps())
 
