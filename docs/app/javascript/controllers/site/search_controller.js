@@ -1,23 +1,45 @@
-// docs/app/javascript/controllers/site/search_controller.js
 import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller {
-  async connect() {
-    // Inject the Pagefind UI stylesheet once
+// Pagefind ships pagefind-ui.{js,css} as classic (IIFE) assets that set
+// window.PagefindUI rather than ES module exports. We load them once via
+// link + script tag injection, wait for the script to fire its 'load'
+// event, then mount PagefindUI on this controller's element.
+const UI_JS  = "/pagefind/pagefind-ui.js"
+const UI_CSS = "/pagefind/pagefind-ui.css"
+
+let pagefindLoader = null
+
+function loadPagefindUI() {
+  if (window.PagefindUI) return Promise.resolve(window.PagefindUI)
+  pagefindLoader ||= new Promise((resolve, reject) => {
     if (!document.querySelector('link[data-pagefind-ui-css]')) {
       const link = document.createElement("link")
       link.rel = "stylesheet"
-      link.href = "/pagefind/pagefind-ui.css"
+      link.href = UI_CSS
       link.dataset.pagefindUiCss = "true"
       document.head.appendChild(link)
     }
+    const script = document.createElement("script")
+    script.src = UI_JS
+    script.async = true
+    script.onload  = () => resolve(window.PagefindUI)
+    script.onerror = () => reject(new Error("Failed to load " + UI_JS))
+    document.head.appendChild(script)
+  })
+  return pagefindLoader
+}
 
-    // Dynamically import the UI bundle
-    const { PagefindUI } = await import("/pagefind/pagefind-ui.js")
-    new PagefindUI({
-      element: this.element,
-      showSubResults: true,
-      resetStyles: false,
-    })
+export default class extends Controller {
+  async connect() {
+    try {
+      const PagefindUI = await loadPagefindUI()
+      new PagefindUI({
+        element: this.element,
+        showSubResults: true,
+        resetStyles: false,
+      })
+    } catch (err) {
+      console.error("[site--search] PagefindUI failed to load:", err)
+    }
   }
 }

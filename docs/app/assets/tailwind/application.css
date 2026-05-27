@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @import "./wabi/tokens.css";
+
+/* Sticky header is 56px (h-14). Anchor-jumps to headings in /docs/* must
+   land below it, not under it. Applied to any h2/h3 with an id inside
+   <main>, which covers the TOC scrollspy targets without affecting prose
+   that happens to repeat heading text elsewhere on the page. */
+@layer base {
+  main :is(h1, h2, h3, h4, h5, h6)[id] {
+    scroll-margin-top: 5rem;
+  }
+}
