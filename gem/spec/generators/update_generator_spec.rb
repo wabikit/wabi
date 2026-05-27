@@ -93,4 +93,42 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
         .to eq(Digest::SHA256.hexdigest(new_content))
     end
   end
+
+  describe "new version, file edited on disk" do
+    it "prompts and skips on 'n'" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+      edited      = "class Button\n  # local edit\nend\n"
+
+      seed_install(version: "0.1.0", content: old_content)
+      File.write(button_path, edited)
+      seed_button(version: "0.2.0", content: new_content)
+
+      allow_any_instance_of(described_class).to receive(:prompt_conflict).and_return("n")
+
+      capture_stdout do
+        described_class.start(["button"], destination_root: destination)
+      end
+
+      expect(File.read(button_path)).to eq(edited)
+    end
+
+    it "prompts and overwrites on 'y'" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+      edited      = "class Button\n  # local edit\nend\n"
+
+      seed_install(version: "0.1.0", content: old_content)
+      File.write(button_path, edited)
+      seed_button(version: "0.2.0", content: new_content)
+
+      allow_any_instance_of(described_class).to receive(:prompt_conflict).and_return("y")
+
+      capture_stdout do
+        described_class.start(["button"], destination_root: destination)
+      end
+
+      expect(File.read(button_path)).to eq(new_content)
+    end
+  end
 end

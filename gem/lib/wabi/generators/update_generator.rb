@@ -136,7 +136,7 @@ module Wabi
           say ""
           say "  conflict    #{path}", :yellow
           say "    #{reason}. Overwrite with new version?", :yellow
-          answer = ask("    (y)es / (n)o / (d)iff / (q)uit?", limited_to: %w[y n d q])
+          answer = prompt_conflict(path)
           case answer
           when "y"
             write_file(target, new_content, reason: "overwrite")
@@ -151,6 +151,10 @@ module Wabi
             raise UpdateAborted, "user aborted update"
           end
         end
+      end
+
+      def prompt_conflict(_path)
+        ask("    (y)es / (n)o / (d)iff / (q)uit?", limited_to: %w[y n d q])
       end
 
       def print_diff(target, new_content)
