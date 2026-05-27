@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.3.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 20 components, 8 theme palettes, WCAG-AA targeted.
+🎉 **Status:** v0.4.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 20 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
 
 ---
 
@@ -177,7 +177,7 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 | v0.1 | 20 components | ✅ shipped 2026-05-26 |
 | v0.2 | 8 themes + theme picker | ✅ shipped 2026-05-26 |
 | v0.3 | Real docs site + RubyGems publish | ✅ shipped 2026-05-26 |
-| v0.4 | Detailed pages for remaining 16 components; Pagefind search; sidebar nav | planned |
+| v0.4 | Detailed pages for all 20 components; Pagefind search; sidebar nav; theme polish | ✅ shipped 2026-05-27 |
 | v0.5 | `@zag-js/toast` group machine; real portal pattern; `wabi:update` generator | planned |
 | v0.6 | Forms expansion: RadioGroup, Toggle, ToggleGroup, Slider, Combobox, Command, Form | planned |
 | v0.7 | Navigation & layout: Sheet, ContextMenu, Pagination, NavigationMenu | planned |

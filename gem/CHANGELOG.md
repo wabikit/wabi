@@ -2,6 +2,69 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] — 2026-05-27
+
+Sprint 8 — docs completeness + theme polish. The docs site gains the
+three-column shell (grouped sidebar, content, right-side TOC) on every
+`/docs/*` route, a Pagefind-powered search, and detail pages for the
+remaining 16 components — every component in the registry now has its
+own page. Theming gains a tinted secondary/accent per color palette,
+a quick sun/moon mode toggle in the header, and a swap of `slate` +
+`zinc` for `yellow` + `orange`.
+
+### Added
+
+- **`Components::Site::Sidebar` + `Sidebar::Group` + `Sidebar::Link`** — Grouped left navigation for `/docs/*`. 7 groups (Getting Started / Forms / Layout & Display / Overlays / Menus / Navigation / Feedback) listing all 20 components + the prose pages. Active link highlighted via `current_path:` kwarg.
+- **`Components::Site::TableOfContents` + `site--toc` Stimulus controller** — Right-side TOC on `chrome: :full` pages. Empty `<aside>` filled client-side by scanning `main h2[id], main h3[id]`. Tracks the active section via `IntersectionObserver`.
+- **`Components::Site::SidebarToggle` + `site--sidebar` controller** — Hamburger button visible below `lg` breakpoint; opens the sidebar as a fixed overlay with scroll lock + Escape-to-close.
+- **`Components::Site::SearchBox` + `site--search` controller** — Header search input that lazy-loads PagefindUI as a classic script, mounts it on the input, and renders results as an absolute-positioned dropdown styled with Wabi popover tokens.
+- **`Components::Site::ModeToggle`** — Sun/moon icon button next to the ThemePicker. One-click dark/light flip via the existing `wabi--theme#toggleMode` action.
+- **`Wabi::Docs::Indexer` + `wabi:docs:index` rake task** — Crawls 26 docs routes via `Rack::Test` (with `HTTP_HOST=localhost` + Chrome UA to satisfy `ActionDispatch::HostAuthorization` and `allow_browser :modern`), writes the response HTML to files mirroring the URL structure, then shells out to `npx pagefind` to build the static index. Index lives at `docs/public/pagefind/` and ships in the repo — deploys stay Node-free.
+- **`docs/spec/requests/docs_smoke_spec.rb`** — Request specs covering every documented route (3 chrome modes: bare / sidebar_only / full) and the SearchBox markup on non-bare routes.
+- **16 new detail pages** under `/docs/components/`: checkbox, input, label, select, switch, textarea, alert, avatar, badge, card, separator, drawer, popover, tooltip, accordion, toast. Each follows a single canonical anatomy: Installation / Example (ComponentPreview) / Source / Accessibility.
+- **Two new theme palettes**: `yellow` (vibrant amber primary) and `orange`. Both follow the standard light + dark structure.
+- **`Site::Layout(chrome:)` kwarg** — `:bare` (default, no sidebar/TOC), `:sidebar_only`, `:full`. Drives where the sidebar, TOC, and SearchBox render. 11 views updated to pass the appropriate value.
+- **`ROADMAP` updates** + **README "Working on docs" section** documenting the Pagefind workflow.
+
+### Changed
+
+- **Theme palettes**: `slate` and `zinc` replaced with `yellow` and `orange`. Neutral baselines stay covered by `default` and `stone`.
+- **Theme tinting**: the 6 color palettes (rose, blue, green, violet, yellow, orange) now redefine `--secondary` and `--accent` as pale tints of their primary hue (lightness ~92-96% light / ~18% dark) with foreground colors at the same hue darkened/lightened for AA contrast. Default and Stone stay neutral on purpose. `--muted` stays neutral across all themes.
+- **Theme dark-mode propagation**: each theme's dark block now also matches `[data-mode="dark"] [data-theme="X"]:not([data-mode="light"])`, so dark mode cascades into nested `data-theme` cards (e.g. the `/docs/themes` palette grid).
+- **Button `:outline` appearance**: `border-input` (neutral) replaced with `border-primary` + `text-primary`. Outline buttons now adopt the active theme color on their stroke and label.
+- **`Site::ComponentPreview`**: replaced the ad-hoc `site--preview-tabs` Stimulus controller with the real `Wabi::UI::Tabs` (dogfooding). Switcher uses an underline pattern — active trigger gets a 3px primary-colored bottom border + bold primary-color text.
+- **`Site::CodeBlock` copy button**: word "Copy" replaced with a 14px clipboard SVG inside a 28×28 button. On copy: swap to checkmark SVG for 1.2s. `pre` reserves the button's column with `pr-12` so long code lines never tuck under the button while scrolling.
+- **Components index**: every component links to its detail page. The `DETAILED` constant gate was dropped from `ComponentsController#show`; the only guard is membership in `ALL`.
+- **Site::Layout header**: sticky with `z-30`, gains the SearchBox + ModeToggle on `chrome != :bare` routes.
+
+### Fixed
+
+- **Tailwind 4 migration — explicit `border` width on every `border-input` element.** TW3 implicitly set `border-width: 1px` on any element with a `border-{color}` class; TW4 removed that default. Components that only declared `border-input` rendered with width 0 — no visible outline. Affected: `select_trigger`, `select_content`, `dropdown_menu_content`, `dropdown_menu_sub_content`, `drawer_content` (4 side variants), `dialog_content`, `popover_content`, `toast`.
+- **Tailwind 4 migration — cursor: pointer on interactive elements.** TW4 Preflight removed the legacy default on `<button>`. Added a CSS rule under `_shared.css` (`@layer base`) restoring `cursor: pointer` for `button`, `[role="button"/"switch"/"checkbox"/"tab"/"option"/"menuitem"/"menuitemradio"/"menuitemcheckbox"]`, plus `cursor: not-allowed` for `[disabled]` and `[aria-disabled="true"]`.
+- **`Wabi::UI::TabsTrigger` active state**: switched all `data-[state=active]:*` variants to `aria-selected:*`. Zag.js's tabs API emits `aria-selected="true"` + `data-selected=""`, NOT `data-state="active"` — so the active styling never fired. Affected `TabsTrigger` base tokens (both light and dark mode active styles).
+- **`Avatar` image/fallback overlap**: `AvatarImage` is now `absolute inset-0 object-cover` so it stacks over `AvatarFallback`. Previously both rendered as flow-positioned siblings inside the flex Avatar container.
+- **`Toast` sticky mode**: `wabi--toast` controller treats `durationMsValue <= 0` as "no timer" — toasts render persistently until manually dismissed. The Toast detail-page preview now uses this so the 3 appearances stay visible.
+- **`SidebarToggle` Stimulus wiring**: button declared `data-action` but no element declared `data-controller="site--sidebar"`, so the controller never instantiated and the hamburger didn't open the sidebar. Added `data-controller` to the button itself.
+- **TOC anchor jumps**: sticky 56px header was tapping over scrolled-to headings. Added `scroll-margin-top: 5rem` to `main :is(h1, h2, h3, h4, h5, h6)[id]`.
+- **SearchBox PagefindUI loader**: PagefindUI ships as classic IIFE scripts (sets `window.PagefindUI`), not ES modules. The original `await import("/pagefind/pagefind-ui.js")` returned an empty module. Rewrote the loader to inject a `<script>` tag and await its `load` event.
+- **Search result URLs**: Indexer wrote `docs_components_button.html` (flattened with `_`), and Pagefind built result URLs from those filenames. Now writes files mirroring the URL structure (`docs/components/button.html` with `mkdir_p`) and PagefindUI's `processResult` callback strips `.html` from the displayed URL — clicks navigate to `/docs/components/button` directly.
+- **Select example wiring**: `items:` array was missing on the `/docs/components/select` example, so Zag's collection was empty and clicks on SelectItem elements were no-ops. Added a `FRUITS` array passed via `items:` and iterated for the SelectItem children.
+
+### Spec totals
+
+- Registry: **125/125**.
+- Gem: **66/66**.
+- Docs (request + component specs): **40/40** — every smoke route (`:bare` / `:sidebar_only` / `:full`) returns 200 with the expected sidebar/TOC/search markup; Indexer crawl writes one file per route, mirroring URL structure with `index.html` at root.
+
+### Known v0.4 deferrals → v0.5
+
+- `@zag-js/toast` group machine — Wabi v0.4 Toast still uses a vanilla setTimeout-based controller. v0.5 will adopt the real Zag toast group machine for cross-toast coordination (max visible, stacking, etc.).
+- `wabi:update` generator — Pulling registry updates back into a host app is still manual (re-run `wabi:add <name>`). v0.5 will add a generator that diffs registry vs. host and applies changes.
+- Real portal pattern — Overlay components (Dialog, Drawer, Popover, Tooltip) currently render in-tree. A `<dialog>`-element-based or `Components::UI::Portal`-based pattern is queued for v0.5.
+- Backfill `bin/importmap pin` footnote on the 5 pre-existing Zag pages (checkbox, select, switch, dialog, tabs). v0.4 added the warning to the new overlay/accordion pages; sweep across all pages happens in v0.5 docs polish.
+
+---
+
 ## [0.3.0] — 2026-05-26
 
 Sprint 7 (docs site polish). The docs site stops being a one-page kitchen
