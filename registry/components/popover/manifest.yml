@@ -7,6 +7,8 @@ ruby_dependencies: []
 js_dependencies:
   "@zag-js/popover": "^1.41"
   "@zag-js/vanilla": "^1.41"
+shared_files:
+  - "_shared/portal_registry.js"
 tailwind:
   extend: {}
 metadata:

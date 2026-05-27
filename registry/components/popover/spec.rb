@@ -35,6 +35,16 @@ RSpec.describe "Popover composition" do
     expect(output).to include('data-wabi--popover-target="closeTrigger"')
   end
 
+  it "carries portal-value true by default" do
+    output = Components::UI::Popover.new.call { "" }
+    expect(output).to include('data-wabi--popover-portal-value="true"')
+  end
+
+  it "allows portal: false to keep v0.4 in-tree behavior" do
+    output = Components::UI::Popover.new(portal: false).call { "" }
+    expect(output).to include('data-wabi--popover-portal-value="false"')
+  end
+
   it "composes into a full popover" do
     composed = Class.new(Phlex::HTML) do
       def view_template
