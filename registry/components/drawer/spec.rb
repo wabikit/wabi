@@ -19,6 +19,16 @@ RSpec.describe "Drawer composition" do
     expect(output).to include('data-wabi--dialog-modal-value="true"')
   end
 
+  it "carries portal-value true by default" do
+    output = Components::UI::Drawer.new.call
+    expect(output).to include('data-wabi--dialog-portal-value="true"')
+  end
+
+  it "allows portal: false to keep v0.4 in-tree behavior" do
+    output = Components::UI::Drawer.new(portal: false).call
+    expect(output).to include('data-wabi--dialog-portal-value="false"')
+  end
+
   it "DrawerTrigger emits <button> with the trigger target" do
     output = Components::UI::DrawerTrigger.new.call { "Open" }
     expect(output).to include('<button')

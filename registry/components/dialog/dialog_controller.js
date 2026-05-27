@@ -1,41 +1,75 @@
 import { Controller } from "@hotwired/stimulus"
 import * as dialog from "@zag-js/dialog"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
+import { WabiPortalRegistry } from "./_shared/portal_registry.js"
 
 export default class extends Controller {
   static targets = ["trigger", "portal", "backdrop", "positioner", "content", "title", "description", "closeTrigger"]
   static values  = {
-    open:  { type: Boolean, default: false },
-    modal: { type: Boolean, default: true  },
+    open:   { type: Boolean, default: false },
+    modal:  { type: Boolean, default: true  },
+    portal: { type: Boolean, default: true  },
   }
 
   connect() {
+    this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
+    this.backdropEl   = this.hasBackdropTarget   ? this.backdropTarget   : null
+    this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
+    this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
+
+    this.originalParents = {
+      content:    this.contentEl?.parentNode,
+      backdrop:   this.backdropEl?.parentNode,
+      positioner: this.positionerEl?.parentNode,
+    }
+
+    this.portaled = this.portalValue
+    if (this.portaled) this.attachToBody()
+
     this.machine = new VanillaMachine(dialog.machine, {
       id: this.element.id || crypto.randomUUID(),
       defaultOpen: this.openValue,
       modal: this.modalValue,
       onOpenChange: ({ open }) => {
         this.openValue = open
-        // Toggle inert SYNCHRONOUSLY inside the state transition so the
-        // attribute clears before Zag's setInitialFocus action runs. If we
-        // toggled it from render() (the subscriber) instead, focus would hit
-        // an inert content target on first open and silently fail. The
-        // initial Phlex render carries `inert` (everything starts closed).
-        if (this.hasContentTarget) {
-          if (open) this.contentTarget.removeAttribute("inert")
-          else      this.contentTarget.setAttribute("inert", "")
+        WabiPortalRegistry.onOpenChange()
+        // For non-portaled mode (portal: false), toggle inert manually so
+        // the in-tree content is still accessible when open. The registry
+        // does NOT manage inert for non-portaled overlays.
+        if (!this.portaled && this.contentEl) {
+          if (open) this.contentEl.removeAttribute("inert")
+          else      this.contentEl.setAttribute("inert", "")
         }
         this.dispatch("change", { detail: { open } })
       },
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
+    if (this.portaled) WabiPortalRegistry.register(this)
     this.render()
   }
 
   disconnect() {
     this.unsubscribe?.()
     this.machine?.stop()
+    if (this.portaled) {
+      WabiPortalRegistry.unregister(this)
+      this.restoreFromBody()
+    }
+  }
+
+  isOpen() { return this.openValue }
+
+  attachToBody() {
+    [this.contentEl, this.backdropEl, this.positionerEl].forEach((el) => {
+      if (el && el.parentNode !== document.body) document.body.appendChild(el)
+    })
+  }
+
+  restoreFromBody() {
+    if (this.contentEl    && this.originalParents.content)    this.originalParents.content.appendChild(this.contentEl)
+    if (this.backdropEl   && this.originalParents.backdrop)   this.originalParents.backdrop.appendChild(this.backdropEl)
+    if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
   }
 
   open()  { this.api()?.setOpen(true)  }
@@ -49,27 +83,19 @@ export default class extends Controller {
     const api = this.api()
     if (!api) return
 
-    if (this.hasTriggerTarget)     spreadProps(this.triggerTarget,    api.getTriggerProps())
-    if (this.hasPositionerTarget)  spreadProps(this.positionerTarget, api.getPositionerProps())
+    if (this.triggerEl)     spreadProps(this.triggerEl,    api.getTriggerProps())
+    if (this.positionerEl)  spreadProps(this.positionerEl, api.getPositionerProps())
     if (this.hasTitleTarget)       spreadProps(this.titleTarget,       api.getTitleProps())
     if (this.hasDescriptionTarget) spreadProps(this.descriptionTarget, api.getDescriptionProps())
     this.closeTriggerTargets.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
 
-    // Backdrop + content: spreadProps sets data-state + hidden. We KEEP
-    // data-state (CSS uses it for transitions) but force-clear hidden so
-    // display:none doesn't cut off the fade-out. `inert` on the content
-    // takes over for tab order + screen-reader hiding when closed.
-    if (this.hasBackdropTarget) {
-      spreadProps(this.backdropTarget, api.getBackdropProps())
-      this.backdropTarget.hidden = false
+    if (this.backdropEl) {
+      spreadProps(this.backdropEl, api.getBackdropProps())
+      this.backdropEl.hidden = false
     }
-    if (this.hasContentTarget) {
-      spreadProps(this.contentTarget, api.getContentProps())
-      // Visibility lives on `data-state` (CSS opacity + pointer-events). We
-      // force `hidden=false` so the fade-out can actually run instead of
-      // display:none cutting it off. The `inert` attribute is managed from
-      // onOpenChange (synchronous, runs before Zag's setInitialFocus).
-      this.contentTarget.hidden = false
+    if (this.contentEl) {
+      spreadProps(this.contentEl, api.getContentProps())
+      this.contentEl.hidden = false
     }
   }
 }

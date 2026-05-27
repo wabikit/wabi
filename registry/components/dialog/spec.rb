@@ -19,6 +19,16 @@ RSpec.describe "Dialog composition" do
     expect(output).to include('data-wabi--dialog-modal-value="true"')
   end
 
+  it "carries portal-value true by default" do
+    output = Components::UI::Dialog.new.call
+    expect(output).to include('data-wabi--dialog-portal-value="true"')
+  end
+
+  it "allows portal: false to keep v0.4 in-tree behavior" do
+    output = Components::UI::Dialog.new(portal: false).call
+    expect(output).to include('data-wabi--dialog-portal-value="false"')
+  end
+
   it "renders DialogTrigger as a <button> with the trigger target" do
     output = Components::UI::DialogTrigger.new.call { "Open" }
     expect(output).to include('<button')

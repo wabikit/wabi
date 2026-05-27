@@ -5,11 +5,12 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class Dialog < Wabi::Base
-      def initialize(id: nil, open: false, modal: true, **attrs)
-        @id    = id
-        @open  = open
-        @modal = modal
-        @attrs = attrs
+      def initialize(id: nil, open: false, modal: true, portal: true, **attrs)
+        @id     = id
+        @open   = open
+        @modal  = modal
+        @portal = portal
+        @attrs  = attrs
       end
 
       def view_template(&block)
@@ -21,8 +22,9 @@ module Components
             # serializes to a value-less attribute `data-...-value`, which
             # Stimulus then parses as the string "" and treats as `false`.
             # Emitting "true"/"false" strings makes the value type roundtrip.
-            "wabi--dialog-open-value":  @open.to_s,
-            "wabi--dialog-modal-value": @modal.to_s,
+            "wabi--dialog-open-value":   @open.to_s,
+            "wabi--dialog-modal-value":  @modal.to_s,
+            "wabi--dialog-portal-value": @portal.to_s,
           }
         ) do
           yield if block_given?
