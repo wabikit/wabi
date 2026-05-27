@@ -4,47 +4,75 @@ require "date"
 
 module Components
   module UI
-    # Singleton container for toasts. Render ONCE near the end of <body> in your
-    # layout. Toasts are appended to this <ol> -- typically via Turbo Stream:
-    #
-    #   turbo_stream.append "wabi-toaster",
-    #     Components::UI::Toast.new(title: "Saved", appearance: :success)
-    #
-    # The list is `pointer-events-none` so the empty toaster doesn't block clicks
-    # behind it; individual toasts override with `pointer-events-auto`.
+    # Group-machine Toaster. ONE Toaster per page by default; multiple
+    # placements are achieved by adding additional Toaster instances with
+    # distinct IDs. The Toaster hosts a single `@zag-js/toast` group
+    # machine; toasts are created via `turbo_stream.wabi_toast(...)` (which
+    # emits a `wabi_toast_create` custom Turbo Stream action) or directly
+    # in JS via `window.wabiToaster.create({title, description, type})`.
     class Toaster < Wabi::Base
-      def initialize(id: "wabi-toaster", placement: :top_right, **attrs)
+      DEFAULT_PLACEMENT = "bottom-end"
+
+      def initialize(
+        id: "wabi-toaster",
+        placement: DEFAULT_PLACEMENT,
+        max: 5,
+        gap: 16,
+        duration: 5000,
+        swipe_direction: "right",
+        **attrs
+      )
         @id        = id
         @placement = placement
+        @max       = max
+        @gap       = gap
+        @duration  = duration
+        @swipe_dir = swipe_direction
         @attrs     = attrs
       end
 
-      PLACEMENT_CLASSES = {
-        top_left:      "top-4 left-4 items-start",
-        top_center:    "top-4 left-1/2 -translate-x-1/2 items-center",
-        top_right:     "top-4 right-4 items-end",
-        bottom_left:   "bottom-4 left-4 items-start",
-        bottom_center: "bottom-4 left-1/2 -translate-x-1/2 items-center",
-        bottom_right:  "bottom-4 right-4 items-end",
-      }.freeze
-
       def view_template
         user_class = @attrs.delete(:class)
-        # `w-96` + `h-fit` keeps the <ol> sized to its actual toast content even
-        # before any toasts are appended -- without an explicit width, an empty
-        # flex-col container can collapse to 0 OR expand under certain Tailwind
-        # 4 layout rules. `z-50` (built-in) replaces the earlier `z-[100]`
-        # arbitrary value to avoid any class-emit ambiguity.
         ol(
           id: @id,
           role: "region",
           "aria-label": "Notifications",
+          data: {
+            controller: "wabi--toast",
+            "wabi--toast-max-value":             @max.to_s,
+            "wabi--toast-gap-value":             @gap.to_s,
+            "wabi--toast-placement-value":       @placement,
+            "wabi--toast-duration-value":        @duration.to_s,
+            "wabi--toast-swipe-direction-value": @swipe_dir,
+          },
           class: merge_class(
             "fixed z-50 flex flex-col gap-2 w-96 max-w-[calc(100vw-2rem)] h-fit pointer-events-none list-none p-0 m-0",
-            PLACEMENT_CLASSES.fetch(@placement),
             user_class,
           )
-        )
+        ) do
+          template(data: { "wabi--toast-target": "template" }) do
+            li(
+              role: "status",
+              "aria-live": "polite",
+              "aria-atomic": "true",
+              class: "pointer-events-auto w-full overflow-hidden rounded-md " \
+                     "border border-input bg-background text-foreground p-4 shadow-md"
+            ) do
+              div(class: "flex items-start justify-between gap-3") do
+                div(class: "grid gap-1") do
+                  div(class: "text-sm font-semibold", data: { slot: "title" })
+                  div(class: "text-sm opacity-90",   data: { slot: "description" })
+                end
+                button(
+                  type: "button",
+                  "aria-label": "Dismiss",
+                  data: { slot: "close" },
+                  class: "shrink-0 rounded-md p-1 text-current opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
+                ) { "×" }
+              end
+            end
+          end
+        end
       end
     end
   end

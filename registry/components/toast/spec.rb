@@ -14,19 +14,24 @@ RSpec.describe "Toast composition" do
       expect(output).to include('aria-label="Notifications"')
     end
 
-    it "places the toaster per the placement option (default top_right)" do
+    it "wires the wabi--toast controller and group-machine values" do
+      output = described_class.new(max: 3, gap: 24, placement: "top-end").call
+      expect(output).to include('data-controller="wabi--toast"')
+      expect(output).to include('data-wabi--toast-max-value="3"')
+      expect(output).to include('data-wabi--toast-gap-value="24"')
+      expect(output).to include('data-wabi--toast-placement-value="top-end"')
+    end
+
+    it "includes a <template> target with the toast skeleton" do
       output = described_class.new.call
-      expect(output).to include("top-4")
-      expect(output).to include("right-4")
+      expect(output).to include('data-wabi--toast-target="template"')
+      expect(output).to include('<template')
+      expect(output).to include('data-slot="title"')
+      expect(output).to include('data-slot="description"')
+      expect(output).to include('data-slot="close"')
     end
 
-    it "supports bottom_center placement" do
-      output = described_class.new(placement: :bottom_center).call
-      expect(output).to include("bottom-4")
-      expect(output).to include("left-1/2")
-    end
-
-    it "is `pointer-events-none` so the empty toaster doesn't block clicks behind it" do
+    it "is pointer-events-none so the empty toaster doesn't block clicks" do
       output = described_class.new.call
       expect(output).to include("pointer-events-none")
     end
