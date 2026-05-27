@@ -24,10 +24,10 @@ module Components
           render ::Components::UI::Tabs.new(value: "preview", class: "w-full") do
             render ::Components::UI::TabsList.new(
               class: "rounded-none w-full justify-start gap-1 border-b border-border " \
-                     "bg-muted/30 px-2 h-auto py-2"
+                     "bg-muted px-2 h-auto py-2"
             ) do
-              render ::Components::UI::TabsTrigger.new(value: "preview", class: "cursor-pointer") { "Preview" }
-              render ::Components::UI::TabsTrigger.new(value: "code",    class: "cursor-pointer") { "Code" }
+              render ::Components::UI::TabsTrigger.new(value: "preview") { "Preview" }
+              render ::Components::UI::TabsTrigger.new(value: "code")    { "Code" }
             end
             render ::Components::UI::TabsContent.new(value: "preview", class: "mt-0 p-8 bg-background") do
               raw safe(block_content) if block_content
