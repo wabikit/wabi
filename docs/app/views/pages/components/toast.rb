@@ -20,7 +20,7 @@ module Views
               h1(class: "text-4xl font-bold mb-2") { "Toast" }
               p(class: "text-muted-foreground mb-6") { description }
               p(class: "text-sm text-muted-foreground mb-8") do
-                "Wabi's v0.4 Toast uses a vanilla JS controller — @zag-js/toast group machine is queued for v0.5."
+                "Wabi v0.5 Toast is powered by the @zag-js/toast group machine — max, gap, swipe, and pause-on-hover are all handled by the Toaster controller."
               end
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
@@ -39,53 +39,45 @@ module Views
               )
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
-              p(class: "text-sm text-muted-foreground mb-4") do
-                "Toasts are dispatched from a Rails action via Turbo Stream. " \
-                "The three appearance variants — :info (default), :success, and :destructive — are shown below."
-              end
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                # Dispatch from a controller action:
-                # turbo_stream.append "wabi-toaster",
-                #   Components::UI::Toast.new(title: "File saved", appearance: :success)
-                #
-                # All three appearances:
-                render Components::UI::Toast.new(
-                  title: "Info",
-                  description: "Something happened that you should know about.",
-                  appearance: :info
-                )
-                render Components::UI::Toast.new(
-                  title: "Success",
-                  description: "Your changes have been saved.",
-                  appearance: :success
-                )
-                render Components::UI::Toast.new(
-                  title: "Destructive",
-                  description: "Something went wrong. Please try again.",
-                  appearance: :destructive
-                )
+                render Components::UI::Toaster.new(id: "demo-toaster", max: 3, placement: "bottom-end")
+
+                # Buttons trigger window.wabiToaster.create() via data-toast-payload
+                button(
+                  type: "button",
+                  data: { "toast-payload": '{"title":"Saved","description":"Profile updated.","type":"success"}' },
+                  class: "js-toast-btn rounded-md bg-primary text-primary-foreground px-4 py-2"
+                ) { "Show success toast" }
+
+                button(
+                  type: "button",
+                  data: { "toast-payload": '{"title":"Boom","description":"Something failed.","type":"error"}' },
+                  class: "js-toast-btn rounded-md bg-destructive text-destructive-foreground px-4 py-2 ml-2"
+                ) { "Show error toast" }
               RUBY
-                ol(class: "flex flex-col gap-2 list-none p-0 m-0 w-80") do
-                  # duration_ms: 0 keeps the toasts sticky so the preview stays
-                  # readable (real toasts default to 5000ms auto-dismiss).
-                  render ::Components::UI::Toast.new(
-                    title: "Info",
-                    description: "Something happened that you should know about.",
-                    appearance: :info,
-                    duration_ms: 0
-                  )
-                  render ::Components::UI::Toast.new(
-                    title: "Success",
-                    description: "Your changes have been saved.",
-                    appearance: :success,
-                    duration_ms: 0
-                  )
-                  render ::Components::UI::Toast.new(
-                    title: "Destructive",
-                    description: "Something went wrong. Please try again.",
-                    appearance: :destructive,
-                    duration_ms: 0
-                  )
+                render ::Components::UI::Toaster.new(id: "demo-toaster", max: 3, placement: "bottom-end")
+
+                button(
+                  type: "button",
+                  data: { "toast-payload": '{"title":"Saved","description":"Profile updated.","type":"success"}' },
+                  class: "js-toast-btn rounded-md bg-primary text-primary-foreground px-4 py-2"
+                ) { "Show success toast" }
+
+                button(
+                  type: "button",
+                  data: { "toast-payload": '{"title":"Boom","description":"Something failed.","type":"error"}' },
+                  class: "js-toast-btn rounded-md bg-destructive text-destructive-foreground px-4 py-2 ml-2"
+                ) { "Show error toast" }
+
+                script do
+                  plain <<~JS
+                    document.querySelectorAll('.js-toast-btn').forEach(function(btn) {
+                      btn.addEventListener('click', function() {
+                        var payload = JSON.parse(btn.dataset.toastPayload);
+                        window.wabiToaster && window.wabiToaster.create(payload);
+                      });
+                    });
+                  JS
                 end
               end
 
@@ -99,9 +91,9 @@ module Views
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "role=\"status\" + aria-live=\"polite\" + aria-atomic=\"true\" on every toast — appearance is purely visual." }
-                li { "auto-dismiss after duration_ms (default 4s); hover pauses the timer so users have time to read." }
-                li { "each toast has a manual close button (X) for keyboard / screen-reader users." }
-                li { "for urgent / destructive messages a screen-reader user may miss a polite announcement — pair toasts with an inline error message in those flows, or wait for the @zag-js/toast group machine in v0.5." }
+                li { "auto-dismiss after duration (default 5000ms); the Zag group machine pauses timers on group hover." }
+                li { "each toast has a manual close button (×) for keyboard / screen-reader users." }
+                li { "for urgent / destructive messages, pair toasts with an inline error message so screen-reader users in polite-only mode don't miss the announcement." }
               end
             end
           end
