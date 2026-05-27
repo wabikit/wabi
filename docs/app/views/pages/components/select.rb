@@ -1,0 +1,86 @@
+# frozen_string_literal: true
+
+require "yaml"
+
+module Views
+  module Pages
+    module Components
+      class Select < Views::Base
+        SOURCE_PATHS = %w[
+          app/components/ui/select.rb
+          app/components/ui/select_trigger.rb
+          app/components/ui/select_content.rb
+          app/components/ui/select_item.rb
+          app/components/ui/select_label.rb
+          app/components/ui/select_value.rb
+        ].freeze
+
+        def view_template
+          render ::Components::Site::Layout.new(title: "Select", chrome: :full) do
+            main(class: "container mx-auto py-12 px-4 max-w-3xl") do
+              p(class: "text-sm text-muted-foreground mb-2") do
+                a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
+              end
+              h1(class: "text-4xl font-bold mb-2") { "Select" }
+              p(class: "text-muted-foreground mb-8") { description }
+
+              h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
+              render ::Components::Site::CodeBlock.new(
+                source: "bin/rails g wabi:add select\nbin/importmap pin @zag-js/select\nbin/importmap pin @zag-js/vanilla",
+                language: "shell"
+              )
+
+              h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Select.new(name: "fruit") do
+                  render Components::UI::SelectTrigger.new do
+                    render Components::UI::SelectValue.new
+                  end
+                  render Components::UI::SelectContent.new do
+                    render Components::UI::SelectItem.new(value: "apple")  { "Apple" }
+                    render Components::UI::SelectItem.new(value: "banana") { "Banana" }
+                    render Components::UI::SelectItem.new(value: "cherry") { "Cherry" }
+                  end
+                end
+              RUBY
+                render ::Components::UI::Select.new(name: "fruit") do
+                  render ::Components::UI::SelectTrigger.new do
+                    render ::Components::UI::SelectValue.new
+                  end
+                  render ::Components::UI::SelectContent.new do
+                    render ::Components::UI::SelectItem.new(value: "apple")  { "Apple" }
+                    render ::Components::UI::SelectItem.new(value: "banana") { "Banana" }
+                    render ::Components::UI::SelectItem.new(value: "cherry") { "Cherry" }
+                  end
+                end
+              end
+
+              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
+              SOURCE_PATHS.each do |relpath|
+                h3(id: "source-#{File.basename(relpath, '.rb')}",
+                   class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
+                render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
+              end
+
+              h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
+              ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
+                li { 'combobox role; trigger announces selected value and "expanded/collapsed" state.' }
+                li { "arrow keys navigate options; type-ahead jumps to matching items; Enter selects; Escape closes." }
+                li { "focus is trapped inside the listbox while open; first focus lands on selected option." }
+                li { "scroll lock prevents background scroll while the listbox is open." }
+              end
+            end
+          end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "select", "manifest.yml").realpath
+          )["description"]
+        end
+      end
+    end
+  end
+end

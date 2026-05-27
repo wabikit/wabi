@@ -13,7 +13,8 @@ class ComponentsController < ApplicationController
     dropdown_menu toast tabs accordion
   ].freeze
 
-  DETAILED = %w[button dropdown_menu dialog tabs].freeze
+  DETAILED = %w[button dropdown_menu dialog tabs
+                checkbox input label select switch textarea].freeze
 
   def index
     render Views::Pages::Components::Index.new

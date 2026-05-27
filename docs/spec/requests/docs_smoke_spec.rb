@@ -36,5 +36,13 @@ RSpec.describe "Docs smoke", type: :request do
         expect(response.body).to include('data-controller="site--toc"')
       end
     end
+
+    %w[/docs/components/checkbox /docs/components/input /docs/components/label
+       /docs/components/select /docs/components/switch /docs/components/textarea].each do |path|
+      it "GET #{path} returns 200" do
+        get path
+        expect(response).to have_http_status(:ok)
+      end
+    end
   end
 end
