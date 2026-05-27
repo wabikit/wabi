@@ -48,9 +48,8 @@ module Components
             yield if block_given?
           end
           div(
-            class: "bg-background",
-            data: { "site--preview-tabs-target": "code" },
-            hidden: true
+            class: "bg-background hidden",
+            data: { "site--preview-tabs-target": "code" }
           ) do
             render Components::Site::CodeBlock.new(source: @source, language: @language)
           end

@@ -9,8 +9,18 @@ export default class extends Controller {
 
   show(event) {
     const which = event.params.tab
-    if (this.hasPreviewTarget) this.previewTarget.hidden = which !== "preview"
-    if (this.hasCodeTarget)    this.codeTarget.hidden    = which !== "code"
+    // Use the Tailwind `hidden` class instead of the [hidden] attribute so
+    // child components (e.g. Zag-controlled previews that spread their own
+    // inline display styles on render) cannot accidentally override our
+    // tab-switching via specificity.
+    if (this.hasPreviewTarget) {
+      this.previewTarget.removeAttribute("hidden")
+      this.previewTarget.classList.toggle("hidden", which !== "preview")
+    }
+    if (this.hasCodeTarget) {
+      this.codeTarget.removeAttribute("hidden")
+      this.codeTarget.classList.toggle("hidden", which !== "code")
+    }
 
     this.element.querySelectorAll("button[data-site--preview-tabs-tab-param]").forEach((btn) => {
       const isActive = btn.dataset["sitePreviewTabsTabParam"] === which
