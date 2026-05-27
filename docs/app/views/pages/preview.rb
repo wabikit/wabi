@@ -4,7 +4,7 @@ module Views
   module Pages
     class Preview < Views::Base
       def view_template
-        render ::Components::Site::Layout.new(title: "Wabi") do
+        render ::Components::Site::Layout.new(title: "Wabi", chrome: :bare) do
           main(class: "container mx-auto py-16 px-4") do
             h1(class: "text-4xl font-bold mb-4") { "Wabi" }
             p(class: "text-muted-foreground mb-8") { "Beautifully imperfect components for Rails." }

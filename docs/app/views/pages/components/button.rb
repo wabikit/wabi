@@ -7,7 +7,7 @@ module Views
         SOURCE_PATH = Rails.root.join("app/components/ui/button.rb")
 
         def view_template
-          render ::Components::Site::Layout.new(title: "Button") do
+          render ::Components::Site::Layout.new(title: "Button", chrome: :full) do
             main(class: "container mx-auto py-12 px-4 max-w-3xl") do
               p(class: "text-sm text-muted-foreground mb-2") do
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }

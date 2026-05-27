@@ -23,7 +23,7 @@ module Views
         end
 
         def view_template
-          render ::Components::Site::Layout.new(title: "Components") do
+          render ::Components::Site::Layout.new(title: "Components", chrome: :sidebar_only) do
             main(class: "container mx-auto py-12 px-4 max-w-5xl") do
               h1(class: "text-4xl font-bold mb-2") { "Components" }
               p(class: "text-muted-foreground mb-8") do

@@ -15,7 +15,7 @@ module Views
         ].freeze
 
         def view_template
-          render ::Components::Site::Layout.new(title: "DropdownMenu") do
+          render ::Components::Site::Layout.new(title: "DropdownMenu", chrome: :full) do
             main(class: "container mx-auto py-12 px-4 max-w-3xl") do
               p(class: "text-sm text-muted-foreground mb-2") do
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }

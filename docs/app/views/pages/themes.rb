@@ -6,7 +6,7 @@ module Views
       THEMES = %w[default slate stone zinc rose blue green violet].freeze
 
       def view_template
-        render ::Components::Site::Layout.new(title: "Themes") do
+        render ::Components::Site::Layout.new(title: "Themes", chrome: :sidebar_only) do
           main(class: "container mx-auto py-12 px-4 max-w-5xl") do
             h1(class: "text-4xl font-bold mb-2") { "Themes" }
             p(class: "text-muted-foreground mb-8") do

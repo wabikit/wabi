@@ -5,7 +5,7 @@ module Views
     module Docs
       class Philosophy < Views::Base
         def view_template
-          render ::Components::Site::Layout.new(title: "Philosophy") do
+          render ::Components::Site::Layout.new(title: "Philosophy", chrome: :full) do
             main(class: "container mx-auto py-12 px-4 max-w-3xl") do
               h1(class: "text-4xl font-bold mb-4") { "Philosophy" }
               p(class: "text-muted-foreground mb-8") do

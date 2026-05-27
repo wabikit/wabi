@@ -4,7 +4,7 @@ module Views
   module Pages
     class Home < Views::Base
       def view_template
-        render ::Components::Site::Layout.new(title: "Wabi — Beautifully imperfect components for Rails") do
+        render ::Components::Site::Layout.new(title: "Wabi — Beautifully imperfect components for Rails", chrome: :bare) do
           # Hero
           section(class: "container mx-auto pt-20 pb-12 px-4 text-center max-w-3xl") do
             h1(class: "text-5xl md:text-6xl font-bold tracking-tight mb-6 text-foreground") do
