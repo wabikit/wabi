@@ -12,8 +12,6 @@ module Wabi
       argument :components, type: :array, default: [],
                banner: "[component_name ...]"
 
-      class_option :all,     type: :boolean, default: false,
-                             desc: "Update every component recorded in wabi.lock.json."
       class_option :force,   type: :boolean, default: false,
                              desc: "Overwrite locally-edited files without prompting."
       class_option :dry_run, type: :boolean, default: false,
@@ -38,13 +36,7 @@ module Wabi
       private
 
       def target_names
-        if options[:all]
-          lockfile.components.keys
-        elsif components.any?
-          components
-        else
-          lockfile.components.keys
-        end
+        components.any? ? components : lockfile.components.keys
       end
 
       def lockfile
@@ -106,9 +98,10 @@ module Wabi
 
         lockfile.record(
           name,
-          version: remote_version,
-          hash:    Digest::SHA256.hexdigest(JSON.generate(data["files"])),
-          files:   files_map,
+          version:         remote_version,
+          hash:            Digest::SHA256.hexdigest(JSON.generate(data["files"])),
+          files:           files_map,
+          js_dependencies: data["js_dependencies"],
         )
       end
 

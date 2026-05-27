@@ -195,6 +195,34 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
     end
   end
 
+  describe "lockfile preservation across update" do
+    it "preserves js_dependencies in the lockfile after update" do
+      seed_install(version: "0.1.0", content: "class B; end\n")
+      lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
+      lock["components"]["button"]["js_dependencies"] = { "@zag-js/popover" => "1.41" }
+      File.write(File.join(destination, "config/wabi.lock.json"), JSON.generate(lock))
+
+      File.write(File.join(fake_registry, "button.json"), JSON.generate({
+        "name" => "button",
+        "version" => "0.2.0",
+        "registry_dependencies" => [],
+        "js_dependencies" => { "@zag-js/popover" => "1.42" },
+        "files" => [{
+          "path" => "app/components/ui/button.rb",
+          "type" => "ruby:phlex",
+          "content" => "class B; end\n",
+        }],
+      }))
+
+      capture_stdout do
+        described_class.start(["button"], destination_root: destination)
+      end
+
+      lock_after = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
+      expect(lock_after["components"]["button"]["js_dependencies"]).to eq("@zag-js/popover" => "1.42")
+    end
+  end
+
   describe "js_dependencies diff" do
     it "prints only added/changed pins, not unchanged ones" do
       seed_install(version: "0.1.0", content: "class B; end\n")
