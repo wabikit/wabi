@@ -52,6 +52,7 @@ module Components
                 class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Components" }
               a(href: "/docs/themes",
                 class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Themes" }
+              render ::Components::Site::ModeToggle.new
               render ::Components::Site::ThemePicker.new
             end
           end
