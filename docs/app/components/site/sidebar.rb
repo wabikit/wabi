@@ -1,0 +1,40 @@
+# frozen_string_literal: true
+
+module Components
+  module Site
+    class Sidebar < Components::Base
+      COMPONENT_LINK = ->(slug) {
+        { name: slug.split("_").map(&:capitalize).join(" "), path: "/docs/components/#{slug}" }
+      }
+
+      GROUPS = [
+        { label: "Getting Started", items: [
+          { name: "Introduction", path: "/docs/getting-started" },
+          { name: "Theming",      path: "/docs/theming" },
+          { name: "Philosophy",   path: "/docs/philosophy" },
+        ]},
+        { label: "Forms", items: %w[button checkbox input label select switch textarea].map(&COMPONENT_LINK) },
+        { label: "Layout & Display", items: %w[alert avatar badge card separator].map(&COMPONENT_LINK) },
+        { label: "Overlays", items: %w[dialog drawer popover tooltip].map(&COMPONENT_LINK) },
+        { label: "Menus", items: [{ name: "Dropdown Menu", path: "/docs/components/dropdown_menu" }] },
+        { label: "Navigation", items: %w[accordion tabs].map(&COMPONENT_LINK) },
+        { label: "Feedback", items: [{ name: "Toast", path: "/docs/components/toast" }] },
+      ].freeze
+
+      def initialize(current_path:)
+        @current_path = current_path
+      end
+
+      def view_template
+        aside(class: "hidden lg:block w-56 flex-shrink-0 border-r border-border " \
+                     "h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto py-6 px-4") do
+          GROUPS.each do |group|
+            render Components::Site::Sidebar::Group.new(
+              label: group[:label], items: group[:items], current_path: @current_path
+            )
+          end
+        end
+      end
+    end
+  end
+end
