@@ -26,12 +26,12 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Avatar.new do
-                  render Components::UI::AvatarImage.new(src: "https://i.pravatar.cc/96?img=12", alt: "Jane Doe")
+                  render Components::UI::AvatarImage.new(src: "/avatar-sample.svg", alt: "Jane Doe")
                   render Components::UI::AvatarFallback.new { "JD" }
                 end
               RUBY
                 render ::Components::UI::Avatar.new do
-                  render ::Components::UI::AvatarImage.new(src: "https://i.pravatar.cc/96?img=12", alt: "Jane Doe")
+                  render ::Components::UI::AvatarImage.new(src: "/avatar-sample.svg", alt: "Jane Doe")
                   render ::Components::UI::AvatarFallback.new { "JD" }
                 end
               end
