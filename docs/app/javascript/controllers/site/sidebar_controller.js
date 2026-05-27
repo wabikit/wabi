@@ -6,6 +6,10 @@ export default class extends Controller {
     this.boundClose = this.close.bind(this)
   }
 
+  disconnect() {
+    if (this.sidebar?.classList.contains("!block")) this.close()
+  }
+
   toggle(e) {
     e?.preventDefault()
     if (!this.sidebar) return
