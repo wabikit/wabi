@@ -14,7 +14,8 @@ class ComponentsController < ApplicationController
   ].freeze
 
   DETAILED = %w[button dropdown_menu dialog tabs
-                checkbox input label select switch textarea].freeze
+                checkbox input label select switch textarea
+                alert avatar badge card separator].freeze
 
   def index
     render Views::Pages::Components::Index.new
