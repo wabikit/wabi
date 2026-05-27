@@ -86,6 +86,13 @@
   padding-bottom: 0.75rem !important;
 }
 
+/* Our docs don't render preview images per result. The thumbnail
+   container is rendered empty by PagefindUI and reserves ~30% width
+   pushing the title/excerpt rightward — hide it. */
+#search .pagefind-ui__result-thumb {
+  display: none !important;
+}
+
 #search .pagefind-ui__drawer.pagefind-ui__hidden {
   display: none !important;
 }
