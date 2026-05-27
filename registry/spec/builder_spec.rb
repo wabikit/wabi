@@ -62,7 +62,7 @@ RSpec.describe Wabi::Registry::Builder do
     # overrides this with realistic fixtures.
     FileUtils.mkdir_p(File.join(tmp, "themes"))
     File.write(File.join(tmp, "themes/_shared.css"), "/* shared stub */\n")
-    %w[default slate stone zinc rose blue green violet].each do |slug|
+    %w[default stone rose blue green violet yellow orange].each do |slug|
       File.write(File.join(tmp, "themes/#{slug}.css"), "/* #{slug} stub */\n")
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe Wabi::Registry::Builder do
   end
 
   describe "#build_themes" do
-    let(:slugs) { %w[default slate stone zinc rose blue green violet] }
+    let(:slugs) { %w[default stone rose blue green violet yellow orange] }
 
     before do
       # Overwrite the stubs from the outer `before` with realistic fixtures.
@@ -123,7 +123,7 @@ RSpec.describe Wabi::Registry::Builder do
       expect(output).to include('[data-theme="default"]')
       expect(output).to include('[data-theme="default"][data-mode="dark"]')
       # Default-only artifact must NOT carry the other 7 themes:
-      expect(output).not_to include('[data-theme="slate"]')
+      expect(output).not_to include('[data-theme="yellow"]')
       expect(output).not_to include('[data-theme="violet"]')
     end
 

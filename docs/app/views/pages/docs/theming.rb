@@ -26,7 +26,7 @@ module Views
 
               h2(id: "available-palettes", class: "text-2xl font-semibold mt-8 mb-3") { "Available palettes" }
               ul(class: "grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm") do
-                %w[default slate stone zinc rose blue green violet].each do |slug|
+                %w[default stone rose blue green violet yellow orange].each do |slug|
                   li(
                     "data-theme": slug,
                     class: "rounded border border-border bg-background px-3 py-2 flex items-center gap-2"

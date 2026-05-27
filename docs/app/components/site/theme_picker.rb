@@ -9,7 +9,7 @@ module Components
     # data-theme reflects the persisted choice after page load even though
     # the server-side radio state shows "default".
     class ThemePicker < Components::Base
-      THEMES = %w[default slate stone zinc rose blue green violet].freeze
+      THEMES = %w[default stone rose blue green violet yellow orange].freeze
 
       def view_template
         render Components::UI::DropdownMenu.new do

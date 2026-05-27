@@ -3,7 +3,7 @@
 module Views
   module Pages
     class Themes < Views::Base
-      THEMES = %w[default slate stone zinc rose blue green violet].freeze
+      THEMES = %w[default stone rose blue green violet yellow orange].freeze
 
       def view_template
         render ::Components::Site::Layout.new(title: "Themes", chrome: :sidebar_only) do

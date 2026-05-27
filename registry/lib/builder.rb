@@ -15,9 +15,9 @@ module Wabi
         ".js" => "javascript:stimulus",
       }.freeze
 
-      # All 8 v0.2 theme palettes. The docs tokens.css concatenates every
+      # All 8 v0.4 theme palettes. The docs tokens.css concatenates every
       # entry; the gem tokens.css only carries the default.
-      THEME_SLUGS = %w[default slate stone zinc rose blue green violet].freeze
+      THEME_SLUGS = %w[default stone rose blue green violet yellow orange].freeze
 
       def initialize(root:, gem_tokens_path: nil, docs_tokens_path: nil)
         @root = root
