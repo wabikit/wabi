@@ -32,7 +32,7 @@ module Views
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                render Components::UI::Select.new(name: "fruit") do
+                render Components::UI::Select.new(name: "fruit", placeholder: "Choose a fruit") do
                   render Components::UI::SelectTrigger.new do
                     render Components::UI::SelectValue.new
                   end
@@ -43,7 +43,7 @@ module Views
                   end
                 end
               RUBY
-                render ::Components::UI::Select.new(name: "fruit") do
+                render ::Components::UI::Select.new(name: "fruit", placeholder: "Choose a fruit") do
                   render ::Components::UI::SelectTrigger.new do
                     render ::Components::UI::SelectValue.new
                   end

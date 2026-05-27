@@ -4,9 +4,9 @@ class ComponentsController < ApplicationController
   layout false
 
   # All 20 v0.2 components. The /docs/components index lists all of them;
-  # /docs/components/:name routes to a detailed page only for the 4
-  # exemplars we've shipped detailed docs for. Other names 404 with a
-  # helpful message until v0.4 fills in the rest.
+  # /docs/components/:name routes to a detailed page only for the entries
+  # in DETAILED. Other names 404 with a helpful message until v0.4 fills
+  # in the rest. (B5 drops the gate once all 16 detail pages ship.)
   ALL = %w[
     button input textarea label card badge separator alert avatar
     checkbox switch select dialog drawer tooltip popover

@@ -46,7 +46,7 @@ module Views
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { 'native <label for="..."> association — clicking the label focuses or activates the bound input.' }
-                li { "the for_: attribute must match the input's id: attribute." }
+                li { "the for_: kwarg maps to the HTML for attribute and must match the input's id." }
                 li { "for screen readers, the label text is announced when the input is focused." }
               end
             end

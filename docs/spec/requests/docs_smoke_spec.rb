@@ -28,20 +28,14 @@ RSpec.describe "Docs smoke", type: :request do
   describe "chrome: :full routes" do
     %w[/docs/getting-started /docs/theming /docs/philosophy
        /docs/components/button /docs/components/dialog
-       /docs/components/dropdown_menu /docs/components/tabs].each do |path|
+       /docs/components/dropdown_menu /docs/components/tabs
+       /docs/components/checkbox /docs/components/input /docs/components/label
+       /docs/components/select /docs/components/switch /docs/components/textarea].each do |path|
       it "GET #{path} returns 200 with sidebar AND TOC" do
         get path
         expect(response).to have_http_status(:ok)
         expect(response.body).to match(/aside[^>]*hidden lg:block/)
         expect(response.body).to include('data-controller="site--toc"')
-      end
-    end
-
-    %w[/docs/components/checkbox /docs/components/input /docs/components/label
-       /docs/components/select /docs/components/switch /docs/components/textarea].each do |path|
-      it "GET #{path} returns 200" do
-        get path
-        expect(response).to have_http_status(:ok)
       end
     end
   end
