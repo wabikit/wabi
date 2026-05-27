@@ -37,17 +37,19 @@ module Wabi
 
         Array(data["registry_dependencies"]).each { |dep| install_component(dep) }
 
+        files_map = {}
         data["files"].each do |file|
           target = File.join(destination_root, file["path"])
           FileUtils.mkdir_p(File.dirname(target))
           File.write(target, file["content"])
+          files_map[file["path"]] = Digest::SHA256.hexdigest(file["content"])
           say "  create    #{file["path"]}", :green
         end
 
         (data["js_dependencies"] || {}).each { |pkg, ver| @js_deps_to_pin[pkg] = ver }
 
         hash = Digest::SHA256.hexdigest(JSON.generate(data["files"]))
-        lockfile.record(name, version: data["version"], hash: hash)
+        lockfile.record(name, version: data["version"], hash: hash, files: files_map)
       end
 
       def print_js_pin_instructions

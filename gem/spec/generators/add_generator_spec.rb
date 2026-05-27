@@ -68,6 +68,14 @@ RSpec.describe Wabi::Generators::AddGenerator do
     expect(File.exist?(File.join(destination, "app/components/ui/button.rb"))).to be true
   end
 
+  it "records per-file SHA256 hashes in the lockfile" do
+    described_class.start(["button"], destination_root: destination)
+    lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
+    files = lock["components"]["button"]["files"]
+    expect(files).to be_a(Hash)
+    expect(files["app/components/ui/button.rb"]).to match(/\A[0-9a-f]{64}\z/)
+  end
+
   describe "JS dependency instructions" do
     it "prints bin/importmap pin commands when js_dependencies present" do
       FileUtils.rm_rf([destination, fake_registry])
