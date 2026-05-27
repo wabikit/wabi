@@ -43,4 +43,17 @@ RSpec.describe "Docs smoke", type: :request do
       end
     end
   end
+
+  describe "SearchBox" do
+    it "renders the search div in the header on non-bare routes" do
+      get "/docs/components"
+      expect(response.body).to include('id="search"')
+      expect(response.body).to include('data-controller="site--search"')
+    end
+
+    it "does NOT render the SearchBox on bare routes" do
+      get "/"
+      expect(response.body).not_to include('data-controller="site--search"')
+    end
+  end
 end

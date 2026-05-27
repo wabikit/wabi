@@ -47,7 +47,7 @@ module Components
               a(href: "/", class: "font-bold text-lg") { "Wabi" }
             end
             div(class: "flex items-center gap-2") do
-              # SearchBox is added in C3
+              render ::Components::Site::SearchBox.new if @chrome != :bare
               a(href: "/docs/components",
                 class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Components" }
               a(href: "/docs/themes",
