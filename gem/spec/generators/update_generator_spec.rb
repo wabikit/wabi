@@ -131,4 +131,67 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
       expect(File.read(button_path)).to eq(new_content)
     end
   end
+
+  describe "options" do
+    it "--force overwrites locally-edited files without prompting" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+      seed_install(version: "0.1.0", content: old_content)
+      File.write(button_path, "edited\n")
+      seed_button(version: "0.2.0", content: new_content)
+
+      capture_stdout do
+        described_class.start(["button", "--force"], destination_root: destination)
+      end
+
+      expect(File.read(button_path)).to eq(new_content)
+    end
+
+    it "--dry-run writes nothing" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+      seed_install(version: "0.1.0", content: old_content)
+      seed_button(version: "0.2.0", content: new_content)
+
+      capture_stdout do
+        described_class.start(["button", "--dry-run"], destination_root: destination)
+      end
+
+      expect(File.read(button_path)).to eq(old_content)
+      lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
+      expect(lock["components"]["button"]["version"]).to eq("0.1.0")
+    end
+  end
+
+  describe "legacy lockfile without files map" do
+    it "treats every file as potentially edited and prompts" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+
+      File.write(File.join(destination, "config/wabi.lock.json"), JSON.generate({
+        "registry"   => "file://#{fake_registry}",
+        "components" => {
+          "button" => {
+            "version" => "0.1.0",
+            "hash"    => "agg",
+          },
+        },
+      }))
+      FileUtils.mkdir_p(File.dirname(button_path))
+      File.write(button_path, old_content)
+      seed_button(version: "0.2.0", content: new_content)
+
+      prompts = 0
+      allow_any_instance_of(described_class).to receive(:prompt_conflict) do
+        prompts += 1
+        "n"
+      end
+
+      capture_stdout do
+        described_class.start(["button"], destination_root: destination)
+      end
+
+      expect(prompts).to eq(1)
+    end
+  end
 end
