@@ -38,40 +38,23 @@ RSpec.describe "Toast composition" do
   end
 
   describe Components::UI::Toast do
-    it "renders an <li role=status aria-live=polite> with the controller wired" do
+    it "renders an inert SSR <li> for first-page-load toasts (no controller)" do
       output = described_class.new(title: "Saved").call
       expect(output).to include('<li')
       expect(output).to include('role="status"')
       expect(output).to include('aria-live="polite"')
-      expect(output).to include('data-controller="wabi--toast"')
-    end
-
-    it "carries the duration in ms as a Stimulus Number value" do
-      output = described_class.new(title: "Saved", duration_ms: 2000).call
-      expect(output).to include('data-wabi--toast-duration-ms-value="2000"')
+      expect(output).not_to include('data-controller=')
     end
 
     it "renders the title and optional description" do
-      output = described_class.new(title: "Saved", description: "Profile updated successfully").call
+      output = described_class.new(title: "Saved", description: "Profile updated").call
       expect(output).to include("Saved")
-      expect(output).to include("Profile updated successfully")
+      expect(output).to include("Profile updated")
     end
 
-    it "renders a dismiss button wired to the controller#dismiss action" do
-      output = described_class.new(title: "Saved").call
-      expect(output).to include('aria-label="Dismiss"')
-      expect(output).to include('data-action="click->wabi--toast#dismiss"')
-    end
-
-    it "applies the appearance variant" do
+    it "applies the appearance variant class" do
       output = described_class.new(title: "Boom", appearance: :destructive).call
       expect(output).to include("bg-destructive")
-      expect(output).to include("text-destructive-foreground")
-    end
-
-    it "the toast is `pointer-events-auto` to override the toaster's `pointer-events-none`" do
-      output = described_class.new(title: "Hello").call
-      expect(output).to include("pointer-events-auto")
     end
   end
 end

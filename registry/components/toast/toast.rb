@@ -4,12 +4,12 @@ require "date"
 
 module Components
   module UI
-    # A single notification. Render via Turbo Stream into the Toaster container,
-    # or inline in a Phlex view for static / story examples. Has its own
-    # `wabi--toast` Stimulus controller that handles auto-dismiss with
-    # pause-on-hover -- v0.1 skips Zag's `@zag-js/toast` group machinery in
-    # favor of a self-contained vanilla timer. Cross-toast coordination (max
-    # visible, advanced stacking) is a v0.2 follow-up.
+    # Static / SSR Toast. Renders an `<li>` with no controller — the parent
+    # Toaster's group machine adopts visible toasts on connect. Use this for
+    # initial-page-load flashes that need to show before JS hydration; for
+    # programmatic creation, prefer `turbo_stream.wabi_toast(...)` (which
+    # emits a `wabi_toast_create` action picked up by the Toaster
+    # controller) or `window.wabiToaster.create({...})`.
     class Toast < Wabi::Base
       variants do
         base "pointer-events-auto w-full overflow-hidden rounded-md border border-input p-4 shadow-md"
@@ -21,24 +21,19 @@ module Components
         }, default: :info
       end
 
-      def initialize(title:, description: nil, appearance: nil, duration_ms: 5000, **attrs)
+      def initialize(title:, description: nil, appearance: nil, **attrs)
         @title       = title
         @description = description
         @appearance  = appearance
-        @duration_ms = duration_ms
         @attrs       = attrs
       end
 
       def view_template
         user_class = @attrs.delete(:class)
         li(
-          role: "status",
-          "aria-live": "polite",
+          role: (@appearance == :destructive ? "alert" : "status"),
+          "aria-live": (@appearance == :destructive ? "assertive" : "polite"),
           "aria-atomic": "true",
-          data: {
-            controller: "wabi--toast",
-            "wabi--toast-duration-ms-value": @duration_ms.to_s,
-          },
           class: merge_class(tokens(appearance: @appearance), user_class)
         ) do
           div(class: "flex items-start justify-between gap-3") do
@@ -49,7 +44,6 @@ module Components
             button(
               type: "button",
               "aria-label": "Dismiss",
-              data: { action: "click->wabi--toast#dismiss" },
               class: "shrink-0 rounded-md p-1 text-current opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
             ) { "×" }
           end
