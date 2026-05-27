@@ -44,3 +44,7 @@ docs/superpowers/
 
 # Brainstorming companion (visual mockups, persists locally)
 .superpowers/
+
+# Pagefind
+docs/tmp/pagefind-input/
+docs/package-lock.json
