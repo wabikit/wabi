@@ -159,9 +159,12 @@ Then visit:
 |---|---|---|
 | v0.1 | 20 components | ✅ shipped 2026-05-26 |
 | v0.2 | 8 themes + theme picker | ✅ shipped 2026-05-26 |
-| v0.3 | Real docs site (marketing + components index + 4 detailed pages + prose) | ✅ shipped 2026-05-26 |
+| v0.3 | Real docs site + RubyGems publish | ✅ shipped 2026-05-26 |
 | v0.4 | Detailed pages for remaining 16 components; Pagefind search; sidebar nav | planned |
 | v0.5 | `@zag-js/toast` group machine; real portal pattern; `wabi:update` generator | planned |
+| v0.6 | Forms expansion: RadioGroup, Toggle, ToggleGroup, Slider, Combobox, Command, Form | planned |
+| v0.7 | Navigation & layout: Sheet, ContextMenu, Pagination, NavigationMenu | planned |
+| v0.8 | Data + dates + ecosystem: Calendar, DatePicker, DataTable, Blocks, community registry | planned |
 | v1.0 | API stability; external a11y audit | 2027-04 target |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.
