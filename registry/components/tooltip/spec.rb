@@ -28,6 +28,16 @@ RSpec.describe "Tooltip composition" do
     expect(output).not_to match(/data-wabi--tooltip-target="positioner"[^>]*hidden/)
   end
 
+  it "carries portal-value true by default" do
+    output = Components::UI::Tooltip.new.call
+    expect(output).to include('data-wabi--tooltip-portal-value="true"')
+  end
+
+  it "allows portal: false to keep v0.4 in-tree behavior" do
+    output = Components::UI::Tooltip.new(portal: false).call
+    expect(output).to include('data-wabi--tooltip-portal-value="false"')
+  end
+
   it "composes into a full tooltip" do
     composed = Class.new(Phlex::HTML) do
       def view_template
