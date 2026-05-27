@@ -74,4 +74,23 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
       expect(File.mtime(button_path)).to eq(original_mtime)
     end
   end
+
+  describe "new version, file unchanged on disk" do
+    it "overwrites the file silently" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+      seed_install(version: "0.1.0", content: old_content)
+      seed_button(version: "0.2.0", content: new_content)
+
+      capture_stdout do
+        described_class.start(["button"], destination_root: destination)
+      end
+
+      expect(File.read(button_path)).to eq(new_content)
+      lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
+      expect(lock["components"]["button"]["version"]).to eq("0.2.0")
+      expect(lock["components"]["button"]["files"]["app/components/ui/button.rb"])
+        .to eq(Digest::SHA256.hexdigest(new_content))
+    end
+  end
 end
