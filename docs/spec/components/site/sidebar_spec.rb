@@ -7,10 +7,12 @@ RSpec.describe Components::Site::Sidebar do
     component.call
   end
 
-  it "renders 7 groups in declared order" do
+  it "renders all 7 groups in declared order" do
     html = render_to_html(described_class.new(current_path: "/"))
-    expected_labels = ["Getting Started", "Forms", "Layout & Display", "Overlays", "Menus", "Navigation", "Feedback"]
-    expected_labels.each { |label| expect(html).to include(label) }
+    labels = ["Getting Started", "Forms", "Layout & Display", "Overlays", "Menus", "Navigation", "Feedback"]
+    indices = labels.map { |l| html.index(l) }
+    expect(indices).to all(be_a(Integer)), "Missing labels: #{labels.zip(indices).reject { |_, i| i }.map(&:first).inspect}"
+    expect(indices).to eq(indices.sort), "Labels rendered out of order: expected #{labels}, got positions #{indices}"
   end
 
   it "marks the matching link with aria-current=\"page\"" do
