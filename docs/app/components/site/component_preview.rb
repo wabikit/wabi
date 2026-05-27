@@ -29,9 +29,9 @@ module Components
         trigger_class =
           "rounded-none bg-transparent shadow-none border-b-[3px] border-transparent " \
           "px-4 py-3 -mb-px text-muted-foreground hover:text-foreground " \
-          "data-[state=active]:bg-transparent data-[state=active]:shadow-none " \
-          "data-[state=active]:border-b-primary data-[state=active]:text-primary " \
-          "data-[state=active]:font-bold"
+          "aria-selected:bg-transparent aria-selected:shadow-none " \
+          "aria-selected:border-b-primary aria-selected:text-primary " \
+          "aria-selected:font-bold"
         div(class: "my-6 rounded-lg border border-border overflow-hidden") do
           render ::Components::UI::Tabs.new(value: "preview", class: "w-full") do
             render ::Components::UI::TabsList.new(

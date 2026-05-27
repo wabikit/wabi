@@ -10,8 +10,8 @@ module Components
              "text-sm font-medium transition-all cursor-pointer focus-visible:outline-none " \
              "focus-visible:ring-2 focus-visible:ring-ring " \
              "disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed " \
-             "data-[state=active]:bg-background data-[state=active]:text-foreground " \
-             "data-[state=active]:shadow-sm"
+             "aria-selected:bg-background aria-selected:text-foreground " \
+             "aria-selected:shadow-sm"
       end
 
       def initialize(value:, disabled: false, **attrs)
