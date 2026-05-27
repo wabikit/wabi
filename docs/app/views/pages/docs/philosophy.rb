@@ -12,7 +12,7 @@ module Views
                 "Why Wabi works the way it does, and where it fits in the Rails ecosystem."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "You own the code" }
+              h2(id: "you-own-the-code", class: "text-2xl font-semibold mt-8 mb-3") { "You own the code" }
               p(class: "text-sm mb-3 leading-relaxed") do
                 "Wabi components are not imported from a node_modules-equivalent. " \
                 "When you run `bin/rails g wabi:add button`, the Phlex source is COPIED into " \
@@ -25,7 +25,7 @@ module Views
                 "customization is the default mode rather than an escape hatch."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Phlex-native, not ERB-wrapped" }
+              h2(id: "phlex-native-not-erb-wrapped", class: "text-2xl font-semibold mt-8 mb-3") { "Phlex-native, not ERB-wrapped" }
               p(class: "text-sm mb-3 leading-relaxed") do
                 "Phlex components are Ruby classes. Composition is method dispatch. " \
                 "Variants are class-method DSLs. Inheritance is real inheritance. " \
@@ -33,7 +33,7 @@ module Views
                 "your Rails app."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Accessible by default, not retrofitted" }
+              h2(id: "accessible-by-default-not-retrofitted", class: "text-2xl font-semibold mt-8 mb-3") { "Accessible by default, not retrofitted" }
               p(class: "text-sm mb-3 leading-relaxed") do
                 "Every interactive component wires through @zag-js state machines, which carry " \
                 "WAI-ARIA roles, keyboard semantics, and focus management baked in. Overlays toggle " \
@@ -41,14 +41,14 @@ module Views
                 "tree. The goal is WCAG-AA out of the box for every component shipping."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Brand-neutral" }
+              h2(id: "brand-neutral", class: "text-2xl font-semibold mt-8 mb-3") { "Brand-neutral" }
               p(class: "text-sm mb-3 leading-relaxed") do
                 "Wabi ships 8 palettes with carefully chosen accent colors and neutral grayscales. " \
                 "No single one is the \"Wabi look\" — pick the one closest to your brand, or edit " \
                 "the HSL values directly. The visual identity is the user's, not ours."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Hotwire and Turbo-friendly" }
+              h2(id: "hotwire-and-turbo-friendly", class: "text-2xl font-semibold mt-8 mb-3") { "Hotwire and Turbo-friendly" }
               p(class: "text-sm mb-3 leading-relaxed") do
                 "Stimulus controllers wrap the Zag state machines so they survive Turbo navigation. " \
                 "The Toast component ships a `turbo_stream.wabi_toast` action helper so server-side " \

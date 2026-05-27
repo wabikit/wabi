@@ -17,13 +17,13 @@ module Views
                 "A clickable button with appearance and size variants."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
+              h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
                 source: "bin/rails g wabi:add button",
                 language: "shell"
               )
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Appearances" }
+              h2(id: "appearances", class: "text-2xl font-semibold mt-8 mb-4") { "Appearances" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Button.new                          { "Primary" }
                 render Components::UI::Button.new(appearance: :secondary)   { "Secondary" }
@@ -42,10 +42,10 @@ module Views
                 end
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
+              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               render ::Components::Site::CodeBlock.new(source: File.read(SOURCE_PATH))
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
+              h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "Native <button> element — keyboard accessible by default." }
                 li { "focus-visible:ring-2 ring keeps focus state visible without polluting click affordance." }

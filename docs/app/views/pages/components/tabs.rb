@@ -23,13 +23,13 @@ module Views
                 "manual activation modes via @zag-js/tabs."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
+              h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
                 source: "bin/rails g wabi:add tabs\nbin/importmap pin @zag-js/tabs\nbin/importmap pin @zag-js/vanilla",
                 language: "shell"
               )
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
+              h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Tabs.new(value: "account") do
                   render Components::UI::TabsList.new do
@@ -54,13 +54,13 @@ module Views
                 end
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
+              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
                 render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
+              h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "role=\"tablist\" / role=\"tab\" / role=\"tabpanel\" anatomy." }
                 li { "←/→ arrow keys navigate between triggers; Home/End jump to first/last." }

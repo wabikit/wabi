@@ -14,7 +14,7 @@ module Views
                 plain " shows them side-by-side; this page covers how to switch and customize."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Switching themes in your app" }
+              h2(id: "switching-themes-in-your-app", class: "text-2xl font-semibold mt-8 mb-3") { "Switching themes in your app" }
               render ::Components::Site::CodeBlock.new(language: "shell", source: "bin/rails g wabi:theme rose")
               p(class: "text-sm text-muted-foreground mt-2") do
                 plain "Overwrites "
@@ -24,14 +24,14 @@ module Views
                 plain " to recompile."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Available palettes" }
+              h2(id: "available-palettes", class: "text-2xl font-semibold mt-8 mb-3") { "Available palettes" }
               ul(class: "grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm") do
                 %w[default slate stone zinc rose blue green violet].each do |slug|
                   li(class: "rounded border border-border px-3 py-1.5 text-center") { slug.capitalize }
                 end
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Dark mode" }
+              h2(id: "dark-mode", class: "text-2xl font-semibold mt-8 mb-3") { "Dark mode" }
               p(class: "text-sm mb-2") do
                 plain "Every palette has a dark variant. The "
                 code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "wabi--theme" }
@@ -46,7 +46,7 @@ module Views
                 ) { "Toggle dark mode" }
               RUBY
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Customizing a palette" }
+              h2(id: "customizing-a-palette", class: "text-2xl font-semibold mt-8 mb-3") { "Customizing a palette" }
               p(class: "text-sm mb-2") do
                 plain "Tokens are CSS variables in HSL space. Edit "
                 code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "app/assets/tailwind/wabi/tokens.css" }
@@ -60,7 +60,7 @@ module Views
                 }
               CSS
 
-              h2(class: "text-2xl font-semibold mt-8 mb-3") { "Notes on Tailwind 4" }
+              h2(id: "notes-on-tailwind-4", class: "text-2xl font-semibold mt-8 mb-3") { "Notes on Tailwind 4" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li do
                   plain "Wabi uses TW4 native "

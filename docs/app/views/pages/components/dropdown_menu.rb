@@ -26,7 +26,7 @@ module Views
                 "single-level submenus, and option (checkbox/radio) items."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
+              h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
                 source: "bin/rails g wabi:add dropdown_menu\nbin/importmap pin @zag-js/menu\nbin/importmap pin @zag-js/vanilla",
                 language: "shell"
@@ -36,7 +36,7 @@ module Views
                 "bin/importmap pin only downloads the main entry and leaves submodule imports unresolved."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Composition with submenu" }
+              h2(id: "composition-with-submenu", class: "text-2xl font-semibold mt-8 mb-4") { "Composition with submenu" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::DropdownMenu.new do
                   render Components::UI::DropdownMenuTrigger.new(class: "...") { "Actions ▾" }
@@ -73,13 +73,13 @@ module Views
                 end
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
+              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
                 render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
+              h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "role=\"menu\" + role=\"menuitem\" anatomy with aria-haspopup for nested triggers." }
                 li { "Keyboard nav: ↑/↓ between items, → opens submenu, ← / Esc closes." }

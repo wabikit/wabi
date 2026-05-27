@@ -28,13 +28,13 @@ module Views
                 "Built on @zag-js/dialog."
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
+              h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
                 source: "bin/rails g wabi:add dialog\nbin/importmap pin @zag-js/dialog\nbin/importmap pin @zag-js/vanilla",
                 language: "shell"
               )
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
+              h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Dialog.new do
                   render Components::UI::DialogTrigger.new(class: "...") { "Open dialog" }
@@ -68,13 +68,13 @@ module Views
                 end
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
+              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
                 render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
               end
 
-              h2(class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
+              h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "role=\"dialog\" + aria-modal=\"true\"; title/description wired via aria-labelledby/aria-describedby." }
                 li { "Initial focus moves into the dialog on open; restored to trigger on close." }
