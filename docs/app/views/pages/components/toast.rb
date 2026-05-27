@@ -93,10 +93,10 @@ module Views
 
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
-                li { "role=\"status\" (info, success) or role=\"alert\" (destructive) so screen readers pick up the message." }
-                li { "aria-live=\"polite\" for non-urgent toasts; \"assertive\" for destructive." }
-                li { "Auto-dismiss with a default timeout; hover pauses the timer so users have time to read." }
-                li { "Each toast has a manual close button (X) for keyboard/screen-reader users." }
+                li { "role=\"status\" + aria-live=\"polite\" + aria-atomic=\"true\" on every toast — appearance is purely visual." }
+                li { "auto-dismiss after duration_ms (default 4s); hover pauses the timer so users have time to read." }
+                li { "each toast has a manual close button (X) for keyboard / screen-reader users." }
+                li { "for urgent / destructive messages a screen-reader user may miss a polite announcement — pair toasts with an inline error message in those flows, or wait for the @zag-js/toast group machine in v0.5." }
               end
             end
           end

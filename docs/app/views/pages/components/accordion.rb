@@ -89,7 +89,7 @@ module Views
                 li { "Each AccordionContent has role=\"region\" and aria-labelledby pointing to its trigger." }
                 li { "aria-expanded on the trigger reflects open/closed state." }
                 li { "Up/Down arrows move focus between triggers; Home/End jump to first/last; Enter or Space toggles." }
-                li { "single mode (default) closes other items on open; multiple mode permits any combination." }
+                li { "type: :single (default) closes other items on open; type: :multiple permits any combination." }
               end
             end
           end
