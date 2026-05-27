@@ -22,6 +22,10 @@ module Views
                 source: "bin/rails g wabi:add checkbox\nbin/importmap pin @zag-js/checkbox\nbin/importmap pin @zag-js/vanilla",
                 language: "shell"
               )
+              p(class: "text-sm text-muted-foreground mt-2") do
+                "Pin @zag-js/checkbox and @zag-js/vanilla at version 1.41+ using the +esm jsdelivr URLs — " \
+                "bin/importmap pin only downloads the main entry and leaves submodule imports unresolved."
+              end
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
