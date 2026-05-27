@@ -16,7 +16,8 @@ class ComponentsController < ApplicationController
   DETAILED = %w[button dropdown_menu dialog tabs
                 checkbox input label select switch textarea
                 alert avatar badge card separator
-                drawer popover tooltip].freeze
+                drawer popover tooltip
+                accordion toast].freeze
 
   def index
     render Views::Pages::Components::Index.new
