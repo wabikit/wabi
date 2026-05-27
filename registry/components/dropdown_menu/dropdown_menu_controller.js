@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as menu from "@zag-js/menu"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
+import { WabiPortalRegistry } from "./_shared/portal_registry.js"
 
 // Single controller owns the parent menu machine AND a child machine per
 // `sub` boundary. Nested same-type controllers would collide on Stimulus
@@ -18,10 +19,33 @@ export default class extends Controller {
     "sub", "subTrigger", "subPositioner", "subContent",
   ]
   static values  = {
-    open: { type: Boolean, default: false },
+    open:   { type: Boolean, default: false },
+    portal: { type: Boolean, default: true  },
   }
 
   connect() {
+    this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
+    this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
+    this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
+
+    // Sub portal nodes: collect content/positioner per sub by index.
+    this.subContentEls    = []
+    this.subPositionerEls = []
+    this.subTargets.forEach((subEl, idx) => {
+      this.subContentEls[idx]    = subEl.querySelector("[data-wabi--dropdown-menu-target='subContent']")
+      this.subPositionerEls[idx] = subEl.querySelector("[data-wabi--dropdown-menu-target='subPositioner']")
+    })
+
+    this.originalParents = {
+      content:    this.contentEl?.parentNode,
+      positioner: this.positionerEl?.parentNode,
+      subContent: this.subContentEls.map((el) => el?.parentNode),
+      subPositioner: this.subPositionerEls.map((el) => el?.parentNode),
+    }
+
+    this.portaled = this.portalValue
+    if (this.portaled) this.attachToBody()
+
     this.machine = new VanillaMachine(menu.machine, {
       id: this.element.id || crypto.randomUUID(),
       defaultOpen: this.openValue,
@@ -31,13 +55,7 @@ export default class extends Controller {
       },
       onOpenChange: ({ open }) => {
         this.openValue = open
-        // inert toggle: synchronous in onOpenChange so it lands before Zag's
-        // setInitialFocus action moves focus into the menu. Closes mirror
-        // back to inert.
-        if (this.hasContentTarget) {
-          if (open) this.contentTarget.removeAttribute("inert")
-          else      this.contentTarget.setAttribute("inert", "")
-        }
+        WabiPortalRegistry.onOpenChange()
         this.dispatch("change", { detail: { open } })
       },
     })
@@ -53,13 +71,7 @@ export default class extends Controller {
           this.handleOptionToggle(value)
           this.dispatch("select", { detail: { value } })
         },
-        onOpenChange: ({ open }) => {
-          const contentEl = subEl.querySelector("[data-wabi--dropdown-menu-target='subContent']")
-          if (contentEl) {
-            if (open) contentEl.removeAttribute("inert")
-            else      contentEl.setAttribute("inert", "")
-          }
-        },
+        onOpenChange: () => WabiPortalRegistry.onOpenChange(),
       })
       this.subMachines.push(subMachine)
     })
@@ -78,6 +90,7 @@ export default class extends Controller {
       subApi.setParent(this.machine.service)
     })
 
+    if (this.portaled) WabiPortalRegistry.register(this)
     this.render()
   }
 
@@ -86,6 +99,43 @@ export default class extends Controller {
     this.machine?.stop()
     this.subUnsubscribes?.forEach((unsub) => unsub?.())
     this.subMachines?.forEach((sub) => sub.stop())
+    if (this.portaled) {
+      WabiPortalRegistry.unregister(this)
+      this.restoreFromBody()
+    }
+  }
+
+  isOpen() {
+    if (this.openValue) return true
+    return this.subMachines.some((sub) => {
+      const api = menu.connect(sub.service, normalizeProps)
+      return api.open
+    })
+  }
+
+  attachToBody() {
+    [this.contentEl, this.positionerEl].forEach((el) => {
+      if (el && el.parentNode !== document.body) document.body.appendChild(el)
+    })
+    this.subContentEls.forEach((el) => {
+      if (el && el.parentNode !== document.body) document.body.appendChild(el)
+    })
+    this.subPositionerEls.forEach((el) => {
+      if (el && el.parentNode !== document.body) document.body.appendChild(el)
+    })
+  }
+
+  restoreFromBody() {
+    if (this.contentEl    && this.originalParents.content)    this.originalParents.content.appendChild(this.contentEl)
+    if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
+    this.subContentEls.forEach((el, idx) => {
+      const parent = this.originalParents.subContent[idx]
+      if (el && parent) parent.appendChild(el)
+    })
+    this.subPositionerEls.forEach((el, idx) => {
+      const parent = this.originalParents.subPositioner[idx]
+      if (el && parent) parent.appendChild(el)
+    })
   }
 
   // Toggles the data-wabi-checked attribute on checkbox/radio option items
@@ -120,11 +170,11 @@ export default class extends Controller {
 
   render() {
     const api = menu.connect(this.machine.service, normalizeProps)
-    if (this.hasTriggerTarget)    spreadProps(this.triggerTarget,    api.getTriggerProps())
-    if (this.hasPositionerTarget) spreadProps(this.positionerTarget, api.getPositionerProps())
-    if (this.hasContentTarget) {
-      spreadProps(this.contentTarget, api.getContentProps())
-      this.contentTarget.hidden = false
+    if (this.triggerEl)    spreadProps(this.triggerEl,    api.getTriggerProps())
+    if (this.positionerEl) spreadProps(this.positionerEl, api.getPositionerProps())
+    if (this.contentEl) {
+      spreadProps(this.contentEl, api.getContentProps())
+      this.contentEl.hidden = false
     }
 
     // Regular menuitem items, routed by closest sub ancestor.
@@ -170,8 +220,8 @@ export default class extends Controller {
       const subMachine = this.subMachines[idx]
       if (!subMachine) return
       const subApi = menu.connect(subMachine.service, normalizeProps)
-      const subPosEl  = subEl.querySelector("[data-wabi--dropdown-menu-target='subPositioner']")
-      const subContEl = subEl.querySelector("[data-wabi--dropdown-menu-target='subContent']")
+      const subPosEl  = this.subPositionerEls[idx]
+      const subContEl = this.subContentEls[idx]
       if (subPosEl)  spreadProps(subPosEl,  subApi.getPositionerProps())
       if (subContEl) {
         spreadProps(subContEl, subApi.getContentProps())

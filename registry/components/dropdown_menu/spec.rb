@@ -22,6 +22,16 @@ RSpec.describe "DropdownMenu composition" do
     expect(output).to include('data-wabi--dropdown-menu-open-value="false"')
   end
 
+  it "carries portal-value true by default" do
+    output = Components::UI::DropdownMenu.new.call { "" }
+    expect(output).to include('data-wabi--dropdown-menu-portal-value="true"')
+  end
+
+  it "allows portal: false to keep v0.4 in-tree behavior" do
+    output = Components::UI::DropdownMenu.new(portal: false).call { "" }
+    expect(output).to include('data-wabi--dropdown-menu-portal-value="false"')
+  end
+
   it "DropdownMenuTrigger emits <button> with the trigger target" do
     output = Components::UI::DropdownMenuTrigger.new.call { "Menu" }
     expect(output).to include('<button')
