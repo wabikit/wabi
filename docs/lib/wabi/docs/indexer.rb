@@ -27,9 +27,19 @@ module Wabi
         new.crawl(output_dir)
       end
 
+      # A modern Chrome UA satisfies ApplicationController's `allow_browser versions: :modern` check.
+      # HTTP_HOST=localhost satisfies ActionDispatch::HostAuthorization (Rack::Test defaults to example.org).
+      CRAWL_HEADERS = {
+        "HTTP_HOST"       => "localhost",
+        "HTTP_USER_AGENT" =>
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " \
+          "AppleWebKit/537.36 (KHTML, like Gecko) " \
+          "Chrome/124.0.0.0 Safari/537.36",
+      }.freeze
+
       def crawl(output_dir)
         ROUTES_TO_INDEX.each do |path|
-          get path
+          get path, {}, CRAWL_HEADERS
           raise "Crawl failed for #{path}: HTTP #{last_response.status}" unless last_response.ok?
           File.write(File.join(output_dir, sanitize(path)), last_response.body)
         end
