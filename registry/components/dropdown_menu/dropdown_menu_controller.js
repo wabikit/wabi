@@ -56,6 +56,10 @@ export default class extends Controller {
       onOpenChange: ({ open }) => {
         this.openValue = open
         WabiPortalRegistry.onOpenChange()
+        if (!this.portaled && this.contentEl) {
+          if (open) this.contentEl.removeAttribute("inert")
+          else      this.contentEl.setAttribute("inert", "")
+        }
         this.dispatch("change", { detail: { open } })
       },
     })
@@ -71,7 +75,16 @@ export default class extends Controller {
           this.handleOptionToggle(value)
           this.dispatch("select", { detail: { value } })
         },
-        onOpenChange: () => WabiPortalRegistry.onOpenChange(),
+        onOpenChange: ({ open }) => {
+          WabiPortalRegistry.onOpenChange()
+          if (!this.portaled) {
+            const subContEl = this.subContentEls[idx]
+            if (subContEl) {
+              if (open) subContEl.removeAttribute("inert")
+              else      subContEl.setAttribute("inert", "")
+            }
+          }
+        },
       })
       this.subMachines.push(subMachine)
     })

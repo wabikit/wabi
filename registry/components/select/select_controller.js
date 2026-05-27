@@ -52,6 +52,10 @@ export default class extends Controller {
       onOpenChange: ({ open }) => {
         this.isOpenValue = open
         WabiPortalRegistry.onOpenChange()
+        if (!this.portaled && this.contentEl) {
+          if (open) this.contentEl.removeAttribute("inert")
+          else      this.contentEl.setAttribute("inert", "")
+        }
       },
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
