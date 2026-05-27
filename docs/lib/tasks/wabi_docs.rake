@@ -18,7 +18,7 @@ namespace :wabi do
 
       puts "Running pagefind -> #{output_dir}"
       FileUtils.rm_rf(output_dir)
-      system!("npx pagefind --site #{input_dir} --output-path #{output_dir}")
+      system!("npx pagefind --site \"#{input_dir}\" --output-path \"#{output_dir}\"")
       puts "  OK — commit #{output_dir}"
     end
 
