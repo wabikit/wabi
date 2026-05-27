@@ -10,13 +10,13 @@ module Components
       # `translate-0`. v0.1.x: visibility lives on `data-state` rather than
       # `hidden`, so the slide actually animates.
       SIDE_CLASSES = {
-        top: "fixed inset-x-0 top-0 w-full max-h-screen border-input " \
+        top: "fixed inset-x-0 top-0 w-full max-h-screen border border-input " \
              "data-[state=open]:translate-y-0 data-[state=closed]:-translate-y-full",
-        right: "fixed inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border-input " \
+        right: "fixed inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border border-input " \
                "data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full",
-        bottom: "fixed inset-x-0 bottom-0 w-full max-h-screen border-input " \
+        bottom: "fixed inset-x-0 bottom-0 w-full max-h-screen border border-input " \
                 "data-[state=open]:translate-y-0 data-[state=closed]:translate-y-full",
-        left: "fixed inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-input " \
+        left: "fixed inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border border-input " \
               "data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full",
       }.freeze
 

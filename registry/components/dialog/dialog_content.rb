@@ -12,7 +12,7 @@ module Components
         # the invisible box intercepts clicks in the center of the viewport.
         # Same trap as the original positioner-covers-everything bug.
         base "fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 " \
-             "gap-4 border-input bg-background p-6 shadow-lg sm:rounded-lg " \
+             "gap-4 border border-input bg-background p-6 shadow-lg sm:rounded-lg " \
              "transition-opacity duration-200 ease-out " \
              "data-[state=open]:opacity-100 data-[state=open]:pointer-events-auto " \
              "data-[state=closed]:opacity-0 data-[state=closed]:pointer-events-none"

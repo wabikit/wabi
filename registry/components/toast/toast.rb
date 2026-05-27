@@ -12,7 +12,7 @@ module Components
     # visible, advanced stacking) is a v0.2 follow-up.
     class Toast < Wabi::Base
       variants do
-        base "pointer-events-auto w-full overflow-hidden rounded-md border-input p-4 shadow-md"
+        base "pointer-events-auto w-full overflow-hidden rounded-md border border-input p-4 shadow-md"
 
         variant :appearance, {
           info:        "bg-background text-foreground",

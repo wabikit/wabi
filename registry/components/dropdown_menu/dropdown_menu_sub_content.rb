@@ -10,7 +10,7 @@ module Components
     # the parent menu's own content stays untouched.
     class DropdownMenuSubContent < Wabi::Base
       variants do
-        base "z-50 min-w-[8rem] overflow-hidden rounded-md border-input bg-popover p-1 " \
+        base "z-50 min-w-[8rem] overflow-hidden rounded-md border border-input bg-popover p-1 " \
              "text-popover-foreground shadow-md outline-none " \
              "transition-opacity duration-150 ease-out " \
              "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
