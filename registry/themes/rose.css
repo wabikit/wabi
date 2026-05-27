@@ -21,7 +21,8 @@
   --popover-foreground: 240 10% 3.9%;
 }
 
-[data-theme="rose"][data-mode="dark"] {
+[data-theme="rose"][data-mode="dark"],
+[data-mode="dark"] [data-theme="rose"]:not([data-mode="light"]) {
   --background: 20 14.3% 4.1%;
   --foreground: 0 0% 95%;
   --primary: 346.8 77.2% 49.8%;

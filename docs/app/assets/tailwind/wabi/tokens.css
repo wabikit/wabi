@@ -64,7 +64,8 @@
   --popover-foreground: 240 10% 3.9%;
 }
 
-[data-theme="default"][data-mode="dark"] {
+[data-theme="default"][data-mode="dark"],
+[data-mode="dark"] [data-theme="default"]:not([data-mode="light"]) {
   --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
   --primary: 0 0% 98%;
@@ -109,7 +110,8 @@
   --popover-foreground: 20 14.3% 4.1%;
 }
 
-[data-theme="stone"][data-mode="dark"] {
+[data-theme="stone"][data-mode="dark"],
+[data-mode="dark"] [data-theme="stone"]:not([data-mode="light"]) {
   --background: 20 14.3% 4.1%;
   --foreground: 60 9.1% 97.8%;
   --primary: 60 9.1% 97.8%;
@@ -154,7 +156,8 @@
   --popover-foreground: 240 10% 3.9%;
 }
 
-[data-theme="rose"][data-mode="dark"] {
+[data-theme="rose"][data-mode="dark"],
+[data-mode="dark"] [data-theme="rose"]:not([data-mode="light"]) {
   --background: 20 14.3% 4.1%;
   --foreground: 0 0% 95%;
   --primary: 346.8 77.2% 49.8%;
@@ -199,7 +202,8 @@
   --popover-foreground: 222.2 84% 4.9%;
 }
 
-[data-theme="blue"][data-mode="dark"] {
+[data-theme="blue"][data-mode="dark"],
+[data-mode="dark"] [data-theme="blue"]:not([data-mode="light"]) {
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;
   --primary: 217.2 91.2% 59.8%;
@@ -244,7 +248,8 @@
   --popover-foreground: 240 10% 3.9%;
 }
 
-[data-theme="green"][data-mode="dark"] {
+[data-theme="green"][data-mode="dark"],
+[data-mode="dark"] [data-theme="green"]:not([data-mode="light"]) {
   --background: 20 14.3% 4.1%;
   --foreground: 0 0% 95%;
   --primary: 142.1 70.6% 45.3%;
@@ -289,7 +294,8 @@
   --popover-foreground: 224 71.4% 4.1%;
 }
 
-[data-theme="violet"][data-mode="dark"] {
+[data-theme="violet"][data-mode="dark"],
+[data-mode="dark"] [data-theme="violet"]:not([data-mode="light"]) {
   --background: 224 71.4% 4.1%;
   --foreground: 210 20% 98%;
   --primary: 263.4 70% 50.4%;
@@ -334,7 +340,8 @@
   --popover-foreground: 240 10% 3.9%;
 }
 
-[data-theme="yellow"][data-mode="dark"] {
+[data-theme="yellow"][data-mode="dark"],
+[data-mode="dark"] [data-theme="yellow"]:not([data-mode="light"]) {
   --background: 20 14.3% 4.1%;
   --foreground: 60 9.1% 97.8%;
   --primary: 47.9 95.8% 53.1%;
@@ -379,7 +386,8 @@
   --popover-foreground: 20 14.3% 4.1%;
 }
 
-[data-theme="orange"][data-mode="dark"] {
+[data-theme="orange"][data-mode="dark"],
+[data-mode="dark"] [data-theme="orange"]:not([data-mode="light"]) {
   --background: 20 14.3% 4.1%;
   --foreground: 60 9.1% 97.8%;
   --primary: 20.5 90.2% 48.2%;
