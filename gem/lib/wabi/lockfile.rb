@@ -27,9 +27,10 @@ module Wabi
       @components = data["components"] || {}
     end
 
-    def record(name, version:, hash:, files: nil)
+    def record(name, version:, hash:, files: nil, js_dependencies: nil)
       entry = { "version" => version, "hash" => hash }
-      entry["files"] = files if files
+      entry["files"]           = files           if files
+      entry["js_dependencies"] = js_dependencies if js_dependencies
       @components[name] = entry
     end
 

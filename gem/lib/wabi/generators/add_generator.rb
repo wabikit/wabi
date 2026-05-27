@@ -49,7 +49,8 @@ module Wabi
         (data["js_dependencies"] || {}).each { |pkg, ver| @js_deps_to_pin[pkg] = ver }
 
         hash = Digest::SHA256.hexdigest(JSON.generate(data["files"]))
-        lockfile.record(name, version: data["version"], hash: hash, files: files_map)
+        lockfile.record(name, version: data["version"], hash: hash, files: files_map,
+                        js_dependencies: data["js_dependencies"])
       end
 
       def print_js_pin_instructions

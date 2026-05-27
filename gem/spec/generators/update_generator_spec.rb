@@ -194,4 +194,32 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
       expect(prompts).to eq(1)
     end
   end
+
+  describe "js_dependencies diff" do
+    it "prints only added/changed pins, not unchanged ones" do
+      seed_install(version: "0.1.0", content: "class B; end\n")
+      File.write(File.join(fake_registry, "button.json"), JSON.generate({
+        "name" => "button",
+        "version" => "0.2.0",
+        "registry_dependencies" => [],
+        "js_dependencies" => { "@zag-js/popover" => "1.41", "@new/pkg" => "2.0" },
+        "files" => [{
+          "path" => "app/components/ui/button.rb",
+          "type" => "ruby:phlex",
+          "content" => "class B; end\n",
+        }],
+      }))
+
+      lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
+      lock["components"]["button"]["js_dependencies"] = { "@zag-js/popover" => "1.41" }
+      File.write(File.join(destination, "config/wabi.lock.json"), JSON.generate(lock))
+
+      output = capture_stdout do
+        described_class.start(["button"], destination_root: destination)
+      end
+
+      expect(output).to include("@new/pkg")
+      expect(output).not_to include("@zag-js/popover")
+    end
+  end
 end
