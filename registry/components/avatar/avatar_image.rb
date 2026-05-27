@@ -3,7 +3,7 @@
 module Components
   module UI
     class AvatarImage < Wabi::Base
-      variants { base "aspect-square h-full w-full" }
+      variants { base "absolute inset-0 aspect-square h-full w-full object-cover" }
 
       def initialize(src:, alt: "", **attrs)
         @src   = src

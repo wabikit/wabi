@@ -28,6 +28,13 @@ export default class extends Controller {
   }
 
   start() {
+    // durationMsValue <= 0 means "sticky" — render the toast without an
+    // auto-dismiss timer. Useful for previews, manual-dismiss-only flows,
+    // or when the app schedules dismissal externally.
+    if (this.durationMsValue <= 0) {
+      this.remainingMs = 0
+      return
+    }
     this.startedAt   = Date.now()
     this.remainingMs = this.durationMsValue
     this.timer       = setTimeout(() => this.dismiss(), this.remainingMs)

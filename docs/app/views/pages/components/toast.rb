@@ -66,20 +66,25 @@ module Views
                 )
               RUBY
                 ol(class: "flex flex-col gap-2 list-none p-0 m-0 w-80") do
+                  # duration_ms: 0 keeps the toasts sticky so the preview stays
+                  # readable (real toasts default to 5000ms auto-dismiss).
                   render ::Components::UI::Toast.new(
                     title: "Info",
                     description: "Something happened that you should know about.",
-                    appearance: :info
+                    appearance: :info,
+                    duration_ms: 0
                   )
                   render ::Components::UI::Toast.new(
                     title: "Success",
                     description: "Your changes have been saved.",
-                    appearance: :success
+                    appearance: :success,
+                    duration_ms: 0
                   )
                   render ::Components::UI::Toast.new(
                     title: "Destructive",
                     description: "Something went wrong. Please try again.",
-                    appearance: :destructive
+                    appearance: :destructive,
+                    duration_ms: 0
                   )
                 end
               end
