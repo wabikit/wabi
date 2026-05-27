@@ -2,12 +2,13 @@
 
 module Components
   module Site
-    # Theme picker dropdown for the docs nav. Reuses `wabi--theme` controller
-    # actions (setTheme / toggleMode) that already ship in the gem template.
-    # The initial radio `value` is hardcoded to "default"; the controller
-    # rehydrates from localStorage on `connect()`, so the visible html
-    # data-theme reflects the persisted choice after page load even though
-    # the server-side radio state shows "default".
+    # Theme picker dropdown for the docs nav. Reuses `wabi--theme#setTheme`
+    # which ships in the gem template. Dark/light toggling lives in the
+    # standalone Site::ModeToggle button in the header — this dropdown is
+    # palette-only. The initial radio `value` is hardcoded to "default";
+    # the controller rehydrates from localStorage on `connect()`, so the
+    # visible html data-theme reflects the persisted choice after page
+    # load even though the server-side radio state shows "default".
     class ThemePicker < Components::Base
       THEMES = %w[default stone rose blue green violet yellow orange].freeze
 
@@ -36,11 +37,6 @@ module Components
                 ) { slug.capitalize }
               end
             end
-            render Components::UI::DropdownMenuSeparator.new
-            render Components::UI::DropdownMenuItem.new(
-              value: "toggle-mode",
-              data: { action: "click->wabi--theme#toggleMode" }
-            ) { "Toggle dark mode" }
           end
         end
       end
