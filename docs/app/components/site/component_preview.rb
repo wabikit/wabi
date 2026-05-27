@@ -20,14 +20,26 @@ module Components
 
       def view_template(&block)
         block_content = capture(&block) if block_given?
+        # Underline-style tabs: the active trigger gets a 2px primary-colored
+        # bottom border that visually replaces the TabsList's bottom border;
+        # inactive triggers stay muted with a transparent placeholder border
+        # so the height doesn't jump on activation. The TabsList's bg, shadow,
+        # and rounded-corners from the base tokens are stripped so the underline
+        # reads cleanly.
+        trigger_class =
+          "rounded-none bg-transparent shadow-none border-b-2 border-transparent " \
+          "-mb-px text-muted-foreground hover:text-foreground " \
+          "data-[state=active]:bg-transparent data-[state=active]:shadow-none " \
+          "data-[state=active]:border-primary data-[state=active]:text-foreground " \
+          "data-[state=active]:font-semibold"
         div(class: "my-6 rounded-lg border border-border overflow-hidden") do
           render ::Components::UI::Tabs.new(value: "preview", class: "w-full") do
             render ::Components::UI::TabsList.new(
-              class: "rounded-none w-full justify-start gap-1 border-b border-border " \
-                     "bg-muted px-2 h-auto py-2"
+              class: "rounded-none w-full justify-start gap-4 border-b border-border " \
+                     "bg-transparent px-4 h-auto py-0"
             ) do
-              render ::Components::UI::TabsTrigger.new(value: "preview") { "Preview" }
-              render ::Components::UI::TabsTrigger.new(value: "code")    { "Code" }
+              render ::Components::UI::TabsTrigger.new(value: "preview", class: trigger_class) { "Preview" }
+              render ::Components::UI::TabsTrigger.new(value: "code",    class: trigger_class) { "Code" }
             end
             render ::Components::UI::TabsContent.new(value: "preview", class: "mt-0 p-8 bg-background") do
               raw safe(block_content) if block_content
