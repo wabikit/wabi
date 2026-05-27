@@ -77,8 +77,9 @@
 /* "n results for ..." header: PagefindUI defaults to 20px top/bottom
    padding — too much in our compact drawer. */
 #search .pagefind-ui__message {
-  padding: 0.25rem 0 0.5rem !important;
+  padding: 0 !important;
   margin: 0 !important;
+  height: auto !important;
   font-size: 0.75rem !important;
   font-weight: 500 !important;
 }
