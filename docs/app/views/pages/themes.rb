@@ -27,6 +27,15 @@ module Views
                   class: "rounded-lg border border-border bg-background p-5"
                 ) do
                   h3(class: "text-lg font-semibold mb-3 text-foreground") { slug.capitalize }
+                  # Color swatches — these read --primary, --secondary, --accent,
+                  # --destructive directly via Tailwind utilities so the cascade
+                  # difference between themes is immediately visible.
+                  div(class: "grid grid-cols-4 gap-1.5 mb-3") do
+                    div(class: "h-10 rounded bg-primary",     title: "primary")
+                    div(class: "h-10 rounded bg-secondary",   title: "secondary")
+                    div(class: "h-10 rounded bg-accent",      title: "accent")
+                    div(class: "h-10 rounded bg-destructive", title: "destructive")
+                  end
                   div(class: "flex flex-col gap-2") do
                     render ::Components::UI::Button.new                        { "Primary" }
                     render ::Components::UI::Button.new(appearance: :secondary) { "Secondary" }

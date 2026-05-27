@@ -32,25 +32,44 @@ module Views
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                render Components::UI::Select.new(name: "fruit", placeholder: "Choose a fruit") do
+                FRUITS = [
+                  { value: "apple",  label: "Apple"  },
+                  { value: "banana", label: "Banana" },
+                  { value: "cherry", label: "Cherry" },
+                ]
+
+                render Components::UI::Select.new(
+                  name: "fruit",
+                  placeholder: "Choose a fruit",
+                  items: FRUITS
+                ) do
                   render Components::UI::SelectTrigger.new do
                     render Components::UI::SelectValue.new
                   end
                   render Components::UI::SelectContent.new do
-                    render Components::UI::SelectItem.new(value: "apple")  { "Apple" }
-                    render Components::UI::SelectItem.new(value: "banana") { "Banana" }
-                    render Components::UI::SelectItem.new(value: "cherry") { "Cherry" }
+                    FRUITS.each do |fruit|
+                      render Components::UI::SelectItem.new(value: fruit[:value]) { fruit[:label] }
+                    end
                   end
                 end
               RUBY
-                render ::Components::UI::Select.new(name: "fruit", placeholder: "Choose a fruit") do
+                fruits = [
+                  { value: "apple",  label: "Apple"  },
+                  { value: "banana", label: "Banana" },
+                  { value: "cherry", label: "Cherry" },
+                ]
+                render ::Components::UI::Select.new(
+                  name: "fruit",
+                  placeholder: "Choose a fruit",
+                  items: fruits
+                ) do
                   render ::Components::UI::SelectTrigger.new do
                     render ::Components::UI::SelectValue.new
                   end
                   render ::Components::UI::SelectContent.new do
-                    render ::Components::UI::SelectItem.new(value: "apple")  { "Apple" }
-                    render ::Components::UI::SelectItem.new(value: "banana") { "Banana" }
-                    render ::Components::UI::SelectItem.new(value: "cherry") { "Cherry" }
+                    fruits.each do |fruit|
+                      render ::Components::UI::SelectItem.new(value: fruit[:value]) { fruit[:label] }
+                    end
                   end
                 end
               end
