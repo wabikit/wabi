@@ -27,8 +27,10 @@ module Wabi
       @components = data["components"] || {}
     end
 
-    def record(name, version:, hash:)
-      @components[name] = { "version" => version, "hash" => hash }
+    def record(name, version:, hash:, files: nil)
+      entry = { "version" => version, "hash" => hash }
+      entry["files"] = files if files
+      @components[name] = entry
     end
 
     def save
