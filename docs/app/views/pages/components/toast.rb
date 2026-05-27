@@ -71,12 +71,15 @@ module Views
 
                 script do
                   plain <<~JS
-                    document.querySelectorAll('.js-toast-btn').forEach(function(btn) {
-                      btn.addEventListener('click', function() {
-                        var payload = JSON.parse(btn.dataset.toastPayload);
-                        window.wabiToaster && window.wabiToaster.create(payload);
-                      });
-                    });
+                    if (!window.__wabiToastDemoBound) {
+                      window.__wabiToastDemoBound = true
+                      document.addEventListener('click', function(e) {
+                        var btn = e.target.closest('.js-toast-btn')
+                        if (!btn || !window.wabiToaster) return
+                        var payload = JSON.parse(btn.dataset.toastPayload)
+                        window.wabiToaster.create(payload)
+                      })
+                    }
                   JS
                 end
               end
