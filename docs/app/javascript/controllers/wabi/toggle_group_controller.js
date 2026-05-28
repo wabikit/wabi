@@ -45,8 +45,8 @@ export default class extends Controller {
   }
 
   syncHiddenInputs() {
+    this.element.querySelectorAll(':scope > input[type="hidden"][data-wabi--toggle-group-hidden="true"]').forEach((el) => el.remove())
     if (!this.nameValue) return
-    this.element.querySelectorAll('input[type="hidden"][data-wabi--toggle-group-hidden="true"]').forEach((el) => el.remove())
     const inputName = this.multipleValue ? `${this.nameValue}[]` : this.nameValue
     this.valueValue.forEach((v) => {
       const inp = document.createElement("input")
