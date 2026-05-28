@@ -42,10 +42,7 @@ export default class extends Controller {
       onOpenChange: ({ open }) => {
         this.openValue = open
         WabiPortalRegistry.onOpenChange()
-        // For non-portaled mode (portal: false), toggle inert manually so
-        // the in-tree content is still accessible when open. The registry
-        // does NOT manage inert for non-portaled overlays.
-        if (!this.portaled && this.contentEl) {
+        if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
         }

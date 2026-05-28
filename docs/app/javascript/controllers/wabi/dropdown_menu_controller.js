@@ -63,7 +63,7 @@ export default class extends Controller {
       onOpenChange: ({ open }) => {
         this.openValue = open
         WabiPortalRegistry.onOpenChange()
-        if (!this.portaled && this.contentEl) {
+        if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
         }
@@ -84,12 +84,10 @@ export default class extends Controller {
         },
         onOpenChange: ({ open }) => {
           WabiPortalRegistry.onOpenChange()
-          if (!this.portaled) {
-            const subContEl = this.subContentEls[idx]
-            if (subContEl) {
-              if (open) subContEl.removeAttribute("inert")
-              else      subContEl.setAttribute("inert", "")
-            }
+          const subContEl = this.subContentEls[idx]
+          if (subContEl) {
+            if (open) subContEl.removeAttribute("inert")
+            else      subContEl.setAttribute("inert", "")
           }
         },
       })

@@ -63,7 +63,7 @@ export default class extends Controller {
         // machine-internal; isOpen() exposes it for WabiPortalRegistry's inert calc.
         this.isOpenValue = open
         WabiPortalRegistry.onOpenChange()
-        if (!this.portaled && this.contentEl) {
+        if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
         }
