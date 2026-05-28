@@ -1,5 +1,5 @@
 name: toggle
-version: 0.6.0
+version: 0.1.0
 type: registry:form
 description: Pressable toggle button with on/off state.
 registry_dependencies: []

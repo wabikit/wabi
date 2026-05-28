@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "date"
+require "date" # Phlex 2.4 references Date/Time constants lazily when rendering data:{} hashes
 
 module Components
   module UI
@@ -40,6 +40,7 @@ module Components
       def view_template(&block)
         user_class = @attrs.delete(:class)
         button(
+          **@attrs,
           id: @id,
           type: "button",
           "data-state": @pressed ? "on" : "off",
@@ -49,10 +50,9 @@ module Components
             "wabi--toggle-disabled-value": @disabled.to_s,
             "wabi--toggle-name-value":     @name,
           },
-          class: merge_class(tokens(appearance: @appearance, size: @size), user_class)
-        ) do
-          yield if block_given?
-        end
+          class: merge_class(tokens(appearance: @appearance, size: @size), user_class),
+          &block
+        )
       end
     end
   end
