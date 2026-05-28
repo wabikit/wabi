@@ -15,6 +15,7 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 # inside the bundle.
 pin "@zag-js/vanilla",  to: "https://cdn.jsdelivr.net/npm/@zag-js/vanilla@1.41.0/+esm"
 pin "@zag-js/checkbox", to: "https://cdn.jsdelivr.net/npm/@zag-js/checkbox@1.41.0/+esm"
+pin "@zag-js/combobox", to: "https://cdn.jsdelivr.net/npm/@zag-js/combobox@1.41.0/+esm"
 pin "@zag-js/switch",   to: "https://cdn.jsdelivr.net/npm/@zag-js/switch@1.41.0/+esm"
 pin "@zag-js/select",   to: "https://cdn.jsdelivr.net/npm/@zag-js/select@1.41.0/+esm"
 pin "@zag-js/slider",   to: "https://cdn.jsdelivr.net/npm/@zag-js/slider@1.41.0/+esm"

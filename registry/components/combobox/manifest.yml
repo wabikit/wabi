@@ -1,0 +1,17 @@
+name: combobox
+version: 0.1.0
+type: registry:overlay
+description: Input with autocomplete dropdown. Static items only in v0.6.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/combobox": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+shared_files:
+  - "_shared/portal_registry.js"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

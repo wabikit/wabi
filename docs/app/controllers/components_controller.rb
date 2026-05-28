@@ -3,13 +3,13 @@
 class ComponentsController < ApplicationController
   layout false
 
-  # All 24 components (20 from v0.4 plus toggle + radio_group + toggle_group + slider from v0.6).
+  # All 25 components (20 from v0.4 plus toggle + radio_group + toggle_group + slider + combobox from v0.6).
   # Every name routes to a detail page.
   ALL = %w[
     button input textarea label card badge separator alert avatar
     checkbox switch select dialog drawer tooltip popover
     dropdown_menu toast tabs accordion toggle radio_group toggle_group
-    slider
+    slider combobox
   ].freeze
 
   def index
