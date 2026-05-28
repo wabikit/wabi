@@ -1,12 +1,10 @@
 name: toast
-version: 0.5.0
+version: 0.1.0
 type: registry:feedback
 description: Notification toaster + Toast component. Auto-dismiss + pause-on-hover, Turbo-Stream friendly.
 registry_dependencies: []
 ruby_dependencies: []
-js_dependencies:
-  "@zag-js/toast": "1.41"
-  "@zag-js/vanilla": "1.41"
+js_dependencies: {}
 tailwind:
   extend: {}
 metadata:

@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
-require "json"
-
 module Wabi
   # Extends `Turbo::Streams::TagBuilder` with a `wabi_toast` shorthand that
-  # emits a `wabi_toast_create` custom Turbo Stream action. The Toaster's
-  # Stimulus controller listens on `turbo:before-stream-render`, intercepts
-  # the action, and routes the payload through the Zag group machine's
-  # `create()` API.
+  # appends a server-rendered Toast component into the singleton Toaster
+  # container.
   #
   # In a Rails controller / Turbo Stream view:
   #
@@ -17,25 +13,34 @@ module Wabi
   #     appearance: :success,
   #   )
   #
+  # Equivalent to:
+  #
+  #   render turbo_stream: turbo_stream.append(
+  #     "wabi-toaster",
+  #     Components::UI::Toast.new(title: "Saved", description: "...", appearance: :success),
+  #   )
+  #
   # The user app must have run `bin/rails g wabi:add toast` first so that
-  # the Toaster controller is registered on the page.
+  # `Components::UI::Toast` is defined.
   #
   # NOTE: this module is named `Wabi::TurboStreamExtensions` (NOT
   # `Wabi::Rails::TurboStreamExtensions`) because nesting a `Rails` module
   # inside `Wabi` shadows the top-level `Rails` constant from generators that
   # reference `Rails::Generators::Base`, breaking gem load order.
   module TurboStreamExtensions
-    APPEARANCE_TO_TYPE = {
-      success:     "success",
-      destructive: "error",
-      info:        "info",
-    }.freeze
+    def wabi_toast(toaster_id: "wabi-toaster", **toast_options)
+      toast_class = wabi_resolve_toast_class
+      append(toaster_id, toast_class.new(**toast_options))
+    end
 
-    def wabi_toast(toaster_id: "wabi-toaster", title:, description: nil, appearance: :info, **extra)
-      type = APPEARANCE_TO_TYPE[appearance] || appearance.to_s
-      payload = { "title" => title, "description" => description, "type" => type }.merge(extra)
-      payload_json = JSON.generate(payload).gsub('"', "&quot;")
-      turbo_stream_action_tag("wabi_toast_create", target: toaster_id, data_payload: payload_json)
+    private
+
+    def wabi_resolve_toast_class
+      Object.const_get("Components::UI::Toast")
+    rescue NameError
+      raise NameError,
+            "Components::UI::Toast is not defined. Run `bin/rails g wabi:add toast` " \
+            "to install the component before using `turbo_stream.wabi_toast(...)`."
     end
   end
 end

@@ -6,12 +6,6 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
 
 ### Breaking
 
-- **Toast public API rewritten**. Toaster is now one-per-page (multiple
-  with distinct IDs allowed) and hosts a `@zag-js/toast` group machine.
-  Apps that subclassed `Components::UI::Toast` or relied on per-Toast
-  Stimulus values (`data-wabi--toast-duration-ms-value`) need to migrate.
-  Programmatic creation now goes through `turbo_stream.wabi_toast(...)`
-  (signature unchanged) or `window.wabiToaster.create({...})`.
 - **Overlays portal to `document.body` by default**. Dialog, Drawer,
   Tooltip, Popover, DropdownMenu, and Select all move their content (and
   backdrop/positioner where applicable) to `<body>` on connect. Pass
@@ -19,10 +13,6 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
   `WabiPortalRegistry` JS module is now part of every overlay's wabi:add
   install — it lands at
   `app/javascript/controllers/wabi/_shared/portal_registry.js`.
-- **Toaster placement default** flips from `:top_right` (Ruby symbol) to
-  `"bottom-end"` (Zag-style string) to match the underlying machine.
-  Apps that explicitly passed `placement: :top_right` need to switch
-  to `placement: "top-end"`.
 
 ### Features
 
@@ -30,8 +20,6 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
   per-file conflict detection. Flags: `--force`, `--dry-run`. Reads
   and writes per-file SHA256 hashes in `wabi.lock.json` (additive
   schema; legacy lockfiles fall back to prompting on every file).
-- Toast group machine via `@zag-js/toast@1.41` — `max`, `gap`,
-  pause-on-group-hover, swipe-to-dismiss.
 - Real portal pattern for the 6 overlays. Resolves the v0.1 carryover
   documented in `docs/V01-CARRYOVER.md` (#3). Overlays inside
   transformed/scrollable ancestors now position relative to the
@@ -45,6 +33,7 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
 
 ### Deferred to v0.6
 
+- Toast `@zag-js/toast` group machine. Attempted in v0.5 but reverted — the group machine's interaction with Phlex+Stimulus+Turbo caused an infinite render loop. v0.4 vanilla setTimeout controller restored; group features (max/gap/pause-on-group-hover/swipe) targeted for v0.6 with a different implementation strategy.
 - Forms wave (RadioGroup/Toggle/ToggleGroup/Slider/Combobox/Command/Form).
 - Nav wave (Sheet/ContextMenu/Pagination/NavigationMenu).
 - Data wave (Calendar/DatePicker/DataTable).
