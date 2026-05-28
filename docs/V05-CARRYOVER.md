@@ -16,6 +16,11 @@ The v0.1/v0.2 carryovers in `docs/V01-CARRYOVER.md` are now superseded:
 ## Deferred to v0.6
 
 - **Toast `@zag-js/toast` group machine** — v0.5 attempt caused a runtime infinite loop in our Phlex+Stimulus+Turbo setup; reverted to v0.4 vanilla setTimeout. Plan to retry with a different shape (separate Stimulus controllers per toast OR custom JS group coordinator) in v0.6.
+- Toast Sonner-style enter/exit animations. Currently toasts appear/dismiss
+  with no transition. Plan to add `data-state="open|closed"` driven Tailwind
+  variants on the Toast component (same pattern as Drawer slide-in) when
+  the toast group machine returns in v0.6 — both changes land together
+  since the animation hooks into machine state.
 - **Forms wave**: RadioGroup, Toggle, ToggleGroup, Slider, Combobox,
   Command, Form. Largest wave; RadioGroup leverages DropdownMenu radio
   primitives.
