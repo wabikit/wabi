@@ -29,7 +29,7 @@ RSpec.describe "Form composition" do
 
   describe Components::UI::FormLabel do
     it "renders a <label> with the form-label classes" do
-      output = described_class.new(for: "user_email").call { "Email" }
+      output = described_class.new(for_: "user_email").call { "Email" }
       expect(output).to include('<label')
       expect(output).to include('for="user_email"')
       expect(output).to include('text-sm')

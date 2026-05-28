@@ -11,7 +11,7 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        div(class: merge_class("space-y-2", user_class)) do
+        div(**@attrs, class: merge_class("space-y-2", user_class)) do
           yield if block_given?
         end
       end

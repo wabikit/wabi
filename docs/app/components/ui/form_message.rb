@@ -17,7 +17,7 @@ module Components
         return unless msg
 
         user_class = @attrs.delete(:class)
-        p(class: merge_class("text-sm font-medium text-destructive", user_class)) { msg }
+        p(**@attrs, class: merge_class("text-sm font-medium text-destructive", user_class)) { msg }
       end
     end
   end

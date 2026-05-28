@@ -8,15 +8,17 @@ module Components
       LABEL_CLASS = "text-sm font-medium leading-none " \
                     "peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 
-      def initialize(for: nil, **attrs)
-        @for   = binding.local_variable_get(:for)
+      # `for_:` matches the standalone Components::UI::Label convention.
+      def initialize(for_: nil, **attrs)
+        @for_  = for_
         @attrs = attrs
       end
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
         label(
-          for: @for,
+          **@attrs,
+          for: @for_,
           class: merge_class(LABEL_CLASS, user_class)
         ) do
           yield if block_given?

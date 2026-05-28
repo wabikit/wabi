@@ -11,7 +11,7 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        p(class: merge_class("text-sm text-muted-foreground", user_class)) do
+        p(**@attrs, class: merge_class("text-sm text-muted-foreground", user_class)) do
           yield if block_given?
         end
       end

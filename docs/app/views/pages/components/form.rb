@@ -57,7 +57,7 @@ module Views
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Form.new(model: @user, url: "#") do |form|
                   render Components::UI::FormField.new do
-                    render Components::UI::FormLabel.new(for: "form_email") { "Email" }
+                    render Components::UI::FormLabel.new(for_: "form_email") { "Email" }
                     form.email_field :email,
                       class: "h-10 w-full rounded-md border border-input bg-background " \
                              "px-3 py-2 text-sm",
@@ -72,7 +72,7 @@ module Views
               RUBY
                 render ::Components::UI::Form.new(model: fake_user_err, url: "#", scope: :fake_user) do |form|
                   render ::Components::UI::FormField.new do
-                    render ::Components::UI::FormLabel.new(for: "fake_user_email") { "Email" }
+                    render ::Components::UI::FormLabel.new(for_: "fake_user_email") { "Email" }
                     form.email_field :email,
                       class: "h-10 w-full rounded-md border border-input bg-background " \
                              "px-3 py-2 text-sm",
