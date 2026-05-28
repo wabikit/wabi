@@ -50,6 +50,8 @@ export default class extends Controller {
         this.dispatch("change", { detail: { value: value[0] } })
       },
       onOpenChange: ({ open }) => {
+        // Tracked here (not as a Stimulus value) because select's open state is
+        // machine-internal; isOpen() exposes it for WabiPortalRegistry's inert calc.
         this.isOpenValue = open
         WabiPortalRegistry.onOpenChange()
         if (!this.portaled && this.contentEl) {

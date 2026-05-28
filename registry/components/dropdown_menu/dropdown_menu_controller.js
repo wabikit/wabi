@@ -110,6 +110,8 @@ export default class extends Controller {
   disconnect() {
     this.unsubscribe?.()
     this.machine?.stop()
+    // Stop sub machines BEFORE portal cleanup so any final onOpenChange
+    // from a stopping sub doesn't race the body-DOM restore.
     this.subUnsubscribes?.forEach((unsub) => unsub?.())
     this.subMachines?.forEach((sub) => sub.stop())
     if (this.portaled) {
