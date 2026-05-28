@@ -7,7 +7,7 @@ class ComponentsController < ApplicationController
   ALL = %w[
     button input textarea label card badge separator alert avatar
     checkbox switch select dialog drawer tooltip popover
-    dropdown_menu toast tabs accordion
+    dropdown_menu toast tabs accordion toggle
   ].freeze
 
   def index

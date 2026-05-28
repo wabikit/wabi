@@ -1,0 +1,15 @@
+name: toggle
+version: 0.6.0
+type: registry:form
+description: Pressable toggle button with on/off state.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/toggle": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
