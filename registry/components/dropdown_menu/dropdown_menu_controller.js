@@ -44,9 +44,7 @@ export default class extends Controller {
     })
 
     this.originalParents = {
-      content:    this.contentEl?.parentNode,
-      positioner: this.positionerEl?.parentNode,
-      subContent: this.subContentEls.map((el) => el?.parentNode),
+      positioner:    this.positionerEl?.parentNode,
       subPositioner: this.subPositionerEls.map((el) => el?.parentNode),
     }
 
@@ -134,24 +132,18 @@ export default class extends Controller {
   }
 
   attachToBody() {
-    [this.contentEl, this.positionerEl].forEach((el) => {
-      if (el && el.parentNode !== document.body) document.body.appendChild(el)
-    })
-    this.subContentEls.forEach((el) => {
-      if (el && el.parentNode !== document.body) document.body.appendChild(el)
-    })
+    // Move parent positioner + each sub positioner. Content (and sub content)
+    // rides along inside its positioner.
+    if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
+      document.body.appendChild(this.positionerEl)
+    }
     this.subPositionerEls.forEach((el) => {
       if (el && el.parentNode !== document.body) document.body.appendChild(el)
     })
   }
 
   restoreFromBody() {
-    if (this.contentEl    && this.originalParents.content)    this.originalParents.content.appendChild(this.contentEl)
     if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
-    this.subContentEls.forEach((el, idx) => {
-      const parent = this.originalParents.subContent[idx]
-      if (el && parent) parent.appendChild(el)
-    })
     this.subPositionerEls.forEach((el, idx) => {
       const parent = this.originalParents.subPositioner[idx]
       if (el && parent) parent.appendChild(el)

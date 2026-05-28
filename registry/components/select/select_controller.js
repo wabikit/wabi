@@ -31,7 +31,6 @@ export default class extends Controller {
     this.itemTextEls      = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--select-target="itemText"]')) : []
 
     this.originalParents = {
-      content:    this.contentEl?.parentNode,
       positioner: this.positionerEl?.parentNode,
     }
 
@@ -87,13 +86,13 @@ export default class extends Controller {
   isOpen() { return !!this.isOpenValue }
 
   attachToBody() {
-    [this.contentEl, this.positionerEl].forEach((el) => {
-      if (el && el.parentNode !== document.body) document.body.appendChild(el)
-    })
+    // Move positioner; content rides along inside it (do not extract).
+    if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
+      document.body.appendChild(this.positionerEl)
+    }
   }
 
   restoreFromBody() {
-    if (this.contentEl    && this.originalParents.content)    this.originalParents.content.appendChild(this.contentEl)
     if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
   }
 

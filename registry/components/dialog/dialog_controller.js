@@ -27,7 +27,6 @@ export default class extends Controller {
     this.descriptionEl = this.contentEl?.querySelector('[data-wabi--dialog-target="description"]') || null
 
     this.originalParents = {
-      content:    this.contentEl?.parentNode,
       backdrop:   this.backdropEl?.parentNode,
       positioner: this.positionerEl?.parentNode,
     }
@@ -67,15 +66,17 @@ export default class extends Controller {
   isOpen() { return this.openValue }
 
   attachToBody() {
-    [this.contentEl, this.backdropEl, this.positionerEl].forEach((el) => {
+    // Move positioner (content rides along as its child) + backdrop (sibling).
+    // Don't extract content from positioner — anchored overlays need content
+    // to stay inside positioner for floating-ui positioning to apply.
+    [this.backdropEl, this.positionerEl].forEach((el) => {
       if (el && el.parentNode !== document.body) document.body.appendChild(el)
     })
   }
 
   restoreFromBody() {
-    if (this.contentEl    && this.originalParents.content)    this.originalParents.content.appendChild(this.contentEl)
-    if (this.backdropEl   && this.originalParents.backdrop)   this.originalParents.backdrop.appendChild(this.backdropEl)
     if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
+    if (this.backdropEl   && this.originalParents.backdrop)   this.originalParents.backdrop.appendChild(this.backdropEl)
   }
 
   open()  { this.api()?.setOpen(true)  }
