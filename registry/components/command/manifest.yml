@@ -1,0 +1,15 @@
+name: command
+version: 0.1.0
+type: registry:overlay
+description: Cmd+K command palette as Dialog + Combobox composition.
+registry_dependencies:
+  - dialog
+  - combobox
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
