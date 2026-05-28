@@ -17,6 +17,7 @@ pin "@zag-js/vanilla",  to: "https://cdn.jsdelivr.net/npm/@zag-js/vanilla@1.41.0
 pin "@zag-js/checkbox", to: "https://cdn.jsdelivr.net/npm/@zag-js/checkbox@1.41.0/+esm"
 pin "@zag-js/switch",   to: "https://cdn.jsdelivr.net/npm/@zag-js/switch@1.41.0/+esm"
 pin "@zag-js/select",   to: "https://cdn.jsdelivr.net/npm/@zag-js/select@1.41.0/+esm"
+pin "@zag-js/slider",   to: "https://cdn.jsdelivr.net/npm/@zag-js/slider@1.41.0/+esm"
 pin "@zag-js/dialog",   to: "https://cdn.jsdelivr.net/npm/@zag-js/dialog@1.41.0/+esm"
 pin "@zag-js/tooltip",  to: "https://cdn.jsdelivr.net/npm/@zag-js/tooltip@1.41.0/+esm"
 pin "@zag-js/popover",  to: "https://cdn.jsdelivr.net/npm/@zag-js/popover@1.41.0/+esm"

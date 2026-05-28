@@ -5,11 +5,11 @@ require "fileutils"
 
 RSpec.describe Wabi::Docs::Indexer do
   describe "::ROUTES_TO_INDEX" do
-    it "covers 26 routes (excluding /preview)" do
-      expect(described_class::ROUTES_TO_INDEX.size).to eq(26)
+    it "covers 6 top-level + every ComponentsController::ALL detail page" do
+      expect(described_class::ROUTES_TO_INDEX.size).to eq(6 + ComponentsController::ALL.size)
     end
 
-    it "includes all 20 component detail pages" do
+    it "includes every component detail page from ComponentsController::ALL" do
       ComponentsController::ALL.each do |name|
         expect(described_class::ROUTES_TO_INDEX).to include("/docs/components/#{name}")
       end

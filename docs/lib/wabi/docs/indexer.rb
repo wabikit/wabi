@@ -8,6 +8,8 @@ module Wabi
     class Indexer
       include Rack::Test::Methods
 
+      # Component slugs are sourced from ComponentsController::ALL so that adding a
+      # component to the docs routing automatically extends the Pagefind crawl.
       ROUTES_TO_INDEX = [
         "/",
         "/docs/getting-started",
@@ -15,11 +17,7 @@ module Wabi
         "/docs/philosophy",
         "/docs/components",
         "/docs/themes",
-        *%w[
-          button input textarea label card badge separator alert avatar
-          checkbox switch select dialog drawer tooltip popover
-          dropdown_menu toast tabs accordion
-        ].map { |n| "/docs/components/#{n}" },
+        *ComponentsController::ALL.map { |n| "/docs/components/#{n}" },
       ].freeze
 
       def self.crawl(output_dir:)
