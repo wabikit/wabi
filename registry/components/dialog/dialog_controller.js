@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as dialog from "@zag-js/dialog"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
-import { WabiPortalRegistry } from "./_shared/portal_registry.js"
+import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 export default class extends Controller {
   static targets = ["trigger", "portal", "backdrop", "positioner", "content", "title", "description", "closeTrigger"]

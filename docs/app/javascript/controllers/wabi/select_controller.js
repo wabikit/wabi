@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as select from "@zag-js/select"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
-import { WabiPortalRegistry } from "./_shared/portal_registry.js"
+import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 export default class extends Controller {
   static targets = [

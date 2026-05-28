@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as menu from "@zag-js/menu"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
-import { WabiPortalRegistry } from "./_shared/portal_registry.js"
+import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 // Single controller owns the parent menu machine AND a child machine per
 // `sub` boundary. Nested same-type controllers would collide on Stimulus
