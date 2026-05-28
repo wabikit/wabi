@@ -3,7 +3,7 @@ import * as combobox from "@zag-js/combobox"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator"]
+  static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator", "hiddenInput"]
   static values  = {
     name:        String,
     items:       Array,
@@ -40,12 +40,16 @@ export default class extends Controller {
     this.machine = new VanillaMachine(combobox.machine, {
       id: this.element.id || crypto.randomUUID(),
       collection,
-      name: this.nameValue || undefined,
+      // Intentionally NOT passing `name` to the machine. Zag would forward it to
+      // the visible <input>, which then submits the LABEL ("Ruby on Rails")
+      // instead of the VALUE ("rails"). We mirror the value to a hidden input
+      // on every change for form submission instead.
       defaultValue: this.valueValue ? [this.valueValue] : undefined,
       disabled: this.disabledValue,
       placeholder: this.placeholderValue,
       onValueChange: ({ value }) => {
         this.valueValue = value[0] || ""
+        if (this.hasHiddenInputTarget) this.hiddenInputTarget.value = this.valueValue
         this.dispatch("change", { detail: { value: value[0] } })
       },
       onOpenChange: ({ open }) => {

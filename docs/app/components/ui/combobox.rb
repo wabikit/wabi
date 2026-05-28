@@ -29,9 +29,19 @@ module Components
             "wabi--combobox-disabled-value":    @disabled.to_s,
             "wabi--combobox-portal-value":      @portal.to_s,
           },
-          class: merge_class("relative", user_class),
-          &block
-        )
+          class: merge_class("relative", user_class)
+        ) do
+          # Hidden input mirrors the selected VALUE for form submission. The
+          # visible <input> carries the label; without this Rails forms would
+          # receive "Ruby on Rails" instead of "rails".
+          input(
+            type: "hidden",
+            name: @name,
+            value: @value,
+            data: { "wabi--combobox-target": "hiddenInput" }
+          )
+          yield if block_given?
+        end
       end
     end
   end
