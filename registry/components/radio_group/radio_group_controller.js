@@ -59,7 +59,7 @@ export default class extends Controller {
 
     this.hiddenInputTargets.forEach((el) => {
       const value = el.dataset.wabiValue
-      spreadProps(el, api.getHiddenInputProps({ value }))
+      spreadProps(el, api.getItemHiddenInputProps({ value }))
     })
   }
 }
