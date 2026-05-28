@@ -70,7 +70,7 @@ module Views
                 ) { "Show error toast" }
 
                 script do
-                  plain <<~JS
+                  raw safe(<<~JS)
                     if (!window.__wabiToastDemoBound) {
                       window.__wabiToastDemoBound = true
                       document.addEventListener('click', function(e) {
