@@ -135,3 +135,39 @@ Carryover punch-list closed; v0.1.0 tagged. See [CHANGELOG.md](../CHANGELOG.md).
 Spec totals: registry 119/119 (was 115; +4 from new submenu components), gem 64/64 (unchanged). 20 dist artifacts produced on every CI run.
 
 v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` group machine for `max`/gap/pause-on-group-hover, real portal pattern, theme picker UI + multi-palette flow.
+
+## Sprint 9 / v0.5.0
+
+### Docs footnote backfill
+- /docs/components/checkbox shows `+esm` footnote under Installation
+- /docs/components/select shows footnote
+- /docs/components/switch shows footnote
+- /docs/components/dialog shows footnote
+- /docs/components/tabs shows footnote
+
+### wabi:update generator (manual smoke from /tmp/wabi-smoke)
+- `bin/rails g wabi:update` after bumping a registry manifest version: reports `updating <name> (X -> Y)` and writes the file
+- `bin/rails g wabi:update button` (explicit name): same behavior
+- `bin/rails g wabi:update --dry-run`: writes nothing, prints planned changes
+- `bin/rails g wabi:update --force`: skips conflict prompts on edited file
+- Locally-edited file: prompts `(y/n/d/q)`; `d` shows diff, `n` skips, `q` aborts
+- Legacy lockfile without `files` map: prompts on every file (fallback)
+
+### Toast group machine
+- /docs/components/toast: `Show success toast` button fires; toast appears at configured placement
+- 4 consecutive clicks with `max: 3`: only 3 visible at a time, oldest dropped
+- Hover any toast: all timers pause; move away: all resume
+- Swipe right (mouse drag): toast dismisses
+- `appearance: :destructive` / `type: 'error'`: `aria-live=assertive` and `role=alert`
+
+### Real portal pattern
+- /docs/components/dialog: trigger opens dialog; DevTools confirms content + backdrop are direct children of `<body>`
+- Close dialog: content + backdrop return to their original parent
+- While dialog open: every `<body>` child except dialog content/backdrop has `inert` attribute; on close, all `inert` removed
+- /docs/components/drawer: same as dialog (drawer reuses dialog controller)
+- /docs/components/tooltip: hover trigger; content moves to body, positioned correctly relative to trigger
+- /docs/components/popover: same as tooltip
+- /docs/components/dropdown_menu: open menu; content under body; open submenu; sub content also under body
+- /docs/components/select: open select; list under body; selection updates trigger label
+- **Transformed-ancestor test**: wrap a dialog example in `<div class="transform translate-x-4 scale-95">`; dialog still centers on viewport (was off-center in v0.4)
+- `portal: false` on any overlay: behavior reverts to v0.4 (in-tree content); inert toggle still works

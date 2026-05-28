@@ -2,6 +2,56 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.5.0 - 2026-05-27
+
+### Breaking
+
+- **Toast public API rewritten**. Toaster is now one-per-page (multiple
+  with distinct IDs allowed) and hosts a `@zag-js/toast` group machine.
+  Apps that subclassed `Components::UI::Toast` or relied on per-Toast
+  Stimulus values (`data-wabi--toast-duration-ms-value`) need to migrate.
+  Programmatic creation now goes through `turbo_stream.wabi_toast(...)`
+  (signature unchanged) or `window.wabiToaster.create({...})`.
+- **Overlays portal to `document.body` by default**. Dialog, Drawer,
+  Tooltip, Popover, DropdownMenu, and Select all move their content (and
+  backdrop/positioner where applicable) to `<body>` on connect. Pass
+  `portal: false` to keep v0.4 in-tree behavior. The shared
+  `WabiPortalRegistry` JS module is now part of every overlay's wabi:add
+  install — it lands at
+  `app/javascript/controllers/wabi/_shared/portal_registry.js`.
+- **Toaster placement default** flips from `:top_right` (Ruby symbol) to
+  `"bottom-end"` (Zag-style string) to match the underlying machine.
+  Apps that explicitly passed `placement: :top_right` need to switch
+  to `placement: "top-end"`.
+
+### Features
+
+- `wabi:update` generator. Per-component diff-aware updates with
+  per-file conflict detection. Flags: `--force`, `--dry-run`. Reads
+  and writes per-file SHA256 hashes in `wabi.lock.json` (additive
+  schema; legacy lockfiles fall back to prompting on every file).
+- Toast group machine via `@zag-js/toast@1.41` — `max`, `gap`,
+  pause-on-group-hover, swipe-to-dismiss.
+- Real portal pattern for the 6 overlays. Resolves the v0.1 carryover
+  documented in `docs/V01-CARRYOVER.md` (#3). Overlays inside
+  transformed/scrollable ancestors now position relative to the
+  viewport.
+
+### Docs
+
+- `+esm` jsdelivr footnote added to 5 component pages
+  (checkbox/select/switch/dialog/tabs) for parity with the other 5
+  Zag-backed components.
+
+### Deferred to v0.6
+
+- Forms wave (RadioGroup/Toggle/ToggleGroup/Slider/Combobox/Command/Form).
+- Nav wave (Sheet/ContextMenu/Pagination/NavigationMenu).
+- Data wave (Calendar/DatePicker/DataTable).
+- Three-way merge in `wabi:update`.
+- Multi-level DropdownMenu nesting (sub-inside-sub).
+- Phlex 2.4 Ruby 4 warnings (upstream).
+
 ## [0.4.0] — 2026-05-27
 
 Sprint 8 — docs completeness + theme polish. The docs site gains the
