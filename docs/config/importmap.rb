@@ -25,3 +25,4 @@ pin "@zag-js/menu",     to: "https://cdn.jsdelivr.net/npm/@zag-js/menu@1.41.0/+e
 pin "@zag-js/tabs",     to: "https://cdn.jsdelivr.net/npm/@zag-js/tabs@1.41.0/+esm"
 pin "@zag-js/accordion", to: "https://cdn.jsdelivr.net/npm/@zag-js/accordion@1.41.0/+esm"
 pin "@zag-js/toggle",   to: "https://cdn.jsdelivr.net/npm/@zag-js/toggle@1.41.0/+esm"
+pin "@zag-js/toggle-group", to: "https://cdn.jsdelivr.net/npm/@zag-js/toggle-group@1.41.0/+esm"

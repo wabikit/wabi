@@ -13,7 +13,7 @@ module Components
           { name: "Theming",      path: "/docs/theming" },
           { name: "Philosophy",   path: "/docs/philosophy" },
         ]},
-        { label: "Forms", items: %w[button checkbox input label radio_group select switch textarea toggle].map(&COMPONENT_LINK) },
+        { label: "Forms", items: %w[button checkbox input label radio_group select switch textarea toggle toggle_group].map(&COMPONENT_LINK) },
         { label: "Layout & Display", items: %w[alert avatar badge card separator].map(&COMPONENT_LINK) },
         { label: "Overlays", items: %w[dialog drawer popover tooltip].map(&COMPONENT_LINK) },
         { label: "Menus", items: [{ name: "Dropdown Menu", path: "/docs/components/dropdown_menu" }] },
