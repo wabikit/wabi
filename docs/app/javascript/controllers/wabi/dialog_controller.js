@@ -27,6 +27,7 @@ export default class extends Controller {
     this.descriptionEl = this.contentEl?.querySelector('[data-wabi--dialog-target="description"]') || null
 
     this.originalParents = {
+      content:    this.contentEl?.parentNode,
       backdrop:   this.backdropEl?.parentNode,
       positioner: this.positionerEl?.parentNode,
     }
@@ -67,17 +68,32 @@ export default class extends Controller {
   isOpen() { return this.openValue }
 
   attachToBody() {
-    // Move positioner (content rides along as its child) + backdrop (sibling).
-    // Don't extract content from positioner — anchored overlays need content
-    // to stay inside positioner for floating-ui positioning to apply.
-    [this.backdropEl, this.positionerEl].forEach((el) => {
-      if (el && el.parentNode !== document.body) document.body.appendChild(el)
-    })
+    // For overlays with a positioner (Dialog), move positioner — content
+    // rides along as its child. For overlays WITHOUT a positioner (Drawer),
+    // move content directly. Then move backdrop (sibling in both cases).
+    if (this.positionerEl) {
+      if (this.positionerEl.parentNode !== document.body) {
+        document.body.appendChild(this.positionerEl)
+      }
+    } else if (this.contentEl) {
+      if (this.contentEl.parentNode !== document.body) {
+        document.body.appendChild(this.contentEl)
+      }
+    }
+    if (this.backdropEl && this.backdropEl.parentNode !== document.body) {
+      document.body.appendChild(this.backdropEl)
+    }
   }
 
   restoreFromBody() {
-    if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
-    if (this.backdropEl   && this.originalParents.backdrop)   this.originalParents.backdrop.appendChild(this.backdropEl)
+    if (this.positionerEl && this.originalParents.positioner) {
+      this.originalParents.positioner.appendChild(this.positionerEl)
+    } else if (this.contentEl && this.originalParents.content) {
+      this.originalParents.content.appendChild(this.contentEl)
+    }
+    if (this.backdropEl && this.originalParents.backdrop) {
+      this.originalParents.backdrop.appendChild(this.backdropEl)
+    }
   }
 
   open()  { this.api()?.setOpen(true)  }

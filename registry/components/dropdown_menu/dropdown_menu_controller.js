@@ -43,8 +43,7 @@ export default class extends Controller {
     })
 
     this.originalParents = {
-      positioner:    this.positionerEl?.parentNode,
-      subPositioner: this.subPositionerEls.map((el) => el?.parentNode),
+      positioner: this.positionerEl?.parentNode,
     }
 
     this.portaled = this.portalValue
@@ -119,22 +118,21 @@ export default class extends Controller {
   }
 
   attachToBody() {
-    // Move parent positioner + each sub positioner. Content (and sub content)
-    // rides along inside its positioner.
+    // Move ONLY parent positioner. Sub positioners live inside parent
+    // content (which is inside parent positioner), so they ride along
+    // and stay nested in the DOM tree. That keeps Zag's hover-bridge
+    // between parent menu items and submenus intact — separating them
+    // as body siblings would cause the mouse path between to register
+    // as "hover left parent" and close the submenu.
     if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
       document.body.appendChild(this.positionerEl)
     }
-    this.subPositionerEls.forEach((el) => {
-      if (el && el.parentNode !== document.body) document.body.appendChild(el)
-    })
   }
 
   restoreFromBody() {
-    if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
-    this.subPositionerEls.forEach((el, idx) => {
-      const parent = this.originalParents.subPositioner[idx]
-      if (el && parent) parent.appendChild(el)
-    })
+    if (this.positionerEl && this.originalParents.positioner) {
+      this.originalParents.positioner.appendChild(this.positionerEl)
+    }
   }
 
   // Toggles the data-wabi-checked attribute on checkbox/radio option items
