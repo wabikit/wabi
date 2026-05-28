@@ -17,6 +17,15 @@ export default class extends Controller {
     this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
     this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
 
+    // Capture in-content targets BEFORE move — Stimulus targets only resolve to
+    // descendants of the controller element, but after the move these live under
+    // <body>. Items/buttons inside content need their captured refs in render().
+    this.closeTriggerEls = this.contentEl
+      ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dialog-target="closeTrigger"]'))
+      : []
+    this.titleEl       = this.contentEl?.querySelector('[data-wabi--dialog-target="title"]') || null
+    this.descriptionEl = this.contentEl?.querySelector('[data-wabi--dialog-target="description"]') || null
+
     this.originalParents = {
       content:    this.contentEl?.parentNode,
       backdrop:   this.backdropEl?.parentNode,
@@ -85,9 +94,9 @@ export default class extends Controller {
 
     if (this.triggerEl)     spreadProps(this.triggerEl,    api.getTriggerProps())
     if (this.positionerEl)  spreadProps(this.positionerEl, api.getPositionerProps())
-    if (this.hasTitleTarget)       spreadProps(this.titleTarget,       api.getTitleProps())
-    if (this.hasDescriptionTarget) spreadProps(this.descriptionTarget, api.getDescriptionProps())
-    this.closeTriggerTargets.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
+    if (this.titleEl)       spreadProps(this.titleEl,       api.getTitleProps())
+    if (this.descriptionEl) spreadProps(this.descriptionEl, api.getDescriptionProps())
+    this.closeTriggerEls.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
 
     if (this.backdropEl) {
       spreadProps(this.backdropEl, api.getBackdropProps())

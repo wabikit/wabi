@@ -21,6 +21,15 @@ export default class extends Controller {
   connect() {
     this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
     this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
+
+    // In-content targets captured before move. trigger/indicator/valueText/
+    // hiddenSelect live OUTSIDE content (in the trigger area) and stay in
+    // Stimulus scope, so we keep using *Target lookups for those.
+    this.listEl           = this.contentEl?.querySelector('[data-wabi--select-target="list"]') || null
+    this.itemEls          = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--select-target="item"]')) : []
+    this.itemIndicatorEls = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--select-target="itemIndicator"]')) : []
+    this.itemTextEls      = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--select-target="itemText"]')) : []
+
     this.originalParents = {
       content:    this.contentEl?.parentNode,
       positioner: this.positionerEl?.parentNode,
@@ -101,7 +110,7 @@ export default class extends Controller {
       spreadProps(this.contentEl, api.getContentProps())
       this.contentEl.hidden = false
     }
-    if (this.hasListTarget)         spreadProps(this.listTarget,         api.getListProps())
+    if (this.listEl)                spreadProps(this.listEl,             api.getListProps())
 
     // ValueText content: api.valueAsString shows the selected label(s) or empty.
     if (this.hasValueTextTarget) {
@@ -109,14 +118,14 @@ export default class extends Controller {
     }
 
     // Per-item props (data-highlighted, data-state=checked, click handlers).
-    this.itemTargets.forEach((el) => {
+    this.itemEls.forEach((el) => {
       const value = el.dataset.wabiValue
       const item  = this.itemsValue.find((i) => i.value === value)
       if (item) spreadProps(el, api.getItemProps({ item }))
     })
 
     // Per-item indicator visibility.
-    this.itemIndicatorTargets.forEach((el) => {
+    this.itemIndicatorEls.forEach((el) => {
       const li    = el.closest("[data-wabi--select-target='item']")
       const value = li?.dataset.wabiValue
       const item  = this.itemsValue.find((i) => i.value === value)
@@ -124,7 +133,7 @@ export default class extends Controller {
     })
 
     // Per-item text props.
-    this.itemTextTargets.forEach((el) => {
+    this.itemTextEls.forEach((el) => {
       const li    = el.closest("[data-wabi--select-target='item']")
       const value = li?.dataset.wabiValue
       const item  = this.itemsValue.find((i) => i.value === value)

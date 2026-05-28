@@ -28,10 +28,17 @@ export default class extends Controller {
     this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
     this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
 
+    // In-content targets captured before move.
+    this.itemEls                = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dropdown-menu-target="item"]')) : []
+    this.optionItemEls          = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dropdown-menu-target="optionItem"]')) : []
+    this.optionItemIndicatorEls = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dropdown-menu-target="optionItemIndicator"]')) : []
+    this.subTriggerEls          = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dropdown-menu-target="subTrigger"]')) : []
+    this.subEls                 = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dropdown-menu-target="sub"]')) : []
+
     // Sub portal nodes: collect content/positioner per sub by index.
     this.subContentEls    = []
     this.subPositionerEls = []
-    this.subTargets.forEach((subEl, idx) => {
+    this.subEls.forEach((subEl, idx) => {
       this.subContentEls[idx]    = subEl.querySelector("[data-wabi--dropdown-menu-target='subContent']")
       this.subPositionerEls[idx] = subEl.querySelector("[data-wabi--dropdown-menu-target='subPositioner']")
     })
@@ -67,7 +74,7 @@ export default class extends Controller {
     // Build a sub machine per sub boundary. Tag each `sub` element with its
     // index so render() can route items/option-items inside it.
     this.subMachines = []
-    this.subTargets.forEach((subEl, idx) => {
+    this.subEls.forEach((subEl, idx) => {
       subEl.dataset.wabiSubIndex = String(idx)
       const subMachine = new VanillaMachine(menu.machine, {
         id: crypto.randomUUID(),
@@ -157,15 +164,15 @@ export default class extends Controller {
   // so the next render() picks up the new checked state. Zag's menu machine
   // doesn't own this state -- callers wire it via onSelect.
   handleOptionToggle(value) {
-    if (!this.hasOptionItemTarget) return
-    const target = this.optionItemTargets.find((el) => el.dataset.wabiValue === value)
+    if (!this.optionItemEls.length) return
+    const target = this.optionItemEls.find((el) => el.dataset.wabiValue === value)
     if (!target) return
     const type = target.dataset.wabiType
     if (type === "checkbox") {
       target.dataset.wabiChecked = target.dataset.wabiChecked === "true" ? "false" : "true"
     } else if (type === "radio") {
       const name = target.dataset.wabiName
-      this.optionItemTargets
+      this.optionItemEls
         .filter((el) => el.dataset.wabiType === "radio" && el.dataset.wabiName === name)
         .forEach((el) => { el.dataset.wabiChecked = (el === target ? "true" : "false") })
     }
@@ -193,7 +200,7 @@ export default class extends Controller {
     }
 
     // Regular menuitem items, routed by closest sub ancestor.
-    this.itemTargets.forEach((el) => {
+    this.itemEls.forEach((el) => {
       spreadProps(el, this.apiFor(el).getItemProps({
         value:    el.dataset.wabiValue,
         disabled: el.dataset.wabiDisabled === "true",
@@ -201,7 +208,7 @@ export default class extends Controller {
     })
 
     // Option items (checkbox / radio), routed by closest sub ancestor.
-    this.optionItemTargets.forEach((el) => {
+    this.optionItemEls.forEach((el) => {
       const value   = el.dataset.wabiValue
       const type    = el.dataset.wabiType    // "checkbox" | "radio"
       const checked = el.dataset.wabiChecked === "true"
@@ -212,7 +219,7 @@ export default class extends Controller {
     })
 
     // Option-item indicators: hidden mirrors the ancestor's data-wabi-checked.
-    this.optionItemIndicatorTargets.forEach((indicator) => {
+    this.optionItemIndicatorEls.forEach((indicator) => {
       const parent = indicator.closest("[data-wabi--dropdown-menu-target='optionItem']")
       indicator.hidden = !(parent && parent.dataset.wabiChecked === "true")
     })
@@ -220,7 +227,7 @@ export default class extends Controller {
     // Sub triggers: parentApi.getTriggerItemProps(childApi) merges parent
     // getItemProps + child getTriggerProps so the same element acts as
     // both an item in the parent menu AND the trigger for the submenu.
-    this.subTriggerTargets.forEach((el) => {
+    this.subTriggerEls.forEach((el) => {
       const subEl = el.closest("[data-wabi--dropdown-menu-target='sub']")
       if (!subEl) return
       const idx = parseInt(subEl.dataset.wabiSubIndex, 10)
@@ -231,7 +238,7 @@ export default class extends Controller {
     })
 
     // Sub positioner + content per sub.
-    this.subTargets.forEach((subEl, idx) => {
+    this.subEls.forEach((subEl, idx) => {
       const subMachine = this.subMachines[idx]
       if (!subMachine) return
       const subApi = menu.connect(subMachine.service, normalizeProps)

@@ -15,6 +15,10 @@ export default class extends Controller {
     this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
     this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
     this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
+    this.closeTriggerEls = this.contentEl
+      ? Array.from(this.contentEl.querySelectorAll('[data-wabi--popover-target="closeTrigger"]'))
+      : []
+
     this.originalParents = {
       content:    this.contentEl?.parentNode,
       positioner: this.positionerEl?.parentNode,
@@ -73,6 +77,6 @@ export default class extends Controller {
       spreadProps(this.contentEl, api.getContentProps())
       this.contentEl.hidden = false
     }
-    this.closeTriggerTargets.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
+    this.closeTriggerEls.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
   }
 }
