@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import * as select from "@zag-js/select"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
-import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 export default class extends Controller {
   static targets = [
@@ -58,10 +57,6 @@ export default class extends Controller {
         this.dispatch("change", { detail: { value: value[0] } })
       },
       onOpenChange: ({ open }) => {
-        // Tracked here (not as a Stimulus value) because select's open state is
-        // machine-internal; isOpen() exposes it for WabiPortalRegistry's inert calc.
-        this.isOpenValue = open
-        WabiPortalRegistry.onOpenChange()
         if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
@@ -70,7 +65,6 @@ export default class extends Controller {
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
-    if (this.portaled) WabiPortalRegistry.register(this)
     this.render()
   }
 
@@ -78,12 +72,9 @@ export default class extends Controller {
     this.unsubscribe?.()
     this.machine?.stop()
     if (this.portaled) {
-      WabiPortalRegistry.unregister(this)
       this.restoreFromBody()
     }
   }
-
-  isOpen() { return !!this.isOpenValue }
 
   attachToBody() {
     // Move positioner; content rides along inside it (do not extract).

@@ -24,6 +24,7 @@ export default class extends Controller {
     }
 
     this.portaled = this.portalValue
+    this.isModalOverlay = this.modalValue
     if (this.portaled) this.attachToBody()
 
     this.machine = new VanillaMachine(popover.machine, {
@@ -32,7 +33,7 @@ export default class extends Controller {
       modal: this.modalValue,
       onOpenChange: ({ open }) => {
         this.openValue = open
-        WabiPortalRegistry.onOpenChange()
+        if (this.isModalOverlay) WabiPortalRegistry.onOpenChange()
         if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
@@ -42,7 +43,7 @@ export default class extends Controller {
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
-    if (this.portaled) WabiPortalRegistry.register(this)
+    if (this.portaled && this.isModalOverlay) WabiPortalRegistry.register(this)
     this.render()
   }
 
@@ -50,7 +51,7 @@ export default class extends Controller {
     this.unsubscribe?.()
     this.machine?.stop()
     if (this.portaled) {
-      WabiPortalRegistry.unregister(this)
+      if (this.isModalOverlay) WabiPortalRegistry.unregister(this)
       this.restoreFromBody()
     }
   }

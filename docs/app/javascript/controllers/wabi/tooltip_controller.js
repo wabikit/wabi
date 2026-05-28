@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import * as tooltip from "@zag-js/tooltip"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
-import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 export default class extends Controller {
   static targets = ["trigger", "positioner", "content"]
@@ -30,7 +29,6 @@ export default class extends Controller {
       closeDelay:  this.closeDelayValue,
       onOpenChange: ({ open }) => {
         this.openValue = open
-        WabiPortalRegistry.onOpenChange()
         if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
@@ -40,7 +38,6 @@ export default class extends Controller {
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
-    if (this.portaled) WabiPortalRegistry.register(this)
     this.render()
   }
 
@@ -48,12 +45,9 @@ export default class extends Controller {
     this.unsubscribe?.()
     this.machine?.stop()
     if (this.portaled) {
-      WabiPortalRegistry.unregister(this)
       this.restoreFromBody()
     }
   }
-
-  isOpen() { return this.openValue }
 
   attachToBody() {
     // Move positioner; content rides along inside it (do not extract).

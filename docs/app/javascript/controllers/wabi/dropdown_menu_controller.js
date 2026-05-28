@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import * as menu from "@zag-js/menu"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
-import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 // Single controller owns the parent menu machine AND a child machine per
 // `sub` boundary. Nested same-type controllers would collide on Stimulus
@@ -60,7 +59,6 @@ export default class extends Controller {
       },
       onOpenChange: ({ open }) => {
         this.openValue = open
-        WabiPortalRegistry.onOpenChange()
         if (this.contentEl) {
           if (open) this.contentEl.removeAttribute("inert")
           else      this.contentEl.setAttribute("inert", "")
@@ -81,7 +79,6 @@ export default class extends Controller {
           this.dispatch("select", { detail: { value } })
         },
         onOpenChange: ({ open }) => {
-          WabiPortalRegistry.onOpenChange()
           const subContEl = this.subContentEls[idx]
           if (subContEl) {
             if (open) subContEl.removeAttribute("inert")
@@ -106,7 +103,6 @@ export default class extends Controller {
       subApi.setParent(this.machine.service)
     })
 
-    if (this.portaled) WabiPortalRegistry.register(this)
     this.render()
   }
 
@@ -118,17 +114,8 @@ export default class extends Controller {
     this.subUnsubscribes?.forEach((unsub) => unsub?.())
     this.subMachines?.forEach((sub) => sub.stop())
     if (this.portaled) {
-      WabiPortalRegistry.unregister(this)
       this.restoreFromBody()
     }
-  }
-
-  isOpen() {
-    if (this.openValue) return true
-    return this.subMachines.some((sub) => {
-      const api = menu.connect(sub.service, normalizeProps)
-      return api.open
-    })
   }
 
   attachToBody() {
