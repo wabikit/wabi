@@ -2,12 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 import * as toast from "@zag-js/toast"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
-// Toaster controller: hosts a single @zag-js/toast group machine. Toasts
-// are created via `controller.create({...})` (called by the
-// `wabi_toast_create` Turbo Stream action) and the machine handles max,
-// gap, swipe, and pause-on-group-hover. There is one Toaster per page by
-// default; multi-placement layouts use multiple Toaster components with
-// distinct IDs.
+// Toaster controller. Hosts a @zag-js/toast group machine + a createStore for
+// group-level config (placement/gap/max/overlap). Each rendered toast gets its
+// OWN VanillaMachine instance wrapping `toast.machine`; the group machine
+// orchestrates the queue, individual machines own per-toast timer/state.
+//
+// To create a toast: use the Stimulus controller's `create(opts)` method
+// (proxies to the store), via window.wabiToaster.create() in JS or via the
+// `wabi_toast_create` custom Turbo Stream action.
 export default class extends Controller {
   static targets = ["template"]
   static values  = {
@@ -19,16 +21,27 @@ export default class extends Controller {
   }
 
   connect() {
+    // Group-level config goes into the store. Per-toast options (duration,
+    // type, swipe overrides) are passed at create() time.
+    this.store = toast.createStore({
+      overlap:   false,
+      placement: this.placementValue,
+      gap:       this.gapValue,
+      max:       this.maxValue,
+    })
+
     this.machine = new VanillaMachine(toast.group.machine, {
-      id:             this.element.id || "wabi-toaster",
-      max:            this.maxValue,
-      gap:            this.gapValue,
-      placement:      this.placementValue,
-      swipeDirection: this.swipeDirectionValue,
-      overlap:        false,
+      id:    this.element.id || "wabi-toaster",
+      store: this.store,
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
+
+    // Per-toast machine registry. Created on first render of an actor,
+    // stopped + removed when the actor is no longer in getToasts().
+    this.itemMachines  = new Map()  // id -> VanillaMachine
+    this.itemUnsubs    = new Map()  // id -> unsubscribe fn
+
     this.render()
 
     this.boundIntercept = this.interceptStream.bind(this)
@@ -39,45 +52,81 @@ export default class extends Controller {
   disconnect() {
     this.unsubscribe?.()
     this.machine?.stop()
+    this.itemUnsubs.forEach((unsub) => unsub?.())
+    this.itemMachines.forEach((m) => m.stop())
+    this.itemUnsubs.clear()
+    this.itemMachines.clear()
     document.removeEventListener("turbo:before-stream-render", this.boundIntercept)
     if (window.wabiToaster === this) delete window.wabiToaster
   }
 
-  create(opts) {
-    this.api().create({ duration: this.durationValue, ...opts })
-  }
-  dismiss(id)  { this.api().dismiss(id)  }
-  pause()      { this.api().pause()      }
-  resume()     { this.api().resume()     }
-
-  api() {
-    return toast.group.connect(this.machine.service, normalizeProps)
-  }
+  // Public API — proxies to the store.
+  create(opts) { return this.store.create({ duration: this.durationValue, ...opts }) }
+  dismiss(id)  { this.store.dismiss(id) }
+  pause(id)    { this.store.pause(id)   }
+  resume(id)   { this.store.resume(id)  }
 
   render() {
-    const api = this.api()
-    spreadProps(this.element, api.getGroupProps())
+    if (!this.machine?.service) return
+    const groupApi = toast.group.connect(this.machine.service, normalizeProps)
+    spreadProps(this.element, groupApi.getGroupProps())
 
-    const wanted = new Set(api.getToasts().map((t) => t.id))
+    const toasts    = groupApi.getToasts()
+    const wantedIds = new Set(toasts.map((t) => t.id))
+
+    // Tear down DOM + machines for actors no longer present.
     this.toastEls().forEach((el) => {
-      if (!wanted.has(el.dataset.toastId)) el.remove()
+      const id = el.dataset.toastId
+      if (wantedIds.has(id)) return
+      this.itemUnsubs.get(id)?.()
+      this.itemMachines.get(id)?.stop()
+      this.itemUnsubs.delete(id)
+      this.itemMachines.delete(id)
+      el.remove()
     })
 
-    api.getToasts().forEach((t) => {
-      let el = this.element.querySelector(`[data-toast-id="${t.id}"]`)
-      if (!el) {
-        el = this.cloneTemplate(t)
+    // Materialize new actors + render every visible item.
+    toasts.forEach((actor, index) => {
+      if (!this.itemMachines.has(actor.id)) {
+        const el = this.cloneTemplate(actor)
         this.element.appendChild(el)
+
+        const itemMachine = new VanillaMachine(toast.machine, {
+          ...actor,
+          index,
+          parent: this.machine.service,
+        })
+        const unsub = itemMachine.subscribe(() => this.renderItem(actor.id))
+        itemMachine.start()
+        this.itemMachines.set(actor.id, itemMachine)
+        this.itemUnsubs.set(actor.id, unsub)
       }
-      const itemApi = toast.connect(t, normalizeProps)
-      spreadProps(el, itemApi.getRootProps())
-      const titleEl = el.querySelector('[data-slot="title"]')
-      const descEl  = el.querySelector('[data-slot="description"]')
-      if (titleEl) titleEl.textContent = t.title  || ""
-      if (descEl)  descEl.textContent  = t.description || ""
-      el.querySelectorAll('[data-slot="close"]').forEach((c) => {
-        spreadProps(c, itemApi.getCloseTriggerProps())
-      })
+      this.renderItem(actor.id)
+    })
+  }
+
+  renderItem(id) {
+    const el          = this.element.querySelector(`[data-toast-id="${id}"]`)
+    const itemMachine = this.itemMachines.get(id)
+    if (!el || !itemMachine?.service) return
+
+    const itemApi = toast.connect(itemMachine.service, normalizeProps)
+    spreadProps(el, itemApi.getRootProps())
+
+    const titleEl = el.querySelector('[data-slot="title"]')
+    const descEl  = el.querySelector('[data-slot="description"]')
+
+    if (titleEl) {
+      spreadProps(titleEl, itemApi.getTitleProps())
+      titleEl.textContent = itemApi.title || ""
+    }
+    if (descEl) {
+      spreadProps(descEl, itemApi.getDescriptionProps())
+      descEl.textContent = itemApi.description || ""
+    }
+
+    el.querySelectorAll('[data-slot="close"]').forEach((c) => {
+      spreadProps(c, itemApi.getCloseTriggerProps())
     })
   }
 
@@ -85,10 +134,10 @@ export default class extends Controller {
     return Array.from(this.element.querySelectorAll("[data-toast-id]"))
   }
 
-  cloneTemplate(t) {
+  cloneTemplate(actor) {
     const tpl = this.templateTarget.content.firstElementChild.cloneNode(true)
-    tpl.dataset.toastId = t.id
-    if (t.type) tpl.classList.add(`appearance-${t.type}`)
+    tpl.dataset.toastId = actor.id
+    if (actor.type) tpl.classList.add(`appearance-${actor.type}`)
     return tpl
   }
 
