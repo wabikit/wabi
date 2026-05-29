@@ -66,7 +66,8 @@ module Views
                     render Components::UI::FormLabel.new(for_: "user_name") { "Name" }
                     form.text_field :name, id: "user_name", required: true,
                       class: "h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    render Components::UI::FormDescription.new { "Your full name." }
+                    render Components::UI::FormDescription.new { "At least 2 characters." }
+                    render Components::UI::FormMessage.new(model: @user, field: :name)
                   end
 
                   render Components::UI::FormField.new do
@@ -74,14 +75,15 @@ module Views
                     form.email_field :email, id: "user_email", required: true,
                       class: "h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     render Components::UI::FormDescription.new { "We'll never share your email." }
-                    render Components::UI::FormMessage.new(text: "Please enter a valid email.")
+                    render Components::UI::FormMessage.new(model: @user, field: :email)
                   end
 
                   render Components::UI::FormField.new do
                     render Components::UI::FormLabel.new(for_: "user_bio") { "Bio" }
                     form.text_area :bio, id: "user_bio", rows: 3,
                       class: "w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    render Components::UI::FormDescription.new { "Optional. Markdown supported." }
+                    render Components::UI::FormDescription.new { "At least 10 characters. Markdown supported." }
+                    render Components::UI::FormMessage.new(model: @user, field: :bio)
                   end
 
                   render Components::UI::FormField.new do
@@ -101,12 +103,25 @@ module Views
                   # this, the browser's native :invalid popover intercepts submit
                   # before our Stimulus controller runs.
                   html: { novalidate: true },
-                  data: { controller: "demo--form", action: "submit->demo--form#submit", turbo: "false" }
+                  data: {
+                    controller: "demo--form",
+                    action: "submit->demo--form#submit",
+                    turbo: "false",
+                    "demo--form-name-min-value": "2",
+                    "demo--form-bio-min-value":  "10",
+                  }
                 ) do |form|
                   render ::Components::UI::FormField.new do
                     render ::Components::UI::FormLabel.new(for_: "user_name") { "Name" }
-                    form.text_field :name, id: "user_name", required: true, class: INPUT_CLASS
-                    render ::Components::UI::FormDescription.new { "Your full name." }
+                    form.text_field :name,
+                      id: "user_name", required: true, class: INPUT_CLASS,
+                      data: { "demo--form-target": "nameInput" }
+                    render ::Components::UI::FormDescription.new { "At least 2 characters." }
+                    render ::Components::UI::FormMessage.new(
+                      text: "Name must be at least 2 characters.",
+                      class: "hidden",
+                      data: { "demo--form-target": "nameError" }
+                    )
                   end
 
                   render ::Components::UI::FormField.new do
@@ -118,14 +133,21 @@ module Views
                     render ::Components::UI::FormMessage.new(
                       text: "Please enter a valid email.",
                       class: "hidden",
-                      data: { "demo--form-target": "errorMessage" }
+                      data: { "demo--form-target": "emailError" }
                     )
                   end
 
                   render ::Components::UI::FormField.new do
                     render ::Components::UI::FormLabel.new(for_: "user_bio") { "Bio" }
-                    form.text_area :bio, id: "user_bio", rows: 3, class: TEXTAREA_CLASS
-                    render ::Components::UI::FormDescription.new { "Optional. Markdown supported." }
+                    form.text_area :bio,
+                      id: "user_bio", rows: 3, class: TEXTAREA_CLASS,
+                      data: { "demo--form-target": "bioInput" }
+                    render ::Components::UI::FormDescription.new { "At least 10 characters. Markdown supported." }
+                    render ::Components::UI::FormMessage.new(
+                      text: "Bio must be at least 10 characters.",
+                      class: "hidden",
+                      data: { "demo--form-target": "bioError" }
+                    )
                   end
 
                   render ::Components::UI::FormField.new do
