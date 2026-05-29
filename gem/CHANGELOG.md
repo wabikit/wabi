@@ -2,6 +2,77 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.6.0 - 2026-05-28
+
+### Features
+
+- **Forms wave** — 7 new components bring Wabi to 27 total:
+  - `Toggle` — pressable toggle button (Bold/Italic style). Distinct from
+    Switch, which is the sliding control. Variants: appearance
+    (default/outline) and size (default/sm/lg). Powered by `@zag-js/toggle`.
+  - `RadioGroup` + `RadioGroupItem` + `RadioGroupIndicator` —
+    single-select radio group with keyboard navigation via
+    `@zag-js/radio-group`. Hidden `<input type="radio">` per item for
+    form submission.
+  - `ToggleGroup` + `ToggleGroupItem` — group of toggles. `type: :single`
+    enforces single selection (radio-like with button styling);
+    `type: :multiple` allows multiple simultaneous selections. Hidden
+    inputs emitted by the controller (`name` for single, `name[]` for
+    multiple).
+  - `Slider` + `SliderLabel` + `SliderTrack` + `SliderRange` +
+    `SliderThumb` — value picker. Accepts Integer (single thumb) or
+    Array (range mode). Vertical orientation via
+    `orientation: :vertical`. Range inputs submit as `name_min`/`name_max`.
+  - `Combobox` + 8 sub-components — input with autocomplete dropdown.
+    Static items only in v0.6 (async deferred to v0.7). Uses the
+    Sprint 9 portal pattern as a non-modal anchored overlay. A sibling
+    `<input type="hidden">` mirrors the selected value so form
+    submission posts the value, not the typed label.
+  - `Form` + `FormField` + `FormLabel` + `FormDescription` +
+    `FormMessage` — Phlex wrapper over Rails' `form_with` helper.
+    FormMessage auto-extracts ActiveModel errors via `model:` + `field:`
+    kwargs, with `text:` override for explicit messages. FormLabel uses
+    `for_:` (matching the standalone `Label` convention).
+  - `Command` + 7 sub-components — Cmd+K palette. Composition of Dialog
+    (modal) and Combobox (filterable list). The combobox controller is
+    mounted on an inner wrapper so it can't overwrite the dialog's
+    role / aria-modal / data-state attributes (a trap discovered during
+    smoke testing — `spreadProps` from `@zag-js/vanilla` strips existing
+    attrs). Selection-closes-palette is **deferred to v0.7** (the
+    `wabi--command` bridge can't reach across the dialog portal yet).
+
+### Docs
+
+- Form docs page demonstrates a multi-field example (name + email + bio
+  + newsletter checkbox + submit) with client-side validation and
+  inline success / per-field error messages — no page reload.
+- Sidebar preserves its scroll position across Turbo navigations and
+  highlights the active component with `bg-accent + font-semibold +
+  shadow-sm` via Tailwind's `aria-[current=page]:` arbitrary variant.
+- Docs `Pagefind` indexer now derives `ROUTES_TO_INDEX` from
+  `ComponentsController::ALL` instead of a hand-maintained list, so
+  future component additions are crawled automatically.
+
+### Deferred to v0.7
+
+- Combobox async items (server-side fetching via Turbo Frame or
+  callback).
+- Combobox `ComboboxItemIndicator` wiring (exported but not consumed by
+  the controller render loop).
+- Combobox `disabled:` on individual items (data attribute is set but
+  the collection doesn't pass `isItemDisabled`).
+- Slider marks/ticks at specific track positions.
+- Command palette item selection auto-closing the dialog (the
+  `wabi--command` bridge listener doesn't cross the dialog portal —
+  needs Stimulus Outlets or a document-level listener).
+- Toast `@zag-js/toast` group machine retry + Sonner-style animations
+  (carried over from v0.5).
+- Overlay controller boilerplate refactor (the now-six overlay
+  controllers share ~50 LOC of attach/restore + ref capture).
+- Vestigial `wabi--<name>-target="portal"` wrappers cleanup.
+- DropdownMenu multi-level submenu nesting.
+- `wabi:update` three-way merge.
+
 ## 0.5.0 - 2026-05-27
 
 ### Breaking

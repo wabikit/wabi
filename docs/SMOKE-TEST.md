@@ -171,3 +171,23 @@ v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` 
 - /docs/components/select: open select; list under body; selection updates trigger label
 - **Transformed-ancestor test**: wrap a dialog example in `<div class="transform translate-x-4 scale-95">`; dialog still centers on viewport (was off-center in v0.4)
 - `portal: false` on any overlay: behavior reverts to v0.4 (in-tree content); inert toggle still works
+
+## Sprint 10 / v0.6.0
+
+### Forms wave — browser smoke per component
+- /docs/components/toggle — press button toggles `data-state` between on/off
+- /docs/components/radio_group — arrow keys move selection; click selects; hidden `<input type="radio">` updated
+- /docs/components/toggle_group — single mode enforces one; multiple allows many; hidden inputs (`name` or `name[]`) emitted
+- /docs/components/slider — drag thumb updates value; range mode shows two thumbs; hidden inputs (`name` or `name_min`/`name_max`) emitted
+- /docs/components/slider — vertical example renders in vertical orientation
+- /docs/components/combobox — type to filter, click to select; sibling hidden input mirrors the selected VALUE (not the label)
+- /docs/components/form — multi-field demo: name (>= 2 chars), email (regex), bio (>= 10 chars); valid → green success banner, invalid → per-field FormMessage error; no page reload
+- /docs/components/command — trigger opens dialog at top-1/4 of viewport with backdrop; close via Escape; dialog content has `data-state` correctly toggling
+
+### Two-controller composition
+- /docs/components/command — DevTools confirms `data-controller="wabi--dialog wabi--command"` on root + nested `data-controller="wabi--combobox"` inside the dialog content; both connect, no attribute conflicts
+
+### Docs site polish
+- Sidebar scroll position persists across Turbo navigations (scroll to Toast, click a Forms component, sidebar stays scrolled)
+- Active sidebar link has `bg-accent + font-semibold + shadow-sm` (look for visible "selected" treatment, not just a color shift)
+- Pagefind search includes every component page (Toggle, RadioGroup, ToggleGroup, Slider, Combobox, Form, Command)
