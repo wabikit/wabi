@@ -21,7 +21,7 @@ module Views
         FRAMEWORKS = [
           { value: "rails",   label: "Ruby on Rails" },
           { value: "django",  label: "Django" },
-          { value: "phoenix", label: "Phoenix" },
+          { value: "phoenix", label: "Phoenix", disabled: true },
           { value: "express", label: "Express" },
           { value: "fastapi", label: "FastAPI" },
         ].freeze
@@ -50,7 +50,7 @@ module Views
                 items = [
                   { value: "rails",   label: "Ruby on Rails" },
                   { value: "django",  label: "Django" },
-                  { value: "phoenix", label: "Phoenix" },
+                  { value: "phoenix", label: "Phoenix", disabled: true },
                   { value: "express", label: "Express" },
                   { value: "fastapi", label: "FastAPI" },
                 ]
@@ -64,7 +64,7 @@ module Views
                   render Components::UI::ComboboxPositioner.new do
                     render Components::UI::ComboboxContent.new do
                       items.each do |item|
-                        render Components::UI::ComboboxItem.new(value: item[:value]) { item[:label] }
+                        render Components::UI::ComboboxItem.new(value: item[:value], disabled: item[:disabled]) { item[:label] }
                       end
                     end
                   end
@@ -79,7 +79,7 @@ module Views
                   render ::Components::UI::ComboboxPositioner.new do
                     render ::Components::UI::ComboboxContent.new do
                       FRAMEWORKS.each do |item|
-                        render ::Components::UI::ComboboxItem.new(value: item[:value]) { item[:label] }
+                        render ::Components::UI::ComboboxItem.new(value: item[:value], disabled: item[:disabled]) { item[:label] }
                       end
                     end
                   end

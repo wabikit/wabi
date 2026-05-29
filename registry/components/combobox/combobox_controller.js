@@ -38,6 +38,7 @@ export default class extends Controller {
       items,
       itemToString: (item) => item.label,
       itemToValue:  (item) => item.value,
+      isItemDisabled: (item) => item.disabled === true,
     })
 
     this.machine = new VanillaMachine(combobox.machine, {

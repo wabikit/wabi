@@ -84,6 +84,16 @@ RSpec.describe "Combobox composition" do
       expect(output).to include('data-wabi-value="rails"')
       expect(output).to include("Ruby on Rails")
     end
+
+    it "does NOT emit data-disabled when @disabled is false" do
+      output = described_class.new(value: "rails").call { "x" }
+      expect(output).not_to include('data-disabled')
+    end
+
+    it "emits data-disabled when @disabled is true" do
+      output = described_class.new(value: "rails", disabled: true).call { "x" }
+      expect(output).to include('data-disabled')
+    end
   end
 
   describe Components::UI::ComboboxItemIndicator do

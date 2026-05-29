@@ -18,12 +18,20 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
+        # data-disabled emitted ONLY when @disabled is true. The Tailwind
+        # `data-[disabled]:*` variants match attribute PRESENCE regardless
+        # of value, so emitting `data-wabi-disabled="false"` would still trigger
+        # the disabled styling — keep it absent in the not-disabled case.
+        # When @disabled is true, the SSR attribute matches Zag's hydration
+        # output (`isItemDisabled` callback in the controller's collection).
+        item_data = {
+          "wabi--combobox-target": "item",
+          "wabi-value": @value,
+        }
+        item_data[:disabled] = "true" if @disabled
+
         li(
-          data: {
-            "wabi--combobox-target": "item",
-            "wabi-value": @value,
-            "wabi-disabled": @disabled.to_s,
-          },
+          data: item_data,
           class: merge_class(ITEM_CLASS, user_class)
         ) do
           yield if block_given?
