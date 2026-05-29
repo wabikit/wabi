@@ -32,7 +32,6 @@ module Views
 
         INPUT_CLASS    = "h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
         TEXTAREA_CLASS = "w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-        BUTTON_CLASS   = "h-10 rounded-md bg-primary text-primary-foreground px-4 text-sm font-medium hover:bg-primary/90"
 
         def view_template
           fake_user = FakeUser.new(name: "", email: "", bio: "", newsletter: true, errors_hash: {})
@@ -93,8 +92,7 @@ module Views
                     end
                   end
 
-                  form.submit "Save",
-                    class: "h-10 rounded-md bg-primary text-primary-foreground px-4"
+                  render Components::UI::Button.new(type: "submit") { "Save" }
                 end
               RUBY
                 render ::Components::UI::Form.new(
@@ -143,7 +141,7 @@ module Views
                     data: { "demo--form-target": "successMessage" }
                   ) { "✓ Submitted. (Demo only — no data was sent.)" }
 
-                  form.submit "Save", class: BUTTON_CLASS
+                  render ::Components::UI::Button.new(type: "submit") { "Save" }
                 end
               end
 
