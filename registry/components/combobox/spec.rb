@@ -85,4 +85,14 @@ RSpec.describe "Combobox composition" do
       expect(output).to include("Ruby on Rails")
     end
   end
+
+  describe Components::UI::ComboboxItemIndicator do
+    it "renders a hidden span wired as the itemIndicator target" do
+      output = described_class.new.call
+      expect(output).to include('data-wabi--combobox-target="itemIndicator"')
+      # Match the boolean `hidden` ATTRIBUTE on the span, not a stray
+      # substring inside a class name or other attribute value.
+      expect(output).to match(/<span[^>]*\shidden(\s|>|\/)/)
+    end
+  end
 end

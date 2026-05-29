@@ -22,6 +22,9 @@ export default class extends Controller {
     this.itemEls = this.contentEl
       ? Array.from(this.contentEl.querySelectorAll('[data-wabi--combobox-target="item"]'))
       : []
+    this.itemIndicatorEls = this.contentEl
+      ? Array.from(this.contentEl.querySelectorAll('[data-wabi--combobox-target="itemIndicator"]'))
+      : []
 
     this.originalParents = {
       positioner: this.positionerEl?.parentNode,
@@ -100,6 +103,16 @@ export default class extends Controller {
       const value = el.dataset.wabiValue
       const item  = this.itemsValue.find((i) => i.value === value)
       if (item) spreadProps(el, api.getItemProps({ item }))
+    })
+
+    this.itemIndicatorEls.forEach((el) => {
+      // Walk up to the nearest item element to look up the item object,
+      // then spread Zag's per-item indicator props (toggles `hidden` based
+      // on whether the item is currently selected).
+      const itemEl = el.closest('[data-wabi--combobox-target="item"]')
+      const value  = itemEl?.dataset.wabiValue
+      const item   = this.itemsValue.find((i) => i.value === value)
+      if (item) spreadProps(el, api.getItemIndicatorProps({ item }))
     })
   }
 }

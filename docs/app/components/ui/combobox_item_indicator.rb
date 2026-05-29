@@ -12,6 +12,7 @@ module Components
       def view_template
         user_class = @attrs.delete(:class)
         span(
+          hidden: true,
           data: { "wabi--combobox-target": "itemIndicator" },
           class: merge_class("absolute right-2 flex h-3.5 w-3.5 items-center justify-center", user_class)
         )
