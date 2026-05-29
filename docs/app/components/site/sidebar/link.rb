@@ -15,8 +15,9 @@ module Components
             a(href: @path,
               "aria-current": (@active ? "page" : nil),
               class: "block px-2 py-1 rounded-sm text-sm text-muted-foreground " \
-                     "hover:text-foreground " \
-                     "aria-current:bg-accent aria-current:text-foreground aria-current:font-medium") { @name }
+                     "hover:text-foreground transition-colors " \
+                     "aria-[current=page]:bg-accent aria-[current=page]:text-foreground " \
+                     "aria-[current=page]:font-semibold aria-[current=page]:shadow-sm") { @name }
           end
         end
       end

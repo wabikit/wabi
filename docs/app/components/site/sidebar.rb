@@ -26,8 +26,11 @@ module Components
       end
 
       def view_template
-        aside(class: "sidebar-mobile-target hidden lg:block w-56 flex-shrink-0 border-r border-border " \
-                     "h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto py-6 px-4") do
+        aside(
+          data: { controller: "site--sidebar-scroll" },
+          class: "sidebar-mobile-target hidden lg:block w-56 flex-shrink-0 border-r border-border " \
+                 "h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto py-6 px-4"
+        ) do
           GROUPS.each do |group|
             render Components::Site::Sidebar::Group.new(
               label: group[:label], items: group[:items], current_path: @current_path
