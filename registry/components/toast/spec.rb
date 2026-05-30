@@ -79,5 +79,10 @@ RSpec.describe "Toast composition" do
       output = described_class.new(title: "Hello").call
       expect(output).to include("pointer-events-auto")
     end
+
+    it "renders with data-state=open SSR so the transition starts at the open keyframe" do
+      output = described_class.new(title: "Saved").call
+      expect(output).to include('data-state="open"')
+    end
   end
 end

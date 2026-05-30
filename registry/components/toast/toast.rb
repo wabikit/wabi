@@ -12,7 +12,10 @@ module Components
     # visible, advanced stacking) is a v0.2 follow-up.
     class Toast < Wabi::Base
       variants do
-        base "pointer-events-auto w-full overflow-hidden rounded-md border border-input p-4 shadow-md"
+        base "pointer-events-auto w-full overflow-hidden rounded-md border border-input p-4 shadow-md " \
+             "transition-all duration-300 ease-out " \
+             "data-[state=open]:translate-x-0 data-[state=open]:opacity-100 " \
+             "data-[state=closed]:translate-x-full data-[state=closed]:opacity-0"
 
         variant :appearance, {
           info:        "bg-background text-foreground",
@@ -35,6 +38,7 @@ module Components
           role: "status",
           "aria-live": "polite",
           "aria-atomic": "true",
+          "data-state": "open",
           data: {
             controller: "wabi--toast",
             "wabi--toast-duration-ms-value": @duration_ms.to_s,

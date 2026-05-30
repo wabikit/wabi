@@ -16,6 +16,20 @@ export default class extends Controller {
     this.element.addEventListener("mouseleave", this.boundResume)
     this.element.addEventListener("focusin",    this.boundPause)
     this.element.addEventListener("focusout",   this.boundResume)
+
+    // Enter animation: SSR sets data-state="open" (no-JS fallback: toast is
+    // visible without JS). For JS, snap to "closed" synchronously before the
+    // browser's first paint of this node (connect() fires in a MutationObserver
+    // microtask, before layout/paint), then flip back to "open" on the next
+    // animation frame so the CSS transition (translate-x + opacity) plays the
+    // slide-in. The double-rAF ensures the "closed" state is committed to
+    // style before the "open" flip is scheduled, which is necessary for the
+    // transition to register on browsers that batch style recalcs.
+    this.element.dataset.state = "closed"
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { this.element.dataset.state = "open" })
+    })
+
     this.start()
   }
 
@@ -55,11 +69,22 @@ export default class extends Controller {
   }
 
   // Stimulus action: `data-action="click->wabi--toast#dismiss"` on the close
-  // button removes the toast from the DOM (Stimulus runs disconnect()
-  // automatically, which clears the timer).
+  // button animates the toast out before removing it from the DOM.
   dismiss() {
     this.element.dispatchEvent(new CustomEvent("wabi-toast:dismiss", { bubbles: true }))
-    this.element.remove()
+    // Flip to closed state; CSS transition (transition-all duration-300)
+    // animates translate-x + opacity. Listen for transitionend to remove.
+    this.element.dataset.state = "closed"
+    const handler = () => {
+      this.element.removeEventListener("transitionend", handler)
+      this.element.remove()
+    }
+    this.element.addEventListener("transitionend", handler)
+    // Safety fallback: if transitionend doesn't fire (e.g. element is
+    // display:none-ish, or prefers-reduced-motion), force-remove after 350ms.
+    setTimeout(() => {
+      if (this.element.isConnected) this.element.remove()
+    }, 350)
   }
 
   clearTimer() {
