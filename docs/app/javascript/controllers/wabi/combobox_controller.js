@@ -3,7 +3,7 @@ import * as combobox from "@zag-js/combobox"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator", "hiddenInput"]
+  static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator", "hiddenInput", "loading"]
   static values  = {
     name:        String,
     items:       Array,
@@ -11,6 +11,10 @@ export default class extends Controller {
     placeholder: { type: String,  default: "Select an option..." },
     disabled:    { type: Boolean, default: false },
     portal:      { type: Boolean, default: true  },
+    url:         { type: String,  default: "" },
+    param:       { type: String,  default: "q" },
+    debounce:    { type: Number,  default: 250 },
+    minLength:   { type: Number,  default: 1 },
   }
 
   connect() {
@@ -42,7 +46,7 @@ export default class extends Controller {
       // CommandItem always emits data-wabi-disabled="true|false". (ComboboxItem
       // emits data-disabled only when disabled — but ComboboxItem is never used
       // in this DOM-fallback path: standalone comboboxes always pass items-value.)
-      disabled: el.dataset.wabiDisabled === "true",
+      disabled: el.hasAttribute("data-disabled") || el.dataset.wabiDisabled === "true",
     }))
     this.items = this.itemsValue.length > 0 ? this.itemsValue : domItems
 

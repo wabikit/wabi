@@ -11,6 +11,7 @@ require_relative "combobox_positioner"
 require_relative "combobox_content"
 require_relative "combobox_item"
 require_relative "combobox_item_indicator"
+require_relative "combobox_loading"
 
 RSpec.describe "Combobox composition" do
   describe Components::UI::Combobox do
@@ -40,6 +41,28 @@ RSpec.describe "Combobox composition" do
       out_off = described_class.new(name: "x", items: [], portal: false).call
       expect(out_on).to include('data-wabi--combobox-portal-value="true"')
       expect(out_off).to include('data-wabi--combobox-portal-value="false"')
+    end
+
+    it "emits async values when url: is given" do
+      output = described_class.new(name: "f", items: [], url: "/search", param: "term", debounce: 300, min_length: 2).call
+      expect(output).to include('data-wabi--combobox-url-value="/search"')
+      expect(output).to include('data-wabi--combobox-param-value="term"')
+      expect(output).to include('data-wabi--combobox-debounce-value="300"')
+      expect(output).to include('data-wabi--combobox-min-length-value="2"')
+    end
+
+    it "omits the url value when not async (sync mode unchanged)" do
+      output = described_class.new(name: "f", items: []).call
+      expect(output).not_to include('wabi--combobox-url-value')
+    end
+  end
+
+  describe Components::UI::ComboboxLoading do
+    it "renders a hidden loading slot wired as the loading target" do
+      output = described_class.new.call { "Loading…" }
+      expect(output).to include('data-wabi--combobox-target="loading"')
+      expect(output).to match(/<div[^>]*\shidden(\s|>|\/)/)
+      expect(output).to include("Loading…")
     end
   end
 
