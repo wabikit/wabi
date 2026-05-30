@@ -62,8 +62,12 @@ export default class extends Controller {
     if (value.length === 1) {
       this.appendHidden(this.nameValue, value[0])
     } else if (value.length === 2) {
-      this.appendHidden(`${this.nameValue}_min`, value[0])
-      this.appendHidden(`${this.nameValue}_max`, value[1])
+      // Range mode: nested-bracket params so Rails parses
+      // params[:price][:min] / params[:price][:max] — strong-params can
+      // permit them via params.require(:price).permit(:min, :max).
+      // BREAKING in v0.7 from v0.6's `name_min` / `name_max`.
+      this.appendHidden(`${this.nameValue}[min]`, value[0])
+      this.appendHidden(`${this.nameValue}[max]`, value[1])
     }
   }
 

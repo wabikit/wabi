@@ -86,7 +86,7 @@ module Views
                 li { "Arrow keys (←/→/↑/↓) adjust the focused thumb by one step." }
                 li { "Home / End jump the focused thumb to the min / max." }
                 li { "PageUp / PageDown move the focused thumb by a larger step (Zag default = 10× step)." }
-                li { "Hidden <input type=\"hidden\"> per value (range mode emits name_min + name_max)." }
+                li { "Single-thumb sliders submit as `name=<value>`. Range sliders submit as `name[min]=...&name[max]=...`, which Rails parses to nested params (e.g. params[:price][:min])." }
               end
             end
           end
