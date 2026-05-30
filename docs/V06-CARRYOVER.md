@@ -55,16 +55,17 @@ See [CHANGELOG.md](../CHANGELOG.md) for the full release entry.
   to `combobox.collection({ items, isItemDisabled })`.
 - **Slider marks/ticks** — visual markers at specific track positions.
   Uncommon use case; deferred.
-- **Slider hidden-input naming for range mode** — currently emits
+- ~~**Slider hidden-input naming for range mode** — currently emits
   `name_min` / `name_max`. Whether to switch to Rails-native
   `name[min]` / `name[max]` is an open question; once shipped, changing
-  it is breaking.
-- **Command palette item selection** — the `wabi--command` bridge
+  it is breaking.~~ ✅ **Resolved in v0.7** — switched to `name[min]` /
+  `name[max]` (breaking). See CHANGELOG 0.7.0.
+- ~~**Command palette item selection** — the `wabi--command` bridge
   listens on the Command root for `wabi--combobox:change`, but the
   dialog portal moves the combobox under `<body>`, so the bubbling
-  event never reaches the bridge. Two fix paths: (a) document-level
-  event delegation with id-linkage filtering, (b) Stimulus Outlets so
-  the bridge can find the dialog regardless of DOM proximity.
+  event never reaches the bridge.~~ ✅ **Resolved in v0.7** — took fix
+  path (a): document-level event delegation with id-linkage filtering.
+  See V07-CARRYOVER.
 
 ## Known limits documented in v0.6
 

@@ -191,3 +191,30 @@ v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` 
 - Sidebar scroll position persists across Turbo navigations (scroll to Toast, click a Forms component, sidebar stays scrolled)
 - Active sidebar link has `bg-accent + font-semibold + shadow-sm` (look for visible "selected" treatment, not just a color shift)
 - Pagefind search includes every component page (Toggle, RadioGroup, ToggleGroup, Slider, Combobox, Form, Command)
+
+## Sprint 11 / v0.7.0
+
+### Combobox
+- /docs/components/combobox — selecting an item shows the ItemIndicator on it only
+- /docs/components/combobox — the disabled item (Phoenix) is visually muted and not selectable (`[data-disabled]` / `aria-disabled` present)
+
+### Overlays cleanup
+- Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select still open/close cleanly
+- DevTools: no outer `data-wabi--<name>-target="portal"` wrapper in any overlay (incl. the Command dialog)
+
+### Slider (BREAKING)
+- /docs/components/slider — range example submits hidden inputs as `price[min]=…&price[max]=…` (DevTools → inspect the hidden inputs / Network on submit); single-thumb still `name=<value>`
+
+### Command
+- /docs/components/command — open palette → items are navigable immediately → click an item WITHOUT typing → dialog closes
+- DevTools: root has `data-controller="wabi--command wabi--dialog"` (command-first); the dialog content (portaled to `<body>`) carries a `data-wabi--command-id` matching the root; no "bridge disabled" console warning
+- The "Preview in v0.6" amber callout is gone
+
+### Toast
+- /docs/components/toast — append: toast slides in from the right (translate-x-full → 0, opacity 0 → 1)
+- dismiss (timer or X button): toast slides out + fades, then is removed from the DOM; sticky toasts (duration ≤ 0) don't auto-dismiss
+- Multi-Toaster: `window.wabiToasters` has keyed entries; default `wabi-toaster` still works; `window.wabiToaster` alias still points at a toaster
+
+### DropdownMenu
+- /docs/components/dropdown_menu — open menu → enter the outer submenu → enter the inner sub-submenu inside it; all three levels open
+- Keyboard: ↓ to focus a sub-trigger, → opens it; works at each nesting level

@@ -2,6 +2,71 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.7.0 - 2026-05-30
+
+Quality + finish: 10 items closing v0.6 deferrals and v0.5 long-tail. No new
+components; one breaking change.
+
+### Breaking
+
+- **Slider range hidden inputs** now use Rails-native bracket params
+  (`name[min]` / `name[max]`) instead of v0.6's flat `name_min` /
+  `name_max`. Apps consuming range params must update their strong params
+  from `params.permit(:price_min, :price_max)` to
+  `params.require(:price).permit(:min, :max)`. Single-thumb sliders are
+  unchanged (`name=<value>`).
+
+### Features
+
+- **Combobox `ComboboxItemIndicator`** now wires through `getItemIndicatorProps`
+  and toggles `hidden` based on the item's selected state (was unwired in v0.6).
+- **Combobox per-item `disabled`** flag now works end-to-end: an item can carry
+  `{ value, label, disabled: true }` and the controller passes `isItemDisabled`
+  to the Zag collection so Zag stamps `data-disabled` on the matching `<li>` for
+  the `data-[disabled]:*` Tailwind variants.
+- **Command palette item selection closes the dialog.** The bridge controller
+  listens at `document` level for `wabi--combobox:change` and filters by id
+  linkage (`data-wabi--command-id`, read via `getAttribute` — the double-dash
+  attribute does not round-trip through `dataset`) to survive the dialog portal
+  move. The controllers are ordered `wabi--command wabi--dialog` so the bridge
+  stamps the dialog content before the dialog portals it. The "Preview in v0.6"
+  callout is removed.
+- **Command auto-opens the combobox when the dialog opens** so item clicks work
+  immediately, without typing first. The combobox builds its collection from the
+  rendered items when no `items` value is supplied.
+- **Toast Sonner-style animations.** Slides in from the right on enter and slides
+  back out on exit — pure CSS transitions on `data-state`, no plugin dependency.
+- **`window.wabiToasters[id]`** keyed registry (via a new `wabi--toaster`
+  controller on the `<ol>`) for pages with multiple Toaster instances.
+  `turbo_stream.wabi_toast(toaster_id: "alerts", ...)` targets a specific one.
+  `window.wabiToaster` remains as a deprecated alias to the most-recently-
+  connected toaster for back-compat.
+- **DropdownMenu N-level submenus.** Sub-inside-sub nesting now works to
+  arbitrary depth (v0.6 was single-level only). Each sub links to its closest
+  ancestor sub or the root menu.
+
+### Cleanup / Perf
+
+- **Vestigial `*-target="portal"` wrappers removed** from the portal-using
+  overlays (Dialog, Drawer, Command dialog). The wrapper was a v0.4 placeholder
+  for `portal: false` mode and added no behavior in v0.5+. (Popover, Tooltip,
+  DropdownMenu, and Select had already been cleaned in a prior refactor.)
+- **`WabiPortalRegistry.applyInert`** caches the body-siblings list. The cache is
+  invalidated only when register/unregister changes the portal node set;
+  `onOpenChange` reuses the cache and just toggles the inert attribute.
+
+### Deferred to v0.8
+
+- Combobox async items (server-side fetching).
+- Toast `@zag-js/toast` group machine retry.
+- `wabi:update` three-way merge on conflict.
+- Slider marks/ticks.
+- Overlay controller boilerplate refactor (the overlay controllers share
+  attach/restore boilerplate; the DropdownMenu ancestor-lookup is duplicated
+  between `connect()` and `render()`).
+- `motion-reduce:transition-none` on Toast (and overlays) for reduced-motion.
+- `WabiPortalRegistry` unregister/restoreFromBody ordering tidy.
+
 ## 0.6.0 - 2026-05-28
 
 ### Features
