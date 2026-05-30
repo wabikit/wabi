@@ -84,5 +84,10 @@ RSpec.describe "Toast composition" do
       output = described_class.new(title: "Saved").call
       expect(output).to include('data-state="open"')
     end
+
+    it "includes motion-reduce:transition-none for prefers-reduced-motion support" do
+      output = described_class.new(title: "x").call
+      expect(output).to include("motion-reduce:transition-none")
+    end
   end
 end

@@ -56,6 +56,11 @@ RSpec.describe "Select composition" do
     expect(output).to match(/data-wabi--select-target="content"[^>]*\binert\b/)
   end
 
+  it "SelectContent includes motion-reduce:transition-none for prefers-reduced-motion support" do
+    output = Components::UI::SelectContent.new.call { "" }
+    expect(output).to include("motion-reduce:transition-none")
+  end
+
   it "renders SelectItem with role=option, item target, and item value" do
     output = Components::UI::SelectItem.new(value: "foo").call { "Foo" }
     expect(output).to include('role="option"')

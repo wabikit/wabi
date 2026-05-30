@@ -13,7 +13,8 @@ module Components
     class Toast < Wabi::Base
       variants do
         base "pointer-events-auto w-full overflow-hidden rounded-md border border-input p-4 shadow-md " \
-             "transition-all duration-300 ease-out " \
+             "transition-all duration-300 ease-out motion-reduce:transition-none " \
+             "motion-reduce:translate-x-0 motion-reduce:opacity-100 " \
              "data-[state=open]:translate-x-0 data-[state=open]:opacity-100 " \
              "data-[state=closed]:translate-x-full data-[state=closed]:opacity-0"
 

@@ -46,6 +46,11 @@ RSpec.describe "DropdownMenu composition" do
     expect(output).not_to match(/data-wabi--dropdown-menu-target="positioner"[^>]*hidden/)
   end
 
+  it "DropdownMenuContent includes motion-reduce:transition-none for prefers-reduced-motion support" do
+    output = Components::UI::DropdownMenuContent.new.call { "" }
+    expect(output).to include("motion-reduce:transition-none")
+  end
+
   it "DropdownMenuItem emits role=menuitem with value + disabled data attrs" do
     output = Components::UI::DropdownMenuItem.new(value: "edit").call { "Edit" }
     expect(output).to include('role="menuitem"')

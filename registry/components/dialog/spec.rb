@@ -57,6 +57,11 @@ RSpec.describe "Dialog composition" do
     expect(output).to match(/data-wabi--dialog-target="content"\s+inert\b/)
   end
 
+  it "DialogContent includes motion-reduce:transition-none for prefers-reduced-motion support" do
+    output = Components::UI::DialogContent.new.call { "" }
+    expect(output).to include("motion-reduce:transition-none")
+  end
+
   it "renders DialogTitle as <h2> with the title target" do
     output = Components::UI::DialogTitle.new.call { "Confirm" }
     expect(output).to include('<h2')

@@ -7,7 +7,7 @@ module Components
     class TooltipContent < Wabi::Base
       variants do
         base "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground shadow-md " \
-             "transition-opacity duration-150 ease-out " \
+             "transition-opacity duration-150 ease-out motion-reduce:transition-none " \
              "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
              "data-[state=closed]:pointer-events-none"
       end

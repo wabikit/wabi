@@ -7,7 +7,7 @@ module Components
     class PopoverContent < Wabi::Base
       variants do
         base "z-50 w-72 rounded-md border border-input bg-popover p-4 text-popover-foreground shadow-md outline-none " \
-             "transition-opacity duration-200 ease-out " \
+             "transition-opacity duration-200 ease-out motion-reduce:transition-none " \
              "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
              "data-[state=closed]:pointer-events-none"
       end

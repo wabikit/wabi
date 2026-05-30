@@ -8,7 +8,7 @@ module Components
       variants do
         base "z-50 min-w-[8rem] overflow-hidden rounded-md border border-input bg-popover p-1 " \
              "text-popover-foreground shadow-md outline-none " \
-             "transition-opacity duration-150 ease-out " \
+             "transition-opacity duration-150 ease-out motion-reduce:transition-none " \
              "data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
              "data-[state=closed]:pointer-events-none"
       end

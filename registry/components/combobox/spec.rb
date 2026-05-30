@@ -97,6 +97,11 @@ RSpec.describe "Combobox composition" do
       expect(output).to include('inert')
       expect(output).to include('data-state="closed"')
     end
+
+    it "includes motion-reduce:transition-none for prefers-reduced-motion support" do
+      output = described_class.new.call
+      expect(output).to include("motion-reduce:transition-none")
+    end
   end
 
   describe Components::UI::ComboboxItem do

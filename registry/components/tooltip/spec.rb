@@ -28,6 +28,11 @@ RSpec.describe "Tooltip composition" do
     expect(output).not_to match(/data-wabi--tooltip-target="positioner"[^>]*hidden/)
   end
 
+  it "TooltipContent includes motion-reduce:transition-none for prefers-reduced-motion support" do
+    output = Components::UI::TooltipContent.new.call { "Hi" }
+    expect(output).to include("motion-reduce:transition-none")
+  end
+
   it "carries portal-value true by default" do
     output = Components::UI::Tooltip.new.call
     expect(output).to include('data-wabi--tooltip-portal-value="true"')

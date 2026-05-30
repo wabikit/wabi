@@ -29,6 +29,11 @@ RSpec.describe "Popover composition" do
     expect(output).not_to match(/data-wabi--popover-target="positioner"[^>]*hidden/)
   end
 
+  it "PopoverContent includes motion-reduce:transition-none for prefers-reduced-motion support" do
+    output = Components::UI::PopoverContent.new.call { "" }
+    expect(output).to include("motion-reduce:transition-none")
+  end
+
   it "PopoverClose renders an outlined Button tagged as closeTrigger" do
     output = Components::UI::PopoverClose.new.call { "Done" }
     expect(output).to include('<button')

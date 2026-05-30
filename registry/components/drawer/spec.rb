@@ -64,6 +64,11 @@ RSpec.describe "Drawer composition" do
     expect(output).to include('aria-modal="true"')
   end
 
+  it "DrawerContent includes motion-reduce:transition-none for prefers-reduced-motion support" do
+    output = Components::UI::DrawerContent.new(side: :right).call { "" }
+    expect(output).to include("motion-reduce:transition-none")
+  end
+
   it "DrawerClose renders an outlined Button tagged as closeTrigger" do
     output = Components::UI::DrawerClose.new.call { "Cancel" }
     expect(output).to include('<button')
