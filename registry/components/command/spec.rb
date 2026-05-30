@@ -15,12 +15,17 @@ RSpec.describe "Command composition" do
     it "renders a div wired to BOTH the wabi--dialog and wabi--command controllers" do
       output = described_class.new.call
       expect(output).to include('<div')
-      expect(output).to include('data-controller="wabi--dialog wabi--command"')
+      expect(output).to include('data-controller="wabi--command wabi--dialog"')
     end
 
     it "modal=true is forced on the dialog (command is always a modal palette)" do
       output = described_class.new.call
       expect(output).to include('data-wabi--dialog-modal-value="true"')
+    end
+
+    it "renders a unique data-wabi--command-id used by the bridge for cross-portal event filtering" do
+      output = described_class.new.call
+      expect(output).to match(/data-wabi--command-id="cmd-[a-f0-9-]{36}"/)
     end
   end
 

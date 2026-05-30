@@ -24,19 +24,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Command" }
-              p(class: "text-muted-foreground mb-2") { description }
-
-              div(class: "rounded-md border border-amber-500/50 bg-amber-500/10 p-4 mb-8 text-sm") do
-                p(class: "font-medium mb-1") { "Preview in v0.6" }
-                p(class: "text-muted-foreground") do
-                  plain "The dialog opens and closes, the modal/portal/focus-trap from "
-                  code(class: "text-xs") { "wabi--dialog" }
-                  plain " works, and the layout is final. Two carry-overs to v0.7: "
-                  plain "(a) items wired into the nested combobox machine for keyboard nav + selection, "
-                  plain "(b) the wabi--command bridge listening across the dialog portal so item selection auto-closes the palette. "
-                  plain "For now, treat selection as render-only and close the dialog manually."
-                end
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
