@@ -9,6 +9,7 @@ js_dependencies:
   "@zag-js/vanilla": "^1.41"
 shared_files:
   - "_shared/portal_registry.js"
+  - "_shared/overlay_portal.js"
 tailwind:
   extend: {}
 metadata:

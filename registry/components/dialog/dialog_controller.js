@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import * as dialog from "@zag-js/dialog"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
+import { capturePortalRefs, attachToBody, restoreFromBody } from "controllers/wabi/_shared/overlay_portal"
 
 export default class extends Controller {
   static targets = ["trigger", "backdrop", "positioner", "content", "title", "description", "closeTrigger"]
@@ -12,9 +13,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
-    this.backdropEl   = this.hasBackdropTarget   ? this.backdropTarget   : null
-    this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
+    capturePortalRefs(this)
     this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
 
     // Capture in-content targets BEFORE move — Stimulus targets only resolve to
@@ -26,15 +25,9 @@ export default class extends Controller {
     this.titleEl       = this.contentEl?.querySelector('[data-wabi--dialog-target="title"]') || null
     this.descriptionEl = this.contentEl?.querySelector('[data-wabi--dialog-target="description"]') || null
 
-    this.originalParents = {
-      content:    this.contentEl?.parentNode,
-      backdrop:   this.backdropEl?.parentNode,
-      positioner: this.positionerEl?.parentNode,
-    }
-
     this.portaled = this.portalValue
     this.isModalOverlay = this.modalValue
-    if (this.portaled) this.attachToBody()
+    if (this.portaled) attachToBody(this)
 
     this.machine = new VanillaMachine(dialog.machine, {
       id: this.element.id || crypto.randomUUID(),
@@ -60,41 +53,12 @@ export default class extends Controller {
     this.unsubscribe?.()
     this.machine?.stop()
     if (this.portaled) {
+      restoreFromBody(this)
       if (this.isModalOverlay) WabiPortalRegistry.unregister(this)
-      this.restoreFromBody()
     }
   }
 
   isOpen() { return this.openValue }
-
-  attachToBody() {
-    // For overlays with a positioner (Dialog), move positioner — content
-    // rides along as its child. For overlays WITHOUT a positioner (Drawer),
-    // move content directly. Then move backdrop (sibling in both cases).
-    if (this.positionerEl) {
-      if (this.positionerEl.parentNode !== document.body) {
-        document.body.appendChild(this.positionerEl)
-      }
-    } else if (this.contentEl) {
-      if (this.contentEl.parentNode !== document.body) {
-        document.body.appendChild(this.contentEl)
-      }
-    }
-    if (this.backdropEl && this.backdropEl.parentNode !== document.body) {
-      document.body.appendChild(this.backdropEl)
-    }
-  }
-
-  restoreFromBody() {
-    if (this.positionerEl && this.originalParents.positioner) {
-      this.originalParents.positioner.appendChild(this.positionerEl)
-    } else if (this.contentEl && this.originalParents.content) {
-      this.originalParents.content.appendChild(this.contentEl)
-    }
-    if (this.backdropEl && this.originalParents.backdrop) {
-      this.originalParents.backdrop.appendChild(this.backdropEl)
-    }
-  }
 
   open()  { this.api()?.setOpen(true)  }
   close() { this.api()?.setOpen(false) }

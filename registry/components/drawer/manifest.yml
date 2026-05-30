@@ -7,6 +7,7 @@ ruby_dependencies: []
 js_dependencies: {}
 shared_files:
   - "_shared/portal_registry.js"
+  - "_shared/overlay_portal.js"
 tailwind:
   extend: {}
 metadata:

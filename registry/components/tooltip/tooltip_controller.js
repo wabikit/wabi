@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as tooltip from "@zag-js/tooltip"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
+import { capturePortalRefs, attachToBody, restoreFromBody } from "controllers/wabi/_shared/overlay_portal"
 
 export default class extends Controller {
   static targets = ["trigger", "positioner", "content"]
@@ -12,15 +13,11 @@ export default class extends Controller {
   }
 
   connect() {
-    this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
-    this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
+    capturePortalRefs(this)
     this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
-    this.originalParents = {
-      positioner: this.positionerEl?.parentNode,
-    }
 
     this.portaled = this.portalValue
-    if (this.portaled) this.attachToBody()
+    if (this.portaled) attachToBody(this)
 
     this.machine = new VanillaMachine(tooltip.machine, {
       id: this.element.id || crypto.randomUUID(),
@@ -45,19 +42,8 @@ export default class extends Controller {
     this.unsubscribe?.()
     this.machine?.stop()
     if (this.portaled) {
-      this.restoreFromBody()
+      restoreFromBody(this)
     }
-  }
-
-  attachToBody() {
-    // Move positioner; content rides along inside it (do not extract).
-    if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
-      document.body.appendChild(this.positionerEl)
-    }
-  }
-
-  restoreFromBody() {
-    if (this.positionerEl && this.originalParents.positioner) this.originalParents.positioner.appendChild(this.positionerEl)
   }
 
   render() {
