@@ -39,26 +39,24 @@ module Components
         # applies `inert` on the content when closed so tab order skips it.
         # Without that switch, `hidden` cascades display:none and CSS
         # transitions never run (the element snaps off-screen mid-fade).
-        div(data: { "wabi--dialog-target": "portal" }) do
+        div(
+          data: { "wabi--dialog-target": "backdrop" },
+          "data-state": "closed",
+          class: BACKDROP_CLASS
+        )
+        div(
+          data: { "wabi--dialog-target": "positioner" },
+          class: POSITIONER_CLASS
+        ) do
           div(
-            data: { "wabi--dialog-target": "backdrop" },
+            role: "dialog",
+            "aria-modal": "true",
             "data-state": "closed",
-            class: BACKDROP_CLASS
-          )
-          div(
-            data: { "wabi--dialog-target": "positioner" },
-            class: POSITIONER_CLASS
+            data: { "wabi--dialog-target": "content" },
+            inert: true,
+            class: merge_class(tokens, user_class)
           ) do
-            div(
-              role: "dialog",
-              "aria-modal": "true",
-              "data-state": "closed",
-              data: { "wabi--dialog-target": "content" },
-              inert: true,
-              class: merge_class(tokens, user_class)
-            ) do
-              yield if block_given?
-            end
+            yield if block_given?
           end
         end
       end

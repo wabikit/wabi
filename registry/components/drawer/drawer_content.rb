@@ -40,22 +40,20 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        div(data: { "wabi--dialog-target": "portal" }) do
-          div(
-            data: { "wabi--dialog-target": "backdrop" },
-            "data-state": "closed",
-            class: BACKDROP_CLASS
-          )
-          div(
-            role: "dialog",
-            "aria-modal": "true",
-            "data-state": "closed",
-            data: { "wabi--dialog-target": "content" },
-            inert: true,
-            class: merge_class(BASE, SIDE_CLASSES.fetch(@side), user_class)
-          ) do
-            yield if block_given?
-          end
+        div(
+          data: { "wabi--dialog-target": "backdrop" },
+          "data-state": "closed",
+          class: BACKDROP_CLASS
+        )
+        div(
+          role: "dialog",
+          "aria-modal": "true",
+          "data-state": "closed",
+          data: { "wabi--dialog-target": "content" },
+          inert: true,
+          class: merge_class(BASE, SIDE_CLASSES.fetch(@side), user_class)
+        ) do
+          yield if block_given?
         end
       end
     end

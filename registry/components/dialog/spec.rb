@@ -36,9 +36,8 @@ RSpec.describe "Dialog composition" do
     expect(output).to include("Open")
   end
 
-  it "renders DialogContent with portal > backdrop + positioner > content (role=dialog)" do
+  it "renders DialogContent with backdrop + positioner > content (role=dialog)" do
     output = Components::UI::DialogContent.new.call { "" }
-    expect(output).to include('data-wabi--dialog-target="portal"')
     expect(output).to include('data-wabi--dialog-target="backdrop"')
     expect(output).to include('data-wabi--dialog-target="positioner"')
     expect(output).to include('data-wabi--dialog-target="content"')
@@ -56,7 +55,6 @@ RSpec.describe "Dialog composition" do
     expect(output).to include('data-wabi--dialog-target="backdrop" data-state="closed"')
     expect(output).to include('data-state="closed" data-wabi--dialog-target="content"')
     expect(output).to match(/data-wabi--dialog-target="content"\s+inert\b/)
-    expect(output).not_to match(/data-wabi--dialog-target="portal"[^>]*hidden/)
   end
 
   it "renders DialogTitle as <h2> with the title target" do

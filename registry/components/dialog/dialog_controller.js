@@ -4,7 +4,7 @@ import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 import { WabiPortalRegistry } from "controllers/wabi/_shared/portal_registry"
 
 export default class extends Controller {
-  static targets = ["trigger", "portal", "backdrop", "positioner", "content", "title", "description", "closeTrigger"]
+  static targets = ["trigger", "backdrop", "positioner", "content", "title", "description", "closeTrigger"]
   static values  = {
     open:   { type: Boolean, default: false },
     modal:  { type: Boolean, default: true  },
