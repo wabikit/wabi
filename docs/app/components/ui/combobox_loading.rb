@@ -13,6 +13,7 @@ module Components
         user_class = @attrs.delete(:class)
         div(
           hidden: true,
+          "aria-live": "polite",
           data: { "wabi--combobox-target": "loading" },
           class: merge_class("px-2 py-1.5 text-sm text-muted-foreground", user_class)
         ) do

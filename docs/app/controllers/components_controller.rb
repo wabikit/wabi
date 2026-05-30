@@ -12,6 +12,17 @@ class ComponentsController < ApplicationController
     slider combobox form command
   ].freeze
 
+  FRAMEWORKS = [
+    { value: "rails",   label: "Ruby on Rails" },
+    { value: "django",  label: "Django" },
+    { value: "phoenix", label: "Phoenix" },
+    { value: "express", label: "Express" },
+    { value: "fastapi", label: "FastAPI" },
+    { value: "laravel", label: "Laravel" },
+    { value: "spring",  label: "Spring" },
+    { value: "flask",   label: "Flask" },
+  ].freeze
+
   def index
     render Views::Pages::Components::Index.new
   end
@@ -22,5 +33,16 @@ class ComponentsController < ApplicationController
 
     klass = "Views::Pages::Components::#{name.camelize}".constantize
     render klass.new
+  end
+
+  def combobox_search
+    q = params[:q].to_s.downcase
+    matches = FRAMEWORKS.select { |f| f[:label].downcase.include?(q) }
+    html = if matches.empty?
+      %(<li class="px-2 py-1.5 text-sm text-muted-foreground">No results</li>)
+    else
+      matches.map { |f| ::Components::UI::ComboboxItem.new(value: f[:value]).call { f[:label] } }.join
+    end
+    render html: html.html_safe, layout: false
   end
 end

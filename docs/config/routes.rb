@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   get "/docs/philosophy",             to: "pages#philosophy",      as: :philosophy_doc
   get "/docs/theming",                to: "pages#theming",         as: :theming_doc
   get "/docs/themes",                 to: "pages#themes"
-  get "/docs/components",             to: "components#index", as: :component_index
-  get "/docs/components/:name",       to: "components#show",  as: :component_doc,
+  get "/docs/components",                      to: "components#index", as: :component_index
+  get "/docs/components/combobox/search",      to: "components#combobox_search", as: :combobox_search
+  get "/docs/components/:name",                to: "components#show",  as: :component_doc,
       constraints: { name: /[a-z][a-z0-9_]*/ }
 
   # Registry endpoints — consumed by the wabi CLI in user apps

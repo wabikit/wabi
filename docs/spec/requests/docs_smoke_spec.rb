@@ -48,6 +48,22 @@ RSpec.describe "Docs smoke", type: :request do
     end
   end
 
+  describe "Combobox async search" do
+    it "GET /docs/components/combobox/search returns an item fragment" do
+      get "/docs/components/combobox/search", params: { q: "rails" }
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('data-wabi--combobox-target="item"')
+      expect(response.body).to include("Ruby on Rails")
+    end
+
+    it "GET /docs/components/combobox/search with no match returns a No results fragment" do
+      get "/docs/components/combobox/search", params: { q: "zzzznomatch" }
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("No results")
+      expect(response.body).not_to include('data-wabi--combobox-target="item"')
+    end
+  end
+
   describe "SearchBox" do
     it "renders the search div in the header on non-bare routes" do
       get "/docs/components"

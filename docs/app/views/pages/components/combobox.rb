@@ -86,6 +86,55 @@ module Views
                 end
               end
 
+              h2(id: "async", class: "text-2xl font-semibold mt-8 mb-4") { "Async (server-rendered items)" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                "Pass url: to fetch server-rendered ComboboxItem fragments on each keystroke. " \
+                "The controller debounces input, aborts stale requests, and swaps items into the content."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Combobox.new(
+                  name: "framework_async",
+                  items: [],
+                  placeholder: "Search frameworks...",
+                  url: "/docs/components/combobox/search",
+                  param: "q",
+                  debounce: 250,
+                  min_length: 1,
+                ) do
+                  render Components::UI::ComboboxLabel.new { "Framework (async)" }
+                  render Components::UI::ComboboxControl.new do
+                    render Components::UI::ComboboxInput.new
+                    render Components::UI::ComboboxTrigger.new
+                  end
+                  render Components::UI::ComboboxPositioner.new do
+                    render Components::UI::ComboboxContent.new do
+                      render Components::UI::ComboboxLoading.new { "Loading..." }
+                    end
+                  end
+                end
+              RUBY
+                render ::Components::UI::Combobox.new(
+                  name: "framework_async",
+                  items: [],
+                  placeholder: "Search frameworks...",
+                  url: "/docs/components/combobox/search",
+                  param: "q",
+                  debounce: 250,
+                  min_length: 1,
+                ) do
+                  render ::Components::UI::ComboboxLabel.new { "Framework (async)" }
+                  render ::Components::UI::ComboboxControl.new do
+                    render ::Components::UI::ComboboxInput.new
+                    render ::Components::UI::ComboboxTrigger.new
+                  end
+                  render ::Components::UI::ComboboxPositioner.new do
+                    render ::Components::UI::ComboboxContent.new do
+                      render ::Components::UI::ComboboxLoading.new { "Loading..." }
+                    end
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",
