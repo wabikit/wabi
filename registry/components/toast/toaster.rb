@@ -39,6 +39,7 @@ module Components
           id: @id,
           role: "region",
           "aria-label": "Notifications",
+          data: { controller: "wabi--toaster" },
           class: merge_class(
             "fixed z-50 flex flex-col gap-2 w-96 max-w-[calc(100vw-2rem)] h-fit pointer-events-none list-none p-0 m-0",
             PLACEMENT_CLASSES.fetch(@placement),

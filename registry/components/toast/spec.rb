@@ -14,6 +14,17 @@ RSpec.describe "Toast composition" do
       expect(output).to include('aria-label="Notifications"')
     end
 
+    it "wires the wabi--toaster Stimulus controller for global registry" do
+      output = described_class.new.call
+      expect(output).to include('data-controller="wabi--toaster"')
+    end
+
+    it "preserves the custom id for named Toaster instances" do
+      output = described_class.new(id: "alerts").call
+      expect(output).to include('id="alerts"')
+      expect(output).to include('data-controller="wabi--toaster"')
+    end
+
     it "places the toaster per the placement option (default top_right)" do
       output = described_class.new.call
       expect(output).to include("top-4")
