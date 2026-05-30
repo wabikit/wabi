@@ -23,7 +23,7 @@ module Views
               h1(class: "text-4xl font-bold mb-2") { "DropdownMenu" }
               p(class: "text-muted-foreground mb-8") do
                 "Floating menu with keyboard navigation, type-ahead, click/Escape dismiss, " \
-                "single-level submenus, and option (checkbox/radio) items."
+                "multi-level submenus, and option (checkbox/radio) items."
               end
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
@@ -73,6 +73,57 @@ module Views
                 end
               end
 
+              h2(id: "composition-with-two-level-submenu", class: "text-2xl font-semibold mt-8 mb-4") { "Two-level submenu nesting" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                "Submenus can nest arbitrarily deep. The controller walks the DOM to discover each sub's " \
+                "parent machine, so an inner Sub automatically chains to the outer Sub instead of the root."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::DropdownMenu.new do
+                  render Components::UI::DropdownMenuTrigger.new(class: "...") { "Actions ▾" }
+                  render Components::UI::DropdownMenuContent.new do
+                    render Components::UI::DropdownMenuItem.new(value: "edit") { "Edit" }
+                    render Components::UI::DropdownMenuSub.new do
+                      render Components::UI::DropdownMenuSubTrigger.new(value: "share") { "Share" }
+                      render Components::UI::DropdownMenuSubContent.new do
+                        render Components::UI::DropdownMenuItem.new(value: "email") { "Email" }
+                        render Components::UI::DropdownMenuSub.new do
+                          render Components::UI::DropdownMenuSubTrigger.new(value: "export") { "Export" }
+                          render Components::UI::DropdownMenuSubContent.new do
+                            render Components::UI::DropdownMenuItem.new(value: "pdf") { "PDF" }
+                            render Components::UI::DropdownMenuItem.new(value: "csv") { "CSV" }
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              RUBY
+                render ::Components::UI::DropdownMenu.new do
+                  render ::Components::UI::DropdownMenuTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Actions ▾" }
+                  render ::Components::UI::DropdownMenuContent.new do
+                    render ::Components::UI::DropdownMenuItem.new(value: "edit") { "Edit" }
+                    render ::Components::UI::DropdownMenuSub.new do
+                      render ::Components::UI::DropdownMenuSubTrigger.new(value: "share") { "Share" }
+                      render ::Components::UI::DropdownMenuSubContent.new do
+                        render ::Components::UI::DropdownMenuItem.new(value: "email") { "Email" }
+                        render ::Components::UI::DropdownMenuSub.new do
+                          render ::Components::UI::DropdownMenuSubTrigger.new(value: "export") { "Export" }
+                          render ::Components::UI::DropdownMenuSubContent.new do
+                            render ::Components::UI::DropdownMenuItem.new(value: "pdf") { "PDF" }
+                            render ::Components::UI::DropdownMenuItem.new(value: "csv") { "CSV" }
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
@@ -85,7 +136,7 @@ module Views
                 li { "Keyboard nav: ↑/↓ between items, → opens submenu, ← / Esc closes." }
                 li { "Type-ahead jumps to the first item starting with the typed character." }
                 li { "Content carries inert when closed — out of tab order + accessibility tree (Zag onOpenChange toggle)." }
-                li { "v0.2 limit: single-level nesting (no sub-inside-a-sub). Multi-level is v0.3+ work." }
+                li { "N-level nesting (v0.7): a sub-inside-a-sub works to arbitrary depth — each sub links to its closest ancestor sub or the root menu." }
               end
             end
           end

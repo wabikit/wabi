@@ -182,6 +182,36 @@ RSpec.describe "DropdownMenu composition" do
     expect(composed).to include('data-wabi--dropdown-menu-target="optionItem"')
   end
 
+  describe "two-level submenu nesting" do
+    it "renders nested sub-sub structure with two distinct sub boundaries and unique ids" do
+      composed = Class.new(Phlex::HTML) do
+        def view_template
+          render Components::UI::DropdownMenu.new do
+            render Components::UI::DropdownMenuTrigger.new { "Open" }
+            render Components::UI::DropdownMenuContent.new do
+              render Components::UI::DropdownMenuSub.new do
+                render Components::UI::DropdownMenuSubTrigger.new(value: "share") { "Share" }
+                render Components::UI::DropdownMenuSubContent.new do
+                  render Components::UI::DropdownMenuSub.new do
+                    render Components::UI::DropdownMenuSubTrigger.new(value: "export") { "Export" }
+                    render Components::UI::DropdownMenuSubContent.new do
+                      render Components::UI::DropdownMenuItem.new(value: "pdf") { "PDF" }
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end.new.call
+
+      expect(composed.scan('data-wabi--dropdown-menu-target="sub"').size).to eq(2)
+      sub_ids = composed.scan(/data-wabi-sub-id="([^"]+)"/).flatten
+      expect(sub_ids.size).to eq(2)
+      expect(sub_ids.uniq.size).to eq(2)
+    end
+  end
+
   it "composes into a full menu" do
     composed = Class.new(Phlex::HTML) do
       def view_template

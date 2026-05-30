@@ -8,10 +8,12 @@ import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 // parent), so all sub machinery lives here. Item / option-item targets are
 // routed to the right machine via closest("[...-target='sub']").
 //
-// Sub limit for v0.1: single-level nesting. Multi-level nesting works in
-// Zag itself (setChild can chain) but needs an extra wrapping pass we
-// haven't put in yet -- a sub's items only see this controller, not their
-// own sub controller, so a sub-inside-a-sub isn't supported.
+// N-level nesting (v0.7): each `sub` boundary carries a unique
+// data-wabi-sub-id. The controller starts every sub machine, then links
+// each to its parent — the closest ANCESTOR sub (walked via the DOM), or
+// the root menu when there is no ancestor sub — by chaining Zag's
+// setChild/setParent. This models a chain instead of a star, so a
+// sub-inside-a-sub works to arbitrary depth.
 export default class extends Controller {
   static targets = [
     "trigger", "positioner", "content", "item", "optionItem", "optionItemIndicator",
@@ -68,7 +70,10 @@ export default class extends Controller {
 
     // Build a sub machine per sub boundary. Tag each `sub` element with its
     // index so render() can route items/option-items inside it.
+    // Each sub also carries a unique `data-wabi-sub-id` (set by DropdownMenuSub)
+    // so we can look machines up by DOM element across arbitrary nesting depth.
     this.subMachines = []
+    this.subMachineBySubId = {}
     this.subEls.forEach((subEl, idx) => {
       subEl.dataset.wabiSubIndex = String(idx)
       const subMachine = new VanillaMachine(menu.machine, {
@@ -86,6 +91,9 @@ export default class extends Controller {
         },
       })
       this.subMachines.push(subMachine)
+      // Index by the stable sub-id so parent-lookup by DOM walk is O(1).
+      const subId = subEl.dataset.wabiSubId
+      if (subId) this.subMachineBySubId[subId] = subMachine
     })
 
     // Start everything before wiring parent <-> child so both services exist.
@@ -95,11 +103,33 @@ export default class extends Controller {
     this.subMachines.forEach((sub) => sub.start())
 
     // setChild / setParent take MenuService (NOT api). Wire after start.
-    const parentApi = menu.connect(this.machine.service, normalizeProps)
-    this.subMachines.forEach((sub) => {
-      parentApi.setChild(sub.service)
-      const subApi = menu.connect(sub.service, normalizeProps)
-      subApi.setParent(this.machine.service)
+    //
+    // N-level chain: each sub walks up the DOM to find its closest ancestor
+    // `[data-wabi--dropdown-menu-target="sub"]`. If found, that ancestor sub's
+    // machine is the parent; otherwise the root machine is the parent.
+    // This generalises the flat star topology (all subs → root) to an
+    // arbitrarily-deep chain (sub-inside-sub-inside-sub…).
+    this.subEls.forEach((subEl, idx) => {
+      const subMachine = this.subMachines[idx]
+      if (!subMachine) return
+
+      // Walk up from subEl's parentElement (not subEl itself) to avoid
+      // self-matching.
+      const ancestorSubEl = subEl.parentElement?.closest("[data-wabi--dropdown-menu-target='sub']")
+      let parentMachine
+      if (ancestorSubEl) {
+        const ancestorSubId = ancestorSubEl.dataset.wabiSubId
+        parentMachine = ancestorSubId ? this.subMachineBySubId[ancestorSubId] : null
+        // Fall back to root if the ancestor sub id isn't in our map (edge case).
+        if (!parentMachine) parentMachine = this.machine
+      } else {
+        parentMachine = this.machine
+      }
+
+      const parentApi = menu.connect(parentMachine.service, normalizeProps)
+      parentApi.setChild(subMachine.service)
+      const subApi = menu.connect(subMachine.service, normalizeProps)
+      subApi.setParent(parentMachine.service)
     })
 
     this.render()
@@ -202,6 +232,12 @@ export default class extends Controller {
     // Sub triggers: parentApi.getTriggerItemProps(childApi) merges parent
     // getItemProps + child getTriggerProps so the same element acts as
     // both an item in the parent menu AND the trigger for the submenu.
+    //
+    // For N-level nesting the "parent" of this sub-trigger is NOT always the
+    // root menu — it is the machine that owns the menu containing this trigger.
+    // We determine that by finding the closest ancestor sub element above the
+    // sub boundary that encloses this trigger, then looking up that machine.
+    // If no ancestor sub exists, the root machine is the owner.
     this.subTriggerEls.forEach((el) => {
       const subEl = el.closest("[data-wabi--dropdown-menu-target='sub']")
       if (!subEl) return
@@ -209,7 +245,20 @@ export default class extends Controller {
       const subMachine = this.subMachines[idx]
       if (!subMachine) return
       const subApi = menu.connect(subMachine.service, normalizeProps)
-      spreadProps(el, api.getTriggerItemProps(subApi))
+
+      // Find the parent machine: walk above subEl to the closest ancestor sub.
+      const ancestorSubEl = subEl.parentElement?.closest("[data-wabi--dropdown-menu-target='sub']")
+      let ownerApi
+      if (ancestorSubEl) {
+        const ancestorSubId = ancestorSubEl.dataset.wabiSubId
+        const ancestorMachine = ancestorSubId ? this.subMachineBySubId[ancestorSubId] : null
+        ownerApi = ancestorMachine
+          ? menu.connect(ancestorMachine.service, normalizeProps)
+          : api
+      } else {
+        ownerApi = api
+      }
+      spreadProps(el, ownerApi.getTriggerItemProps(subApi))
     })
 
     // Sub positioner + content per sub.
