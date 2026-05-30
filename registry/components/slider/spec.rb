@@ -43,6 +43,24 @@ RSpec.describe "Slider composition" do
       output = described_class.new(name: "volume", value: 50).call
       expect(output).to include('data-wabi--slider-orientation-value="horizontal"')
     end
+
+    it "renders a marker group with one marker per mark when marks: given" do
+      output = described_class.new(name: "vol", value: 50, marks: [{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]).call
+      expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
+      expect(output).to include('data-wabi-mark-value="50"')
+      expect(output).to include("50%")
+    end
+
+    it "renders no marker group when marks: omitted" do
+      output = described_class.new(name: "vol", value: 50).call
+      expect(output).not_to include('data-wabi--slider-target="marker"')
+    end
+
+    it "normalizes bare integer marks to value hashes" do
+      output = described_class.new(name: "vol", value: 50, marks: [0, 50, 100]).call
+      expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
+      expect(output).to include('data-wabi-mark-value="100"')
+    end
   end
 
   describe Components::UI::SliderTrack do

@@ -73,6 +73,25 @@ module Views
                 end
               end
 
+              h2(id: "marks", class: "text-2xl font-semibold mt-8 mb-4") { "With Marks" }
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Slider.new(name: "volume", value: 50, min: 0, max: 100, marks: [{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]) do
+                  render Components::UI::SliderLabel.new { "Volume" }
+                  render Components::UI::SliderTrack.new do
+                    render Components::UI::SliderRange.new
+                  end
+                  render Components::UI::SliderThumb.new(index: 0)
+                end
+              RUBY
+                render ::Components::UI::Slider.new(name: "volume_marks", value: 50, min: 0, max: 100, marks: [{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]) do
+                  render ::Components::UI::SliderLabel.new { "Volume" }
+                  render ::Components::UI::SliderTrack.new do
+                    render ::Components::UI::SliderRange.new
+                  end
+                  render ::Components::UI::SliderThumb.new(index: 0)
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

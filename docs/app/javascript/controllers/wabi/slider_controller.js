@@ -3,7 +3,7 @@ import * as slider from "@zag-js/slider"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["label", "track", "range", "thumb"]
+  static targets = ["label", "track", "range", "thumb", "markerGroup", "marker"]
   static values  = {
     name:        String,
     value:       Array,
@@ -50,6 +50,12 @@ export default class extends Controller {
     this.thumbTargets.forEach((el) => {
       const index = parseInt(el.dataset.wabiIndex, 10)
       spreadProps(el, api.getThumbProps({ index }))
+    })
+
+    if (this.hasMarkerGroupTarget) spreadProps(this.markerGroupTarget, api.getMarkerGroupProps())
+    this.markerTargets.forEach((el) => {
+      const value = parseFloat(el.dataset.wabiMarkValue)
+      spreadProps(el, api.getMarkerProps({ value }))
     })
 
     this.syncHiddenInputs()
