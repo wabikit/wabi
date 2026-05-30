@@ -33,9 +33,21 @@ export default class extends Controller {
     this.portaled = this.portalValue
     if (this.portaled) this.attachToBody()
 
-    const items = this.itemsValue
+    // When items-value is empty (e.g. Command palette renders items as static
+    // HTML rather than passing a JSON array), build the collection from the
+    // captured DOM elements so Zag can spread getItemProps onto them.
+    const domItems = this.itemEls.map((el) => ({
+      value:    el.dataset.wabiValue    || "",
+      label:    el.dataset.wabiLabel    || el.textContent.trim(),
+      // CommandItem always emits data-wabi-disabled="true|false". (ComboboxItem
+      // emits data-disabled only when disabled — but ComboboxItem is never used
+      // in this DOM-fallback path: standalone comboboxes always pass items-value.)
+      disabled: el.dataset.wabiDisabled === "true",
+    }))
+    this.items = this.itemsValue.length > 0 ? this.itemsValue : domItems
+
     const collection = combobox.collection({
-      items,
+      items: this.items,
       itemToString: (item) => item.label,
       itemToValue:  (item) => item.value,
       isItemDisabled: (item) => item.disabled === true,
@@ -74,6 +86,20 @@ export default class extends Controller {
     if (this.portaled) this.restoreFromBody()
   }
 
+  // Imperative open/close actions, used by sibling controllers (e.g. the
+  // wabi--command bridge auto-opens this combobox when its dialog opens).
+  open() {
+    if (!this.machine) return
+    const api = combobox.connect(this.machine.service, normalizeProps)
+    if (typeof api.setOpen === "function") api.setOpen(true)
+  }
+
+  close() {
+    if (!this.machine) return
+    const api = combobox.connect(this.machine.service, normalizeProps)
+    if (typeof api.setOpen === "function") api.setOpen(false)
+  }
+
   attachToBody() {
     if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
       document.body.appendChild(this.positionerEl)
@@ -102,7 +128,7 @@ export default class extends Controller {
 
     this.itemEls.forEach((el) => {
       const value = el.dataset.wabiValue
-      const item  = this.itemsValue.find((i) => i.value === value)
+      const item  = this.items.find((i) => i.value === value)
       if (item) spreadProps(el, api.getItemProps({ item }))
     })
 
@@ -112,7 +138,7 @@ export default class extends Controller {
       // on whether the item is currently selected).
       const itemEl = el.closest('[data-wabi--combobox-target="item"]')
       const value  = itemEl?.dataset.wabiValue
-      const item   = this.itemsValue.find((i) => i.value === value)
+      const item   = this.items.find((i) => i.value === value)
       if (item) spreadProps(el, api.getItemIndicatorProps({ item }))
     })
   }
