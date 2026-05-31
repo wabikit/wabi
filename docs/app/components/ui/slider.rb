@@ -37,19 +37,22 @@ module Components
           yield if block
           if @marks.any?
             # Zag's getMarkerGroupProps spreads position:relative + pointer-events:none
-            # inline; the authored classes match that (relative + full width) so the
-            # markup intent and runtime layout agree. Each marker is absolutely
-            # positioned by Zag via inset-inline-start.
-            # NOTE: the `mt-2` label offset assumes horizontal orientation; vertical
-            # sliders need a horizontal (ml-*) offset instead — deferred follow-up.
-            div(data: { "wabi--slider-target": "markerGroup" }, class: "relative w-full pointer-events-none") do
+            # inline; the authored classes match that (relative + full width). The
+            # group reserves height (h-9) so the ticks + labels sit in a row below
+            # the track. Each marker is absolutely positioned by Zag via
+            # inset-inline-start and centered on its value (Zag's -50% translate),
+            # so the tick line + label center under that point.
+            # NOTE: the tick/label layout assumes horizontal orientation; vertical
+            # sliders need a side offset instead — deferred follow-up.
+            div(data: { "wabi--slider-target": "markerGroup" }, class: "relative w-full h-9 mt-1 pointer-events-none") do
               @marks.each do |mark|
                 div(
                   data: { "wabi--slider-target": "marker", "wabi-mark-value": mark[:value].to_s },
-                  class: "absolute"
+                  class: "absolute flex flex-col items-center"
                 ) do
-                  span(class: "block h-1 w-1 rounded-full bg-muted-foreground") {}
-                  span(class: "mt-2 block text-xs text-muted-foreground whitespace-nowrap") { mark[:label] } if mark[:label]
+                  # Visible vertical tick line on the rail (was a 4px dot — too faint).
+                  span(class: "block h-2 w-0.5 rounded-full bg-muted-foreground") {}
+                  span(class: "mt-1 block text-xs text-muted-foreground whitespace-nowrap") { mark[:label] } if mark[:label]
                 end
               end
             end
