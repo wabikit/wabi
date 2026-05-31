@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as menu from "@zag-js/menu"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
+import { capturePortalRefs, attachToBody, restoreFromBody } from "controllers/wabi/_shared/overlay_portal"
 
 // Single controller owns the parent menu machine AND a child machine per
 // `sub` boundary. Nested same-type controllers would collide on Stimulus
@@ -25,9 +26,8 @@ export default class extends Controller {
   }
 
   connect() {
-    this.contentEl    = this.hasContentTarget    ? this.contentTarget    : null
-    this.positionerEl = this.hasPositionerTarget ? this.positionerTarget : null
-    this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
+    capturePortalRefs(this)
+    this.triggerEl = this.hasTriggerTarget ? this.triggerTarget : null
 
     // In-content targets captured before move.
     this.itemEls                = this.contentEl ? Array.from(this.contentEl.querySelectorAll('[data-wabi--dropdown-menu-target="item"]')) : []
@@ -44,12 +44,8 @@ export default class extends Controller {
       this.subPositionerEls[idx] = subEl.querySelector("[data-wabi--dropdown-menu-target='subPositioner']")
     })
 
-    this.originalParents = {
-      positioner: this.positionerEl?.parentNode,
-    }
-
     this.portaled = this.portalValue
-    if (this.portaled) this.attachToBody()
+    if (this.portaled) attachToBody(this)
 
     this.machine = new VanillaMachine(menu.machine, {
       id: this.element.id || crypto.randomUUID(),
@@ -113,19 +109,7 @@ export default class extends Controller {
       const subMachine = this.subMachines[idx]
       if (!subMachine) return
 
-      // Walk up from subEl's parentElement (not subEl itself) to avoid
-      // self-matching.
-      const ancestorSubEl = subEl.parentElement?.closest("[data-wabi--dropdown-menu-target='sub']")
-      let parentMachine
-      if (ancestorSubEl) {
-        const ancestorSubId = ancestorSubEl.dataset.wabiSubId
-        parentMachine = ancestorSubId ? this.subMachineBySubId[ancestorSubId] : null
-        // Fall back to root if the ancestor sub id isn't in our map (edge case).
-        if (!parentMachine) parentMachine = this.machine
-      } else {
-        parentMachine = this.machine
-      }
-
+      const parentMachine = this._parentMachineFor(subEl)
       const parentApi = menu.connect(parentMachine.service, normalizeProps)
       parentApi.setChild(subMachine.service)
       const subApi = menu.connect(subMachine.service, normalizeProps)
@@ -142,27 +126,23 @@ export default class extends Controller {
     // from a stopping sub doesn't race the body-DOM restore.
     this.subUnsubscribes?.forEach((unsub) => unsub?.())
     this.subMachines?.forEach((sub) => sub.stop())
+    this.subEls?.forEach((subEl) => delete subEl.dataset.wabiSubIndex)
     if (this.portaled) {
-      this.restoreFromBody()
+      restoreFromBody(this)
     }
   }
 
-  attachToBody() {
-    // Move ONLY parent positioner. Sub positioners live inside parent
-    // content (which is inside parent positioner), so they ride along
-    // and stay nested in the DOM tree. That keeps Zag's hover-bridge
-    // between parent menu items and submenus intact — separating them
-    // as body siblings would cause the mouse path between to register
-    // as "hover left parent" and close the submenu.
-    if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
-      document.body.appendChild(this.positionerEl)
-    }
+  // Closest ancestor sub element for a given sub (null = root level).
+  _parentSubElFor(subEl) {
+    return subEl.parentElement?.closest("[data-wabi--dropdown-menu-target='sub']") || null
   }
 
-  restoreFromBody() {
-    if (this.positionerEl && this.originalParents.positioner) {
-      this.originalParents.positioner.appendChild(this.positionerEl)
-    }
+  // The machine that owns a given sub: its ancestor sub's machine, or root.
+  _parentMachineFor(subEl) {
+    const ancestorSubEl = this._parentSubElFor(subEl)
+    if (!ancestorSubEl) return this.machine
+    const id = ancestorSubEl.dataset.wabiSubId
+    return (id && this.subMachineBySubId[id]) || this.machine
   }
 
   // Toggles the data-wabi-checked attribute on checkbox/radio option items
@@ -247,17 +227,8 @@ export default class extends Controller {
       const subApi = menu.connect(subMachine.service, normalizeProps)
 
       // Find the parent machine: walk above subEl to the closest ancestor sub.
-      const ancestorSubEl = subEl.parentElement?.closest("[data-wabi--dropdown-menu-target='sub']")
-      let ownerApi
-      if (ancestorSubEl) {
-        const ancestorSubId = ancestorSubEl.dataset.wabiSubId
-        const ancestorMachine = ancestorSubId ? this.subMachineBySubId[ancestorSubId] : null
-        ownerApi = ancestorMachine
-          ? menu.connect(ancestorMachine.service, normalizeProps)
-          : api
-      } else {
-        ownerApi = api
-      }
+      const ownerMachine = this._parentMachineFor(subEl)
+      const ownerApi = menu.connect(ownerMachine.service, normalizeProps)
       spreadProps(el, ownerApi.getTriggerItemProps(subApi))
     })
 
