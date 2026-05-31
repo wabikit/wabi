@@ -23,6 +23,7 @@ export default class extends Controller {
       max: this.maxValue,
       step: this.stepValue,
       orientation: this.orientationValue,
+      thumbAlignment: "center",
       disabled: this.disabledValue,
       onValueChange: ({ value }) => {
         this.valueValue = value
