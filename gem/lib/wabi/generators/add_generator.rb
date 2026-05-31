@@ -42,7 +42,10 @@ module Wabi
           target = File.join(destination_root, file["path"])
           FileUtils.mkdir_p(File.dirname(target))
           File.write(target, file["content"])
-          files_map[file["path"]] = Digest::SHA256.hexdigest(file["content"])
+          files_map[file["path"]] = {
+            "hash"    => Digest::SHA256.hexdigest(file["content"]),
+            "content" => file["content"],
+          }
           say "  create    #{file["path"]}", :green
         end
 

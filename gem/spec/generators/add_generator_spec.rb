@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "digest"
 require "rails/generators"
 require "wabi/generators/add_generator"
 
@@ -69,11 +70,14 @@ RSpec.describe Wabi::Generators::AddGenerator do
   end
 
   it "records per-file SHA256 hashes in the lockfile" do
+    content = "module UI\n  class Button < Wabi::Base\n  end\nend\n"
     described_class.start(["button"], destination_root: destination)
     lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
     files = lock["components"]["button"]["files"]
     expect(files).to be_a(Hash)
-    expect(files["app/components/ui/button.rb"]).to match(/\A[0-9a-f]{64}\z/)
+    entry = files["app/components/ui/button.rb"]
+    expect(entry["hash"]).to eq(Digest::SHA256.hexdigest(content))
+    expect(entry["content"]).to eq(content)
   end
 
   describe "JS dependency instructions" do
