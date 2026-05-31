@@ -12,6 +12,7 @@ require_relative "combobox_content"
 require_relative "combobox_item"
 require_relative "combobox_item_indicator"
 require_relative "combobox_loading"
+require_relative "combobox_error"
 
 RSpec.describe "Combobox composition" do
   describe Components::UI::Combobox do
@@ -63,6 +64,16 @@ RSpec.describe "Combobox composition" do
       expect(output).to include('data-wabi--combobox-target="loading"')
       expect(output).to match(/<div[^>]*\shidden(\s|>|\/)/)
       expect(output).to include("Loading…")
+    end
+  end
+
+  describe Components::UI::ComboboxError do
+    it "renders a hidden, aria-live error slot wired as the error target" do
+      output = described_class.new.call { "Couldn't load results" }
+      expect(output).to include('data-wabi--combobox-target="error"')
+      expect(output).to include('aria-live="polite"')
+      expect(output).to match(/<div[^>]*\shidden(\s|>|\/)/)
+      expect(output).to include("Couldn&#39;t load results")
     end
   end
 

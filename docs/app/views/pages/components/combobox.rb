@@ -109,6 +109,7 @@ module Views
                   render Components::UI::ComboboxPositioner.new do
                     render Components::UI::ComboboxContent.new do
                       render Components::UI::ComboboxLoading.new { "Loading..." }
+                      render Components::UI::ComboboxError.new { "Couldn't load results. Try again." }
                     end
                   end
                 end
@@ -130,6 +131,7 @@ module Views
                   render ::Components::UI::ComboboxPositioner.new do
                     render ::Components::UI::ComboboxContent.new do
                       render ::Components::UI::ComboboxLoading.new { "Loading..." }
+                      render ::Components::UI::ComboboxError.new { "Couldn't load results. Try again." }
                     end
                   end
                 end

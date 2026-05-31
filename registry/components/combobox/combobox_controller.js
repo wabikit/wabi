@@ -3,7 +3,7 @@ import * as combobox from "@zag-js/combobox"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator", "hiddenInput", "loading"]
+  static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator", "hiddenInput", "loading", "error"]
   static values  = {
     name:        String,
     items:       Array,
@@ -125,6 +125,7 @@ export default class extends Controller {
     this.abortController?.abort()
     const controller = (this.abortController = new AbortController())
     this.showLoading(true)
+    this.showError(false)
     try {
       const sep = this.urlValue.includes("?") ? "&" : "?"
       const url = `${this.urlValue}${sep}${encodeURIComponent(this.paramValue)}=${encodeURIComponent(query)}`
@@ -136,6 +137,7 @@ export default class extends Controller {
     } catch (err) {
       if (err.name === "AbortError") return  // superseded by a newer keystroke / disconnect
       console.warn("wabi--combobox: async fetch failed; keeping prior results", err)
+      this.showError(true)
     } finally {
       // Only the LATEST fetch clears loading — a superseded fetch's finally
       // must not hide the indicator while a newer fetch is still in flight.
@@ -167,13 +169,30 @@ export default class extends Controller {
     if (el) { if (on) el.removeAttribute("hidden"); else el.setAttribute("hidden", "") }
   }
 
+  _errorEl() {
+    // Prefer cached ref (survives innerHTML swaps via replaceItems re-prepend).
+    if (this.__errorEl?.isConnected) return this.__errorEl
+    // Fall back to DOM query on contentEl (first fetch, or after re-connect).
+    const el = this.contentEl?.querySelector('[data-wabi--combobox-target="error"]')
+    if (el) this.__errorEl = el
+    return el || null
+  }
+
+  showError(on) {
+    const el = this._errorEl()
+    if (el) { if (on) el.removeAttribute("hidden"); else el.setAttribute("hidden", "") }
+  }
+
   replaceItems(html) {
     if (this._disconnected || !this.machine) return
-    // Preserve the loading slot across the innerHTML swap (it lives inside the
-    // content and would otherwise be destroyed, breaking later fetches).
+    // Preserve the loading and error slots across the innerHTML swap (they live
+    // inside the content and would otherwise be destroyed, breaking later fetches).
     const loadingEl = this._loadingEl()
+    const errorEl = this._errorEl()
     this.contentEl.innerHTML = html
     if (loadingEl) { this.contentEl.prepend(loadingEl); this.__loadingEl = loadingEl }
+    if (errorEl) { this.contentEl.prepend(errorEl); this.__errorEl = errorEl }
+    this.showError(false)
     this.itemEls = Array.from(this.contentEl.querySelectorAll('[data-wabi--combobox-target="item"]'))
     this.itemIndicatorEls = Array.from(this.contentEl.querySelectorAll('[data-wabi--combobox-target="itemIndicator"]'))
     this.items = this.itemEls.map((el) => ({
