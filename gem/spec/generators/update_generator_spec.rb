@@ -40,6 +40,27 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
     File.write(button_path, content)
   end
 
+  def seed_install_with_content(version:, content:)
+    File.write(File.join(destination, "config/wabi.lock.json"), JSON.generate({
+      "registry"   => "file://#{fake_registry}",
+      "components" => {
+        "button" => {
+          "version" => version,
+          "hash"    => Digest::SHA256.hexdigest(JSON.generate([{
+            "path" => "app/components/ui/button.rb",
+            "type" => "ruby:phlex",
+            "content" => content,
+          }])),
+          "files"   => { "app/components/ui/button.rb" => {
+            "hash" => Digest::SHA256.hexdigest(content), "content" => content,
+          } },
+        },
+      },
+    }))
+    FileUtils.mkdir_p(File.dirname(button_path))
+    File.write(button_path, content)
+  end
+
   before do
     FileUtils.rm_rf(destination)
     FileUtils.rm_rf(fake_registry)
@@ -89,8 +110,9 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
       expect(File.read(button_path)).to eq(new_content)
       lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
       expect(lock["components"]["button"]["version"]).to eq("0.2.0")
-      expect(lock["components"]["button"]["files"]["app/components/ui/button.rb"])
-        .to eq(Digest::SHA256.hexdigest(new_content))
+      entry = lock["components"]["button"]["files"]["app/components/ui/button.rb"]
+      expect(entry["hash"]).to eq(Digest::SHA256.hexdigest(new_content))
+      expect(entry["content"]).to eq(new_content)
     end
   end
 
@@ -223,6 +245,57 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
     end
   end
 
+  describe "edited on disk, base content available (3-way merge)" do
+    it "auto-merges non-conflicting edits (clean)" do
+      # Use 5 lines with edits far enough apart for git's 3-line context heuristic
+      base  = "line1\nline2\nline3\nline4\nline5\n"
+      new   = "line1\nline2 CHANGED BY REGISTRY\nline3\nline4\nline5\n"
+      local = "line1\nline2\nline3\nline4\nline5 EDITED LOCALLY\n"
+      seed_install_with_content(version: "0.1.0", content: base)
+      File.write(button_path, local)
+      seed_button(version: "0.2.0", content: new)
+
+      capture_stdout { described_class.start(["button"], destination_root: destination) }
+
+      merged = File.read(button_path)
+      expect(merged).to include("line2 CHANGED BY REGISTRY")
+      expect(merged).to include("line5 EDITED LOCALLY")
+      expect(merged).not_to include("<<<<<<<")
+    end
+
+    it "writes conflict markers when both edited the same region" do
+      base  = "line1\nline2\nline3\n"
+      new   = "line1\nline2 REGISTRY\nline3\n"
+      local = "line1\nline2 LOCAL\nline3\n"
+      seed_install_with_content(version: "0.1.0", content: base)
+      File.write(button_path, local)
+      seed_button(version: "0.2.0", content: new)
+
+      output = capture_stdout { described_class.start(["button"], destination_root: destination) }
+
+      merged = File.read(button_path)
+      expect(merged).to include("<<<<<<<")
+      expect(merged).to include("line2 LOCAL")
+      expect(merged).to include("line2 REGISTRY")
+      expect(output).to match(/conflict/i)
+    end
+  end
+
+  describe "edited on disk, legacy lockfile (no base content)" do
+    it "falls back to the prompt" do
+      old_content = "class Button; end\n"
+      new_content = "class Button\n  # v2\nend\n"
+      edited      = "class Button\n  # local\nend\n"
+      seed_install(version: "0.1.0", content: old_content)
+      File.write(button_path, edited)
+      seed_button(version: "0.2.0", content: new_content)
+
+      allow_any_instance_of(described_class).to receive(:prompt_conflict).and_return("n")
+      capture_stdout { described_class.start(["button"], destination_root: destination) }
+      expect(File.read(button_path)).to eq(edited)
+    end
+  end
+
   describe "js_dependencies diff" do
     it "prints only added/changed pins, not unchanged ones" do
       seed_install(version: "0.1.0", content: "class B; end\n")
@@ -248,6 +321,26 @@ RSpec.describe Wabi::Generators::UpdateGenerator do
 
       expect(output).to include("@new/pkg")
       expect(output).not_to include("@zag-js/popover")
+    end
+  end
+
+  describe "git merge-file failure (data-safety guard)" do
+    it "leaves the user's edited file untouched and reports an error" do
+      base  = "line1\nline2\nline3\n"
+      new   = "line1\nline2 NEW\nline3\n"
+      local = "line1\nline2 LOCAL EDIT\nline3\n"
+      seed_install_with_content(version: "0.1.0", content: base)
+      File.write(button_path, local)
+      seed_button(version: "0.2.0", content: new)
+
+      # Simulate git merge-file erroring (exit 255, empty stdout).
+      allow_any_instance_of(described_class)
+        .to receive(:three_way_merge).and_return(["", 255, "fatal: simulated git error"])
+
+      output = capture_stdout { described_class.start(["button"], destination_root: destination) }
+
+      expect(File.read(button_path)).to eq(local)   # NOT blanked — local edits preserved
+      expect(output).to match(/error|failed/i)
     end
   end
 end

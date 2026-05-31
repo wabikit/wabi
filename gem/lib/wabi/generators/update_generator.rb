@@ -3,6 +3,8 @@
 require "rails/generators"
 require "digest"
 require "json"
+require "open3"
+require "tempfile"
 require "wabi/registry_client"
 require "wabi/lockfile"
 
@@ -72,7 +74,7 @@ module Wabi
           new_hash = Digest::SHA256.hexdigest(file["content"])
           target   = File.join(destination_root, path)
 
-          files_map[path] = new_hash
+          files_map[path] = { "hash" => new_hash, "content" => file["content"] }
 
           if !File.exist?(target)
             write_file(target, file["content"], reason: "create")
@@ -80,7 +82,7 @@ module Wabi
           end
 
           on_disk_hash   = Digest::SHA256.hexdigest(File.read(target))
-          installed_hash = installed_map[path]
+          installed_hash = Wabi::Lockfile.file_entry(installed_map[path])[:hash]
 
           if installed_hash.nil?
             handle_conflict(path, target, file["content"], reason: "legacy lockfile has no per-file hash")
@@ -90,7 +92,12 @@ module Wabi
           if on_disk_hash == installed_hash
             write_file(target, file["content"], reason: "update")
           else
-            handle_conflict(path, target, file["content"], reason: "edited locally")
+            base_content = Wabi::Lockfile.file_entry(installed_map[path])[:content]
+            if base_content && git_available? && !options[:force]
+              merge_file(path, target, base_content, file["content"])
+            else
+              handle_conflict(path, target, file["content"], reason: "edited locally")
+            end
           end
         end
 
@@ -148,6 +155,63 @@ module Wabi
 
       def prompt_conflict(_path)
         ask("    (y)es / (n)o / (d)iff / (q)uit?", limited_to: %w[y n d q])
+      end
+
+      def merge_file(path, target, base_content, new_content)
+        if options[:dry_run]
+          say "  would 3-way merge #{path}", :cyan
+          return
+        end
+
+        begin
+          merged, conflicts, err = three_way_merge(target, base_content, new_content)
+        rescue Errno::ENOENT, StandardError => e
+          # git vanished mid-run, or any other spawn/IO failure.
+          merged, conflicts, err = nil, 255, e.message
+        end
+
+        # git merge-file returns 255 (an error, NOT a conflict count) on
+        # failure. Treat that — or empty output when we expected content — as a
+        # failure and DO NOT write: blanking the user's edited file would be
+        # irreversible data loss. Leave the file untouched; the user can re-run.
+        if conflicts == 255 || conflicts.negative? || (merged.to_s.empty? && !new_content.empty?)
+          detail = err.to_s.strip.empty? ? "" : ": #{err.to_s.strip.lines.first&.chomp}"
+          say "  error       #{path} (git merge-file failed, file unchanged#{detail})", :red
+          return
+        end
+
+        File.write(target, merged)
+        if conflicts.zero?
+          say "  merged      #{path}", :green
+        else
+          # git caps the exit code at 127, so report 127+ rather than lying.
+          count = conflicts >= 127 ? "127+ conflicts" : "#{conflicts} conflict#{'s' if conflicts != 1}"
+          say "  merged      #{path} (#{count} — resolve the <<<<<<< markers)", :yellow
+        end
+      end
+
+      def git_available?
+        return @git_available unless @git_available.nil?
+        @git_available = system("git", "--version", out: File::NULL, err: File::NULL) || false
+      end
+
+      # 3-way merge via `git merge-file`. Arg order is current/base/other =
+      # local/base/new (DO NOT reorder). Returns [merged_string, status, stderr]:
+      # status 0 = clean, 1..127 = number of conflicts (git caps at 127),
+      # 255 = error. stderr carries git's diagnostic on error.
+      def three_way_merge(local_path, base_content, new_content)
+        Tempfile.create("wabi-base") do |base_f|
+          Tempfile.create("wabi-new") do |new_f|
+            base_f.write(base_content); base_f.flush
+            new_f.write(new_content);   new_f.flush
+            merged, err, status = Open3.capture3(
+              "git", "merge-file", "-p",
+              "-L", "local (your edits)", "-L", "base (original)", "-L", "new (registry)",
+              local_path, base_f.path, new_f.path
+            )
+            [merged, status.exitstatus, err]
+          end
+        end
       end
 
       def print_diff(target, new_content)
