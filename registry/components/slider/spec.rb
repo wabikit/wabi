@@ -4,6 +4,7 @@ require "wabi"
 require "json"
 require_relative "slider"
 require_relative "slider_label"
+require_relative "slider_control"
 require_relative "slider_track"
 require_relative "slider_range"
 require_relative "slider_thumb"
@@ -60,6 +61,14 @@ RSpec.describe "Slider composition" do
       output = described_class.new(name: "vol", value: 50, marks: [0, 50, 100]).call
       expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
       expect(output).to include('data-wabi-mark-value="100"')
+    end
+  end
+
+  describe Components::UI::SliderControl do
+    it "renders a relative flex positioning context for the track + thumbs" do
+      output = described_class.new.call { "x" }
+      expect(output).to include("relative")
+      expect(output).to include("items-center")
     end
   end
 

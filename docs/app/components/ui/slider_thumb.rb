@@ -5,7 +5,8 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class SliderThumb < Wabi::Base
-      THUMB_CLASS = "block h-5 w-5 rounded-full border-2 border-primary bg-background " \
+      THUMB_CLASS = "block h-3 w-3 rounded-full border border-primary bg-foreground shadow-sm " \
+                    "top-1/2 -translate-y-1/2 " \
                     "ring-offset-background transition-colors " \
                     "focus-visible:outline-none focus-visible:ring-2 " \
                     "focus-visible:ring-ring focus-visible:ring-offset-2 " \

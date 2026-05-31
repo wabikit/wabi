@@ -3,7 +3,7 @@ import * as slider from "@zag-js/slider"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["label", "track", "range", "thumb", "markerGroup", "marker"]
+  static targets = ["label", "control", "track", "range", "thumb", "markerGroup", "marker"]
   static values  = {
     name:        String,
     value:       Array,
@@ -44,8 +44,11 @@ export default class extends Controller {
     const api = slider.connect(this.machine.service, normalizeProps)
     spreadProps(this.element, api.getRootProps())
 
-    if (this.hasLabelTarget) spreadProps(this.labelTarget, api.getLabelProps())
-    if (this.hasTrackTarget) spreadProps(this.trackTarget, api.getTrackProps())
+    if (this.hasLabelTarget)   spreadProps(this.labelTarget,   api.getLabelProps())
+    // Control carries Zag's pointer handlers (onPointerDown) so click/drag on
+    // the track sets the value live. Without it the slider is keyboard-only.
+    if (this.hasControlTarget) spreadProps(this.controlTarget, api.getControlProps())
+    if (this.hasTrackTarget)   spreadProps(this.trackTarget,   api.getTrackProps())
     if (this.hasRangeTarget) spreadProps(this.rangeTarget, api.getRangeProps())
 
     this.thumbTargets.forEach((el) => {
@@ -83,7 +86,11 @@ export default class extends Controller {
     inp.type = "hidden"
     inp.name = name
     inp.value = String(value)
-    inp.dataset.wabiSliderHidden = "true"
+    // setAttribute (NOT dataset): the double-dash `data-wabi--slider-hidden`
+    // can't round-trip through dataset (it would become data-wabi-slider-hidden,
+    // single-dash), which is what the cleanup selector in syncHiddenInputs
+    // matches — the mismatch leaked a new input on every render.
+    inp.setAttribute("data-wabi--slider-hidden", "true")
     this.element.appendChild(inp)
   }
 }
