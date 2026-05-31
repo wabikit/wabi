@@ -79,4 +79,22 @@ RSpec.describe Wabi::Lockfile do
       expect(lockfile.components["button"]["files"]).to be_nil
     end
   end
+
+  describe ".file_entry" do
+    it "normalizes a new-shape object entry" do
+      e = Wabi::Lockfile.file_entry({ "hash" => "abc", "content" => "x = 1\n" })
+      expect(e[:hash]).to eq("abc")
+      expect(e[:content]).to eq("x = 1\n")
+    end
+
+    it "normalizes a legacy string-hash entry to content: nil" do
+      e = Wabi::Lockfile.file_entry("abc")
+      expect(e[:hash]).to eq("abc")
+      expect(e[:content]).to be_nil
+    end
+
+    it "tolerates a nil/garbage entry" do
+      expect(Wabi::Lockfile.file_entry(nil)).to eq({ hash: nil, content: nil })
+    end
+  end
 end

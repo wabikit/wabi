@@ -27,6 +27,17 @@ module Wabi
       @components = data["components"] || {}
     end
 
+    # Normalizes a per-file lockfile entry to { hash:, content: }, tolerating
+    # both the v0.9 object shape ({ "hash" =>, "content" => }) and the legacy
+    # string-hash shape (content: nil → caller falls back to the prompt).
+    def self.file_entry(raw)
+      case raw
+      when String then { hash: raw, content: nil }
+      when Hash   then { hash: raw["hash"], content: raw["content"] }
+      else             { hash: nil, content: nil }
+      end
+    end
+
     def record(name, version:, hash:, files: nil, js_dependencies: nil)
       entry = { "version" => version, "hash" => hash }
       entry["files"]           = files           if files
