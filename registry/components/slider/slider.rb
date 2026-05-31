@@ -37,22 +37,25 @@ module Components
           yield if block
           if @marks.any?
             # Zag's getMarkerGroupProps spreads position:relative + pointer-events:none
-            # inline; the authored classes match that (relative + full width). The
-            # group reserves height (h-9) so the ticks + labels sit in a row below
-            # the track. Each marker is absolutely positioned by Zag via
-            # inset-inline-start and centered on its value (Zag's -50% translate),
-            # so the tick line + label center under that point.
-            # NOTE: the tick/label layout assumes horizontal orientation; vertical
-            # sliders need a side offset instead — deferred follow-up.
-            div(data: { "wabi--slider-target": "markerGroup" }, class: "relative w-full h-9 mt-1 pointer-events-none") do
+            # inline; the authored classes match that (relative + full width/height).
+            # Horizontal: the group reserves height (h-9) so ticks + labels sit in a
+            # row below the track; each marker is a column (tick above, label below).
+            # Vertical: the group runs full height alongside the rail; each marker is
+            # a row (tick left, label to the right) since Zag positions vertical
+            # markers along the Y axis via `bottom`.
+            vertical     = @orientation == :vertical
+            group_class  = vertical ? "relative h-full ml-1 pointer-events-none" : "relative w-full h-9 mt-1 pointer-events-none"
+            marker_class = vertical ? "absolute flex items-center" : "absolute flex flex-col items-center"
+            tick_class   = vertical ? "block h-0.5 w-2 rounded-full bg-muted-foreground" : "block h-2 w-0.5 rounded-full bg-muted-foreground"
+            label_class  = vertical ? "ml-2 block text-xs text-muted-foreground whitespace-nowrap" : "mt-1 block text-xs text-muted-foreground whitespace-nowrap"
+            div(data: { "wabi--slider-target": "markerGroup" }, class: group_class) do
               @marks.each do |mark|
                 div(
                   data: { "wabi--slider-target": "marker", "wabi-mark-value": mark[:value].to_s },
-                  class: "absolute flex flex-col items-center"
+                  class: marker_class
                 ) do
-                  # Visible vertical tick line on the rail (was a 4px dot — too faint).
-                  span(class: "block h-2 w-0.5 rounded-full bg-muted-foreground") {}
-                  span(class: "mt-1 block text-xs text-muted-foreground whitespace-nowrap") { mark[:label] } if mark[:label]
+                  span(class: tick_class) {}
+                  span(class: label_class) { mark[:label] } if mark[:label]
                 end
               end
             end

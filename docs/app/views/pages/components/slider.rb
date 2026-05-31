@@ -104,6 +104,29 @@ module Views
                 end
               end
 
+              h2(id: "vertical-marks", class: "text-2xl font-semibold mt-8 mb-4") { "Vertical with Marks" }
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Slider.new(name: "level", value: 50, orientation: :vertical, marks: [{ value: 0, label: "Low" }, { value: 50, label: "Mid" }, { value: 100, label: "High" }]) do
+                  render Components::UI::SliderLabel.new { "Level" }
+                  render Components::UI::SliderControl.new do
+                    render Components::UI::SliderTrack.new do
+                      render Components::UI::SliderRange.new
+                    end
+                    render Components::UI::SliderThumb.new(index: 0)
+                  end
+                end
+              RUBY
+                render ::Components::UI::Slider.new(name: "level", value: 50, orientation: :vertical, marks: [{ value: 0, label: "Low" }, { value: 50, label: "Mid" }, { value: 100, label: "High" }]) do
+                  render ::Components::UI::SliderLabel.new { "Level" }
+                  render ::Components::UI::SliderControl.new do
+                    render ::Components::UI::SliderTrack.new do
+                      render ::Components::UI::SliderRange.new
+                    end
+                    render ::Components::UI::SliderThumb.new(index: 0)
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

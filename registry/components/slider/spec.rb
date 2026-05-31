@@ -62,6 +62,16 @@ RSpec.describe "Slider composition" do
       expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
       expect(output).to include('data-wabi-mark-value="100"')
     end
+
+    it "uses a side label offset for vertical marks" do
+      output = described_class.new(name: "v", value: 50, orientation: :vertical, marks: [{ value: 50, label: "50%" }]).call
+      expect(output).to include("ml-2")
+    end
+
+    it "uses a below label offset for horizontal marks" do
+      output = described_class.new(name: "v", value: 50, marks: [{ value: 50, label: "50%" }]).call
+      expect(output).to include("mt-1")
+    end
   end
 
   describe Components::UI::SliderControl do
