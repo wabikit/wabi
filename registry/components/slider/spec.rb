@@ -45,32 +45,9 @@ RSpec.describe "Slider composition" do
       expect(output).to include('data-wabi--slider-orientation-value="horizontal"')
     end
 
-    it "renders a marker group with one marker per mark when marks: given" do
-      output = described_class.new(name: "vol", value: 50, marks: [{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]).call
-      expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
-      expect(output).to include('data-wabi-mark-value="50"')
-      expect(output).to include("50%")
-    end
-
-    it "renders no marker group when marks: omitted" do
+    it "does not render marks (marks are rendered by SliderControl)" do
       output = described_class.new(name: "vol", value: 50).call
       expect(output).not_to include('data-wabi--slider-target="marker"')
-    end
-
-    it "normalizes bare integer marks to value hashes" do
-      output = described_class.new(name: "vol", value: 50, marks: [0, 50, 100]).call
-      expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
-      expect(output).to include('data-wabi-mark-value="100"')
-    end
-
-    it "uses a side label offset for vertical marks" do
-      output = described_class.new(name: "v", value: 50, orientation: :vertical, marks: [{ value: 50, label: "50%" }]).call
-      expect(output).to include("ml-2")
-    end
-
-    it "uses a below label offset for horizontal marks" do
-      output = described_class.new(name: "v", value: 50, marks: [{ value: 50, label: "50%" }]).call
-      expect(output).to include("mt-1")
     end
   end
 
@@ -79,6 +56,51 @@ RSpec.describe "Slider composition" do
       output = described_class.new.call { "x" }
       expect(output).to include("relative")
       expect(output).to include("items-center")
+    end
+
+    it "renders a marker group with one marker per mark when marks: given" do
+      output = described_class.new(marks: [{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]).call { "x" }
+      expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
+      expect(output).to include('data-wabi-mark-value="50"')
+      expect(output).to include("50%")
+    end
+
+    it "renders no marker group when marks: omitted" do
+      output = described_class.new.call { "x" }
+      expect(output).not_to include('data-wabi--slider-target="marker"')
+    end
+
+    it "normalizes bare integer marks to value hashes" do
+      output = described_class.new(marks: [0, 50, 100]).call { "x" }
+      expect(output.scan('data-wabi--slider-target="marker"').size).to eq(3)
+      expect(output).to include('data-wabi-mark-value="100"')
+    end
+
+    it "uses a side label offset for vertical marks" do
+      output = described_class.new(orientation: :vertical, marks: [{ value: 50, label: "50%" }]).call { "x" }
+      expect(output).to include("ml-2")
+    end
+
+    it "uses a below label offset for horizontal marks" do
+      output = described_class.new(marks: [{ value: 50, label: "50%" }]).call { "x" }
+      expect(output).to include("mt-1")
+    end
+
+    it "renders marks after the yielded block content" do
+      output = described_class.new(marks: [{ value: 50, label: "Mid" }]).call { "TRACK_CONTENT" }
+      track_pos  = output.index("TRACK_CONTENT")
+      marker_pos = output.index('data-wabi--slider-target="markerGroup"')
+      expect(track_pos).to be < marker_pos
+    end
+
+    it "adds mb-8 reservation for horizontal marks" do
+      output = described_class.new(marks: [50]).call { "x" }
+      expect(output).to include("mb-8")
+    end
+
+    it "adds mr-12 reservation for vertical marks" do
+      output = described_class.new(orientation: :vertical, marks: [50]).call { "x" }
+      expect(output).to include("mr-12")
     end
   end
 
