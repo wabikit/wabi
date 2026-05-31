@@ -2,6 +2,77 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.8.0 - 2026-05-31
+
+Focused high-value mix: one marquee feature, one self-contained feature, an
+accessibility win, and an overlay-controller hardening refactor. No breaking
+changes.
+
+### Features
+
+- **Combobox async items.** With `url:` set, the combobox debounces input and
+  fetches a server-rendered `ComboboxItem` fragment (AbortController-guarded so
+  stale in-flight responses are dropped), swaps it into the content, and
+  rebuilds the Zag collection from the new DOM via `machine.updateProps`. New
+  optional `ComboboxLoading` slot (shown during the fetch); empty state is
+  server-rendered; fetch errors keep the prior results + `console.warn`.
+  `param` (default `q`), `debounce` (default 250ms), and `min_length`
+  (default 1) are configurable. Sync mode is unchanged.
+- **Slider marks/ticks.** `Slider(marks: [{value:, label:}])` (or bare
+  Integers) renders tick markers (short vertical lines) positioned via Zag
+  `getMarkerProps`, with optional labels. Works single + range.
+
+### Fixes
+
+- **Slider is now fully functional + visible.** Several latent issues from the
+  v0.6 slider are fixed together:
+  - **Thumb + marks render.** `thumbAlignment: "center"` on the machine — the
+    previous `"contain"` default gated thumb/marker visibility on a thumb-size
+    measurement that never completed in the vanilla Stimulus setup (the machine
+    starts before `render()` decorates the DOM with Zag's part ids), leaving
+    the thumb knob and any marks `visibility: hidden`.
+  - **Pointer interaction.** New `SliderControl` element carries Zag's
+    `getControlProps` (`onPointerDown`), so click/drag on the track now sets the
+    value live. Previously the slider was keyboard-only. `SliderControl` also
+    provides the positioning context that vertically centers the thumb on the
+    track (the root is a flex column with the label/marks, so an absolutely
+    positioned thumb anchored to it floated above the bar).
+  - **Hidden-input dedup.** `syncHiddenInputs` cleanup selector
+    (`data-wabi--slider-hidden`) never matched the inputs `appendHidden` created
+    via `dataset` (which emitted single-dash `data-wabi-slider-hidden`), so a
+    new hidden input leaked on every render and the form value went stale.
+    `appendHidden` now uses `setAttribute` with the matching double-dash name.
+  - **Thumb styling.** Smaller (12px) thumb with a thinner border + subtle
+    shadow; `bg-foreground` fill (adapts to theme: dark knob in light mode,
+    light knob in dark mode).
+  - **Composition note:** the track + thumb(s) now nest inside `SliderControl`
+    (`Slider > SliderLabel + SliderControl(SliderTrack(SliderRange) + SliderThumb…)`).
+
+### Accessibility
+
+- **`motion-reduce:transition-none`** on Toast and the animated overlays
+  (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, Combobox content +
+  Dialog/Drawer backdrops) — `prefers-reduced-motion` users get instantaneous
+  enter/exit instead of slide/fade.
+
+### Refactor / internal
+
+- **`_shared/overlay_portal.js`** — Dialog, Popover, Tooltip, Select, and
+  DropdownMenu now share `capturePortalRefs` / `attachToBody` / `restoreFromBody`
+  (composition, not inheritance) instead of duplicating that boilerplate per
+  controller. Behavior-preserving (each overlay browser re-smoked).
+- DropdownMenu's closest-ancestor-sub lookup is deduped into `_parentMachineFor`
+  (was inline in both `connect()` and `render()`).
+- Overlay `disconnect()` now restores from `<body>` before unregistering from
+  `WabiPortalRegistry`, so the registry recomputes its sibling cache on the
+  post-move DOM. `data-wabi-sub-index` is cleaned up on DropdownMenu disconnect.
+
+### Deferred to v0.9
+
+- Toast `@zag-js/toast` group machine; `wabi:update` three-way merge; richer
+  Combobox async error UX; vertical-orientation Slider mark label offset; Phlex
+  2.4 Ruby 4 warnings (upstream).
+
 ## 0.7.0 - 2026-05-30
 
 Quality + finish: 10 items closing v0.6 deferrals and v0.5 long-tail. No new

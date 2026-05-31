@@ -218,3 +218,24 @@ v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` 
 ### DropdownMenu
 - /docs/components/dropdown_menu — open menu → enter the outer submenu → enter the inner sub-submenu inside it; all three levels open
 - Keyboard: ↓ to focus a sub-trigger, → opens it; works at each nesting level
+
+## Sprint 12 / v0.8.0
+
+### Combobox async
+- /docs/components/combobox — on the async example: type a few chars → the loading slot ("Searching…") shows briefly → server results swap in → an item is clickable and sets the hidden input to its VALUE
+- Type a non-matching string → "No results" fragment renders
+- Rapid typing: the loading indicator doesn't flicker off mid-search (superseded fetches are aborted; only the latest clears loading)
+- The `ComboboxLoading` slot survives across multiple fetches (not destroyed by the first result swap)
+
+### Slider marks
+- /docs/components/slider — the marks example shows ticks at 0% / 50% / 100% positioned along the track, with labels beneath
+
+### motion-reduce (a11y)
+- Enable OS "reduce motion" → /docs/components/toast: a toast appears/disappears instantly (no slide/fade); overlays open/close without transition
+- DevTools: animated components carry `motion-reduce:transition-none`
+
+### Overlays (refactor regression check)
+- All 6 portal overlays still open/close cleanly: dialog, drawer, popover, tooltip, dropdown_menu, select
+- Dialog (modal): body siblings get `inert` while open, cleared on close
+- DropdownMenu: N-level submenu still opens all three levels
+- DevTools: each overlay's dist bundles `_shared/overlay_portal.js`
