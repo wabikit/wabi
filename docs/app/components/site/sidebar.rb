@@ -14,11 +14,11 @@ module Components
           { name: "Philosophy",   path: "/docs/philosophy" },
         ]},
         { label: "Forms", items: %w[button checkbox combobox form input label radio_group select slider switch textarea toggle toggle_group].map(&COMPONENT_LINK) },
-        { label: "Layout & Display", items: %w[alert avatar badge card separator table].map(&COMPONENT_LINK) },
+        { label: "Layout & Display", items: %w[alert avatar badge card separator table skeleton].map(&COMPONENT_LINK) },
         { label: "Overlays", items: %w[command dialog drawer popover tooltip].map(&COMPONENT_LINK) },
         { label: "Menus", items: [{ name: "Dropdown Menu", path: "/docs/components/dropdown_menu" }] },
-        { label: "Navigation", items: %w[accordion tabs].map(&COMPONENT_LINK) },
-        { label: "Feedback", items: [{ name: "Toast", path: "/docs/components/toast" }] },
+        { label: "Navigation", items: %w[accordion tabs breadcrumb pagination].map(&COMPONENT_LINK) },
+        { label: "Feedback", items: [{ name: "Toast", path: "/docs/components/toast" }, { name: "Progress", path: "/docs/components/progress" }] },
       ].freeze
 
       def initialize(current_path:)
