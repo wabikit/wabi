@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.4.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 20 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
+🎉 **Status:** v0.11.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 28 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
 
 ---
 
@@ -31,25 +31,22 @@ Then add `@import "./wabi/tokens.css";` AFTER `@import "tailwindcss";` in your `
 
 ## What's in the box
 
-### 20 components
+### 28 components
 
-| Static (9) | Forms (3) | Overlays (4) | Menus + Feedback (2) | Navigation (2) |
-|---|---|---|---|---|
-| Button | Checkbox | Dialog | DropdownMenu | Tabs |
-| Input | Switch | Drawer (4 sides) | Toast + Toaster | Accordion |
-| Textarea | Select | Tooltip | | |
-| Label | | Popover | | |
-| Card (compound) | | | | |
-| Badge | | | | |
-| Separator | | | | |
-| Alert (compound) | | | | |
-| Avatar (compound) | | | | |
+| Group | Components |
+|---|---|
+| **Forms** (13) | Button, Input, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form |
+| **Layout & Display** (6) | Card, Badge, Separator, Alert, Avatar, Table |
+| **Overlays** (5) | Dialog, Drawer (4 sides), Tooltip, Popover, Command |
+| **Menus** (1) | DropdownMenu (nested submenus, checkbox + radio items) |
+| **Navigation** (2) | Accordion, Tabs |
+| **Feedback** (1) | Toast + Toaster |
 
-All interactive components wire through **Zag.js 1.x** state machines for WAI-ARIA roles, keyboard semantics, and focus management. Toast uses a custom vanilla controller (cross-toast coordination is a v0.4 task).
+Compound components (Card, Alert, Avatar, Dialog, Drawer, Table, Form, Combobox, …) ship as composable sub-component sets. All interactive components wire through **Zag.js 1.x** state machines for WAI-ARIA roles, keyboard semantics, and focus management. Toast is the one exception: it uses a custom Stimulus coordinator for Sonner-style stacking, group pause-on-hover, and swipe-to-dismiss — `@zag-js/toast`'s imperative DOM-creation model conflicts with Wabi's SSR + Turbo Stream append.
 
 ### 8 theme palettes
 
-`default`, `slate`, `stone`, `zinc`, `rose`, `blue`, `green`, `violet`. Light + dark variants per theme. Switch with:
+`default`, `blue`, `green`, `orange`, `rose`, `stone`, `violet`, `yellow`. Light + dark variants per theme. Switch with:
 
 ```bash
 bin/rails g wabi:theme rose
@@ -137,7 +134,7 @@ bin/dev      # starts registry watcher + tailwind watcher + docs server on :3000
 
 Then visit:
 - `/` — marketing landing
-- `/docs/components` — index of all 20 components
+- `/docs/components` — index of all 28 components
 - `/docs/components/{button,dropdown_menu,dialog,tabs}` — detailed pages with live preview + source
 - `/docs/themes` — all 8 palettes side-by-side
 - `/docs/getting-started`, `/docs/theming`, `/docs/philosophy` — prose docs
@@ -174,14 +171,15 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 
 | Version | Target | Status |
 |---|---|---|
-| v0.1 | 20 components | ✅ shipped 2026-05-26 |
-| v0.2 | 8 themes + theme picker | ✅ shipped 2026-05-26 |
-| v0.3 | Real docs site + RubyGems publish | ✅ shipped 2026-05-26 |
-| v0.4 | Detailed pages for all 20 components; Pagefind search; sidebar nav; theme polish | ✅ shipped 2026-05-27 |
-| v0.5 | `@zag-js/toast` group machine; real portal pattern; `wabi:update` generator | planned |
-| v0.6 | Forms expansion: RadioGroup, Toggle, ToggleGroup, Slider, Combobox, Command, Form | planned |
-| v0.7 | Navigation & layout: Sheet, ContextMenu, Pagination, NavigationMenu | planned |
-| v0.8 | Data + dates + ecosystem: Calendar, DatePicker, DataTable, Blocks, community registry | planned |
+| v0.1–0.3 | 20 components, 8 themes + picker, docs site + RubyGems publish | ✅ shipped 2026-05-26 |
+| v0.4 | Detailed pages for all components; Pagefind search; sidebar nav | ✅ shipped 2026-05-27 |
+| v0.5 | Overlays portal to `document.body`; overlay enter/exit animations | ✅ shipped 2026-05-27 |
+| v0.6 | Forms expansion: RadioGroup, Toggle, ToggleGroup, Slider, Combobox, Command, Form | ✅ shipped 2026-05-28 |
+| v0.7 | Quality + finish: closing v0.5/v0.6 deferrals; one breaking change | ✅ shipped 2026-05-30 |
+| v0.8 | Combobox async items; a11y win + overlay-controller hardening | ✅ shipped 2026-05-31 |
+| v0.9 | `wabi:update` 3-way merge; Combobox async error state; vertical Slider | ✅ shipped 2026-05-31 |
+| v0.10 | Toast group coordination (Sonner-style stacking, swipe, group pause) | ✅ shipped 2026-06-01 |
+| v0.11 | Table component (shadcn parity); ClassMerge text-align fix | ✅ shipped 2026-06-01 |
 | v1.0 | API stability; external a11y audit | 2027-04 target |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.
@@ -190,7 +188,7 @@ See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANG
 
 ## Contributing
 
-Wabi is in alpha and the API is still moving. Filing issues with concrete repros, suggestions for components, or theme palette ideas is the most useful kind of contribution right now. See [CONTRIBUTING.md](./CONTRIBUTING.md) (TODO — will land before v0.4) for the per-component anatomy and the Zag.js wiring conventions used throughout.
+Wabi is in alpha and the API is still moving. Filing issues with concrete repros, suggestions for components, or theme palette ideas is the most useful kind of contribution right now. A `CONTRIBUTING.md` documenting the per-component anatomy and the Zag.js wiring conventions is still on the to-do list.
 
 ---
 
