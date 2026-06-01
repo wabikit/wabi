@@ -1,7 +1,7 @@
-name: dialog
+name: alert_dialog
 version: 0.1.0
 type: registry:overlay
-description: Modal dialog with focus trap, Escape dismiss, click-outside dismiss, and portal.
+description: Modal confirmation dialog — role=alertdialog, no click-outside dismiss, initial focus on Cancel.
 registry_dependencies: ["button"]
 ruby_dependencies: []
 js_dependencies:
