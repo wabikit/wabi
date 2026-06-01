@@ -40,7 +40,7 @@ module Views
                     end
                     render Components::UI::BreadcrumbSeparator.new
                     render Components::UI::BreadcrumbItem.new do
-                      render Components::UI::BreadcrumbLink.new(href: "/docs") { "Docs" }
+                      render Components::UI::BreadcrumbLink.new(href: "/docs/components") { "Components" }
                     end
                     render Components::UI::BreadcrumbSeparator.new
                     render Components::UI::BreadcrumbItem.new do
@@ -56,7 +56,7 @@ module Views
                     end
                     render ::Components::UI::BreadcrumbSeparator.new
                     render ::Components::UI::BreadcrumbItem.new do
-                      render ::Components::UI::BreadcrumbLink.new(href: "/docs") { "Docs" }
+                      render ::Components::UI::BreadcrumbLink.new(href: "/docs/components") { "Components" }
                     end
                     render ::Components::UI::BreadcrumbSeparator.new
                     render ::Components::UI::BreadcrumbItem.new do
