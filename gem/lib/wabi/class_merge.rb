@@ -75,6 +75,11 @@ module Wabi
       auto full screen min max fit none px
     ].to_set.freeze
 
+    # Tail tokens that identify a text-alignment utility (`text-left`,
+    # `text-center`, etc.). These are distinct from both text-size and
+    # text-color so all three can coexist on the same element.
+    TEXT_ALIGN_TOKENS = %w[left center right justify start end].to_set.freeze
+
     def utility_group(utility)
       return "atom:#{utility}" if ATOM_UTILITIES.include?(utility)
 
@@ -94,6 +99,7 @@ module Wabi
       return "#{head}-#{tail}" if AXIS_FAMILIES.include?(head) && AXIS_SUFFIXES.include?(tail)
 
       if WIDTH_COLOR_FAMILIES.include?(head) && tail
+        return "#{head}:align" if head == "text" && TEXT_ALIGN_TOKENS.include?(tail)
         return "#{head}:size"  if size_or_numeric?(tail)
         return "#{head}:color"
       end

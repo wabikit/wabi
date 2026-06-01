@@ -88,6 +88,17 @@ RSpec.describe Wabi::ClassMerge do
         .to eq("text-sm text-foreground")
     end
 
+    it "distinguishes text-alignment from text-size and text-color" do
+      # text-left (align), text-sm (size), text-muted-foreground (color) are
+      # three independent CSS properties and must all survive dedup.
+      expect(described_class.call("text-left text-sm text-muted-foreground"))
+        .to eq("text-left text-sm text-muted-foreground")
+    end
+
+    it "still dedups within the same text category" do
+      expect(described_class.call("text-left text-center")).to eq("text-center")
+    end
+
     it "still dedups within the same category" do
       expect(described_class.call("text-sm text-base")).to eq("text-base")
       expect(described_class.call("ring-2 ring-4")).to eq("ring-4")
