@@ -2,6 +2,25 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.12.0 - 2026-06-01
+
+Five new components filling common shadcn gaps. No breaking changes.
+
+### Features
+
+- **Skeleton** — pulsing loading placeholder you size with utility classes.
+- **Breadcrumb** — composable trail (`Breadcrumb`/`BreadcrumbList`/`BreadcrumbItem`/
+  `BreadcrumbLink`/`BreadcrumbPage`/`BreadcrumbSeparator`/`BreadcrumbEllipsis`),
+  static, no JS.
+- **Pagination** — composable, link-based, server-driven
+  (`Pagination`/`Content`/`Item`/`Link`/`Previous`/`Next`/`Ellipsis`); active
+  link styling + `aria-current="page"`.
+- **Progress** — value-driven progress bar with `role="progressbar"` semantics
+  (`value:`/`max:`), static, no JS.
+- **AlertDialog** — modal confirmation built on the same `@zag-js/dialog`
+  machinery as Dialog, but `role="alertdialog"`, does NOT dismiss on
+  click-outside, and puts initial focus on the Cancel button.
+
 ## 0.11.0 - 2026-06-01
 
 New Table component (shadcn parity) plus a ClassMerge alignment fix.

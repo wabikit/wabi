@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.11.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 28 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
+🎉 **Status:** v0.12.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 33 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
 
 ---
 
@@ -31,16 +31,16 @@ Then add `@import "./wabi/tokens.css";` AFTER `@import "tailwindcss";` in your `
 
 ## What's in the box
 
-### 28 components
+### 33 components
 
 | Group | Components |
 |---|---|
 | **Forms** (13) | Button, Input, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form |
-| **Layout & Display** (6) | Card, Badge, Separator, Alert, Avatar, Table |
-| **Overlays** (5) | Dialog, Drawer (4 sides), Tooltip, Popover, Command |
+| **Layout & Display** (7) | Card, Badge, Separator, Alert, Avatar, Table, Skeleton |
+| **Overlays** (6) | Dialog, AlertDialog, Drawer (4 sides), Tooltip, Popover, Command |
 | **Menus** (1) | DropdownMenu (nested submenus, checkbox + radio items) |
-| **Navigation** (2) | Accordion, Tabs |
-| **Feedback** (1) | Toast + Toaster |
+| **Navigation** (4) | Accordion, Tabs, Breadcrumb, Pagination |
+| **Feedback** (2) | Toast + Toaster, Progress |
 
 Compound components (Card, Alert, Avatar, Dialog, Drawer, Table, Form, Combobox, …) ship as composable sub-component sets. All interactive components wire through **Zag.js 1.x** state machines for WAI-ARIA roles, keyboard semantics, and focus management. Toast is the one exception: it uses a custom Stimulus coordinator for Sonner-style stacking, group pause-on-hover, and swipe-to-dismiss — `@zag-js/toast`'s imperative DOM-creation model conflicts with Wabi's SSR + Turbo Stream append.
 
@@ -134,7 +134,7 @@ bin/dev      # starts registry watcher + tailwind watcher + docs server on :3000
 
 Then visit:
 - `/` — marketing landing
-- `/docs/components` — index of all 28 components
+- `/docs/components` — index of all 33 components
 - `/docs/components/{button,dropdown_menu,dialog,tabs}` — detailed pages with live preview + source
 - `/docs/themes` — all 8 palettes side-by-side
 - `/docs/getting-started`, `/docs/theming`, `/docs/philosophy` — prose docs
@@ -180,6 +180,7 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 | v0.9 | `wabi:update` 3-way merge; Combobox async error state; vertical Slider | ✅ shipped 2026-05-31 |
 | v0.10 | Toast group coordination (Sonner-style stacking, swipe, group pause) | ✅ shipped 2026-06-01 |
 | v0.11 | Table component (shadcn parity); ClassMerge text-align fix | ✅ shipped 2026-06-01 |
+| v0.12 | Skeleton, Breadcrumb, Pagination, Progress, AlertDialog | ✅ shipped 2026-06-01 |
 | v1.0 | API stability; external a11y audit | 2027-04 target |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.
