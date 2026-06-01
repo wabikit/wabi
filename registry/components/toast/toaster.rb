@@ -13,35 +13,46 @@ module Components
     # The list is `pointer-events-none` so the empty toaster doesn't block clicks
     # behind it; individual toasts override with `pointer-events-auto`.
     class Toaster < Wabi::Base
-      def initialize(id: "wabi-toaster", placement: :top_right, **attrs)
-        @id        = id
-        @placement = placement
-        @attrs     = attrs
+      def initialize(id: "wabi-toaster", placement: :top_right, visible_count: 3, gap: 14, **attrs)
+        @id            = id
+        @placement     = placement
+        @visible_count = visible_count
+        @gap           = gap
+        @attrs         = attrs
       end
 
       PLACEMENT_CLASSES = {
-        top_left:      "top-4 left-4 items-start",
-        top_center:    "top-4 left-1/2 -translate-x-1/2 items-center",
-        top_right:     "top-4 right-4 items-end",
-        bottom_left:   "bottom-4 left-4 items-start",
-        bottom_center: "bottom-4 left-1/2 -translate-x-1/2 items-center",
-        bottom_right:  "bottom-4 right-4 items-end",
+        top_left:      "top-4 left-4",
+        top_center:    "top-4 left-1/2 -translate-x-1/2",
+        top_right:     "top-4 right-4",
+        bottom_left:   "bottom-4 left-4",
+        bottom_center: "bottom-4 left-1/2 -translate-x-1/2",
+        bottom_right:  "bottom-4 right-4",
       }.freeze
 
       def view_template
         user_class = @attrs.delete(:class)
-        # `w-96` + `h-fit` keeps the <ol> sized to its actual toast content even
-        # before any toasts are appended -- without an explicit width, an empty
-        # flex-col container can collapse to 0 OR expand under certain Tailwind
-        # 4 layout rules. `z-50` (built-in) replaces the earlier `z-[100]`
-        # arbitrary value to avoid any class-emit ambiguity.
+        # The <ol> is the containing block for its absolutely-positioned toast
+        # <li> children: the wabi--toaster controller sets each toast to
+        # position:absolute and assigns its translateY/scale transform. Without
+        # JS the <li>s fall back to normal block flow (a plain vertical list),
+        # so the no-JS experience still works. `w-96`/`h-fit` keep the empty
+        # container sized correctly; `position: fixed` is itself the containing
+        # block for the absolute toast children.
         ol(
           id: @id,
           role: "region",
           "aria-label": "Notifications",
-          data: { controller: "wabi--toaster" },
+          data: {
+            controller: "wabi--toaster",
+            # @id must be a simple alphanumeric/hyphen string; no CSS escaping is applied.
+            "wabi--toaster-wabi--toast-outlet": "##{@id} > [data-controller~='wabi--toast']",
+            "wabi--toaster-placement-value": @placement.to_s,
+            "wabi--toaster-visible-count-value": @visible_count.to_s,
+            "wabi--toaster-gap-value": @gap.to_s,
+          },
           class: merge_class(
-            "fixed z-50 flex flex-col gap-2 w-96 max-w-[calc(100vw-2rem)] h-fit pointer-events-none list-none p-0 m-0",
+            "fixed z-50 w-96 max-w-[calc(100vw-2rem)] h-fit pointer-events-none list-none p-0 m-0",
             PLACEMENT_CLASSES.fetch(@placement),
             user_class,
           )

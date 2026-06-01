@@ -41,6 +41,29 @@ RSpec.describe "Toast composition" do
       output = described_class.new.call
       expect(output).to include("pointer-events-none")
     end
+
+    it "emits visible_count, gap and placement as Stimulus values for the coordinator" do
+      output = described_class.new(visible_count: 5, gap: 20).call
+      expect(output).to include('data-wabi--toaster-visible-count-value="5"')
+      expect(output).to include('data-wabi--toaster-gap-value="20"')
+      expect(output).to include('data-wabi--toaster-placement-value="top_right"')
+    end
+
+    it "defaults to visible_count 3 and gap 14" do
+      output = described_class.new.call
+      expect(output).to include('data-wabi--toaster-visible-count-value="3"')
+      expect(output).to include('data-wabi--toaster-gap-value="14"')
+    end
+
+    it "wires the wabi--toast outlet scoped to this toaster's own toasts" do
+      output = described_class.new(id: "alerts").call
+      expect(output).to include('data-wabi--toaster-wabi--toast-outlet="#alerts >')
+    end
+
+    it "drops flex/gap flow layout (children are absolutely positioned by JS)" do
+      output = described_class.new.call
+      expect(output).not_to include("flex flex-col")
+    end
   end
 
   describe Components::UI::Toast do
