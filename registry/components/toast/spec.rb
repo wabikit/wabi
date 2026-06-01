@@ -112,5 +112,17 @@ RSpec.describe "Toast composition" do
       output = described_class.new(title: "x").call
       expect(output).to include("motion-reduce:transition-none")
     end
+
+    it "does not bake in a translate-x transform (stack transform is JS-driven)" do
+      output = described_class.new(title: "x").call
+      expect(output).not_to include("translate-x-full")
+      expect(output).not_to include("translate-x-0")
+    end
+
+    it "fades via opacity data-state variants" do
+      output = described_class.new(title: "x").call
+      expect(output).to include("data-[state=open]:opacity-100")
+      expect(output).to include("data-[state=closed]:opacity-0")
+    end
   end
 end
