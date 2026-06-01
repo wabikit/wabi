@@ -1,0 +1,18 @@
+name: dialog
+version: 0.1.0
+type: registry:overlay
+description: Modal dialog with focus trap, Escape dismiss, click-outside dismiss, and portal.
+registry_dependencies: ["button"]
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/dialog": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+shared_files:
+  - "_shared/portal_registry.js"
+  - "_shared/overlay_portal.js"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
