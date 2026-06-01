@@ -1,0 +1,13 @@
+name: data_table
+version: 0.1.0
+type: registry:display
+description: Server-driven data table — sortable column headers + row selection. Composes Table + Pagination.
+registry_dependencies: ["table"]
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
