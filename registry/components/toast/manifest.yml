@@ -1,7 +1,7 @@
 name: toast
-version: 0.1.0
+version: 0.2.0
 type: registry:feedback
-description: Notification toaster + Toast component. Auto-dismiss + pause-on-hover, Turbo-Stream friendly.
+description: Notification toaster + Toast. Sonner-style stacking, group pause-on-hover, swipe-to-dismiss, Turbo-Stream friendly.
 registry_dependencies: []
 ruby_dependencies: []
 js_dependencies: {}

@@ -2,6 +2,29 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.10.0 - 2026-06-01
+
+Toast group coordination — the last long-deferred carryover.
+
+### Features
+
+- **Toast Sonner-style stacking.** Toasts now collapse into a peek stack
+  (`visible_count`, default 3) and expand to a full spaced list on group
+  hover/focus. Overflow toasts are kept and surface as front toasts dismiss
+  (their timers hold until visible). Hovering the group pauses every timer.
+  `Toaster.new(visible_count:, gap:)` configure the stack. Built on a custom
+  two-controller coordinator (`wabi--toaster` + `wabi--toast` via Stimulus
+  outlets) — **not** `@zag-js/toast`, whose imperative DOM-creation model looped
+  against Wabi's SSR + Turbo Stream append in v0.5.
+- **Swipe-to-dismiss.** Drag a toast horizontally past a threshold to dismiss it.
+
+### Breaking
+
+- **Toast no longer bakes in a `translate-x` enter/exit transform.** The
+  slide/scale is now JS-driven inline styles; the Tailwind base fades via
+  opacity only. Apps that overrode the toast transform via `class:` should
+  remove `translate-x-*` overrides.
+
 ## 0.9.0 - 2026-05-31
 
 DX + polish, plus a full fix of the vertical Slider.

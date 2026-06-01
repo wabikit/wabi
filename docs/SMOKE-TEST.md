@@ -257,3 +257,17 @@ v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` 
 - /docs/components/slider "Vertical with Marks": tall vertical track, fill rises from the bottom with the value, thumb on the rail, marks (Low/Mid/High) BESIDE the track aligned with its height
 - Drag works in both; both correct in light AND dark themes
 - Note: `marks:` is now on `SliderControl` (not `Slider`)
+
+## Sprint 14 / v0.10.0
+
+### Toast — group coordination
+
+- Spawn 1 toast → slides in from the placement edge, auto-dismisses after ~5s.
+- Spawn 4+ fast → only `visible_count` (3) peek; the rest hidden behind, scaled/offset.
+- Hover the stack → expands to a full spaced list AND all timers pause (no dismissal while hovered).
+- Move mouse away → collapses back; timers resume.
+- Let the front toast dismiss with >3 present → a previously hidden toast surfaces.
+- Drag a toast horizontally past ~80px → it flies off and dismisses; a small drag snaps back.
+- Click the × button → dismisses (and does not trigger a swipe).
+- OS "reduce motion" on → toasts still position correctly, just without transitions.
+- A `bottom_*` placement Toaster → stack grows upward; entrance comes from below.
