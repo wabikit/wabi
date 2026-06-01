@@ -1,0 +1,13 @@
+name: breadcrumb
+version: 0.1.0
+type: registry:display
+description: Composable breadcrumb trail (nav/list/item/link/page/separator/ellipsis). Static, no JS.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
