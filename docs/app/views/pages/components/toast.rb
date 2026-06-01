@@ -40,8 +40,9 @@ module Views
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               p(class: "text-sm text-muted-foreground mb-4") do
-                "Toasts are dispatched from a Rails action via Turbo Stream. " \
-                "Click the buttons below to spawn one of the three appearance variants."
+                "Toasts are dispatched from a Rails action via Turbo Stream. Click a button " \
+                "several times to build a stack — toasts collapse into a peek pile, expand when " \
+                "you hover the group (which also pauses auto-dismiss), and can be swiped away."
               end
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 # In a Rails controller action:
@@ -86,6 +87,15 @@ module Views
                     },
                     class: "rounded-md bg-destructive text-destructive-foreground px-4 py-2 text-sm hover:opacity-90"
                   ) { "Destructive toast" }
+
+                  button(
+                    type: "button",
+                    data: {
+                      action: "click->wabi--toast-demo#spawn",
+                      "wabi--toast-demo-key-param": "info",
+                    },
+                    class: "rounded-md border border-input bg-background px-4 py-2 text-sm hover:bg-muted"
+                  ) { "Spawn another (build a stack)" }
 
                   template(
                     data: {
