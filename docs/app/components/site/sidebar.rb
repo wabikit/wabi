@@ -14,7 +14,7 @@ module Components
           { name: "Philosophy",   path: "/docs/philosophy" },
         ]},
         { label: "Forms", items: %w[button checkbox combobox form input label radio_group select slider switch textarea toggle toggle_group].map(&COMPONENT_LINK) },
-        { label: "Layout & Display", items: %w[alert avatar badge card separator].map(&COMPONENT_LINK) },
+        { label: "Layout & Display", items: %w[alert avatar badge card separator table].map(&COMPONENT_LINK) },
         { label: "Overlays", items: %w[command dialog drawer popover tooltip].map(&COMPONENT_LINK) },
         { label: "Menus", items: [{ name: "Dropdown Menu", path: "/docs/components/dropdown_menu" }] },
         { label: "Navigation", items: %w[accordion tabs].map(&COMPONENT_LINK) },

@@ -9,7 +9,7 @@ class ComponentsController < ApplicationController
     button input textarea label card badge separator alert avatar
     checkbox switch select dialog drawer tooltip popover
     dropdown_menu toast tabs accordion toggle radio_group toggle_group
-    slider combobox form command
+    slider combobox form command table
   ].freeze
 
   FRAMEWORKS = [
