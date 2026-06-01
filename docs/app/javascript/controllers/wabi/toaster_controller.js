@@ -24,10 +24,14 @@ export default class extends Controller {
     window.wabiToaster = this // deprecated alias -> most-recent toaster
 
     this.expanded = false
-    this.onEnter = () => this.setExpanded(true)
-    this.onLeave = () => this.setExpanded(false)
-    this.element.addEventListener("pointerenter", this.onEnter)
-    this.element.addEventListener("pointerleave", this.onLeave)
+    // The <ol> is pointer-events:none, so non-bubbling pointerenter/leave would
+    // never fire on it. Use the bubbling pointerover/pointerout (they propagate
+    // up from the pointer-events:auto toast children) and ignore moves that stay
+    // within the group via relatedTarget. focusin/focusout bubble natively.
+    this.onEnter = (e) => { if (!this.element.contains(e.relatedTarget)) this.setExpanded(true) }
+    this.onLeave = (e) => { if (!this.element.contains(e.relatedTarget)) this.setExpanded(false) }
+    this.element.addEventListener("pointerover", this.onEnter)
+    this.element.addEventListener("pointerout", this.onLeave)
     this.element.addEventListener("focusin", this.onEnter)
     this.element.addEventListener("focusout", this.onLeave)
 
@@ -35,8 +39,9 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.element.removeEventListener("pointerenter", this.onEnter)
-    this.element.removeEventListener("pointerleave", this.onLeave)
+    if (this.raf) cancelAnimationFrame(this.raf)
+    this.element.removeEventListener("pointerover", this.onEnter)
+    this.element.removeEventListener("pointerout", this.onLeave)
     this.element.removeEventListener("focusin", this.onEnter)
     this.element.removeEventListener("focusout", this.onLeave)
     if (window.wabiToasters && window.wabiToasters[this.toasterId] === this) {
