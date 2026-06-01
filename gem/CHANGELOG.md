@@ -2,6 +2,26 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.11.0 - 2026-06-01
+
+New Table component (shadcn parity) plus a ClassMerge alignment fix.
+
+### Features
+
+- **Table component.** Eight composable, semantic, static primitives mirroring
+  shadcn: `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`,
+  `TableHead`, `TableCell`, `TableCaption`. Purely presentational — no JS;
+  sorting/pagination stay server-driven. Install with
+  `bin/rails g wabi:add table`.
+
+### Fixed
+
+- **ClassMerge: `text-align` no longer collides with text color.** `text-left`,
+  `text-center`, `text-right`, `text-justify`, `text-start`, and `text-end` now
+  dedup in their own bucket instead of being dropped against a `text-{color}`
+  utility (e.g. `text-muted-foreground`). Surfaced by `TableHead`, which needs
+  both `text-left` and `text-muted-foreground` to survive.
+
 ## 0.10.0 - 2026-06-01
 
 Toast group coordination — the last long-deferred carryover.
