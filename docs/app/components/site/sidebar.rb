@@ -15,7 +15,7 @@ module Components
         ]},
         { label: "Forms", items: %w[button checkbox combobox form input label radio_group select slider switch textarea toggle toggle_group].map(&COMPONENT_LINK) },
         { label: "Layout & Display", items: %w[alert avatar badge card separator table skeleton].map(&COMPONENT_LINK) },
-        { label: "Overlays", items: %w[command dialog drawer popover tooltip].map(&COMPONENT_LINK) },
+        { label: "Overlays", items: %w[alert_dialog command dialog drawer popover tooltip].map(&COMPONENT_LINK) },
         { label: "Menus", items: [{ name: "Dropdown Menu", path: "/docs/components/dropdown_menu" }] },
         { label: "Navigation", items: %w[accordion tabs breadcrumb pagination].map(&COMPONENT_LINK) },
         { label: "Feedback", items: [{ name: "Toast", path: "/docs/components/toast" }, { name: "Progress", path: "/docs/components/progress" }] },
