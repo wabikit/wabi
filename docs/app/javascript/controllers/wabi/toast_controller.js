@@ -1,96 +1,163 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Self-contained toast lifecycle. No Zag machine -- vanilla setTimeout with
-// pause-on-hover bookkeeping. Each toast manages its own dismissal timer; when
-// Turbo Stream appends a new <li> to the Toaster, Stimulus auto-connects this
-// controller on the new element and the countdown starts.
+// Item controller for a single toast. The wabi--toaster coordinator owns the
+// stack: it calls position() with this toast's resting translateY/scale, and
+// hold()/release() to pause/resume the dismiss timer at the group level. This
+// controller owns its entrance/exit animation, its dismiss timer, and the
+// swipe-to-dismiss gesture. No Zag machine -- vanilla timer + inline styles.
+const SWIPE_THRESHOLD = 80 // px of horizontal drag before a swipe dismisses
+
 export default class extends Controller {
   static values = {
     durationMs: { type: Number, default: 5000 },
   }
 
   connect() {
-    this.boundPause  = this.pause.bind(this)
-    this.boundResume = this.resume.bind(this)
-    this.element.addEventListener("mouseenter", this.boundPause)
-    this.element.addEventListener("mouseleave", this.boundResume)
-    this.element.addEventListener("focusin",    this.boundPause)
-    this.element.addEventListener("focusout",   this.boundResume)
+    this.rest = { y: 0, scale: 1, zIndex: 1 } // assigned by the coordinator
+    this.entered = false
+    this.held = false
+    this.remainingMs = null
 
-    // Enter animation: SSR sets data-state="open" (no-JS fallback: toast is
-    // visible without JS). For JS, snap to "closed" synchronously before the
-    // browser's first paint of this node (connect() fires in a MutationObserver
-    // microtask, before layout/paint), then flip back to "open" on the next
-    // animation frame so the CSS transition (translate-x + opacity) plays the
-    // slide-in. The double-rAF ensures the "closed" state is committed to
-    // style before the "open" flip is scheduled, which is necessary for the
-    // transition to register on browsers that batch style recalcs.
+    this.element.style.transitionProperty = "transform, opacity"
+    this.element.style.willChange = "transform, opacity"
+
+    this.boundDown = this.onPointerDown.bind(this)
+    this.element.addEventListener("pointerdown", this.boundDown)
+
+    // Entrance: snap to closed off-screen, then flip to open at the resting
+    // transform on the next frame so the CSS transition plays. The double-rAF
+    // commits the "closed" style before scheduling "open".
     this.element.dataset.state = "closed"
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => { this.element.dataset.state = "open" })
-    })
-
-    this.start()
+    this.applyTransform(this.entranceY(), this.rest.scale)
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      this.entered = true
+      this.element.dataset.state = "open"
+      this.applyRest()
+      this.startTimer()
+    }))
   }
 
   disconnect() {
     this.clearTimer()
-    this.element.removeEventListener("mouseenter", this.boundPause)
-    this.element.removeEventListener("mouseleave", this.boundResume)
-    this.element.removeEventListener("focusin",    this.boundPause)
-    this.element.removeEventListener("focusout",   this.boundResume)
+    this.element.removeEventListener("pointerdown", this.boundDown)
   }
 
-  start() {
-    // durationMsValue <= 0 means "sticky" — render the toast without an
-    // auto-dismiss timer. Useful for previews, manual-dismiss-only flows,
-    // or when the app schedules dismissal externally.
-    if (this.durationMsValue <= 0) {
-      this.remainingMs = 0
-      return
-    }
-    this.startedAt   = Date.now()
-    this.remainingMs = this.durationMsValue
-    this.timer       = setTimeout(() => this.dismiss(), this.remainingMs)
+  // --- coordinator API (called via the wabi--toaster outlet) ---
+
+  position({ y, scale, zIndex, front, hidden, expanded }) {
+    this.rest = { y, scale, zIndex }
+    this.element.style.zIndex = String(zIndex)
+    this.element.toggleAttribute("data-front", !!front)
+    this.element.toggleAttribute("data-hidden", !!hidden)
+    this.element.toggleAttribute("data-expanded", !!expanded)
+    this.element.style.opacity = hidden ? "0" : ""
+    this.element.style.pointerEvents = hidden ? "none" : ""
+    if (this.entered && !this.swiping) this.applyRest()
+    if (hidden) this.hold()
+    else if (this.entered && !this.groupHeld) this.release()
   }
 
-  pause() {
+  hold() {
+    this.groupHeld = true
     if (!this.timer) return
     this.clearTimer()
     this.remainingMs -= Date.now() - this.startedAt
     if (this.remainingMs < 0) this.remainingMs = 0
   }
 
-  resume() {
-    if (this.timer) return
+  release() {
+    this.groupHeld = false
+    if (this.timer || this.durationMsValue <= 0) return
+    if (this.element.hasAttribute("data-hidden")) return
+    if (this.remainingMs == null) { this.startTimer(); return }
     if (this.remainingMs <= 0) { this.dismiss(); return }
     this.startedAt = Date.now()
-    this.timer     = setTimeout(() => this.dismiss(), this.remainingMs)
+    this.timer = setTimeout(() => this.dismiss(), this.remainingMs)
   }
 
-  // Stimulus action: `data-action="click->wabi--toast#dismiss"` on the close
-  // button animates the toast out before removing it from the DOM.
+  measuredHeight() { return this.element.offsetHeight }
+
+  // --- timer ---
+
+  startTimer() {
+    if (this.durationMsValue <= 0) { this.remainingMs = 0; return }
+    if (this.groupHeld || this.element.hasAttribute("data-hidden")) return
+    this.startedAt = Date.now()
+    this.remainingMs = this.durationMsValue
+    this.timer = setTimeout(() => this.dismiss(), this.remainingMs)
+  }
+
+  clearTimer() {
+    if (this.timer) { clearTimeout(this.timer); this.timer = null }
+  }
+
+  // --- dismissal (Stimulus action: click->wabi--toast#dismiss) ---
+
   dismiss() {
+    this.clearTimer()
     this.element.dispatchEvent(new CustomEvent("wabi-toast:dismiss", { bubbles: true }))
-    // Flip to closed state; CSS transition (transition-all duration-300)
-    // animates translate-x + opacity. Listen for transitionend to remove.
     this.element.dataset.state = "closed"
+    this.element.style.opacity = "0"
+    this.applyTransform(this.entranceY(), this.rest.scale) // slide back out
     const handler = () => {
       this.element.removeEventListener("transitionend", handler)
       this.element.remove()
     }
     this.element.addEventListener("transitionend", handler)
-    // Safety fallback: if transitionend doesn't fire (e.g. element is
-    // display:none-ish, or prefers-reduced-motion), force-remove after 350ms.
-    setTimeout(() => {
-      if (this.element.isConnected) this.element.remove()
-    }, 350)
+    // Safety: if transitionend never fires (reduced-motion / display issues).
+    setTimeout(() => { if (this.element.isConnected) this.element.remove() }, 350)
   }
 
-  clearTimer() {
-    if (this.timer) {
-      clearTimeout(this.timer)
-      this.timer = null
+  // --- swipe-to-dismiss ---
+
+  onPointerDown(event) {
+    if (event.target.closest("button")) return // let the close button work
+    this.swiping = true
+    this.swipeStart = event.clientX
+    this.swipeDx = 0
+    try { this.element.setPointerCapture(event.pointerId) } catch (_) {}
+    this.element.style.transitionProperty = "none"
+    this.boundMove = this.onPointerMove.bind(this)
+    this.boundUp = this.onPointerUp.bind(this)
+    this.element.addEventListener("pointermove", this.boundMove)
+    this.element.addEventListener("pointerup", this.boundUp)
+    this.element.addEventListener("pointercancel", this.boundUp)
+  }
+
+  onPointerMove(event) {
+    this.swipeDx = event.clientX - this.swipeStart
+    this.element.style.transform = `translateX(${this.swipeDx}px)`
+  }
+
+  onPointerUp() {
+    this.element.removeEventListener("pointermove", this.boundMove)
+    this.element.removeEventListener("pointerup", this.boundUp)
+    this.element.removeEventListener("pointercancel", this.boundUp)
+    this.element.style.transitionProperty = "transform, opacity"
+    this.swiping = false
+    if (Math.abs(this.swipeDx) > SWIPE_THRESHOLD) {
+      this.element.style.opacity = "0"
+      this.element.style.transform = `translateX(${Math.sign(this.swipeDx) * 400}px)`
+      this.dismiss()
+    } else {
+      this.applyRest() // snap back
     }
+    this.swipeDx = 0
+  }
+
+  // --- transform helpers ---
+
+  applyRest() { this.applyTransform(this.rest.y, this.rest.scale) }
+
+  applyTransform(y, scale) {
+    this.element.style.transform = `translateY(${y}px) scale(${scale})`
+  }
+
+  entranceY() {
+    // Off-screen offset in the placement direction. enterDir is set by the
+    // coordinator (-1 for top placements, +1 for bottom). Fallback +1.
+    const h = this.element.offsetHeight || 80
+    const dir = Number(this.element.dataset.enterDir || 1)
+    return dir * (h + 24)
   }
 }
