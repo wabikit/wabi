@@ -2,6 +2,52 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.9.0 - 2026-05-31
+
+DX + polish, plus a full fix of the vertical Slider.
+
+### Breaking
+
+- **Slider `marks:` moved from `Slider` to `SliderControl`.** Marks now render
+  inside the control (the track's positioning context) so they align with the
+  track in both orientations. Update `Slider.new(marks: […])` →
+  `SliderControl.new(marks: […])` (and pass `orientation:` to `SliderControl`
+  for vertical). Marks were introduced in v0.8.
+
+### Features
+
+- **`wabi:update` three-way merge.** Locally-edited component files are now
+  3-way merged (base + local + new) via `git merge-file` instead of the
+  all-or-nothing prompt: non-conflicting registry changes auto-apply while your
+  edits are preserved; true conflicts are written with `<<<<<<<` markers. Falls
+  back to the y/n/d/q prompt when git is unavailable or the lockfile predates
+  this release. The lockfile now records `{ hash, content }` per file
+  (back-compat: legacy string-hash entries still load and use the fallback). A
+  data-safety guard never writes a file when `git merge-file` errors.
+- **Combobox async error state.** New optional `ComboboxError` slot (hidden,
+  `aria-live`) — shown on async fetch failure (prior results kept), hidden on
+  the next successful fetch.
+
+### Fixes
+
+- **Vertical Slider now works end-to-end.** The v0.8 slider was effectively
+  horizontal-only; the vertical orientation didn't render usably. Fixed across
+  the board, each gated by orientation so horizontal is unchanged:
+  - `SliderControl` fills the column height in vertical (was collapsing to 0,
+    leaving the track 0px tall).
+  - Thumb centers on the cross-axis correctly per orientation (horizontal:
+    vertical-center; vertical: horizontal-center on the rail).
+  - `SliderRange` fill is `w-full` in vertical (was zero-width / invisible) with
+    Zag driving the height from the value.
+  - Marks render inside `SliderControl`, aligned with the track (below it for
+    horizontal, beside it spanning its height for vertical), with the tick +
+    label offset oriented accordingly.
+
+### Deferred to v0.10
+
+- Toast `@zag-js/toast` group machine (high-risk; failed twice).
+- Phlex 2.4 Ruby 4 warnings (upstream).
+
 ## 0.8.0 - 2026-05-31
 
 Focused high-value mix: one marquee feature, one self-contained feature, an

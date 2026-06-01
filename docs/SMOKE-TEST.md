@@ -239,3 +239,21 @@ v0.2 deferrals enumerated in `V01-CARRYOVER.md`. The main ones: `@zag-js/toast` 
 - Dialog (modal): body siblings get `inert` while open, cleared on close
 - DropdownMenu: N-level submenu still opens all three levels
 - DevTools: each overlay's dist bundles `_shared/overlay_portal.js`
+
+## Sprint 13 / v0.9.0
+
+### wabi:update three-way merge (CLI, in a host app)
+- Install a component, edit it locally, bump the registry version, run `bin/rails g wabi:update <comp>`:
+  - Non-conflicting edits → auto-merged (your edits + registry changes both present, no markers)
+  - Conflicting edits → file written with `<<<<<<<`/`=======`/`>>>>>>>` markers, reported as a conflict
+- Pre-v0.9 lockfile (string hashes) or no git → falls back to the y/n/d/q prompt
+- git error → file left UNCHANGED (never blanked); `--dry-run` reports planned merges; `--force` overwrites
+
+### Combobox async error
+- /docs/components/combobox (async example): DevTools → Network → Offline, type → "Couldn't load results" error slot shows; back online + type → error hides, results load
+
+### Slider — both orientations (regression + new)
+- /docs/components/slider "With Marks" (horizontal): track full width, fill = value%, thumb on the bar, marks at 0/50/100% BELOW the track
+- /docs/components/slider "Vertical with Marks": tall vertical track, fill rises from the bottom with the value, thumb on the rail, marks (Low/Mid/High) BESIDE the track aligned with its height
+- Drag works in both; both correct in light AND dark themes
+- Note: `marks:` is now on `SliderControl` (not `Slider`)
