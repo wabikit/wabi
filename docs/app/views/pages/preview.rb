@@ -327,6 +327,108 @@ module Views
                 end
               end
             end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Skeleton" }
+              div(class: "flex flex-col gap-3") do
+                render ::Components::UI::Skeleton.new(class: "h-12 w-12 rounded-full")
+                render ::Components::UI::Skeleton.new(class: "h-4 w-[250px]")
+                render ::Components::UI::Skeleton.new(class: "h-4 w-[200px]")
+              end
+            end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Progress" }
+              render ::Components::UI::Progress.new(value: 60, class: "max-w-md")
+            end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Breadcrumb" }
+              render ::Components::UI::Breadcrumb.new do
+                render ::Components::UI::BreadcrumbList.new do
+                  render ::Components::UI::BreadcrumbItem.new do
+                    render ::Components::UI::BreadcrumbLink.new(href: "/") { "Home" }
+                  end
+                  render ::Components::UI::BreadcrumbSeparator.new
+                  render ::Components::UI::BreadcrumbItem.new do
+                    render ::Components::UI::BreadcrumbLink.new(href: "/docs/components") { "Components" }
+                  end
+                  render ::Components::UI::BreadcrumbSeparator.new
+                  render ::Components::UI::BreadcrumbItem.new do
+                    render ::Components::UI::BreadcrumbPage.new { "Breadcrumb" }
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Pagination" }
+              render ::Components::UI::Pagination.new do
+                render ::Components::UI::PaginationContent.new do
+                  render ::Components::UI::PaginationItem.new do
+                    render ::Components::UI::PaginationPrevious.new(href: "#")
+                  end
+                  render ::Components::UI::PaginationItem.new do
+                    render ::Components::UI::PaginationLink.new(href: "#") { "1" }
+                  end
+                  render ::Components::UI::PaginationItem.new do
+                    render ::Components::UI::PaginationLink.new(href: "#", active: true) { "2" }
+                  end
+                  render ::Components::UI::PaginationItem.new do
+                    render ::Components::UI::PaginationLink.new(href: "#") { "3" }
+                  end
+                  render ::Components::UI::PaginationItem.new do
+                    render ::Components::UI::PaginationEllipsis.new
+                  end
+                  render ::Components::UI::PaginationItem.new do
+                    render ::Components::UI::PaginationNext.new(href: "#")
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Table" }
+              render ::Components::UI::Table.new do
+                render ::Components::UI::TableCaption.new { "A list of recent invoices." }
+                render ::Components::UI::TableHeader.new do
+                  render ::Components::UI::TableRow.new do
+                    render ::Components::UI::TableHead.new { "Invoice" }
+                    render ::Components::UI::TableHead.new { "Status" }
+                    render ::Components::UI::TableHead.new(class: "text-right") { "Amount" }
+                  end
+                end
+                render ::Components::UI::TableBody.new do
+                  render ::Components::UI::TableRow.new do
+                    render ::Components::UI::TableCell.new(class: "font-medium") { "INV001" }
+                    render ::Components::UI::TableCell.new { "Paid" }
+                    render ::Components::UI::TableCell.new(class: "text-right") { "$250.00" }
+                  end
+                  render ::Components::UI::TableRow.new do
+                    render ::Components::UI::TableCell.new(class: "font-medium") { "INV002" }
+                    render ::Components::UI::TableCell.new { "Pending" }
+                    render ::Components::UI::TableCell.new(class: "text-right") { "$150.00" }
+                  end
+                end
+              end
+            end
+
+            section(class: "mt-12") do
+              h2(class: "text-2xl font-semibold mb-4") { "Alert Dialog" }
+              render ::Components::UI::AlertDialog.new do
+                render ::Components::UI::AlertDialogTrigger.new(class: "inline-flex h-10 px-4 items-center rounded-md border border-input") { "Delete account" }
+                render ::Components::UI::AlertDialogContent.new do
+                  render ::Components::UI::AlertDialogHeader.new do
+                    render ::Components::UI::AlertDialogTitle.new { "Are you absolutely sure?" }
+                    render ::Components::UI::AlertDialogDescription.new { "This permanently deletes your account and cannot be undone." }
+                  end
+                  render ::Components::UI::AlertDialogFooter.new do
+                    render ::Components::UI::AlertDialogCancel.new { "Cancel" }
+                    render ::Components::UI::AlertDialogAction.new(appearance: :destructive) { "Delete" }
+                  end
+                end
+              end
+            end
           end
         end
       end
