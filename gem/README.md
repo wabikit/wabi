@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.12.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 33 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
+🎉 **Status:** v0.13.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 34 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
 
 ---
 
@@ -31,12 +31,12 @@ Then add `@import "./wabi/tokens.css";` AFTER `@import "tailwindcss";` in your `
 
 ## What's in the box
 
-### 33 components
+### 34 components
 
 | Group | Components |
 |---|---|
 | **Forms** (13) | Button, Input, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form |
-| **Layout & Display** (7) | Card, Badge, Separator, Alert, Avatar, Table, Skeleton |
+| **Layout & Display** (8) | Card, Badge, Separator, Alert, Avatar, Table, DataTable, Skeleton |
 | **Overlays** (6) | Dialog, AlertDialog, Drawer (4 sides), Tooltip, Popover, Command |
 | **Menus** (1) | DropdownMenu (nested submenus, checkbox + radio items) |
 | **Navigation** (4) | Accordion, Tabs, Breadcrumb, Pagination |
@@ -134,7 +134,7 @@ bin/dev      # starts registry watcher + tailwind watcher + docs server on :3000
 
 Then visit:
 - `/` — marketing landing
-- `/docs/components` — index of all 33 components
+- `/docs/components` — index of all 34 components
 - `/docs/components/{button,dropdown_menu,dialog,tabs}` — detailed pages with live preview + source
 - `/docs/themes` — all 8 palettes side-by-side
 - `/docs/getting-started`, `/docs/theming`, `/docs/philosophy` — prose docs
@@ -181,6 +181,7 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 | v0.10 | Toast group coordination (Sonner-style stacking, swipe, group pause) | ✅ shipped 2026-06-01 |
 | v0.11 | Table component (shadcn parity); ClassMerge text-align fix | ✅ shipped 2026-06-01 |
 | v0.12 | Skeleton, Breadcrumb, Pagination, Progress, AlertDialog | ✅ shipped 2026-06-01 |
+| v0.13 | DataTable (server-driven: sortable headers + row selection) | ✅ shipped 2026-06-01 |
 | v1.0 | API stability; external a11y audit | 2027-04 target |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.

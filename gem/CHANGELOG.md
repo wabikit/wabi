@@ -2,6 +2,22 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.13.0 - 2026-06-01
+
+Server-driven DataTable. No breaking changes.
+
+### Features
+
+- **DataTable** — composes the static `Table` + `Pagination` into a server-driven
+  data table. `DataTableColumnHeader` renders a sort link + asc/desc/neutral
+  indicator (the Rails controller orders the query and builds the toggle href —
+  no client-side data). `DataTableCheckbox` is a native, theme-styled checkbox
+  (no per-row Zag machine). The `wabi--data-table` Stimulus controller
+  coordinates select-all + indeterminate state, toggles each row's
+  `data-state="selected"`, and dispatches `wabi--data-table:change` with the
+  selected row values for app-side bulk actions. Install with
+  `bin/rails g wabi:add data_table`.
+
 ## 0.12.0 - 2026-06-01
 
 Five new components filling common shadcn gaps. No breaking changes.
