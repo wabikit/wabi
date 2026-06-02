@@ -10,8 +10,12 @@ export default class extends Controller {
 
   connect() {
     const html = document.documentElement
-    const storedTheme = localStorage.getItem(this.themeKeyValue) || "default"
-    const storedMode  = localStorage.getItem(this.modeKeyValue) || this.systemMode()
+    // Honor the server-rendered data-theme/data-mode before falling back, so a
+    // single-theme (or non-"default") install isn't clobbered to "default" on
+    // hydration when localStorage is empty. Precedence: user choice (localStorage)
+    // → server-rendered value → sensible default.
+    const storedTheme = localStorage.getItem(this.themeKeyValue) || html.dataset.theme || "default"
+    const storedMode  = localStorage.getItem(this.modeKeyValue) || html.dataset.mode || this.systemMode()
     html.dataset.theme = storedTheme
     html.dataset.mode  = storedMode
   }
