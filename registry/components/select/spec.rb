@@ -22,6 +22,35 @@ RSpec.describe "Select composition" do
     expect(output).to include('data-wabi--select-target="hiddenSelect"')
   end
 
+  it "renders an <option> per item in the hidden <select> so the chosen value submits" do
+    # Regression guard: the hidden <select> used to render with NO options, so
+    # its .value was always "" and the form submitted nothing. Zag's
+    # getHiddenSelectProps only sets attributes; the view must render the option
+    # set itself. A leading empty option means "no selection" submits "".
+    output = Components::UI::Select.new(
+      items: [{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }],
+      name: "fruit",
+      value: "b",
+    ).call { "" }
+    expect(output).to include('<option value="a"')
+    expect(output).to include('<option value="b"')
+    expect(output).to include("Apple")
+    expect(output).to include("Banana")
+    # the matching item is marked selected
+    expect(output).to match(/<option value="b"[^>]*\bselected\b/)
+    # leading empty option present (placeholder text); not selected when value set
+    expect(output).to include('<option value=""')
+  end
+
+  it "marks the leading empty option selected when no value is set" do
+    output = Components::UI::Select.new(
+      items: [{ value: "a", label: "Apple" }],
+      name: "fruit",
+    ).call { "" }
+    expect(output).to match(/<option value=""[^>]*\bselected\b/)
+    expect(output).not_to match(/<option value="a"[^>]*\bselected\b/)
+  end
+
   it "carries portal-value true by default" do
     output = Components::UI::Select.new.call { "" }
     expect(output).to include('data-wabi--select-portal-value="true"')
