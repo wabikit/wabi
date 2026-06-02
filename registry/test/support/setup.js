@@ -43,6 +43,32 @@ if (typeof globalThis.CSS.escape !== "function") {
   }
 }
 
+// jsdom's selector engine (nwsapi) can't compile the `:scope >` combinator and
+// throws SYNTAX_ERR. Several controllers use `el.querySelectorAll(':scope > …')`
+// to find/clean up their own direct-child hidden inputs (toggle_group, slider).
+// Real browsers support :scope fine, so this is a jsdom-only gap. Polyfill it by
+// temporarily tagging the host element and rewriting :scope → an attribute
+// selector that nwsapi can compile. Transparent for selectors without :scope.
+if (!Element.prototype.__wabiScopePatched) {
+  let counter = 0
+  for (const method of ["querySelector", "querySelectorAll"]) {
+    const original = Element.prototype[method]
+    Element.prototype[method] = function (selector) {
+      if (typeof selector === "string" && selector.includes(":scope")) {
+        const attr = `data-wabi-scope-${counter++}`
+        this.setAttribute(attr, "")
+        try {
+          return original.call(this, selector.replace(/:scope/g, `[${attr}]`))
+        } finally {
+          this.removeAttribute(attr)
+        }
+      }
+      return original.call(this, selector)
+    }
+  }
+  Element.prototype.__wabiScopePatched = true
+}
+
 // Global teardown: stop any Stimulus Applications a test started, so controllers
 // never leak across test files.
 afterEach(() => stopAll())
