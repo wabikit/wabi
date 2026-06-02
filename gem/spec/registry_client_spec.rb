@@ -49,6 +49,23 @@ RSpec.describe Wabi::RegistryClient do
       expect(File.read(cached_path)).to eq(json_body)
     end
 
+    it "force-encodes a binary (ASCII-8BIT) body to UTF-8 so multibyte content survives write/parse" do
+      # Net::HTTP tags bodies ASCII-8BIT; the registry serves UTF-8 with em-dashes
+      # in comments. Without force_encoding, File.write/cache raises
+      # Encoding::UndefinedConversionError and parsed content stays binary.
+      binary_body = '{"name":"card","files":[{"path":"card.rb","content":"# an em-dash — here"}]}'
+                    .dup.force_encoding("ASCII-8BIT")
+      stub_request(:get, "https://wabi-docs.onrender.com/r/card.json")
+        .to_return(status: 200, body: binary_body)
+
+      client = described_class.new
+      result = nil
+      expect { result = client.fetch("card") }.not_to raise_error
+      content = result["files"].first["content"]
+      expect(content.encoding.name).to eq("UTF-8")
+      expect(content).to include("—")
+    end
+
     it "returns cached value on second fetch without hitting network" do
       stub_request(:get, "https://wabi-docs.onrender.com/r/button.json")
         .to_return(status: 200, body: json_body)

@@ -2,6 +2,25 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.14.1 - 2026-06-02
+
+Two blocking install-flow bugs surfaced by end-to-end dogfooding against the live registry.
+
+### Fixed
+
+- **Encoding crash on `wabi:add` / `wabi:theme`.** `Net::HTTP` tags response
+  bodies `ASCII-8BIT`; writing/caching any component or theme containing a
+  multibyte character (e.g. an em-dash in a comment) raised
+  `Encoding::UndefinedConversionError` (BINARY→UTF-8) on Ruby 4. The registry
+  client and theme generator now `force_encoding("UTF-8")` (on a dup — the body
+  is frozen) before writing. This broke the happy path against the live HTTPS
+  registry.
+- **Zeitwerk `UI` acronym not registered.** Components install to
+  `app/components/ui/` under the `Components::UI` namespace, but Zeitwerk expects
+  `Components::Ui`, so a fresh app 500'd on the first component reference.
+  `wabi:install` now writes `config/initializers/wabi.rb` registering
+  `inflect.acronym "UI"`.
+
 ## 0.14.0 - 2026-06-02
 
 The component registry is now live, and the gem points at it by default.

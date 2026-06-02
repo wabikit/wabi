@@ -57,7 +57,11 @@ module Wabi
       unless response.is_a?(Net::HTTPSuccess)
         raise Wabi::Error, "Failed to fetch #{name}: HTTP #{response.code}"
       end
-      response.body
+      # Net::HTTP tags the body ASCII-8BIT (binary). The registry serves UTF-8
+      # JSON, so force the encoding back — otherwise File.write of any component
+      # with a multibyte char (e.g. an em-dash in a comment) raises
+      # Encoding::UndefinedConversionError (BINARY→UTF-8) on write/cache.
+      response.body.dup.force_encoding("UTF-8")
     end
 
     def cache_path(name)

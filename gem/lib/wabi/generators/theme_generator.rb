@@ -39,7 +39,9 @@ module Wabi
           uri = URI.parse(url_or_path)
           response = Net::HTTP.get_response(uri)
           raise Wabi::Error, "Theme #{label} not found at #{url_or_path}: HTTP #{response.code}" unless response.is_a?(Net::HTTPSuccess)
-          response.body
+          # Net::HTTP tags the body ASCII-8BIT; theme CSS is UTF-8 (em-dashes in
+          # comments). Force UTF-8 so File.write doesn't raise BINARY→UTF-8.
+          response.body.dup.force_encoding("UTF-8")
         end
       end
     end

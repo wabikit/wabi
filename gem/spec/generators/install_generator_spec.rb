@@ -33,6 +33,13 @@ RSpec.describe Wabi::Generators::InstallGenerator do
     expect(lock["components"]).to eq({})
   end
 
+  it "registers the UI acronym so Zeitwerk resolves Components::UI (not ::Ui)" do
+    described_class.start([], destination_root: destination)
+    init = File.join(destination, "config/initializers/wabi.rb")
+    expect(File.exist?(init)).to be true
+    expect(File.read(init)).to include('inflect.acronym "UI"')
+  end
+
   it "overwrites existing tokens.css when --force is passed" do
     target = File.join(destination, "app/assets/tailwind/wabi/tokens.css")
     FileUtils.mkdir_p(File.dirname(target))

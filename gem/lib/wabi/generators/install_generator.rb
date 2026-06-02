@@ -32,6 +32,23 @@ module Wabi
         lockfile.save
       end
 
+      # Components install into app/components/ui/ under the Components::UI
+      # namespace. Zeitwerk would expect Components::Ui for the "ui" dir, so the
+      # app 500s on the first component reference unless "UI" is a known acronym.
+      # Register it (idempotent — skipped if the file already exists).
+      def register_ui_acronym
+        create_file "config/initializers/wabi.rb", <<~RUBY
+          # frozen_string_literal: true
+
+          # Wabi components live in app/components/ui/ under the Components::UI
+          # namespace. Zeitwerk needs the "UI" acronym to map the ui/ directory
+          # to the UI constant (otherwise it expects Components::Ui).
+          ActiveSupport::Inflector.inflections(:en) do |inflect|
+            inflect.acronym "UI"
+          end
+        RUBY
+      end
+
       def print_next_steps
         say "\n  Wabi installed. Next steps:", :green
         say ""
