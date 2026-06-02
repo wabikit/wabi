@@ -14,7 +14,7 @@ module Wabi
 
       def fetch_and_write
         lockfile = Wabi::Lockfile.load(File.join(destination_root, "config/wabi.lock.json"))
-        base = lockfile.registry  # e.g. https://wabikit.dev/r OR file:///abs/path
+        base = lockfile.registry  # e.g. https://wabi-docs.onrender.com/r OR file:///abs/path
 
         shared = fetch("#{base}/themes/_shared.css", label: "_shared")
         body   = fetch("#{base}/themes/#{slug}.css", label: slug)

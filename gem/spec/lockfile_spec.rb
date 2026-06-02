@@ -12,7 +12,7 @@ RSpec.describe Wabi::Lockfile do
     it "returns an empty lockfile when the file does not exist" do
       lf = described_class.load(path)
       expect(lf.components).to eq({})
-      expect(lf.registry).to eq("https://wabikit.dev/r")
+      expect(lf.registry).to eq("https://wabi-docs.onrender.com/r")
     end
 
     it "reads existing JSON content" do

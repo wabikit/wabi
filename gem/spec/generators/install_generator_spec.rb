@@ -29,7 +29,7 @@ RSpec.describe Wabi::Generators::InstallGenerator do
   it "creates an empty config/wabi.lock.json with default registry" do
     described_class.start([], destination_root: destination)
     lock = JSON.parse(File.read(File.join(destination, "config/wabi.lock.json")))
-    expect(lock["registry"]).to eq("https://wabikit.dev/r")
+    expect(lock["registry"]).to eq("https://wabi-docs.onrender.com/r")
     expect(lock["components"]).to eq({})
   end
 

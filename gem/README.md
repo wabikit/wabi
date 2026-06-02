@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.13.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 34 components, 8 theme palettes, WCAG-AA targeted, full docs site at the GitHub repo's `docs/` Rails app.
+🎉 **Status:** v0.14.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 34 components, 8 theme palettes, WCAG-AA targeted, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
 
 ---
 
@@ -106,7 +106,7 @@ That's a fully-accessible modal with focus trap, scroll lock, backdrop click, Es
 | `wabi:install [--force]` | Copies `tokens.css`, the `wabi--theme` Stimulus controller, and initializes `config/wabi.lock.json`. `--force` re-copies tokens/controller on gem upgrades (lockfile is preserved). |
 | `wabi:add <name…>` | Copies one or more component source files from the registry into `app/components/ui/` and their controllers into `app/javascript/controllers/wabi/`. Updates the lockfile. |
 | `wabi:list` | Lists all available components in the configured registry. |
-| `wabi:registry <url>` | Switches the active registry origin (default: `https://wabikit.dev/r`). |
+| `wabi:registry <url>` | Switches the active registry origin (default: `https://wabi-docs.onrender.com/r`). |
 | `wabi:theme <slug>` | Swaps `tokens.css` for the requested palette. Run `bin/rails tailwindcss:build` after. |
 
 ---

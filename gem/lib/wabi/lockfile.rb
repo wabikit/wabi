@@ -7,7 +7,7 @@ module Wabi
   # Manages config/wabi.lock.json in a user's Rails app.
   # Tracks installed components, versions, hashes, and registry origin.
   class Lockfile
-    DEFAULT_REGISTRY = "https://wabikit.dev/r"
+    DEFAULT_REGISTRY = "https://wabi-docs.onrender.com/r"
 
     attr_reader :path, :registry, :components
 

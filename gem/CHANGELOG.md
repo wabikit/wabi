@@ -2,6 +2,19 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.14.0 - 2026-06-02
+
+The component registry is now live, and the gem points at it by default.
+
+### Changed
+
+- **Default registry URL → `https://wabi-docs.onrender.com/r`** (was the
+  not-yet-wired `https://wabikit.dev/r`). The registry is now deployed (the docs
+  app on Render serves `/r/*.json` for all 34 components), so
+  `bin/rails g wabi:add <name>` works out of the box without
+  `wabi:registry`. Override anytime with `bin/rails g wabi:registry <url>`.
+  (When `wabikit.dev` is wired to the same service, the default can move back.)
+
 ## 0.13.0 - 2026-06-01
 
 Server-driven DataTable. No breaking changes.
