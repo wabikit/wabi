@@ -60,6 +60,9 @@ describe("wabi--popover", () => {
 
   it("dispatches wabi--popover:change on open then close (teeth)", async () => {
     const seen = []
+    // Popover is non-modal (no focus-trap), so the close :change dispatch is
+    // faithfully testable in jsdom — this is the canonical close-dispatch teeth
+    // for the overlay family (the modal dialog/alert_dialog can't assert it).
     document.addEventListener("wabi--popover:change", (e) => seen.push(e.detail.open))
     byTarget(ID, "trigger").click(); await tick()
     byTarget(ID, "closeTrigger").click(); await tick()
