@@ -1,0 +1,26 @@
+name: js-test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "registry/**"
+      - ".github/workflows/js-test.yml"
+  pull_request:
+    paths:
+      - "registry/**"
+      - ".github/workflows/js-test.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: registry
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm test
