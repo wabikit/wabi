@@ -11,6 +11,13 @@ export default defineConfig({
     globals: true,
     include: ["**/*.test.js"],
     exclude: ["node_modules/**"],
+    setupFiles: ["./test/support/setup.js"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      include: ["components/**/*.js"],
+      exclude: ["**/*.test.js", "test/**", "node_modules/**"],
+    },
   },
   resolve: {
     alias: [{ find: /^controllers\/wabi\/_shared\//, replacement: sharedDir }],
