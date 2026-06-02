@@ -53,7 +53,12 @@ export default class extends Controller {
       inp.type = "hidden"
       inp.name = inputName
       inp.value = v
-      inp.dataset.wabiToggleGroupHidden = "true"
+      // setAttribute (NOT dataset): the double-dash `data-wabi--toggle-group-hidden`
+      // can't round-trip through dataset (it would become single-dash
+      // data-wabi-toggle-group-hidden), which is what the cleanup selector in
+      // render() matches — the mismatch leaked stale inputs across selections
+      // (same trap the slider documents). Form then submitted stale values.
+      inp.setAttribute("data-wabi--toggle-group-hidden", "true")
       this.element.appendChild(inp)
     })
   }

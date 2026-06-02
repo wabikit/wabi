@@ -15,7 +15,10 @@ export default class extends Controller {
       defaultPressed: this.pressedValue,
       name: this.nameValue || undefined,
       disabled: this.disabledValue,
-      onPressedChange: ({ pressed }) => {
+      // Zag's toggle machine calls onPressedChange with a BARE boolean (not a
+      // details object) — `(pressed) =>`, not `({ pressed }) =>`. The object
+      // form left pressed undefined, so pressedValue + the :change event broke.
+      onPressedChange: (pressed) => {
         this.pressedValue = pressed
         this.dispatch("change", { detail: { pressed } })
       },
