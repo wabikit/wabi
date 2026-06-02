@@ -4,7 +4,10 @@
 .bundle/
 .config/
 .yardoc/
-Gemfile.lock
+# The gem is a library — its lockfile stays uncommitted (convention).
+# The docs app + registry are deployable/tooling: their Gemfile.lock IS committed
+# (Render's frozen bundler needs it).
+/gem/Gemfile.lock
 InstalledFiles
 _yardoc/
 coverage/
