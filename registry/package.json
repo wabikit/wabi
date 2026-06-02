@@ -10,6 +10,12 @@
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@vitest/coverage-v8": "^2.1.8",
+    "@zag-js/dialog": "1.41.0",
+    "@zag-js/menu": "1.41.0",
+    "@zag-js/popover": "1.41.0",
+    "@zag-js/select": "1.41.0",
+    "@zag-js/tooltip": "1.41.0",
+    "@zag-js/vanilla": "1.41.0",
     "jsdom": "^25.0.1",
     "vitest": "^2.1.8"
   }

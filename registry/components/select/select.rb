@@ -33,7 +33,9 @@ module Components
           class: merge_class("relative inline-block", user_class)
         ) do
           # Real <select> kept visually hidden for form submission and a11y.
-          # Zag's getHiddenSelectProps fills in the <option> set at hydration.
+          # Zag's getHiddenSelectProps only sets attributes, so we render the
+          # <option> set ourselves (mirroring @items); the controller's render()
+          # then syncs the selected value for form submission.
           select(
             name: @name,
             disabled: @disabled,
@@ -41,7 +43,15 @@ module Components
             class: "sr-only",
             tabindex: "-1",
             "aria-hidden": "true"
-          )
+          ) do
+            # Leading empty option: with no selection the form submits "" rather
+            # than the native default (the first <option>).
+            option(value: "", selected: @value.nil? || @value == "") { @placeholder }
+            @items.each do |item|
+              item = item.transform_keys(&:to_sym) if item.is_a?(Hash)
+              option(value: item[:value], selected: item[:value].to_s == @value.to_s) { item[:label] }
+            end
+          end
           yield if block_given?
         end
       end
