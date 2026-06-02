@@ -28,9 +28,16 @@ jobs:
           working-directory: registry
       - run: bundle exec rspec
       - run: bundle exec ./bin/build
-      - name: Verify dist artifacts exist for all v0.1 components
+      - name: Verify every component compiled to dist
         run: |
           test -f dist/r/index.json
-          for name in button input textarea label card badge separator alert avatar checkbox switch select dialog drawer tooltip popover dropdown_menu toast tabs accordion; do
-            test -f dist/r/${name}.json || (echo "Missing: ${name}.json" && exit 1)
+          missing=0
+          for dir in components/*/; do
+            name=$(basename "$dir")
+            case "$name" in _*) continue ;; esac   # skip _shared and other private dirs
+            if [ ! -f "dist/r/${name}.json" ]; then
+              echo "Missing dist for component: ${name}"
+              missing=1
+            fi
           done
+          [ "$missing" -eq 0 ] || (echo "Some components have source but no compiled dist/r/<name>.json" && exit 1)
