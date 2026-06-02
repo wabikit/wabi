@@ -73,7 +73,7 @@ module Wabi
         manifest = YAML.safe_load_file(File.join(dir, "manifest.yml"))
 
         files = Dir[File.join(dir, "*")]
-          .reject { |p| File.basename(p) == "manifest.yml" || File.basename(p) == "spec.rb" }
+          .reject { |p| File.basename(p) == "manifest.yml" || File.basename(p) == "spec.rb" || File.basename(p).end_with?(".test.js") }
           .sort
           .map { |path| file_entry(path) }
 

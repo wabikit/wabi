@@ -95,6 +95,26 @@ RSpec.describe Wabi::Registry::Builder do
     end
   end
 
+  describe "#build_component" do
+    it "excludes *.test.js files from a component's dist (they must not ship to users)" do
+      comp = File.join(tmp, "components", "widget")
+      FileUtils.mkdir_p(comp)
+      FileUtils.mkdir_p(File.join(tmp, "dist/r"))
+      File.write(File.join(comp, "manifest.yml"), { "name" => "widget", "type" => "registry:display" }.to_yaml)
+      File.write(File.join(comp, "widget.rb"), "# widget\n")
+      File.write(File.join(comp, "widget_controller.js"), "// controller\n")
+      File.write(File.join(comp, "widget_controller.test.js"), "// THIS MUST NOT SHIP\n")
+
+      builder = new_builder
+      output = builder.send(:build_component, comp)
+
+      paths = output["files"].map { |f| f["path"] }
+      expect(paths).to include("app/components/ui/widget.rb", "app/javascript/controllers/wabi/widget_controller.js")
+      expect(paths).not_to include("widget_controller.test.js")
+      expect(output["files"].map { |f| f["content"] }.join).not_to include("MUST NOT SHIP")
+    end
+  end
+
   describe "#build_themes" do
     let(:slugs) { %w[default stone rose blue green violet yellow orange] }
 
