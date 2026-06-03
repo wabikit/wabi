@@ -5,9 +5,10 @@ require "date"
 module Components
   module UI
     class Tabs < Wabi::Base
-      def initialize(value:, activation_mode: :automatic, id: nil, **attrs)
+      def initialize(value:, variant: :standard, activation_mode: :automatic, id: nil, **attrs)
         @id              = id
         @value           = value
+        @variant         = variant
         @activation_mode = activation_mode
         @attrs           = attrs
       end
@@ -20,8 +21,9 @@ module Components
             controller: "wabi--tabs",
             "wabi--tabs-value-value": @value,
             "wabi--tabs-activation-mode-value": @activation_mode.to_s,
+            variant: @variant.to_s,
           },
-          class: user_class
+          class: merge_class("group/tabs", user_class)
         ) do
           yield if block_given?
         end
