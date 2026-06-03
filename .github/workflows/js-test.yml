@@ -23,4 +23,6 @@ jobs:
         with:
           node-version: "22"
       - run: npm ci
-      - run: npm test
+      # test:coverage (not bare test) so the coverage thresholds in
+      # vitest.config.js gate CI — the run fails if coverage drops below the floor.
+      - run: npm run test:coverage

@@ -4,6 +4,10 @@ require "simplecov"
 SimpleCov.start do
   add_filter "/spec/"
   enable_coverage :branch
+  # Regression floors a few points below the measured baseline (line 92.3%,
+  # branch 77.6% as of v0.14.2) so CI fails if coverage drops, without flagging
+  # normal fluctuation. Raise these as coverage improves.
+  minimum_coverage line: 88, branch: 72
 end
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
