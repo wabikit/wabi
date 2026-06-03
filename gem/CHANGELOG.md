@@ -2,6 +2,23 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.15.0 - 2026-06-03
+
+Adds the **NumberInput** component.
+
+### Added
+
+- **NumberInput** — a numeric stepper input (`[ − | value | + ]`) backed by
+  `@zag-js/number-input`. It hides the native browser spinner arrows and ships
+  its own decrement/increment controls with full keyboard support (↑/↓,
+  PageUp/PageDown, Home/End), press-and-hold to repeat, and `min`/`max`/`step`
+  clamping. Supports number formatting via `Intl.NumberFormat`
+  (`format: :decimal | :currency | :percent`, with `currency:` and `precision:`),
+  three sizes (`:sm`/`:md`/`:lg`), optional mouse-wheel adjustment
+  (`allow_mouse_wheel:`), an `invalid:` state for Form integration, and native
+  form submission (the real `<input>` carries the `name`). Install with
+  `bin/rails g wabi:add number_input`.
+
 ## 0.14.2 - 2026-06-02
 
 Bugfix release. Wabi's controllers gained a real JavaScript test suite (vitest +
