@@ -4,8 +4,7 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
 
 ## 0.17.0 - 2026-06-03
 
-A minimalist `:underline` style variant for Tabs, and the docs `ComponentPreview`
-now dogfoods it.
+A minimalist `:underline` style variant for Tabs.
 
 ### Added
 
@@ -17,11 +16,10 @@ now dogfoods it.
   propagated to `TabsList`/`TabsTrigger` via the `group-data-[variant=underline]`
   marker.
 
-### Changed
-
-- **`ComponentPreview` (docs) now renders the `:underline` Tabs variant** instead
-  of hand-applying the underline classes inline — dogfooding the new variant and
-  removing the duplicated styling. No visual change.
+  Note: the variant is set on the `Tabs` root and applied to its pieces via a
+  Tailwind named group (`group/tabs`), which matches any ancestor of that name —
+  so a `Tabs` nested inside another `Tabs` inherits the outer variant. Avoid
+  nesting tabs of different variants (or give the inner one its own wrapper).
 
 ## 0.16.0 - 2026-06-03
 
