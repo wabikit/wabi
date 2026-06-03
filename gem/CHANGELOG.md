@@ -2,7 +2,10 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.16.0 - 2026-06-03
+
+Local Zag vendoring for offline / strict-CSP installs, plus a `:pill` style
+variant for Tabs.
 
 ### Added
 
@@ -15,6 +18,11 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
   specifier, and repins each package at its local copy — so no controller loads
   from the CDN at runtime. Pass package names to vendor a subset. `wabi:add` now
   hints at it when a component needs Zag. CDN remains the default.
+- **Tabs `:pill` variant.** `Tabs.new(variant: :pill)` renders a rounded
+  container with a solid-primary active pill, as an alternative to the default
+  `:standard` segmented look. The variant is set once on the root and propagates
+  to `TabsList`/`TabsTrigger` via a `group-data-[variant=pill]` marker — no
+  changes to how triggers are written, and the Stimulus controller is unchanged.
 
 ## 0.15.0 - 2026-06-03
 
