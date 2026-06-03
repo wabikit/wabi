@@ -94,6 +94,42 @@ module Views
                 end
               end
 
+              h3(id: "variant-underline", class: "text-xl font-semibold mt-6 mb-3") { "Underline" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "variant: :underline" }
+                plain " for a full-width, minimalist underline — the same style used by these Preview / Code switchers."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Tabs.new(value: "overview", variant: :underline, class: "w-full") do
+                  render Components::UI::TabsList.new do
+                    render Components::UI::TabsTrigger.new(value: "overview") { "Overview" }
+                    render Components::UI::TabsTrigger.new(value: "activity") { "Activity" }
+                    render Components::UI::TabsTrigger.new(value: "settings") { "Settings" }
+                  end
+                  render Components::UI::TabsContent.new(value: "overview") { p { "Overview" } }
+                  render Components::UI::TabsContent.new(value: "activity") { p { "Activity" } }
+                  render Components::UI::TabsContent.new(value: "settings") { p { "Settings" } }
+                end
+              RUBY
+                render ::Components::UI::Tabs.new(value: "overview", variant: :underline, class: "w-full") do
+                  render ::Components::UI::TabsList.new do
+                    render ::Components::UI::TabsTrigger.new(value: "overview") { "Overview" }
+                    render ::Components::UI::TabsTrigger.new(value: "activity") { "Activity" }
+                    render ::Components::UI::TabsTrigger.new(value: "settings") { "Settings" }
+                  end
+                  render ::Components::UI::TabsContent.new(value: "overview") do
+                    p(class: "text-sm text-muted-foreground") { "Account overview." }
+                  end
+                  render ::Components::UI::TabsContent.new(value: "activity") do
+                    p(class: "text-sm text-muted-foreground") { "Recent activity." }
+                  end
+                  render ::Components::UI::TabsContent.new(value: "settings") do
+                    p(class: "text-sm text-muted-foreground") { "Settings." }
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }

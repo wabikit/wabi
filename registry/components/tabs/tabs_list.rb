@@ -11,7 +11,17 @@ module Components
              "group-data-[variant=pill]/tabs:gap-1 " \
              "group-data-[variant=pill]/tabs:border " \
              "group-data-[variant=pill]/tabs:border-border " \
-             "group-data-[variant=pill]/tabs:bg-muted/40"
+             "group-data-[variant=pill]/tabs:bg-muted/40 " \
+             "group-data-[variant=underline]/tabs:w-full " \
+             "group-data-[variant=underline]/tabs:justify-start " \
+             "group-data-[variant=underline]/tabs:gap-4 " \
+             "group-data-[variant=underline]/tabs:rounded-none " \
+             "group-data-[variant=underline]/tabs:bg-transparent " \
+             "group-data-[variant=underline]/tabs:border-b " \
+             "group-data-[variant=underline]/tabs:border-border " \
+             "group-data-[variant=underline]/tabs:px-4 " \
+             "group-data-[variant=underline]/tabs:py-0 " \
+             "group-data-[variant=underline]/tabs:h-auto"
       end
 
       def initialize(**attrs)

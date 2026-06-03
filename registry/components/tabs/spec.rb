@@ -102,4 +102,30 @@ RSpec.describe "Tabs composition" do
     expect(output).to include("group-data-[variant=pill]/tabs:rounded-full")
     expect(output).to include("group-data-[variant=pill]/tabs:border-border")
   end
+
+  it "Tabs emits data-variant=underline when variant: :underline" do
+    output = Components::UI::Tabs.new(value: "tab1", variant: :underline).call { "" }
+    expect(output).to include('data-variant="underline"')
+    expect(output).to include("group/tabs")
+  end
+
+  it "TabsList carries gated underline utilities (full-width baseline) without evicting the standard look" do
+    output = Components::UI::TabsList.new.call { "" }
+    expect(output).to include("group-data-[variant=underline]/tabs:w-full")
+    expect(output).to include("group-data-[variant=underline]/tabs:border-b")
+    expect(output).to include("group-data-[variant=underline]/tabs:bg-transparent")
+    # standard base survives the merge alongside the gated underline tokens
+    expect(output).to include("rounded-md")
+    expect(output).to include("bg-muted")
+  end
+
+  it "TabsTrigger carries gated underline utilities (active bottom border + primary text) without evicting the standard active look" do
+    output = Components::UI::TabsTrigger.new(value: "tab1").call { "Tab 1" }
+    expect(output).to include("group-data-[variant=underline]/tabs:border-b-[3px]")
+    expect(output).to include("group-data-[variant=underline]/tabs:aria-selected:border-b-primary")
+    expect(output).to include("group-data-[variant=underline]/tabs:aria-selected:text-primary")
+    # standard active state survives the merge
+    expect(output).to include("aria-selected:bg-background")
+    expect(output).to include("aria-selected:shadow-sm")
+  end
 end

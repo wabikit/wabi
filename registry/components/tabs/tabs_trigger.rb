@@ -16,7 +16,22 @@ module Components
              "group-data-[variant=pill]/tabs:hover:text-foreground " \
              "group-data-[variant=pill]/tabs:aria-selected:bg-primary " \
              "group-data-[variant=pill]/tabs:aria-selected:text-primary-foreground " \
-             "group-data-[variant=pill]/tabs:aria-selected:shadow-none"
+             "group-data-[variant=pill]/tabs:aria-selected:shadow-none " \
+             "group-data-[variant=underline]/tabs:rounded-none " \
+             "group-data-[variant=underline]/tabs:bg-transparent " \
+             "group-data-[variant=underline]/tabs:shadow-none " \
+             "group-data-[variant=underline]/tabs:border-b-[3px] " \
+             "group-data-[variant=underline]/tabs:border-transparent " \
+             "group-data-[variant=underline]/tabs:px-4 " \
+             "group-data-[variant=underline]/tabs:py-3 " \
+             "group-data-[variant=underline]/tabs:-mb-px " \
+             "group-data-[variant=underline]/tabs:text-muted-foreground " \
+             "group-data-[variant=underline]/tabs:hover:text-foreground " \
+             "group-data-[variant=underline]/tabs:aria-selected:bg-transparent " \
+             "group-data-[variant=underline]/tabs:aria-selected:shadow-none " \
+             "group-data-[variant=underline]/tabs:aria-selected:border-b-primary " \
+             "group-data-[variant=underline]/tabs:aria-selected:text-primary " \
+             "group-data-[variant=underline]/tabs:aria-selected:font-bold"
       end
 
       def initialize(value:, disabled: false, **attrs)
