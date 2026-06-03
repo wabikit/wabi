@@ -17,6 +17,8 @@ require_relative "sidebar_menu_collapsible"
 require_relative "sidebar_menu_sub"
 require_relative "sidebar_menu_sub_item"
 require_relative "sidebar_menu_sub_button"
+require_relative "sidebar_menu_badge"
+require_relative "sidebar_menu_action"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider hosts the controller, group marker, default expanded state" do
@@ -171,5 +173,27 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include("hover:bg-sidebar-accent")
     expect(out).to include("aria-[current=page]:bg-sidebar-accent")
     expect(out).to include("focus-visible:ring-sidebar-ring")
+  end
+
+  it "SidebarMenuItem is a hover group + positioning context" do
+    expect(Components::UI::SidebarMenuItem.new.call { "" }).to include("group/menu-item")
+  end
+
+  it "SidebarMenuBadge is a trailing span hidden in collapsed mode" do
+    out = Components::UI::SidebarMenuBadge.new.call { "12" }
+    expect(out).to include("<span")
+    expect(out).to include("12")
+    expect(out).to include("absolute")
+    expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
+  end
+
+  it "SidebarMenuAction is a hover-reveal button hidden in collapsed mode, forwarding attrs" do
+    out = Components::UI::SidebarMenuAction.new("aria-label": "More").call { "x" }
+    expect(out).to include("<button")
+    expect(out).to include('type="button"')
+    expect(out).to include('aria-label="More"')
+    expect(out).to include("opacity-0")
+    expect(out).to include("group-hover/menu-item:opacity-100")
+    expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
   end
 end

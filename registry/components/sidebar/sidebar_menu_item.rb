@@ -3,7 +3,7 @@
 module Components
   module UI
     class SidebarMenuItem < Wabi::Base
-      variants { base "relative" }
+      variants { base "group/menu-item relative" }
 
       def initialize(**attrs) = @attrs = attrs
 
