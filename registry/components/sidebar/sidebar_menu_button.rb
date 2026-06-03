@@ -5,11 +5,11 @@ module Components
     class SidebarMenuButton < Wabi::Base
       variants do
         base "flex w-full items-center gap-2 overflow-hidden rounded-md px-2 py-1.5 text-left " \
-             "text-sm text-foreground outline-none transition-colors " \
-             "hover:bg-accent hover:text-accent-foreground " \
-             "focus-visible:ring-2 focus-visible:ring-ring " \
+             "text-sm text-sidebar-foreground outline-none transition-colors " \
+             "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground " \
+             "focus-visible:ring-2 focus-visible:ring-sidebar-ring " \
              "disabled:pointer-events-none disabled:opacity-50 " \
-             "aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground " \
+             "aria-[current=page]:bg-sidebar-accent aria-[current=page]:text-sidebar-accent-foreground " \
              "aria-[current=page]:font-medium " \
              "group-data-[state=collapsed]/sidebar:justify-center " \
              "group-data-[state=collapsed]/sidebar:[&>span]:hidden"
