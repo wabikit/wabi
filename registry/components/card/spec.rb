@@ -31,6 +31,27 @@ RSpec.describe Components::UI::Card do
     expect(output).to include(">Desc</p>")
   end
 
+  it "CardContent defaults to with_header padding (px-6 pt-0 pb-6, identical to old p-6 pt-0)" do
+    output = Components::UI::CardContent.new.call { "Body" }
+    expect(output).to include("px-6")
+    expect(output).to include("pt-0")
+    expect(output).to include("pb-6")
+    expect(output).not_to include("py-6")
+  end
+
+  it "CardContent with padding: :standalone uses symmetric vertical padding (px-6 py-6)" do
+    output = Components::UI::CardContent.new(padding: :standalone).call { "Body" }
+    expect(output).to include("px-6")
+    expect(output).to include("py-6")
+    expect(output).not_to include("pt-0")
+  end
+
+  it "CardContent still forwards user class and html attributes" do
+    output = Components::UI::CardContent.new(padding: :standalone, class: "flex gap-3", id: "x").call { "Body" }
+    expect(output).to include("flex gap-3")
+    expect(output).to include('id="x"')
+  end
+
   it "composes header, title, description, content, footer" do
     composition = Class.new(Phlex::HTML) do
       def view_template

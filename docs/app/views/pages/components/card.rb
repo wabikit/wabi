@@ -59,6 +59,42 @@ module Views
                 end
               end
 
+              h2(id: "example-standalone", class: "text-2xl font-semibold mt-8 mb-4") { "Standalone (no header)" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "For cards without a "
+                code(class: "font-mono text-foreground") { "CardHeader" }
+                plain ", pass "
+                code(class: "font-mono text-foreground") { "padding: :standalone" }
+                plain " to CardContent for symmetric vertical padding."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Card.new(class: "max-w-sm") do
+                  render Components::UI::CardContent.new(
+                    padding: :standalone,
+                    class: "flex items-center justify-between gap-3"
+                  ) do
+                    div do
+                      p(class: "font-medium") { "Storage" }
+                      p(class: "text-sm text-muted-foreground") { "8.2 GB of 15 GB used" }
+                    end
+                    render Components::UI::Button.new(appearance: :outline, size: :sm) { "Upgrade" }
+                  end
+                end
+              RUBY
+                render ::Components::UI::Card.new(class: "max-w-sm") do
+                  render ::Components::UI::CardContent.new(
+                    padding: :standalone,
+                    class: "flex items-center justify-between gap-3"
+                  ) do
+                    div do
+                      p(class: "font-medium") { "Storage" }
+                      p(class: "text-sm text-muted-foreground") { "8.2 GB of 15 GB used" }
+                    end
+                    render ::Components::UI::Button.new(appearance: :outline, size: :sm) { "Upgrade" }
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",
