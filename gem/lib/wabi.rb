@@ -20,4 +20,5 @@ if defined?(Rails::Generators)
   require_relative "wabi/generators/list_generator"
   require_relative "wabi/generators/registry_generator"
   require_relative "wabi/generators/theme_generator"
+  require_relative "wabi/generators/vendor_generator"
 end
