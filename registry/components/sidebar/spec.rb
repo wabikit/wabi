@@ -13,6 +13,10 @@ require_relative "sidebar_menu_item"
 require_relative "sidebar_menu_button"
 require_relative "sidebar_trigger"
 require_relative "../tooltip/tooltip_content"
+require_relative "sidebar_menu_collapsible"
+require_relative "sidebar_menu_sub"
+require_relative "sidebar_menu_sub_item"
+require_relative "sidebar_menu_sub_button"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider hosts the controller, group marker, default expanded state" do
@@ -111,6 +115,48 @@ RSpec.describe "Sidebar structural pieces" do
   it "SidebarMenuButton without a tooltip renders no tooltip controller" do
     out = Components::UI::SidebarMenuButton.new(href: "/x").call { "X" }
     expect(out).not_to include('data-controller="wabi--tooltip"')
+  end
+
+  it "SidebarMenuCollapsible renders a details/summary disclosure with label + chevron" do
+    out = Components::UI::SidebarMenuCollapsible.new(label: "Projects").call { "" }
+    expect(out).to include("<details")
+    expect(out).to include("group/collapsible")
+    expect(out).to include("<summary")
+    expect(out).to include("Projects")
+    expect(out).to include("group-[[open]]/collapsible:rotate-90")
+    expect(out).to include("[&::-webkit-details-marker]:hidden")
+  end
+
+  it "SidebarMenuCollapsible default_open adds the open attribute" do
+    expect(Components::UI::SidebarMenuCollapsible.new(label: "P", default_open: true).call { "" }).to include("open")
+    expect(Components::UI::SidebarMenuCollapsible.new(label: "P").call { "" }).not_to include("<details open")
+  end
+
+  it "SidebarMenuSub is an indented ul hidden in collapsed mode" do
+    out = Components::UI::SidebarMenuSub.new.call { "" }
+    expect(out).to include("<ul")
+    expect(out).to include("border-l")
+    expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
+  end
+
+  it "SidebarMenuSubItem is a li" do
+    expect(Components::UI::SidebarMenuSubItem.new.call { "" }).to include("<li")
+  end
+
+  it "SidebarMenuSubButton renders an anchor with active state" do
+    out = Components::UI::SidebarMenuSubButton.new(href: "/a", active: true).call { "Alpha" }
+    expect(out).to include("<a")
+    expect(out).to include('href="/a"')
+    expect(out).to include('aria-current="page"')
+    expect(out).to include("bg-sidebar-accent")
+    expect(out).to include("Alpha")
+  end
+
+  it "SidebarMenuSubButton renders a button when no href" do
+    out = Components::UI::SidebarMenuSubButton.new.call { "Beta" }
+    expect(out).to include('<button')
+    expect(out).to include('type="button"')
+    expect(out).not_to include('aria-current="page"')
   end
 
   it "Sidebar uses the dedicated sidebar surface tokens" do
