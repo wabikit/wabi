@@ -68,6 +68,8 @@ module Wabi
         say "  imports (like @zag-js/*) — it only downloads the entry file, leaving relative"
         say "  imports unresolved. The `+esm` endpoint above ships a single bundle with all"
         say "  transitive deps resolved to absolute URLs.", :yellow
+        say "\n  Offline / strict-CSP app? Run `bin/rails g wabi:vendor` to download Zag", :yellow
+        say "  into vendor/javascript/ and pin the local copies instead of the CDN.", :yellow
       end
     end
   end

@@ -107,6 +107,23 @@ RSpec.describe Wabi::Generators::AddGenerator do
       expect(output).to include('pin "@zag-js/dom-query", to: "https://cdn.jsdelivr.net/npm/@zag-js/dom-query@')
     end
 
+    it "points offline/CSP apps at wabi:vendor when the component needs Zag" do
+      File.write(File.join(fake_registry, "switch.json"), JSON.generate({
+        "name" => "switch",
+        "version" => "0.1.0",
+        "registry_dependencies" => [],
+        "js_dependencies" => { "@zag-js/switch" => "^0.50" },
+        "files" => [{
+          "path" => "app/components/ui/switch.rb",
+          "type" => "ruby:phlex",
+          "content" => "module Components; module UI; class Switch < Wabi::Base; end; end; end\n"
+        }]
+      }))
+
+      expect { described_class.start(["switch"], destination_root: destination) }
+        .to output(/wabi:vendor/).to_stdout
+    end
+
     def capture_stdout
       captured = StringIO.new
       original = $stdout
