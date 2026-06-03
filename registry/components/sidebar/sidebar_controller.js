@@ -11,7 +11,10 @@ export default class extends Controller {
     const stored = localStorage.getItem(this.persistKeyValue)
     const collapsed = stored === null ? this.defaultCollapsedValue : stored === "true"
     this.element.dataset.state = collapsed ? "collapsed" : "expanded"
-    this._onKeydown = (e) => { if (e.key === "Escape" && this.element.dataset.mobile === "open") this.closeMobile() }
+    this._onKeydown = (e) => {
+      if (e.key === "Escape" && this.element.dataset.mobile === "open") this.closeMobile()
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") { e.preventDefault(); this.toggle() }
+    }
     document.addEventListener("keydown", this._onKeydown)
   }
 

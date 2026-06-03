@@ -70,4 +70,25 @@ describe("wabi--sidebar", () => {
     await tick()
     expect(root().dataset.mobile).toBe("closed")
   })
+
+  it("Cmd/Ctrl+B toggles the sidebar", async () => {
+    setViewport(true)
+    const h = mountSidebar(`data-wabi--sidebar-persist-key-value="k"`)
+    await tick()
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "b", metaKey: true }))
+    await tick()
+    expect(root().dataset.state).toBe("collapsed")
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "b", ctrlKey: true }))
+    await tick()
+    expect(root().dataset.state).toBe("expanded")
+  })
+
+  it("a plain 'b' keypress does not toggle", async () => {
+    setViewport(true)
+    const h = mountSidebar()
+    await tick()
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "b" }))
+    await tick()
+    expect(root().dataset.state).toBe("expanded")
+  })
 })

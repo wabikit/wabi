@@ -4,9 +4,9 @@ module Components
   module UI
     class SidebarTrigger < Wabi::Base
       variants do
-        base "inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground " \
-             "transition-colors hover:bg-accent hover:text-accent-foreground " \
-             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        base "inline-flex h-9 w-9 items-center justify-center rounded-md text-sidebar-foreground " \
+             "transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground " \
+             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
       end
 
       def initialize(**attrs) = @attrs = attrs

@@ -69,7 +69,7 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include("<a")
     expect(out).to include('href="/dashboard"')
     expect(out).to include('aria-current="page"')
-    expect(out).to include("bg-accent")
+    expect(out).to include("bg-sidebar-accent")
     expect(out).to include("Dash")
   end
 
@@ -111,5 +111,19 @@ RSpec.describe "Sidebar structural pieces" do
   it "SidebarMenuButton without a tooltip renders no tooltip controller" do
     out = Components::UI::SidebarMenuButton.new(href: "/x").call { "X" }
     expect(out).not_to include('data-controller="wabi--tooltip"')
+  end
+
+  it "Sidebar uses the dedicated sidebar surface tokens" do
+    out = Components::UI::Sidebar.new.call { "" }
+    expect(out).to include("bg-sidebar")
+    expect(out).to include("text-sidebar-foreground")
+    expect(out).to include("border-sidebar-border")
+  end
+
+  it "SidebarMenuButton active/hover/ring use sidebar-accent + sidebar-ring" do
+    out = Components::UI::SidebarMenuButton.new(href: "/x").call { "X" }
+    expect(out).to include("hover:bg-sidebar-accent")
+    expect(out).to include("aria-[current=page]:bg-sidebar-accent")
+    expect(out).to include("focus-visible:ring-sidebar-ring")
   end
 end
