@@ -57,7 +57,7 @@ RSpec.describe Wabi::ZagVendor do
     end
   end
 
-  it "raises if a package appears at two versions" do
+  it "raises if a package appears at two genuinely different versions" do
     graph = {
       "root@1.0.0" => %(import"/npm/dep@1.0.0/+esm";import"/npm/dep@2.0.0/+esm";),
       "dep@1.0.0"  => "export const d=1;",
@@ -66,5 +66,36 @@ RSpec.describe Wabi::ZagVendor do
     expect {
       described_class.call([{ pkg: "root", ver: "1.0.0" }], fetcher: fetcher_for(graph))
     }.to raise_error(Wabi::Error, /two versions|appears at/)
+  end
+
+  it "treats a range ref and a pin ref to the same version as one package" do
+    # jsDelivr's real graph references the same dep both as `@%5E0.2.11`
+    # (URL-encoded `^0.2.11`) and `@0.2.11`. These must NOT be a conflict.
+    fetched = []
+    graph = {
+      "root@1.0.0"  => %(import"/npm/dep@%5E0.2.11/+esm";import"/npm/dep@0.2.11/+esm";),
+      "dep@0.2.11"  => "export const d=1;",
+    }
+    base = fetcher_for(graph)
+    counting = ->(url) { fetched << url; base.call(url) }
+    res = described_class.call([{ pkg: "root", ver: "1.0.0" }], fetcher: counting)
+    expect(res.files.keys).to contain_exactly("root", "dep")
+    expect(res.versions["dep"]).to eq("0.2.11")            # normalized
+    expect(fetched.count { |u| u.include?("/dep@") }).to eq(1) # fetched once, at the exact version
+    expect(res.files["root"]).to eq(%(import"dep";import"dep";)) # both refs → bare specifier
+  end
+
+  it "vendors subpath exports (e.g. @floating-ui/utils/dom) as distinct modules" do
+    # jsDelivr references subpath exports like `/npm/@scope/pkg@ver/dom/+esm`
+    # (NOT the package root). These must be vendored + pinned as their own
+    # specifier (`@scope/pkg/dom`), not collapsed to the root.
+    graph = {
+      "root@1.0.0"     => %(import"/npm/dep@0.2.11/dom/+esm";import"/npm/dep@0.2.11/+esm";),
+      "dep@0.2.11/dom" => %(export const sub=1;),
+      "dep@0.2.11"     => %(export const root=1;),
+    }
+    res = described_class.call([{ pkg: "root", ver: "1.0.0" }], fetcher: fetcher_for(graph))
+    expect(res.files.keys).to contain_exactly("root", "dep", "dep/dom")
+    expect(res.files["root"]).to eq(%(import"dep/dom";import"dep";))
   end
 end
