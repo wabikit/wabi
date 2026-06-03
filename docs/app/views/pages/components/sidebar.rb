@@ -55,6 +55,30 @@ module Views
                               end
                             end
                           end
+                          # Item with a count badge
+                          render ::Components::UI::SidebarMenuItem.new do
+                            render ::Components::UI::SidebarMenuButton.new(href: "#", tooltip: "Inbox") do
+                              raw(safe(%(<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 5L2 7"/></svg>)))
+                              span { "Inbox" }
+                            end
+                            render ::Components::UI::SidebarMenuBadge.new { "12" }
+                          end
+                          # Collapsible submenu (expands only when the rail is expanded)
+                          render ::Components::UI::SidebarMenuItem.new do
+                            render ::Components::UI::SidebarMenuCollapsible.new(
+                              label: "Projects", default_open: true,
+                              icon: %(<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M3 7h18M3 12h18M3 17h18"/></svg>)
+                            ) do
+                              render ::Components::UI::SidebarMenuSub.new do
+                                render ::Components::UI::SidebarMenuSubItem.new do
+                                  render ::Components::UI::SidebarMenuSubButton.new(href: "#", active: true) { "Apollo" }
+                                end
+                                render ::Components::UI::SidebarMenuSubItem.new do
+                                  render ::Components::UI::SidebarMenuSubButton.new(href: "#") { "Gemini" }
+                                end
+                              end
+                            end
+                          end
                         end
                       end
                     end
