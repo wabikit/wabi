@@ -11,7 +11,7 @@ class ComponentsController < ApplicationController
     checkbox switch select dialog drawer tooltip popover
     dropdown_menu toast tabs accordion toggle radio_group toggle_group
     slider combobox form command table skeleton breadcrumb pagination progress
-    alert_dialog data_table number_input
+    alert_dialog data_table number_input sidebar
   ].freeze
 
   FRAMEWORKS = [

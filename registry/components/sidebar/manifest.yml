@@ -1,0 +1,14 @@
+name: sidebar
+version: 0.1.0
+type: registry:layout
+description: Composable, collapsible sidebar — icon rail on desktop, off-canvas on mobile, with menu primitives.
+registry_dependencies:
+  - tooltip
+ruby_dependencies: []
+js_dependencies: {}
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
