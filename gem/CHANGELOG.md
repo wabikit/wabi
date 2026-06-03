@@ -2,6 +2,20 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- **`wabi:vendor` generator — opt-in local vendoring of Zag (offline / strict-CSP).**
+  Components pin Zag from the jsDelivr `+esm` CDN by default, which fails for
+  offline, air-gapped, or strict-CSP apps. `bin/rails g wabi:vendor` reads the
+  jsDelivr `+esm` pins from `config/importmap.rb`, downloads the full transitive
+  `+esm` graph into `vendor/javascript/`, rewrites every cross-package CDN
+  reference (including subpath exports like `@floating-ui/utils/dom`) to a bare
+  specifier, and repins each package at its local copy — so no controller loads
+  from the CDN at runtime. Pass package names to vendor a subset. `wabi:add` now
+  hints at it when a component needs Zag. CDN remains the default.
+
 ## 0.15.0 - 2026-06-03
 
 Adds the **NumberInput** component.

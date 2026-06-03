@@ -108,6 +108,7 @@ That's a fully-accessible modal with focus trap, scroll lock, backdrop click, Es
 | `wabi:list` | Lists all available components in the configured registry. |
 | `wabi:registry <url>` | Switches the active registry origin (default: `https://wabi-docs.onrender.com/r`). |
 | `wabi:theme <slug>` | Swaps `tokens.css` for the requested palette. Run `bin/rails tailwindcss:build` after. |
+| `wabi:vendor [pkg…]` | **Offline / strict-CSP.** Downloads the Zag `+esm` dependency graph for your jsDelivr-pinned packages into `vendor/javascript/` and repins `config/importmap.rb` at the local copies, so no controller loads from the CDN at runtime. Default: every jsDelivr `+esm` pin in the importmap. |
 
 ---
 
