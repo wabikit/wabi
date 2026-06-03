@@ -11,6 +11,7 @@ require_relative "sidebar_group_label"
 require_relative "sidebar_menu"
 require_relative "sidebar_menu_item"
 require_relative "sidebar_menu_button"
+require_relative "sidebar_trigger"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider hosts the controller, group marker, default expanded state" do
@@ -81,5 +82,19 @@ RSpec.describe "Sidebar structural pieces" do
   it "SidebarMenuButton hides its label span in collapsed (icon) mode" do
     out = Components::UI::SidebarMenuButton.new(href: "/x").call { "Label" }
     expect(out).to include("group-data-[state=collapsed]/sidebar:[&>span]:hidden")
+  end
+
+  it "SidebarTrigger is a button wired to toggle with an aria-label" do
+    out = Components::UI::SidebarTrigger.new.call
+    expect(out).to include('<button')
+    expect(out).to include('data-action="wabi--sidebar#toggle"')
+    expect(out).to include('aria-label')
+    expect(out).to include("<svg")
+  end
+
+  it "SidebarTrigger accepts a custom icon via block (no default svg)" do
+    out = Components::UI::SidebarTrigger.new.call { "Custom" }
+    expect(out).to include("Custom")
+    expect(out).not_to include("<svg")
   end
 end
