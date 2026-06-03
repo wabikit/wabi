@@ -66,4 +66,40 @@ RSpec.describe "Tabs composition" do
     expect(composed).to include("Panel A")
     expect(composed).to include("Panel B")
   end
+
+  it "Tabs defaults to the standard variant and marks the group" do
+    output = Components::UI::Tabs.new(value: "tab1").call { "" }
+    expect(output).to include("group/tabs")
+    expect(output).to include('data-variant="standard"')
+  end
+
+  it "Tabs emits data-variant=pill when variant: :pill" do
+    output = Components::UI::Tabs.new(value: "tab1", variant: :pill).call { "" }
+    expect(output).to include('data-variant="pill"')
+    expect(output).to include("group/tabs")
+  end
+
+  it "TabsList keeps the standard track look and carries gated pill utilities" do
+    output = Components::UI::TabsList.new.call { "" }
+    expect(output).to include("rounded-md")
+    expect(output).to include("bg-muted")
+    expect(output).to include("group-data-[variant=pill]/tabs:rounded-full")
+    expect(output).to include("group-data-[variant=pill]/tabs:border")
+  end
+
+  it "TabsTrigger keeps the standard active look and carries gated pill active utilities" do
+    output = Components::UI::TabsTrigger.new(value: "tab1").call { "Tab 1" }
+    expect(output).to include("aria-selected:bg-background")
+    expect(output).to include("aria-selected:shadow-sm")
+    expect(output).to include("group-data-[variant=pill]/tabs:rounded-full")
+    expect(output).to include("group-data-[variant=pill]/tabs:aria-selected:bg-primary")
+    expect(output).to include("group-data-[variant=pill]/tabs:aria-selected:text-primary-foreground")
+  end
+
+  it "TabsList gated pill utilities survive a user class: override" do
+    output = Components::UI::TabsList.new(class: "rounded-lg").call { "" }
+    expect(output).to include("rounded-lg") # user override wins the plain rounded bucket
+    expect(output).to include("group-data-[variant=pill]/tabs:rounded-full")
+    expect(output).to include("group-data-[variant=pill]/tabs:border-border")
+  end
 end

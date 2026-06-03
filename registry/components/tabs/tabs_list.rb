@@ -6,7 +6,12 @@ module Components
   module UI
     class TabsList < Wabi::Base
       variants do
-        base "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground"
+        base "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground " \
+             "group-data-[variant=pill]/tabs:rounded-full " \
+             "group-data-[variant=pill]/tabs:gap-1 " \
+             "group-data-[variant=pill]/tabs:border " \
+             "group-data-[variant=pill]/tabs:border-border " \
+             "group-data-[variant=pill]/tabs:bg-muted/40"
       end
 
       def initialize(**attrs)

@@ -58,6 +58,42 @@ module Views
                 end
               end
 
+              h2(id: "variants", class: "text-2xl font-semibold mt-8 mb-4") { "Variants" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "variant: :pill" }
+                plain " to Tabs for a rounded container with a solid-primary active pill. The default is the segmented look above."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Tabs.new(value: "predictions", variant: :pill) do
+                  render Components::UI::TabsList.new do
+                    render Components::UI::TabsTrigger.new(value: "predictions") { "Pronósticos" }
+                    render Components::UI::TabsTrigger.new(value: "standings")   { "Ranking" }
+                    render Components::UI::TabsTrigger.new(value: "results")     { "Resultados" }
+                  end
+                  render Components::UI::TabsContent.new(value: "predictions") { p { "Predictions" } }
+                  render Components::UI::TabsContent.new(value: "standings")   { p { "Standings" } }
+                  render Components::UI::TabsContent.new(value: "results")     { p { "Results" } }
+                end
+              RUBY
+                render ::Components::UI::Tabs.new(value: "predictions", variant: :pill) do
+                  render ::Components::UI::TabsList.new do
+                    render ::Components::UI::TabsTrigger.new(value: "predictions") { "Pronósticos" }
+                    render ::Components::UI::TabsTrigger.new(value: "standings")   { "Ranking" }
+                    render ::Components::UI::TabsTrigger.new(value: "results")     { "Resultados" }
+                  end
+                  render ::Components::UI::TabsContent.new(value: "predictions") do
+                    p(class: "text-sm text-muted-foreground") { "Upcoming match predictions." }
+                  end
+                  render ::Components::UI::TabsContent.new(value: "standings") do
+                    p(class: "text-sm text-muted-foreground") { "League standings." }
+                  end
+                  render ::Components::UI::TabsContent.new(value: "results") do
+                    p(class: "text-sm text-muted-foreground") { "Recent results." }
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }

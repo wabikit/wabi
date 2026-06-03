@@ -10,8 +10,13 @@ module Components
              "text-sm font-medium transition-all cursor-pointer focus-visible:outline-none " \
              "focus-visible:ring-2 focus-visible:ring-ring " \
              "disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed " \
-             "aria-selected:bg-background aria-selected:text-foreground " \
-             "aria-selected:shadow-sm"
+             "aria-selected:bg-background aria-selected:text-foreground aria-selected:shadow-sm " \
+             "group-data-[variant=pill]/tabs:rounded-full " \
+             "group-data-[variant=pill]/tabs:text-muted-foreground " \
+             "group-data-[variant=pill]/tabs:hover:text-foreground " \
+             "group-data-[variant=pill]/tabs:aria-selected:bg-primary " \
+             "group-data-[variant=pill]/tabs:aria-selected:text-primary-foreground " \
+             "group-data-[variant=pill]/tabs:aria-selected:shadow-none"
       end
 
       def initialize(value:, disabled: false, **attrs)
