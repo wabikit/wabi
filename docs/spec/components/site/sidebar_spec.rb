@@ -15,6 +15,11 @@ RSpec.describe Components::Site::Sidebar do
     expect(indices).to eq(indices.sort), "Labels rendered out of order: expected #{labels}, got positions #{indices}"
   end
 
+  it "lists Number Input under Forms (linking to its docs page)" do
+    html = render_to_html(described_class.new(current_path: "/"))
+    expect(html).to match(%r{<a[^>]*href="/docs/components/number_input"[^>]*>.*?Number Input}m)
+  end
+
   it "marks the matching link with aria-current=\"page\"" do
     html = render_to_html(described_class.new(current_path: "/docs/components/checkbox"))
     expect(html).to match(%r{<a[^>]*href="/docs/components/checkbox"[^>]*aria-current="page"})
