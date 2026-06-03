@@ -2,6 +2,29 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.18.0 - 2026-06-03
+
+Adds the **Sidebar** component (#36).
+
+### Added
+
+- **Sidebar.** A composable, collapsible application sidebar: collapses to an
+  icon rail on desktop (toggle persisted in `localStorage`) and becomes an
+  off-canvas panel on mobile (focus moves into it, the rest of the page goes
+  `inert`, Escape / backdrop click closes). Anatomy: `SidebarProvider`, `Sidebar`
+  (`side: :left | :right`), `SidebarTrigger`, `SidebarHeader`/`SidebarContent`/
+  `SidebarFooter`, `SidebarGroup`/`SidebarGroupLabel`, `SidebarMenu`/
+  `SidebarMenuItem`/`SidebarMenuButton`. Menu buttons render as real `<a>`/`<button>`
+  (active item gets `aria-current="page"`) and show a tooltip with their label when
+  the rail is collapsed (reuses the Tooltip component). State is set once on the
+  provider and propagated via a `group/sidebar` data-attribute marker; the
+  `wabi--sidebar` Stimulus controller is custom (no Zag). Install with
+  `bin/rails g wabi:add sidebar` (pulls `tooltip`).
+
+  Caveat: variant/state is propagated through a Tailwind named group
+  (`group/sidebar`), which matches any ancestor of that name — avoid nesting a
+  `Sidebar` inside another `Sidebar`.
+
 ## 0.17.0 - 2026-06-03
 
 A minimalist `:underline` style variant for Tabs.
