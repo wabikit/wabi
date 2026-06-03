@@ -2,6 +2,27 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.17.0 - 2026-06-03
+
+A minimalist `:underline` style variant for Tabs, and the docs `ComponentPreview`
+now dogfoods it.
+
+### Added
+
+- **Tabs `:underline` variant.** `Tabs.new(variant: :underline)` renders a
+  full-width, minimalist tab strip: no track, a baseline border under the whole
+  list, and the active tab marked by a primary-colored bottom border + primary
+  bold text (with a transparent placeholder border so activation doesn't shift
+  layout). Joins `:standard` (default) and `:pill`; set once on the root and
+  propagated to `TabsList`/`TabsTrigger` via the `group-data-[variant=underline]`
+  marker.
+
+### Changed
+
+- **`ComponentPreview` (docs) now renders the `:underline` Tabs variant** instead
+  of hand-applying the underline classes inline — dogfooding the new variant and
+  removing the duplicated styling. No visual change.
+
 ## 0.16.0 - 2026-06-03
 
 Local Zag vendoring for offline / strict-CSP installs, plus a `:pill` style
