@@ -10,6 +10,7 @@ require_relative "sidebar_group"
 require_relative "sidebar_group_label"
 require_relative "sidebar_menu"
 require_relative "sidebar_menu_item"
+require_relative "sidebar_menu_button"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider hosts the controller, group marker, default expanded state" do
@@ -59,5 +60,26 @@ RSpec.describe "Sidebar structural pieces" do
 
   it "forwards user class on the provider" do
     expect(Components::UI::SidebarProvider.new(class: "h-dvh").call { "" }).to include("h-dvh")
+  end
+
+  it "SidebarMenuButton renders an anchor when href is given, marked active" do
+    out = Components::UI::SidebarMenuButton.new(href: "/dashboard", active: true).call { "Dash" }
+    expect(out).to include("<a")
+    expect(out).to include('href="/dashboard"')
+    expect(out).to include('aria-current="page"')
+    expect(out).to include("bg-accent")
+    expect(out).to include("Dash")
+  end
+
+  it "SidebarMenuButton renders a button when no href, not active" do
+    out = Components::UI::SidebarMenuButton.new.call { "Action" }
+    expect(out).to include('<button')
+    expect(out).to include('type="button"')
+    expect(out).not_to include('aria-current="page"')
+  end
+
+  it "SidebarMenuButton hides its label span in collapsed (icon) mode" do
+    out = Components::UI::SidebarMenuButton.new(href: "/x").call { "Label" }
+    expect(out).to include("group-data-[state=collapsed]/sidebar:[&>span]:hidden")
   end
 end
