@@ -5,6 +5,12 @@ description: Notification toaster + Toast. Sonner-style stacking, group pause-on
 registry_dependencies: []
 ruby_dependencies: []
 js_dependencies: {}
+# toaster_controller.js imports the pure computeStack helper from this shared
+# file. Without declaring it here the builder omits it from toast.json, so
+# `wabi:add toast` never installs it -> the importmap can't pin the bare
+# specifier -> "Failed to register controller: wabi--toaster".
+shared_files:
+  - "_shared/toast_stack.js"
 tailwind:
   extend: {}
 metadata:
