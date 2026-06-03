@@ -15,6 +15,7 @@
     "@zag-js/combobox": "1.41.0",
     "@zag-js/dialog": "1.41.0",
     "@zag-js/menu": "1.41.0",
+    "@zag-js/number-input": "1.41.0",
     "@zag-js/popover": "1.41.0",
     "@zag-js/radio-group": "1.41.0",
     "@zag-js/select": "1.41.0",
