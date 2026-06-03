@@ -2,6 +2,39 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.14.2 - 2026-06-02
+
+Bugfix release. Wabi's controllers gained a real JavaScript test suite (vitest +
+jsdom, the controllers exercised against the real `@zag-js` machines) — raising
+JS coverage from ~18% to ~81%. That effort, plus continued live-registry
+dogfooding, surfaced five real bugs, all fixed here. No API changes.
+
+### Fixed
+
+- **Select submitted an empty value.** The visually-hidden native `<select>` was
+  rendered with no `<option>` children, so its `.value` was always `""` and the
+  chosen value never reached the server on form submit. It now renders an
+  `<option>` per item (plus a leading empty option so "no selection" submits
+  `""`); the controller syncs the selected value as before.
+- **Single-theme installs lost their styling on hydration.** The theme
+  controller's `connect()` forced `data-theme="default"` (and `data-mode`) when
+  `localStorage` was empty, clobbering the server-rendered value. Precedence is
+  now localStorage (user choice) → server-rendered value → default.
+- **Toggle's pressed state and `wabi--toggle:change` event were broken.** Zag
+  calls `onPressedChange` with a bare boolean, but the controller destructured
+  `{ pressed }` off it (always `undefined`). Fixed to take the boolean directly.
+- **ToggleGroup leaked stale hidden inputs.** The hidden-input cleanup selector
+  used the double-dash `data-wabi--toggle-group-hidden`, but the inputs were
+  tagged via `dataset` (single-dash), so cleanup never matched — switching
+  selection accumulated stale inputs and the form submitted stale values. Now
+  tagged with `setAttribute` (matching the Slider fix).
+- **`wabi:add toast` produced an unregistered controller.** `toast`'s manifest
+  never declared `_shared/toast_stack.js` under `shared_files:`, so the file
+  `toaster_controller.js` imports was never installed → the importmap couldn't
+  pin the bare specifier → "Failed to register controller: wabi--toaster". The
+  manifest now declares it; a registry spec guards every component's `_shared`
+  imports against its manifest so this can't silently regress.
+
 ## 0.14.1 - 2026-06-02
 
 Two blocking install-flow bugs surfaced by end-to-end dogfooding against the live registry.
