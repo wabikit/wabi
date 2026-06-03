@@ -2,6 +2,33 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.19.0 - 2026-06-03
+
+Sidebar v2 — a richer, themeable Sidebar. No breaking changes (existing v1
+sidebars keep working and pick up the new surface tokens).
+
+### Added
+
+- **Dedicated `--sidebar*` color tokens** (full shadcn-style palette: `--sidebar`,
+  `--sidebar-foreground`, `--sidebar-primary(-foreground)`, `--sidebar-accent(-foreground)`,
+  `--sidebar-border`, `--sidebar-ring`) across all 8 themes (light + dark). The
+  sidebar now reads as its own surface; the tokens are exposed as `bg-sidebar`,
+  `text-sidebar-foreground`, `bg-sidebar-accent`, `border-sidebar-border`,
+  `ring-sidebar-ring`, etc., and are independently re-themeable.
+- **⌘/Ctrl+B** toggles the sidebar (collapse on desktop, open/close on mobile).
+- **Nested submenus** — `SidebarMenuCollapsible` (native `<details>`, no JS) with
+  `SidebarMenuSub`/`SidebarMenuSubItem`/`SidebarMenuSubButton`. Expand inline when
+  the rail is expanded; hidden in collapsed (icon) mode. The chevron rotates on open.
+- **`SidebarMenuBadge`** — a trailing count badge (hidden in icon mode).
+- **`SidebarMenuAction`** — a secondary per-item button revealed on hover/focus
+  (hidden in icon mode).
+
+### Changed
+
+- `Sidebar`, `SidebarMenuButton`, and `SidebarTrigger` recolored to the new
+  `--sidebar*` surface tokens (active/hover use `--sidebar-accent`); `SidebarMenuItem`
+  is now a `group/menu-item` hover context for badges/actions.
+
 ## 0.18.0 - 2026-06-03
 
 Adds the **Sidebar** component (#36).
