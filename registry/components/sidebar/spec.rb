@@ -12,6 +12,7 @@ require_relative "sidebar_menu"
 require_relative "sidebar_menu_item"
 require_relative "sidebar_menu_button"
 require_relative "sidebar_trigger"
+require_relative "../tooltip/tooltip_content"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider hosts the controller, group marker, default expanded state" do
@@ -96,5 +97,19 @@ RSpec.describe "Sidebar structural pieces" do
     out = Components::UI::SidebarTrigger.new.call { "Custom" }
     expect(out).to include("Custom")
     expect(out).not_to include("<svg")
+  end
+
+  it "SidebarMenuButton with a tooltip: wraps in a wabi--tooltip controller, button stays the trigger" do
+    out = Components::UI::SidebarMenuButton.new(href: "/x", tooltip: "Dashboard").call { "Dashboard" }
+    expect(out).to include('data-controller="wabi--tooltip"')
+    expect(out).to include('data-wabi--tooltip-target="trigger"')
+    expect(out).to include('data-wabi--tooltip-target="content"')
+    expect(out).to include("group-data-[state=expanded]/sidebar:hidden")
+    expect(out.scan("Dashboard").size).to be >= 2
+  end
+
+  it "SidebarMenuButton without a tooltip renders no tooltip controller" do
+    out = Components::UI::SidebarMenuButton.new(href: "/x").call { "X" }
+    expect(out).not_to include('data-controller="wabi--tooltip"')
   end
 end

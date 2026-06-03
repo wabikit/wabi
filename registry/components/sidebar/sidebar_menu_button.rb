@@ -25,10 +25,38 @@ module Components
       def view_template(&block)
         user_class = @attrs.delete(:class)
         klass = merge_class(tokens, user_class)
+
+        return render_button(klass, &block) unless @tooltip
+
+        # Hand-rolled wabi--tooltip wrapper (Tooltip.new forces inline-block and
+        # ignores attrs). The menu button element itself is the trigger (no nested
+        # interactive elements). The bubble shows only when the sidebar is collapsed.
+        tip = @tooltip
+        div(
+          class: "w-full",
+          data: {
+            controller: "wabi--tooltip",
+            "wabi--tooltip-open-delay-value":  "0",
+            "wabi--tooltip-close-delay-value": "0",
+            "wabi--tooltip-portal-value":      "true",
+          }
+        ) do
+          render_button(klass, trigger: true, &block)
+          render Components::UI::TooltipContent.new(
+            class: "group-data-[state=expanded]/sidebar:hidden"
+          ) { tip }
+        end
+      end
+
+      private
+
+      def render_button(klass, trigger: false, &block)
+        data = trigger ? { "wabi--tooltip-target": "trigger" } : {}
+        common = { "aria-current": (@active ? "page" : nil), data: data, class: klass }
         if @href
-          a(href: @href, "aria-current": (@active ? "page" : nil), class: klass) { yield if block }
+          a(href: @href, **common) { yield if block }
         else
-          button(type: "button", "aria-current": (@active ? "page" : nil), class: klass) { yield if block }
+          button(type: "button", **common) { yield if block }
         end
       end
     end
