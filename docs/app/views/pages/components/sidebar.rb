@@ -35,11 +35,13 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               p(class: "text-muted-foreground mb-4 text-sm") do
                 plain "Click the trigger to collapse the rail to icons (hover an icon for its label). "
+                plain "You can also click the thin rail on the sidebar's right edge to toggle it. "
                 plain "On narrow screens it becomes an off-canvas panel."
               end
               div(class: "rounded-lg border border-border overflow-hidden h-80") do
                 render ::Components::UI::SidebarProvider.new(class: "h-full min-h-0") do
                   render ::Components::UI::Sidebar.new(class: "lg:!h-full lg:!sticky lg:!top-0") do
+                    render ::Components::UI::SidebarRail.new
                     render ::Components::UI::SidebarHeader.new do
                       span(class: "px-2 font-semibold group-data-[state=collapsed]/sidebar:hidden") { "Acme" }
                       render ::Components::UI::SidebarInput.new(placeholder: "Search…")
