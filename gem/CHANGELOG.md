@@ -2,6 +2,31 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.20.0 - 2026-06-04
+
+Sidebar v3 — richer menu items, shell variants, and polish. No breaking changes.
+
+### Added
+
+- **Shell variants** on `SidebarProvider`: `variant: :floating` (the rail becomes a
+  detached, rounded, shadowed card) and `variant: :inset` (the main content, wrapped
+  in the new **`SidebarInset`**, floats as a rounded card over a sidebar-colored
+  background). Default stays `:sidebar`.
+- **Collapsible groups** — `SidebarGroup.new(collapsible: true, label: "…", default_open: true)`
+  renders the group as a native `<details>` disclosure (label as summary, rotating
+  chevron, no JS).
+- **`SidebarInput`** — a search field styled for the sidebar (hidden in collapsed mode).
+- **`SidebarMenuSkeleton`** — a loading-row placeholder (icon + text pulse;
+  `show_icon:` toggles the icon).
+
+### Fixed
+
+- **`SidebarMenuButton` / `SidebarMenuSubButton` now forward arbitrary attributes**
+  (`id`, `target`, `rel`, `aria-*`, `data-*`, `data-turbo-method`, …) to the rendered
+  `<a>`/`<button>` — they were previously dropped. For tooltip menu buttons, a
+  user-supplied `data:` is merged with the internal tooltip-trigger target so neither
+  is lost.
+
 ## 0.19.1 - 2026-06-03
 
 ### Fixed
