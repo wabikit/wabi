@@ -46,7 +46,7 @@ module Views
                     render ::Components::UI::SidebarContent.new do
                       render ::Components::UI::SidebarGroup.new do
                         render ::Components::UI::SidebarGroupLabel.new { "Platform" }
-                        render ::Components::UI::SidebarMenu.new do
+                        render ::Components::UI::SidebarMenu.new(data: { controller: "demo--sidebar-nav", action: "click->demo--sidebar-nav#select" }) do
                           NAV.each do |item|
                             render ::Components::UI::SidebarMenuItem.new do
                               render ::Components::UI::SidebarMenuButton.new(active: item[:active], tooltip: item[:label]) do
