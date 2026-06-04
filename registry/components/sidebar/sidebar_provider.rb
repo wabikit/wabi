@@ -7,7 +7,8 @@ module Components
         base "group/sidebar flex min-h-svh w-full"
       end
 
-      def initialize(default_collapsed: false, persist_key: "wabi-sidebar", **attrs)
+      def initialize(variant: :sidebar, default_collapsed: false, persist_key: "wabi-sidebar", **attrs)
+        @variant           = variant
         @default_collapsed = default_collapsed
         @persist_key       = persist_key
         @attrs             = attrs
@@ -22,9 +23,10 @@ module Components
             "wabi--sidebar-default-collapsed-value": @default_collapsed.to_s,
             "wabi--sidebar-persist-key-value":       @persist_key,
           },
-          "data-state":  @default_collapsed ? "collapsed" : "expanded",
-          "data-mobile": "closed",
-          class: merge_class(tokens, user_class)
+          "data-state":   @default_collapsed ? "collapsed" : "expanded",
+          "data-mobile":  "closed",
+          "data-variant": @variant.to_s,
+          class: merge_class(tokens, (@variant == :inset ? "bg-sidebar" : nil), user_class)
         ) do
           div(
             data: {
