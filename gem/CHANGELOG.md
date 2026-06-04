@@ -2,6 +2,15 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.0 - 2026-06-04
+
+### Added
+
+- **`SidebarRail`** — a thin, desktop-only strip on the sidebar's inner edge;
+  clicking it toggles collapse/expand (it reuses the `wabi--sidebar` controller, so
+  the rail, `SidebarTrigger`, and ⌘/Ctrl+B all drive the same toggle). `side:` picks
+  the edge; a 1px line highlights on hover/focus. Render it inside `Sidebar`.
+
 ## 0.20.0 - 2026-06-04
 
 Sidebar v3 — richer menu items, shell variants, and polish. No breaking changes.
