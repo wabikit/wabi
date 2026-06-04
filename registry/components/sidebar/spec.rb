@@ -20,6 +20,8 @@ require_relative "sidebar_menu_sub_button"
 require_relative "sidebar_menu_badge"
 require_relative "sidebar_menu_action"
 require_relative "sidebar_inset"
+require_relative "sidebar_input"
+require_relative "sidebar_menu_skeleton"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider defaults to the sidebar variant" do
@@ -246,6 +248,24 @@ RSpec.describe "Sidebar structural pieces" do
 
   it "SidebarGroup collapsible respects default_open: false" do
     expect(Components::UI::SidebarGroup.new(collapsible: true, label: "P", default_open: false).call { "" }).not_to include("<details open")
+  end
+
+  it "SidebarInput is a search input styled for the sidebar, hidden when collapsed" do
+    out = Components::UI::SidebarInput.new(placeholder: "Search").call
+    expect(out).to include("<input")
+    expect(out).to include('type="search"')
+    expect(out).to include('placeholder="Search"')
+    expect(out).to include("border-sidebar-border")
+    expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
+  end
+
+  it "SidebarMenuSkeleton renders pulse bars; show_icon toggles the icon pulse" do
+    with_icon = Components::UI::SidebarMenuSkeleton.new.call
+    expect(with_icon).to include("animate-pulse")
+    expect(with_icon).to include("size-4")
+    expect(with_icon).to include("group-data-[state=collapsed]/sidebar:hidden")
+    no_icon = Components::UI::SidebarMenuSkeleton.new(show_icon: false).call
+    expect(no_icon).not_to include("size-4")
   end
 
   it "SidebarMenuButton forwards arbitrary attrs to the element" do
