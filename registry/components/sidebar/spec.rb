@@ -191,6 +191,15 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include("data-[flyout=open]:border-l-0")
   end
 
+  it "SidebarMenuCollapsible marks the details for the open/close animation" do
+    expect(Components::UI::SidebarMenuCollapsible.new(label: "Projects").call { "" }).to include("wabi-collapsible")
+  end
+
+  it "collapsible SidebarGroup marks the details for the animation; non-collapsible does not" do
+    expect(Components::UI::SidebarGroup.new(collapsible: true, label: "Platform").call { "" }).to include("wabi-collapsible")
+    expect(Components::UI::SidebarGroup.new.call { "" }).not_to include("wabi-collapsible")
+  end
+
   it "SidebarMenuSubItem is a li" do
     expect(Components::UI::SidebarMenuSubItem.new.call { "" }).to include("<li")
   end
