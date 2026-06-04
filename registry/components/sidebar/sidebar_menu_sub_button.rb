@@ -22,9 +22,9 @@ module Components
         user_class = @attrs.delete(:class)
         klass = merge_class(tokens, user_class)
         if @href
-          a(href: @href, "aria-current": (@active ? "page" : nil), class: klass) { yield if block }
+          a(href: @href, **@attrs, "aria-current": (@active ? "page" : nil), class: klass) { yield if block }
         else
-          button(type: "button", "aria-current": (@active ? "page" : nil), class: klass) { yield if block }
+          button(type: "button", **@attrs, "aria-current": (@active ? "page" : nil), class: klass) { yield if block }
         end
       end
     end
