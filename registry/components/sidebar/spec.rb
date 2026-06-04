@@ -177,6 +177,20 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
   end
 
+  it "SidebarMenuCollapsible wires the flyout controller" do
+    out = Components::UI::SidebarMenuCollapsible.new(label: "Projects").call { "" }
+    expect(out).to include('data-controller="wabi--sidebar-flyout"')
+  end
+
+  it "SidebarMenuSub carries the flyout-card classes and the inline base" do
+    out = Components::UI::SidebarMenuSub.new.call { "" }
+    expect(out).to include("border-l")
+    expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
+    expect(out).to include("data-[flyout=open]:!fixed")
+    expect(out).to include("data-[flyout=open]:bg-sidebar")
+    expect(out).to include("data-[flyout=open]:border-l-0")
+  end
+
   it "SidebarMenuSubItem is a li" do
     expect(Components::UI::SidebarMenuSubItem.new.call { "" }).to include("<li")
   end
