@@ -24,7 +24,7 @@ module Components
         user_data  = @attrs.delete(:data) || {}
         details(**@attrs, open: (@default_open ? true : nil),
                 data: { **user_data, controller: "wabi--sidebar-flyout" },
-                class: merge_class("group/collapsible", user_class)) do
+                class: merge_class("group/collapsible wabi-collapsible", user_class)) do
           summary(class: SUMMARY) do
             raw(safe(@icon)) if @icon
             span { @label }

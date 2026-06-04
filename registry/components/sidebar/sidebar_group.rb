@@ -26,7 +26,7 @@ module Components
         end
 
         details(**@attrs, open: (@default_open ? true : nil),
-                class: merge_class(tokens, "group/collapsible-group", user_class)) do
+                class: merge_class(tokens, "group/collapsible-group wabi-collapsible", user_class)) do
           summary(class: SUMMARY) do
             span { @label }
             raw(safe(chevron))

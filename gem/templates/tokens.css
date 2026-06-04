@@ -31,6 +31,21 @@
   [aria-disabled="true"] {
     cursor: not-allowed;
   }
+
+  /* Animate Wabi collapsibles (SidebarMenuCollapsible / collapsible SidebarGroup)
+   * when the sidebar is expanded. Progressive enhancement: animates where
+   * ::details-content + interpolate-size are supported; instant otherwise.
+   * Collapsed mode uses the flyout / icon rail, so it's intentionally excluded. */
+  [data-state="expanded"] .wabi-collapsible { interpolate-size: allow-keywords; }
+  [data-state="expanded"] .wabi-collapsible::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 200ms ease, content-visibility 200ms;
+    transition-behavior: allow-discrete;
+  }
+  [data-state="expanded"] .wabi-collapsible[open]::details-content {
+    block-size: auto;
+  }
 }
 
 /* Sidebar surface tokens (full shadcn-style palette). Seven mirror the active
