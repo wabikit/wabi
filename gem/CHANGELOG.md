@@ -2,6 +2,19 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.19.1 - 2026-06-03
+
+### Fixed
+
+- **Sidebar collapsed-only tooltips showed when expanded too.** The menu-button
+  tooltip's content portals to `<body>` (Zag default), which escaped the
+  `group/sidebar` scope, so the `group-data-[state=expanded]/sidebar:hidden` gate
+  never matched and the label tooltip appeared even when the rail was expanded
+  (redundant with the visible label). The `wabi--sidebar` controller now mirrors
+  collapse state to `<html data-wabi-sidebar="…">` (same idiom as the theme
+  controller's `data-mode`), and the tooltip content gates on that marker — which
+  reaches the portaled content. Tooltips now appear only when collapsed.
+
 ## 0.19.0 - 2026-06-03
 
 Sidebar v2 — a richer, themeable Sidebar. No breaking changes (existing v1
