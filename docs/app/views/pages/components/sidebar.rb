@@ -137,6 +137,12 @@ module Views
                 end
               RUBY
 
+              h3(id: "variant-floating", class: "text-xl font-semibold mt-6 mb-3") { "Floating" }
+              variant_demo(:floating)
+
+              h3(id: "variant-inset", class: "text-xl font-semibold mt-6 mb-3") { "Inset" }
+              variant_demo(:inset)
+
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "Menu items are real <a>/<button> elements; the active item carries aria-current=\"page\"." }
@@ -149,6 +155,34 @@ module Views
         end
 
         private
+
+        # A small contained live demo of a shell variant. The lg:! overrides keep
+        # the rail inside the fixed-height preview box instead of the viewport.
+        def variant_demo(variant)
+          div(class: "rounded-lg border border-border overflow-hidden h-72") do
+            render ::Components::UI::SidebarProvider.new(variant: variant, class: "h-full min-h-0") do
+              render ::Components::UI::Sidebar.new(class: "lg:!h-full lg:!sticky lg:!top-0") do
+                render ::Components::UI::SidebarHeader.new do
+                  span(class: "px-2 font-semibold") { "Acme" }
+                end
+                render ::Components::UI::SidebarContent.new do
+                  render ::Components::UI::SidebarGroup.new do
+                    render ::Components::UI::SidebarMenu.new do
+                      [["Home", true], ["Inbox", false], ["Settings", false]].each do |label, active|
+                        render ::Components::UI::SidebarMenuItem.new do
+                          render ::Components::UI::SidebarMenuButton.new(active: active) { span { label } }
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+              render ::Components::UI::SidebarInset.new(class: "p-4") do
+                p(class: "text-sm text-muted-foreground") { "Main content (#{variant})." }
+              end
+            end
+          end
+        end
 
         def description
           @description ||= YAML.safe_load_file(
