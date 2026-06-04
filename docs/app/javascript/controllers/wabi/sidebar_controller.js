@@ -11,6 +11,7 @@ export default class extends Controller {
     const stored = localStorage.getItem(this.persistKeyValue)
     const collapsed = stored === null ? this.defaultCollapsedValue : stored === "true"
     this.element.dataset.state = collapsed ? "collapsed" : "expanded"
+    this.#syncGlobalState()
     this._onKeydown = (e) => {
       if (e.key === "Escape" && this.element.dataset.mobile === "open") this.closeMobile()
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") { e.preventDefault(); this.toggle() }
@@ -30,6 +31,7 @@ export default class extends Controller {
     if (this.isDesktop()) {
       const collapsed = this.element.dataset.state !== "collapsed"
       this.element.dataset.state = collapsed ? "collapsed" : "expanded"
+      this.#syncGlobalState()
       localStorage.setItem(this.persistKeyValue, String(collapsed))
       this.dispatch("change", { detail: { state: this.element.dataset.state, mobile: this.element.dataset.mobile } })
     } else {
@@ -52,6 +54,13 @@ export default class extends Controller {
     this._triggerEl?.focus() // return focus to the trigger (WCAG 2.4.3)
     this._triggerEl = null
     this.dispatch("change", { detail: { state: this.element.dataset.state, mobile: "closed" } })
+  }
+
+  // Mirror collapse state to <html> (like the theme controller mirrors data-mode)
+  // so collapsed-only menu-button tooltips can gate on it even after their content
+  // portals out to <body> (escaping the sidebar's own group/sidebar scope).
+  #syncGlobalState() {
+    document.documentElement.setAttribute("data-wabi-sidebar", this.element.dataset.state)
   }
 
   #setInert(on) {

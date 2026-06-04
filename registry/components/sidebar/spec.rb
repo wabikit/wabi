@@ -110,7 +110,9 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include('data-controller="wabi--tooltip"')
     expect(out).to include('data-wabi--tooltip-target="trigger"')
     expect(out).to include('data-wabi--tooltip-target="content"')
-    expect(out).to include("group-data-[state=expanded]/sidebar:hidden")
+    # collapsed-only: tooltip content gated on the <html data-wabi-sidebar> marker
+    # (works through the Zag portal, unlike a group/sidebar-scoped gate)
+    expect(out).to include("[[data-wabi-sidebar=expanded]_&]:hidden")
     expect(out.scan("Dashboard").size).to be >= 2
   end
 
