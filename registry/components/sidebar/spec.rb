@@ -198,4 +198,23 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include("group-hover/menu-item:opacity-100")
     expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
   end
+
+  it "SidebarMenuButton forwards arbitrary attrs to the element" do
+    out = Components::UI::SidebarMenuButton.new(href: "/x", id: "nav-home", target: "_blank", data: { turbo_method: "get" }).call { "Home" }
+    expect(out).to include('id="nav-home"')
+    expect(out).to include('target="_blank"')
+    expect(out).to include('data-turbo-method="get"')
+  end
+
+  it "SidebarMenuButton with a tooltip keeps BOTH user data and the tooltip trigger target" do
+    out = Components::UI::SidebarMenuButton.new(href: "/x", tooltip: "Home", data: { foo: "bar" }).call { "Home" }
+    expect(out).to include('data-foo="bar"')
+    expect(out).to include('data-wabi--tooltip-target="trigger"')
+  end
+
+  it "SidebarMenuSubButton forwards arbitrary attrs to the element" do
+    out = Components::UI::SidebarMenuSubButton.new(href: "/x", id: "sub", "aria-label": "Sub").call { "Sub" }
+    expect(out).to include('id="sub"')
+    expect(out).to include('aria-label="Sub"')
+  end
 end
