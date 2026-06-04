@@ -2,6 +2,18 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.1 - 2026-06-04
+
+### Added
+
+- **Collapsed-submenu flyout.** When the sidebar is collapsed to icons, hovering or
+  focusing a `SidebarMenuCollapsible` group pops its submenu out as a floating panel
+  anchored to the icon (auto-flipping to the other side near the viewport edge),
+  instead of hiding it. Expanded mode keeps the inline `<details>` behavior. A small
+  `wabi--sidebar-flyout` controller repositions the same submenu with `position:
+  fixed` (so it escapes the rail's clipping); hover/focus open, Escape / pointer-leave
+  close. Desktop only.
+
 ## 0.21.0 - 2026-06-04
 
 ### Added
