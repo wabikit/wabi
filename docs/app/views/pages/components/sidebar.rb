@@ -42,10 +42,10 @@ module Views
                   render ::Components::UI::Sidebar.new(class: "lg:!h-full lg:!sticky lg:!top-0") do
                     render ::Components::UI::SidebarHeader.new do
                       span(class: "px-2 font-semibold group-data-[state=collapsed]/sidebar:hidden") { "Acme" }
+                      render ::Components::UI::SidebarInput.new(placeholder: "Search…")
                     end
                     render ::Components::UI::SidebarContent.new do
-                      render ::Components::UI::SidebarGroup.new do
-                        render ::Components::UI::SidebarGroupLabel.new { "Platform" }
+                      render ::Components::UI::SidebarGroup.new(collapsible: true, label: "Platform", default_open: true) do
                         render ::Components::UI::SidebarMenu.new(data: { controller: "demo--sidebar-nav", action: "click->demo--sidebar-nav#select" }) do
                           NAV.each do |item|
                             render ::Components::UI::SidebarMenuItem.new do
@@ -77,6 +77,16 @@ module Views
                                   render ::Components::UI::SidebarMenuSubButton.new { "Gemini" }
                                 end
                               end
+                            end
+                          end
+                        end
+                      end
+                      render ::Components::UI::SidebarGroup.new do
+                        render ::Components::UI::SidebarGroupLabel.new { "Loading" }
+                        render ::Components::UI::SidebarMenu.new do
+                          3.times do
+                            render ::Components::UI::SidebarMenuItem.new do
+                              render ::Components::UI::SidebarMenuSkeleton.new
                             end
                           end
                         end
