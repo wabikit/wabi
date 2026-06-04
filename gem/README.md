@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.21.1 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 36 components, 8 theme palettes, WCAG-AA targeted, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
+🎉 **Status:** v0.21.2 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 36 components, 8 theme palettes, WCAG-AA targeted, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
 
 ---
 

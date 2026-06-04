@@ -2,6 +2,16 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.2 - 2026-06-04
+
+### Added
+
+- **Collapsible `<details>` open/close animation.** `SidebarMenuCollapsible` and
+  collapsible `SidebarGroup`s now slide open/closed when the sidebar is expanded — a
+  CSS-only progressive enhancement (`::details-content` + `interpolate-size`), gated
+  to `[data-state="expanded"]` so collapsed mode (flyout / icon rail) is untouched.
+  Browsers without support fall back to the instant native behavior.
+
 ## 0.21.1 - 2026-06-04
 
 ### Added
