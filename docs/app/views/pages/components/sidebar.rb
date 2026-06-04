@@ -36,6 +36,7 @@ module Views
               p(class: "text-muted-foreground mb-4 text-sm") do
                 plain "Click the trigger to collapse the rail to icons (hover an icon for its label). "
                 plain "You can also click the thin rail on the sidebar's right edge to toggle it. "
+                plain "When collapsed, hovering a group with a submenu (like Projects) pops it out as a flyout. "
                 plain "On narrow screens it becomes an off-canvas panel."
               end
               div(class: "rounded-lg border border-border overflow-hidden h-80") do
