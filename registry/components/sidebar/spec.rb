@@ -22,6 +22,7 @@ require_relative "sidebar_menu_action"
 require_relative "sidebar_inset"
 require_relative "sidebar_input"
 require_relative "sidebar_menu_skeleton"
+require_relative "sidebar_rail"
 
 RSpec.describe "Sidebar structural pieces" do
   it "SidebarProvider defaults to the sidebar variant" do
@@ -285,5 +286,34 @@ RSpec.describe "Sidebar structural pieces" do
     out = Components::UI::SidebarMenuSubButton.new(href: "/x", id: "sub", "aria-label": "Sub").call { "Sub" }
     expect(out).to include('id="sub"')
     expect(out).to include('aria-label="Sub"')
+  end
+
+  it "SidebarRail is a desktop-only toggle button with an edge affordance" do
+    out = Components::UI::SidebarRail.new.call
+    expect(out).to include('<button')
+    expect(out).to include('type="button"')
+    expect(out).to include('aria-label="Toggle sidebar"')
+    expect(out).to include('tabindex="-1"')
+    expect(out).to include('data-action="wabi--sidebar#toggle"')
+    expect(out).to include("hidden")
+    expect(out).to include("lg:flex")
+    expect(out).to include("after:bg-sidebar-border")
+    expect(out).to include("hover:after:bg-sidebar-ring")
+  end
+
+  it "SidebarRail side picks the inner edge + resize cursor" do
+    left  = Components::UI::SidebarRail.new(side: :left).call
+    right = Components::UI::SidebarRail.new(side: :right).call
+    expect(left).to include("right-0")
+    expect(left).to include("cursor-w-resize")
+    expect(right).to include("left-0")
+    expect(right).to include("cursor-e-resize")
+  end
+
+  it "SidebarRail forwards attrs and merges user data with the toggle action" do
+    out = Components::UI::SidebarRail.new(id: "rail", data: { foo: "bar" }).call
+    expect(out).to include('id="rail"')
+    expect(out).to include('data-foo="bar"')
+    expect(out).to include('data-action="wabi--sidebar#toggle"')
   end
 end
