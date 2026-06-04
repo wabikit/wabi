@@ -48,6 +48,15 @@ describe("wabi--sidebar", () => {
     expect(root().dataset.state).toBe("collapsed")
   })
 
+  it("mirrors collapse state to <html data-wabi-sidebar> (so portaled tooltips can gate on it)", async () => {
+    setViewport(true)
+    const h = mountSidebar(`data-wabi--sidebar-persist-key-value="k"`)
+    await tick()
+    expect(document.documentElement.getAttribute("data-wabi-sidebar")).toBe("expanded")
+    ctrlOf(h).toggle()
+    expect(document.documentElement.getAttribute("data-wabi-sidebar")).toBe("collapsed")
+  })
+
   it("mobile toggle flips data-mobile and sets inert on non-panel/backdrop children", async () => {
     setViewport(false)
     const h = mountSidebar()

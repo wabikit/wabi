@@ -42,8 +42,11 @@ module Components
           }
         ) do
           render_button(klass, trigger: true, &block)
+          # The tooltip is a collapsed-only label. Its content portals to <body>
+          # (escaping group/sidebar), so we gate on the <html data-wabi-sidebar>
+          # marker the controller mirrors — hidden whenever the sidebar is expanded.
           render Components::UI::TooltipContent.new(
-            class: "group-data-[state=expanded]/sidebar:hidden"
+            class: "[[data-wabi-sidebar=expanded]_&]:hidden"
           ) { tip }
         end
       end
