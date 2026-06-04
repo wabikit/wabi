@@ -54,8 +54,9 @@ module Components
       private
 
       def render_button(klass, trigger: false, &block)
-        data = trigger ? { "wabi--tooltip-target": "trigger" } : {}
-        common = { "aria-current": (@active ? "page" : nil), data: data, class: klass }
+        user_data = @attrs.delete(:data) || {}
+        data = trigger ? { **user_data, "wabi--tooltip-target": "trigger" } : user_data
+        common = { **@attrs, "aria-current": (@active ? "page" : nil), data: data, class: klass }
         if @href
           a(href: @href, **common) { yield if block }
         else
