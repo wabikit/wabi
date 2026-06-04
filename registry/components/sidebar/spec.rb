@@ -230,6 +230,24 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include("group-data-[state=collapsed]/sidebar:hidden")
   end
 
+  it "SidebarGroup stays a div by default (not collapsible)" do
+    expect(Components::UI::SidebarGroup.new.call { "" }).to include("<div")
+  end
+
+  it "SidebarGroup collapsible renders a details disclosure with the label as summary" do
+    out = Components::UI::SidebarGroup.new(collapsible: true, label: "Platform").call { "" }
+    expect(out).to include("<details")
+    expect(out).to include("group/collapsible-group")
+    expect(out).to include("<summary")
+    expect(out).to include("Platform")
+    expect(out).to include("group-[[open]]/collapsible-group:rotate-90")
+    expect(out).to include("open")
+  end
+
+  it "SidebarGroup collapsible respects default_open: false" do
+    expect(Components::UI::SidebarGroup.new(collapsible: true, label: "P", default_open: false).call { "" }).not_to include("<details open")
+  end
+
   it "SidebarMenuButton forwards arbitrary attrs to the element" do
     out = Components::UI::SidebarMenuButton.new(href: "/x", id: "nav-home", target: "_blank", data: { turbo_method: "get" }).call { "Home" }
     expect(out).to include('id="nav-home"')
