@@ -19,8 +19,39 @@ require_relative "sidebar_menu_sub_item"
 require_relative "sidebar_menu_sub_button"
 require_relative "sidebar_menu_badge"
 require_relative "sidebar_menu_action"
+require_relative "sidebar_inset"
 
 RSpec.describe "Sidebar structural pieces" do
+  it "SidebarProvider defaults to the sidebar variant" do
+    out = Components::UI::SidebarProvider.new.call { "" }
+    expect(out).to include('data-variant="sidebar"')
+    expect(out).not_to include("bg-sidebar")
+  end
+
+  it "SidebarProvider inset variant sets data-variant + a sidebar background" do
+    out = Components::UI::SidebarProvider.new(variant: :inset).call { "" }
+    expect(out).to include('data-variant="inset"')
+    expect(out).to include("bg-sidebar")
+  end
+
+  it "Sidebar carries gated floating + inset adaptations" do
+    out = Components::UI::Sidebar.new.call { "" }
+    expect(out).to include("group-data-[variant=floating]/sidebar:rounded-lg")
+    expect(out).to include("group-data-[variant=floating]/sidebar:shadow-lg")
+    expect(out).to include("group-data-[variant=inset]/sidebar:bg-transparent")
+  end
+
+  it "SidebarInset is a main wrapper with gated inset-card classes" do
+    out = Components::UI::SidebarInset.new.call { "" }
+    expect(out).to include("<main")
+    # grow (not flex-1) so it coexists with flex-col under ClassMerge's minimal dedup
+    # (flex-1 and flex-col share the same "flex" key and would evict each other)
+    expect(out).to include("grow")
+    expect(out).to include("flex-col")
+    expect(out).to include("group-data-[variant=inset]/sidebar:rounded-xl")
+    expect(out).to include("group-data-[variant=inset]/sidebar:bg-background")
+  end
+
   it "SidebarProvider hosts the controller, group marker, default expanded state" do
     out = Components::UI::SidebarProvider.new.call { "" }
     expect(out).to include('data-controller="wabi--sidebar"')

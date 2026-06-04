@@ -99,6 +99,31 @@ module Views
                 render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
               end
 
+              h2(id: "variants", class: "text-2xl font-semibold mt-8 mb-4") { "Shell variants" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "variant:" }
+                plain " to SidebarProvider: "
+                code(class: "font-mono text-foreground") { ":sidebar" }
+                plain " (default), "
+                code(class: "font-mono text-foreground") { ":floating" }
+                plain " (the rail becomes a detached card), or "
+                code(class: "font-mono text-foreground") { ":inset" }
+                plain " (the main content, wrapped in "
+                code(class: "font-mono text-foreground") { "SidebarInset" }
+                plain ", floats as a rounded card over a sidebar-colored background)."
+              end
+              render ::Components::Site::CodeBlock.new(language: "ruby", source: <<~RUBY)
+                render Components::UI::SidebarProvider.new(variant: :inset) do
+                  render Components::UI::Sidebar.new do
+                    # … header / content / footer …
+                  end
+                  render Components::UI::SidebarInset.new do
+                    # … your page; include a SidebarTrigger somewhere …
+                  end
+                end
+              RUBY
+
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "Menu items are real <a>/<button> elements; the active item carries aria-current=\"page\"." }
