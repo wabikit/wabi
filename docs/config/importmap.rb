@@ -31,3 +31,5 @@ pin "@zag-js/toggle",   to: "https://cdn.jsdelivr.net/npm/@zag-js/toggle@1.41.0/
 pin "@zag-js/toggle-group", to: "https://cdn.jsdelivr.net/npm/@zag-js/toggle-group@1.41.0/+esm"
 pin "@zag-js/date-picker", to: "https://cdn.jsdelivr.net/npm/@zag-js/date-picker@1.41.0/+esm"
 pin "@internationalized/date", to: "https://cdn.jsdelivr.net/npm/@internationalized/date@3.12.2/+esm"
+pin "@zag-js/pin-input", to: "https://cdn.jsdelivr.net/npm/@zag-js/pin-input@1.41.0/+esm"
+pin "@zag-js/file-upload", to: "https://cdn.jsdelivr.net/npm/@zag-js/file-upload@1.41.0/+esm"

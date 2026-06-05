@@ -1,0 +1,17 @@
+name: context_menu
+version: 0.1.0
+type: registry:ui
+description: Right-click context menu — full menu parity (items, checkbox/radio, submenus) opening at the cursor.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/menu": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+shared_files:
+  - "_shared/overlay_portal.js"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
