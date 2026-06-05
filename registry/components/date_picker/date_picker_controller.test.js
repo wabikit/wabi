@@ -108,3 +108,45 @@ describe("wabi--date-picker (field open/close)", () => {
     expect(cells.length).toBeGreaterThanOrEqual(28)
   })
 })
+
+function rangeFixture(attrs = "") {
+  return `
+    <div data-controller="wabi--date-picker"
+         data-wabi--date-picker-name-value="stay"
+         data-wabi--date-picker-selection-mode-value="range"
+         data-wabi--date-picker-locale-value="en-US"
+         data-wabi--date-picker-num-of-months-value="2"
+         ${attrs}>
+      <div data-wabi--date-picker-target="viewControl">
+        <button data-wabi--date-picker-target="prev">‹</button>
+        <button data-wabi--date-picker-target="viewTrigger"></button>
+        <button data-wabi--date-picker-target="next">›</button>
+      </div>
+      <table><thead><tr data-wabi--date-picker-target="gridHead"></tr></thead>
+        <tbody data-wabi--date-picker-target="grid"></tbody></table>
+      <input type="hidden" name="stay[start]" data-wabi--date-picker-target="hiddenStart" />
+      <input type="hidden" name="stay[end]" data-wabi--date-picker-target="hiddenEnd" />
+    </div>`
+}
+
+describe("wabi--date-picker (range)", () => {
+  it("pre-fills both hidden inputs from a default range", async () => {
+    mount(ID, Controller, rangeFixture(`data-wabi--date-picker-default-value-value="2026-06-10,2026-06-14"`))
+    await tick()
+    expect(root().querySelector('[data-wabi--date-picker-target="hiddenStart"]').value).toBe("2026-06-10")
+    expect(root().querySelector('[data-wabi--date-picker-target="hiddenEnd"]').value).toBe("2026-06-14")
+  })
+
+  it("selecting two days fills start then end", async () => {
+    mount(ID, Controller, rangeFixture(`data-wabi--date-picker-default-value-value="2026-06-01,2026-06-01"`))
+    await tick()
+    const dayButtons = (txt) => [...root().querySelectorAll('[data-wabi--date-picker-target="grid"] button')]
+      .filter((b) => b.textContent.trim() === txt)
+    dayButtons("10")[0].click(); await tick()
+    dayButtons("14")[0].click(); await tick()
+    const start = root().querySelector('[data-wabi--date-picker-target="hiddenStart"]').value
+    const end = root().querySelector('[data-wabi--date-picker-target="hiddenEnd"]').value
+    expect(start).toBe("2026-06-10")
+    expect(end).toBe("2026-06-14")
+  })
+})
