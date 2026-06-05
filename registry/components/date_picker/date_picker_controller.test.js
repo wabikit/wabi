@@ -56,3 +56,55 @@ describe("wabi--date-picker (calendar core)", () => {
     expect(after).not.toBe(before)
   })
 })
+
+function fieldFixture(attrs = "") {
+  return `
+    <div data-controller="wabi--date-picker"
+         data-wabi--date-picker-name-value="d"
+         data-wabi--date-picker-selection-mode-value="single"
+         data-wabi--date-picker-locale-value="en-US"
+         data-wabi--date-picker-num-of-months-value="1"
+         data-wabi--date-picker-portal-value="false"
+         ${attrs}>
+      <div data-wabi--date-picker-target="control">
+        <input data-wabi--date-picker-target="input" />
+        <button data-wabi--date-picker-target="trigger">cal</button>
+      </div>
+      <div data-wabi--date-picker-target="positioner">
+        <div data-wabi--date-picker-target="content" data-state="closed" inert hidden>
+          <div data-wabi--date-picker-target="viewControl">
+            <button data-wabi--date-picker-target="prev">‹</button>
+            <button data-wabi--date-picker-target="viewTrigger"></button>
+            <button data-wabi--date-picker-target="next">›</button>
+          </div>
+          <table><thead><tr data-wabi--date-picker-target="gridHead"></tr></thead>
+            <tbody data-wabi--date-picker-target="grid"></tbody></table>
+        </div>
+      </div>
+      <input type="hidden" name="d" data-wabi--date-picker-target="hiddenStart" />
+    </div>`
+}
+
+describe("wabi--date-picker (field open/close)", () => {
+  it("starts closed, opens on trigger click, and closes again (portal:false keeps it in-tree)", async () => {
+    const h = mount(ID, Controller, fieldFixture())
+    await tick()
+    const content = root().querySelector('[data-wabi--date-picker-target="content"]')
+    expect(content.getAttribute("data-state")).toBe("closed")
+    ctrlOf(h).triggerTarget.click()
+    await tick()
+    expect(content.getAttribute("data-state")).toBe("open")
+    expect(content.hasAttribute("inert")).toBe(false)
+    ctrlOf(h).triggerTarget.click()
+    await tick()
+    expect(content.getAttribute("data-state")).toBe("closed")
+    expect(content.hasAttribute("inert")).toBe(true)
+  })
+
+  it("fills the grid inside the popover content", async () => {
+    mount(ID, Controller, fieldFixture(`data-wabi--date-picker-default-value-value="2026-06-15"`))
+    await tick()
+    const cells = root().querySelectorAll('[data-wabi--date-picker-target="grid"] button')
+    expect(cells.length).toBeGreaterThanOrEqual(28)
+  })
+})
