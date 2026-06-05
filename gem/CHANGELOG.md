@@ -2,6 +2,26 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.3 - 2026-06-05
+
+### Accessibility
+
+- **`SidebarTrigger` now announces state.** It registers as a `wabi--sidebar`
+  controller target, and the controller reflects `aria-expanded` (expanded vs.
+  collapsed on desktop, off-canvas open vs. closed on mobile) and points
+  `aria-controls` at the sidebar panel (which is given a stable id).
+- **Mobile panel is a proper modal.** When the sidebar opens off-canvas on mobile
+  it becomes `role="dialog"` with `aria-modal="true"` (cleared on close); the panel
+  also carries a default `aria-label` ("Sidebar"), overridable via `aria-label:`.
+- **`⌘/Ctrl+B` is scoped.** The toggle shortcut is now ignored while focus is in an
+  `input`, `textarea`, `select`, or `contenteditable` element, so it no longer
+  collides with editors' bold shortcut.
+
+### Changed
+
+- **Docs:** the sidebar page now shows the shell variants (floating / inset)
+  directly under the main example, matching the other component pages.
+
 ## 0.21.2 - 2026-06-04
 
 ### Added
