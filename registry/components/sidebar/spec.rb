@@ -82,6 +82,16 @@ RSpec.describe "Sidebar structural pieces" do
     expect(right).to include("group-data-[state=collapsed]/sidebar:lg:w-[3.25rem]")
   end
 
+  it "Sidebar panel has a default accessible name (it becomes a modal dialog on mobile)" do
+    expect(Components::UI::Sidebar.new.call { "" }).to include('aria-label="Sidebar"')
+  end
+
+  it "Sidebar lets the caller override the accessible name" do
+    out = Components::UI::Sidebar.new("aria-label": "Main navigation").call { "" }
+    expect(out).to include('aria-label="Main navigation"')
+    expect(out).not_to include('aria-label="Sidebar"')
+  end
+
   it "Sections render with their layout roles" do
     expect(Components::UI::SidebarHeader.new.call { "" }).to include("<div")
     expect(Components::UI::SidebarContent.new.call { "" }).to include("overflow-auto")
@@ -131,6 +141,11 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include('data-action="wabi--sidebar#toggle"')
     expect(out).to include('aria-label')
     expect(out).to include("<svg")
+  end
+
+  it "SidebarTrigger registers as a controller target so JS can sync aria-expanded/controls" do
+    out = Components::UI::SidebarTrigger.new.call
+    expect(out).to include('data-wabi--sidebar-target="trigger"')
   end
 
   it "SidebarTrigger accepts a custom icon via block (no default svg)" do

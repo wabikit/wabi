@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
+let panelUid = 0
+
 export default class extends Controller {
-  static targets = ["panel", "backdrop"]
+  static targets = ["panel", "backdrop", "trigger"]
   static values  = {
     defaultCollapsed: { type: Boolean, default: false },
     persistKey:       { type: String,  default: "wabi-sidebar" },
@@ -12,9 +14,16 @@ export default class extends Controller {
     const collapsed = stored === null ? this.defaultCollapsedValue : stored === "true"
     this.element.dataset.state = collapsed ? "collapsed" : "expanded"
     this.#syncGlobalState()
+    // Give the panel a stable id so triggers can point aria-controls at it.
+    if (this.hasPanelTarget && !this.panelTarget.id) this.panelTarget.id = `wabi-sidebar-${++panelUid}`
+    this.#syncTriggers()
     this._onKeydown = (e) => {
       if (e.key === "Escape" && this.element.dataset.mobile === "open") this.closeMobile()
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") { e.preventDefault(); this.toggle() }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
+        if (this.#isEditable(e.target)) return // don't steal Cmd/Ctrl+B from text fields (bold)
+        e.preventDefault()
+        this.toggle()
+      }
     }
     document.addEventListener("keydown", this._onKeydown)
   }
@@ -32,6 +41,7 @@ export default class extends Controller {
       const collapsed = this.element.dataset.state !== "collapsed"
       this.element.dataset.state = collapsed ? "collapsed" : "expanded"
       this.#syncGlobalState()
+      this.#syncTriggers()
       localStorage.setItem(this.persistKeyValue, String(collapsed))
       this.dispatch("change", { detail: { state: this.element.dataset.state, mobile: this.element.dataset.mobile } })
     } else {
@@ -43,14 +53,24 @@ export default class extends Controller {
     this._triggerEl = document.activeElement // remember opener to restore focus on close
     this.element.dataset.mobile = "open"
     this.#setInert(true)
-    // hasPanelTarget guard: accessing this.panelTarget when absent throws in Stimulus.
-    if (this.hasPanelTarget) this.panelTarget.focus()
+    // Off-canvas panel is a modal on mobile: announce it as such to AT.
+    if (this.hasPanelTarget) {
+      this.panelTarget.setAttribute("role", "dialog")
+      this.panelTarget.setAttribute("aria-modal", "true")
+      this.panelTarget.focus() // hasPanelTarget guard: this.panelTarget throws when absent.
+    }
+    this.#syncTriggers()
     this.dispatch("change", { detail: { state: this.element.dataset.state, mobile: "open" } })
   }
 
   closeMobile() {
     this.element.dataset.mobile = "closed"
     this.#setInert(false)
+    if (this.hasPanelTarget) {
+      this.panelTarget.removeAttribute("role")
+      this.panelTarget.removeAttribute("aria-modal")
+    }
+    this.#syncTriggers()
     this._triggerEl?.focus() // return focus to the trigger (WCAG 2.4.3)
     this._triggerEl = null
     this.dispatch("change", { detail: { state: this.element.dataset.state, mobile: "closed" } })
@@ -61,6 +81,25 @@ export default class extends Controller {
   // portals out to <body> (escaping the sidebar's own group/sidebar scope).
   #syncGlobalState() {
     document.documentElement.setAttribute("data-wabi-sidebar", this.element.dataset.state)
+  }
+
+  // Reflect the current open/collapsed state onto every trigger button so AT
+  // announces it. Desktop: expanded vs collapsed rail. Mobile: off-canvas open.
+  #syncTriggers() {
+    if (!this.hasTriggerTarget) return
+    const expanded = this.isDesktop()
+      ? this.element.dataset.state === "expanded"
+      : this.element.dataset.mobile === "open"
+    for (const t of this.triggerTargets) {
+      t.setAttribute("aria-expanded", String(expanded))
+      if (this.hasPanelTarget && this.panelTarget.id) t.setAttribute("aria-controls", this.panelTarget.id)
+    }
+  }
+
+  #isEditable(el) {
+    if (!el || !el.tagName) return false
+    return el.isContentEditable ||
+      el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT"
   }
 
   #setInert(on) {

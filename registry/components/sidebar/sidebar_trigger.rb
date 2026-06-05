@@ -16,7 +16,7 @@ module Components
         button(
           type: "button",
           "aria-label": "Toggle sidebar",
-          data: { action: "wabi--sidebar#toggle" },
+          data: { action: "wabi--sidebar#toggle", "wabi--sidebar-target": "trigger" },
           class: merge_class(tokens, user_class)
         ) do
           if block

@@ -18,6 +18,8 @@ function mountSidebar(attrs = "") {
     <div data-controller="wabi--sidebar" data-state="expanded" data-mobile="closed" class="group/sidebar" ${attrs}>
       <div data-wabi--sidebar-target="backdrop"></div>
       <aside data-wabi--sidebar-target="panel" tabindex="-1"></aside>
+      <button id="trigger" data-wabi--sidebar-target="trigger" data-action="wabi--sidebar#toggle">T</button>
+      <input id="field" />
       <main id="main">content</main>
     </div>`
   return mount(ID, Controller, FIXTURE)
@@ -99,5 +101,43 @@ describe("wabi--sidebar", () => {
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "b" }))
     await tick()
     expect(root().dataset.state).toBe("expanded")
+  })
+
+  it("Cmd/Ctrl+B is ignored while focus is in an editable field", async () => {
+    setViewport(true)
+    const h = mountSidebar(`data-wabi--sidebar-persist-key-value="k"`)
+    await tick()
+    const field = document.getElementById("field")
+    field.dispatchEvent(new KeyboardEvent("keydown", { key: "b", metaKey: true, bubbles: true }))
+    await tick()
+    expect(root().dataset.state).toBe("expanded") // unchanged — shortcut suppressed in inputs
+  })
+
+  it("gives the panel an id and syncs aria-expanded/aria-controls on the trigger", async () => {
+    setViewport(true)
+    const h = mountSidebar(`data-wabi--sidebar-persist-key-value="k"`)
+    await tick()
+    const trigger = document.getElementById("trigger")
+    const panel = root().querySelector('[data-wabi--sidebar-target="panel"]')
+    expect(panel.id).toBeTruthy()
+    expect(trigger.getAttribute("aria-controls")).toBe(panel.id)
+    expect(trigger.getAttribute("aria-expanded")).toBe("true")
+    ctrlOf(h).toggle()
+    expect(trigger.getAttribute("aria-expanded")).toBe("false")
+    ctrlOf(h).toggle()
+    expect(trigger.getAttribute("aria-expanded")).toBe("true")
+  })
+
+  it("mobile open marks the panel as a modal dialog; close clears it", async () => {
+    setViewport(false)
+    const h = mountSidebar()
+    await tick()
+    const panel = root().querySelector('[data-wabi--sidebar-target="panel"]')
+    ctrlOf(h).toggle()
+    expect(panel.getAttribute("role")).toBe("dialog")
+    expect(panel.getAttribute("aria-modal")).toBe("true")
+    ctrlOf(h).toggle()
+    expect(panel.hasAttribute("role")).toBe(false)
+    expect(panel.hasAttribute("aria-modal")).toBe(false)
   })
 })

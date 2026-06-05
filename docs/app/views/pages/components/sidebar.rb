@@ -106,12 +106,6 @@ module Views
                 end
               end
 
-              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
-              SOURCE_PATHS.each do |relpath|
-                h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
-                render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
-              end
-
               h2(id: "variants", class: "text-2xl font-semibold mt-8 mb-4") { "Shell variants" }
               p(class: "text-muted-foreground mb-4 text-sm") do
                 plain "Pass "
@@ -143,11 +137,19 @@ module Views
               h3(id: "variant-inset", class: "text-xl font-semibold mt-6 mb-3") { "Inset" }
               variant_demo(:inset)
 
+              h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
+              SOURCE_PATHS.each do |relpath|
+                h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
+                render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
+              end
+
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "Menu items are real <a>/<button> elements; the active item carries aria-current=\"page\"." }
                 li { "Collapsed (icon) mode shows each item's label via a tooltip, so the icon-only rail stays labelled." }
-                li { "On mobile the panel is off-canvas: focus moves to it on open, the rest of the page is inert, and Escape (or a backdrop click) closes it." }
+                li { "The trigger reflects its state with aria-expanded and points aria-controls at the panel." }
+                li { "On mobile the panel is off-canvas: it becomes role=\"dialog\" aria-modal=\"true\", focus moves to it on open, the rest of the page is inert, and Escape (or a backdrop click) closes it." }
+                li { "Cmd/Ctrl+B toggles the sidebar — but the shortcut is ignored while focus is in an input, textarea, select, or contenteditable." }
                 li { "Collapse state persists across visits in localStorage." }
               end
             end

@@ -29,8 +29,13 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
+        # Default accessible name: the panel is a complementary landmark on
+        # desktop and becomes role="dialog" on mobile (set by the controller),
+        # where it needs a name. Callers can override via aria-label:.
+        aria_label = @attrs.delete(:"aria-label") || "Sidebar"
         aside(
           **@attrs,
+          "aria-label": aria_label,
           data: { "wabi--sidebar-target": "panel" },
           tabindex: -1,
           class: merge_class(BASE, SIDE.fetch(@side, SIDE[:left]), user_class)
