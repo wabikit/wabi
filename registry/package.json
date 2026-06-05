@@ -10,9 +10,11 @@
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@vitest/coverage-v8": "^2.1.8",
+    "@internationalized/date": "3.12.2",
     "@zag-js/accordion": "1.41.0",
     "@zag-js/checkbox": "1.41.0",
     "@zag-js/combobox": "1.41.0",
+    "@zag-js/date-picker": "1.41.0",
     "@zag-js/dialog": "1.41.0",
     "@zag-js/menu": "1.41.0",
     "@zag-js/number-input": "1.41.0",
