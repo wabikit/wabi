@@ -28,7 +28,7 @@ module Components
       end
 
       def num_of_months
-        @num_of_months || (@selection_mode == :range ? 2 : 1)
+        @num_of_months || 1
       end
 
       def iso(value)

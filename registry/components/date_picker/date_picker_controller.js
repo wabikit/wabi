@@ -118,6 +118,9 @@ export default class extends Controller {
   }
 
   renderGrid(api) {
+    // Renders the first visible month from api.weeks. Multi-month side-by-side
+    // (num_of_months > 1) is deferred — range selection still works across months
+    // via prev/next navigation.
     if (this.gridHeadEl) {
       this.gridHeadEl.innerHTML = ""
       api.weekDays.forEach((wd) => {

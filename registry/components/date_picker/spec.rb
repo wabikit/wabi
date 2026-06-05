@@ -31,12 +31,17 @@ RSpec.describe "Date Picker" do
       expect(out).not_to include('data-wabi--date-picker-target="hiddenEnd"')
     end
 
-    it "range mode emits [start] + [end] hidden inputs and defaults to 2 months" do
+    it "range mode emits [start] + [end] hidden inputs (single-month view)" do
       out = Components::UI::Calendar.new(name: "stay", selection_mode: :range).call
       expect(out).to include('data-wabi--date-picker-selection-mode-value="range"')
-      expect(out).to include('data-wabi--date-picker-num-of-months-value="2"')
+      expect(out).to include('data-wabi--date-picker-num-of-months-value="1"')
       expect(out).to include('name="stay[start]"')
       expect(out).to include('name="stay[end]"')
+    end
+
+    it "accepts an explicit num_of_months override" do
+      out = Components::UI::Calendar.new(name: "d", num_of_months: 2).call
+      expect(out).to include('data-wabi--date-picker-num-of-months-value="2"')
     end
 
     it "serializes default_value + min/max as ISO strings" do
