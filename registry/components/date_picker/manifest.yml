@@ -1,0 +1,18 @@
+name: date_picker
+version: 0.1.0
+type: registry:ui
+description: Localized date field (input + popover calendar) and a standalone inline calendar. Single + range selection, Rails-friendly hidden inputs.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/date-picker": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+  "@internationalized/date": "^3.12"
+shared_files:
+  - "_shared/overlay_portal.js"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

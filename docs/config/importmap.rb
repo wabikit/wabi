@@ -29,3 +29,5 @@ pin "@zag-js/tabs",     to: "https://cdn.jsdelivr.net/npm/@zag-js/tabs@1.41.0/+e
 pin "@zag-js/accordion", to: "https://cdn.jsdelivr.net/npm/@zag-js/accordion@1.41.0/+esm"
 pin "@zag-js/toggle",   to: "https://cdn.jsdelivr.net/npm/@zag-js/toggle@1.41.0/+esm"
 pin "@zag-js/toggle-group", to: "https://cdn.jsdelivr.net/npm/@zag-js/toggle-group@1.41.0/+esm"
+pin "@zag-js/date-picker", to: "https://cdn.jsdelivr.net/npm/@zag-js/date-picker@1.41.0/+esm"
+pin "@internationalized/date", to: "https://cdn.jsdelivr.net/npm/@internationalized/date@3.12.2/+esm"
