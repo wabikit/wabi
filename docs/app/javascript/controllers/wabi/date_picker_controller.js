@@ -11,6 +11,15 @@ const DAY_CELL_CLASS =
   "data-[today]:font-bold data-[outside-range]:text-muted-foreground/40 " +
   "data-[disabled]:opacity-40 data-[disabled]:pointer-events-none"
 
+// Range "tunnel": the connecting band lives on the CELL (via :has on the trigger's
+// data-in-range / data-*-hover-range), so adjacent cells form a continuous strip and
+// the primary-colored endpoints (on the button) sit on top without a class collision.
+const RANGE_CELL_CLASS =
+  "p-0 text-center " +
+  "[&:has([data-in-range])]:bg-accent [&:has([data-in-hover-range])]:bg-accent/50 " +
+  "[&:has([data-range-start])]:rounded-l-md [&:has([data-hover-range-start])]:rounded-l-md " +
+  "[&:has([data-range-end])]:rounded-r-md [&:has([data-hover-range-end])]:rounded-r-md"
+
 export default class extends Controller {
   static targets = [
     "control", "input", "trigger", "positioner", "content",
@@ -139,6 +148,7 @@ export default class extends Controller {
       week.forEach((day) => {
         const td = document.createElement("td")
         spreadProps(td, api.getDayTableCellProps({ value: day }))
+        td.className = RANGE_CELL_CLASS
         const btn = document.createElement("button")
         btn.type = "button"
         spreadProps(btn, api.getDayTableCellTriggerProps({ value: day }))
