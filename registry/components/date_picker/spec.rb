@@ -3,6 +3,7 @@
 require "wabi"
 require_relative "date_picker_view"
 require_relative "calendar"
+require_relative "date_picker"
 
 RSpec.describe "Date Picker" do
   describe "Calendar (inline)" do
@@ -61,6 +62,46 @@ RSpec.describe "Date Picker" do
       out = Components::UI::Calendar.new(name: "d", class: "shadow-lg", id: "cal1").call
       expect(out).to include('id="cal1"')
       expect(out).to include("shadow-lg")
+    end
+  end
+
+  describe "DatePicker (field)" do
+    it "renders control > input + trigger, sharing the controller" do
+      out = Components::UI::DatePicker.new(name: "event[date]").call
+      expect(out).to include('data-controller="wabi--date-picker"')
+      expect(out).to include('data-wabi--date-picker-target="control"')
+      expect(out).to include('data-wabi--date-picker-target="input"')
+      expect(out).to include('data-wabi--date-picker-target="trigger"')
+    end
+
+    it "renders a portaled positioner + content (content starts hidden + inert + closed)" do
+      out = Components::UI::DatePicker.new(name: "d").call
+      expect(out).to include('data-wabi--date-picker-target="positioner"')
+      expect(out).to match(/data-wabi--date-picker-target="content"[^>]*data-state="closed"/)
+      expect(out).to match(/data-wabi--date-picker-target="content"[^>]*\binert\b/)
+      expect(out).to match(/data-wabi--date-picker-target="content"[^>]*\bhidden\b/)
+      expect(out).not_to match(/data-wabi--date-picker-target="positioner"[^>]*\bhidden\b/)
+    end
+
+    it "carries portal-value true by default and honors portal: false" do
+      expect(Components::UI::DatePicker.new(name: "d").call).to include('data-wabi--date-picker-portal-value="true"')
+      expect(Components::UI::DatePicker.new(name: "d", portal: false).call).to include('data-wabi--date-picker-portal-value="false"')
+    end
+
+    it "supports motion-reduce on the content" do
+      expect(Components::UI::DatePicker.new(name: "d").call).to include("motion-reduce:transition-none")
+    end
+
+    it "passes through a placeholder to the input" do
+      out = Components::UI::DatePicker.new(name: "d", placeholder: "Pick a date").call
+      expect(out).to include('placeholder="Pick a date"')
+    end
+
+    it "forwards id + arbitrary data attrs without clobbering the controller wiring" do
+      out = Components::UI::DatePicker.new(name: "d", id: "dp1", data: { testid: "picker" }).call
+      expect(out).to include('id="dp1"')
+      expect(out).to include('data-testid="picker"')
+      expect(out).to include('data-controller="wabi--date-picker"')
     end
   end
 end
