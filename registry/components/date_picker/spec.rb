@@ -102,6 +102,11 @@ RSpec.describe "Date Picker" do
       expect(out).to include('placeholder="Pick a date"')
     end
 
+    it "labels the input (default) and accepts an aria_label override" do
+      expect(Components::UI::DatePicker.new(name: "d").call).to include('aria-label="Choose date"')
+      expect(Components::UI::DatePicker.new(name: "d", aria_label: "Event date").call).to include('aria-label="Event date"')
+    end
+
     it "forwards id + arbitrary data attrs without clobbering the controller wiring" do
       out = Components::UI::DatePicker.new(name: "d", id: "dp1", data: { testid: "picker" }).call
       expect(out).to include('id="dp1"')

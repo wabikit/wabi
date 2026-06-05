@@ -69,7 +69,7 @@ module Views
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "The day grid uses Zag's grid roles; arrow keys move between days, Enter selects." }
                 li { "Prev/next buttons and day cells carry accessible labels derived from the locale." }
-                li { "The field's popover is keyboard-dismissable (Escape) and the trigger reflects open state." }
+                li { "The field input has an accessible name (aria-label, default \"Choose date\", overridable); the popover is keyboard-dismissable (Escape)." }
                 li { "Selection is mirrored into hidden inputs as ISO YYYY-MM-DD, so forms submit a value." }
                 li { "Single-month view; range selection spans months via prev/next navigation." }
               end

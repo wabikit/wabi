@@ -12,7 +12,7 @@ module Components
 
       def initialize(name:, selection_mode: :single, default_value: nil,
                      min: nil, max: nil, locale: "en-US", num_of_months: nil,
-                     placeholder: nil, disabled: false, readonly: false,
+                     placeholder: nil, aria_label: "Choose date", disabled: false, readonly: false,
                      portal: true, **attrs)
         @name           = name
         @selection_mode = selection_mode
@@ -22,6 +22,7 @@ module Components
         @locale         = locale
         @num_of_months  = num_of_months
         @placeholder    = placeholder
+        @aria_label     = aria_label
         @disabled       = disabled
         @readonly       = readonly
         @portal         = portal
@@ -39,7 +40,7 @@ module Components
               class: "flex items-center rounded-md border border-input bg-background ring-offset-background " \
                      "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 " \
                      "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50") do
-            input(type: "text", placeholder: @placeholder,
+            input(type: "text", placeholder: @placeholder, "aria-label": @aria_label,
                   data: { "wabi--date-picker-target": "input" },
                   class: "flex-1 h-10 min-w-0 bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground")
             # aria-label is the no-JS fallback; the controller localizes it via getTriggerProps.
