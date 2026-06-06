@@ -1,0 +1,15 @@
+name: rating_group
+version: 0.1.0
+type: registry:form
+description: Star rating input with keyboard navigation, half-star support, and read-only mode.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/rating-group": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
