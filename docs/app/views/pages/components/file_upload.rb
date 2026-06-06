@@ -86,9 +86,9 @@ module Views
 
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
-                li { "The dropzone has role=\"presentation\"; the trigger button is a native <button> and is keyboard-activatable." }
+                li { "The dropzone has role=\"button\" with tabindex=0 and opens the file picker on Enter or Space." }
                 li { "Drag state is reflected via data-[dragging] on the dropzone for visual feedback." }
-                li { "The underlying <input type=\"file\"> is visually hidden (sr-only) but receives focus from the trigger button." }
+                li { "The underlying <input type=\"file\"> is tabindex=-1 and aria-hidden (out of the tab order and the accessibility tree); the dropzone and the Browse button are the accessible surfaces." }
                 li { "File list renders accepted files; each entry can expose a remove button wired to the controller." }
                 li { "max_files > 1 automatically appends [] to the field name and enables the multiple attribute." }
               end
