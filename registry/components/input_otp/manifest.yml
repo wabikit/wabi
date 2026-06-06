@@ -1,0 +1,15 @@
+name: input_otp
+version: 0.1.0
+type: registry:ui
+description: One-time-code / PIN input — N single-character slots that submit one concatenated value.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/pin-input": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
