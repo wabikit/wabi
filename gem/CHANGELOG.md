@@ -2,6 +2,37 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.22.0 - 2026-06-05
+
+Four new components (36 → 40), all backed by Zag.js 1.41 via `@zag-js/vanilla`.
+
+### Added
+
+- **Date Picker + Calendar** (`date_picker`, `@zag-js/date-picker`). A localized date
+  field (input + popover calendar) and a standalone inline `Calendar`. Single and range
+  selection; the day grid is built from the machine at runtime; submits ISO `YYYY-MM-DD`
+  via hidden inputs (single → `name`; range → `name[start]` + `name[end]`). The range
+  shows a connecting band between the start/end days (plus a hover preview). The field
+  input has an accessible name (`aria-label`, default "Choose date", overridable).
+- **Input OTP** (`input_otp`, `@zag-js/pin-input`). One-time-code / PIN input — N
+  single-character slots (default 6) that submit a single concatenated hidden value.
+  `length`, `type` (`:numeric` / `:alphanumeric`), `mask`, and `otp`
+  (`autocomplete="one-time-code"`) are configurable.
+- **File Upload** (`file_upload`, `@zag-js/file-upload`). Drag-and-drop dropzone + browse
+  button + a file list (name, size, remove, image thumbnail) rendered from the accepted
+  files. Backed by a real `<input type="file">` so a standard Rails multipart submit posts
+  the files; `name` gains `[]` and `multiple` when `max_files > 1`. `accept` / `max_size`
+  constraints supported.
+- **Context Menu** (`context_menu`, `@zag-js/menu`). Right-click menu opening at the
+  cursor, with full DropdownMenu parity — items, label, separator, shortcut, checkbox and
+  radio items, and N-level submenus.
+
+### Deferred
+
+- Date Picker: multi-month side-by-side view (range still spans months via prev/next).
+- Input OTP: groups + separator (e.g. 3-3).
+- File Upload: ActiveStorage direct-upload, chunked/resumable uploads, progress bars.
+
 ## 0.21.3 - 2026-06-05
 
 ### Accessibility
