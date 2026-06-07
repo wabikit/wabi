@@ -40,3 +40,22 @@ export function restoreFromBody(c) {
     c.originalParents.backdrop.appendChild(c.backdropEl)
   }
 }
+
+// Multi-panel variant for overlays that own several content panels (one open at
+// a time), e.g. navigation_menu. Capture the panel refs + parents BEFORE moving,
+// move each to <body>, and restore each on disconnect. Same Sprint 9 trap: once a
+// panel leaves the subtree, `contentTargets` stops resolving it.
+export function capturePanelRefs(c) {
+  c.panelEls = c.hasContentTarget ? Array.from(c.contentTargets) : []
+  c.panelParents = c.panelEls.map((el) => el.parentNode)
+}
+
+export function attachPanelsToBody(c) {
+  c.panelEls?.forEach((el) => {
+    if (el.parentNode !== document.body) document.body.appendChild(el)
+  })
+}
+
+export function restorePanelsFromBody(c) {
+  c.panelEls?.forEach((el, i) => c.panelParents?.[i]?.appendChild(el))
+}
