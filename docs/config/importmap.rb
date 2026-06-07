@@ -34,3 +34,4 @@ pin "@internationalized/date", to: "https://cdn.jsdelivr.net/npm/@internationali
 pin "@zag-js/pin-input", to: "https://cdn.jsdelivr.net/npm/@zag-js/pin-input@1.41.0/+esm"
 pin "@zag-js/file-upload", to: "https://cdn.jsdelivr.net/npm/@zag-js/file-upload@1.41.0/+esm"
 pin "@zag-js/rating-group", to: "https://cdn.jsdelivr.net/npm/@zag-js/rating-group@1.41.0/+esm"
+pin "@zag-js/hover-card", to: "https://cdn.jsdelivr.net/npm/@zag-js/hover-card@1.41.0/+esm"
