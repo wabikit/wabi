@@ -12,7 +12,7 @@ class ComponentsController < ApplicationController
     dropdown_menu toast tabs accordion toggle radio_group toggle_group
     slider combobox form command table skeleton breadcrumb pagination progress
     alert_dialog data_table number_input sidebar date_picker
-    input_otp file_upload context_menu
+    input_otp file_upload context_menu rating_group
   ].freeze
 
   FRAMEWORKS = [

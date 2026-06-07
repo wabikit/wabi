@@ -33,3 +33,4 @@ pin "@zag-js/date-picker", to: "https://cdn.jsdelivr.net/npm/@zag-js/date-picker
 pin "@internationalized/date", to: "https://cdn.jsdelivr.net/npm/@internationalized/date@3.12.2/+esm"
 pin "@zag-js/pin-input", to: "https://cdn.jsdelivr.net/npm/@zag-js/pin-input@1.41.0/+esm"
 pin "@zag-js/file-upload", to: "https://cdn.jsdelivr.net/npm/@zag-js/file-upload@1.41.0/+esm"
+pin "@zag-js/rating-group", to: "https://cdn.jsdelivr.net/npm/@zag-js/rating-group@1.41.0/+esm"
