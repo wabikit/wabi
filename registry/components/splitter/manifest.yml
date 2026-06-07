@@ -1,0 +1,15 @@
+name: splitter
+version: 0.1.0
+type: registry:ui
+description: Resizable side-by-side panels with draggable gutters; horizontal or vertical.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/splitter": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
