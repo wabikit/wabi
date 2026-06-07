@@ -1,0 +1,15 @@
+name: tags_input
+version: 0.1.0
+type: registry:form
+description: Multi-value text entry that collects free-form tags, with edit-in-place and array form submission.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/tags-input": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
