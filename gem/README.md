@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.22.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 40 components, 8 theme palettes, WCAG-AA targeted, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
+🎉 **Status:** v0.23.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 43 components, 8 theme palettes, WCAG-AA targeted, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
 
 ---
 
@@ -31,14 +31,14 @@ Then add `@import "./wabi/tokens.css";` AFTER `@import "tailwindcss";` in your `
 
 ## What's in the box
 
-### 36 components
+### 43 components
 
 | Group | Components |
 |---|---|
-| **Forms** (14) | Button, Input, NumberInput, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form |
+| **Forms** (19) | Button, Input, NumberInput, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form, DatePicker, InputOTP, FileUpload, RatingGroup, TagsInput |
 | **Layout & Display** (9) | Card, Badge, Separator, Alert, Avatar, Table, DataTable, Skeleton, Sidebar |
-| **Overlays** (6) | Dialog, AlertDialog, Drawer (4 sides), Tooltip, Popover, Command |
-| **Menus** (1) | DropdownMenu (nested submenus, checkbox + radio items) |
+| **Overlays** (7) | Dialog, AlertDialog, Drawer (4 sides), Tooltip, Popover, Command, HoverCard |
+| **Menus** (2) | DropdownMenu (nested submenus, checkbox + radio items), ContextMenu |
 | **Navigation** (4) | Accordion, Tabs, Breadcrumb, Pagination |
 | **Feedback** (2) | Toast + Toaster, Progress |
 

@@ -2,6 +2,34 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.23.0 - 2026-06-06
+
+Three new components (40 → 43), all backed by Zag.js 1.41 via `@zag-js/vanilla`.
+
+### Added
+
+- **Rating Group** (`rating_group`, `@zag-js/rating-group`). Star rating input with
+  half-star precision (`allow_half`), a read-only display mode (`read_only`), and a
+  configurable star `count` (default 5). Each star is two layered SVGs — an always-visible
+  outline plus a filled overlay revealed via `group-data-[highlighted]` and clipped to the
+  left half via `group-data-[half]` — so half-stars render in pure CSS. Submits the value
+  through Zag's hidden input (`name`).
+- **Hover Card** (`hover_card`, `@zag-js/hover-card`). Rich preview card shown on pointer
+  hover and keyboard focus of a trigger, rendered through a portal (reusing the shared
+  `_shared/overlay_portal` helper). Configurable `open_delay` / `close_delay`; content is
+  inert while closed and fades in (respecting `prefers-reduced-motion`). Non-modal — no
+  focus trap. The trigger is keyboard-focusable before hydration (`tabindex="0"`).
+- **Tags Input** (`tags_input`, `@zag-js/tags-input`). Multi-value text entry that collects
+  free-form tags, with edit-in-place (`editable`), an optional `max`, and a placeholder.
+  Tag nodes are rendered by the controller at runtime from the machine's value collection.
+  Submits as a Rails array via per-tag `name[]` hidden inputs, re-synced on every change
+  with no leaked inputs.
+
+### Fixed
+
+- **README component table** brought current — it still listed 36 components and omitted the
+  v0.22.0 additions (DatePicker, InputOTP, FileUpload, ContextMenu). Now reflects all 43.
+
 ## 0.22.0 - 2026-06-05
 
 Four new components (36 → 40), all backed by Zag.js 1.41 via `@zag-js/vanilla`.
