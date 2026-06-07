@@ -36,3 +36,4 @@ pin "@zag-js/file-upload", to: "https://cdn.jsdelivr.net/npm/@zag-js/file-upload
 pin "@zag-js/rating-group", to: "https://cdn.jsdelivr.net/npm/@zag-js/rating-group@1.41.0/+esm"
 pin "@zag-js/hover-card", to: "https://cdn.jsdelivr.net/npm/@zag-js/hover-card@1.41.0/+esm"
 pin "@zag-js/tags-input", to: "https://cdn.jsdelivr.net/npm/@zag-js/tags-input@1.41.0/+esm"
+pin "@zag-js/collapsible", to: "https://cdn.jsdelivr.net/npm/@zag-js/collapsible@1.41.2/+esm"
