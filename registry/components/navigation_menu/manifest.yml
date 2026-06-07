@@ -7,6 +7,8 @@ ruby_dependencies: []
 js_dependencies:
   "@zag-js/navigation-menu": "^1.41"
   "@zag-js/vanilla": "^1.41"
+shared_files:
+  - "_shared/overlay_portal.js"
 tailwind:
   extend: {}
 metadata:

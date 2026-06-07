@@ -17,7 +17,7 @@ module Components
           "data-state": "closed",
           inert: true,
           class: merge_class(
-            "absolute left-0 top-full mt-1.5 min-w-48 rounded-md border border-input bg-popover p-2 " \
+            "fixed z-50 min-w-48 rounded-md border border-input bg-popover p-2 " \
             "text-popover-foreground shadow-md outline-none transition-opacity duration-200 ease-out " \
             "motion-reduce:transition-none data-[state=open]:opacity-100 data-[state=closed]:opacity-0 " \
             "data-[state=closed]:pointer-events-none",
