@@ -13,6 +13,25 @@ if (typeof globalThis.ResizeObserver !== "function") {
   }
 }
 
+// Zag's carousel machine uses IntersectionObserver to track which slides are
+// in view. jsdom has none, so connecting would throw. Polyfill a no-op: these
+// tests assert wiring, not visibility geometry.
+if (typeof globalThis.IntersectionObserver !== "function") {
+  globalThis.IntersectionObserver = class {
+    constructor(callback) { this.callback = callback }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}
+
+// Zag's carousel machine calls el.scrollTo() on the item-group when navigating
+// pages. jsdom doesn't implement scrollTo on elements, so polyfill a no-op.
+// Tests assert wiring (dispatch, aria attrs), not actual scroll geometry.
+if (typeof Element.prototype.scrollTo !== "function") {
+  Element.prototype.scrollTo = function () {}
+}
+
 // Zag's radio-group machine resolves its grouped inputs with
 // `CSS.escape(rootId)` when syncing each input's checked state. jsdom exposes no
 // `CSS` global, so without this the sync throws and selection never propagates
