@@ -42,7 +42,8 @@ RSpec.describe "Docs smoke", type: :request do
        /docs/components/sidebar /docs/components/date_picker
        /docs/components/input_otp /docs/components/file_upload /docs/components/context_menu
        /docs/components/rating_group /docs/components/hover_card
-       /docs/components/tags_input /docs/components/collapsible].each do |path|
+       /docs/components/tags_input /docs/components/collapsible
+       /docs/components/splitter].each do |path|
       it "GET #{path} returns 200 with sidebar AND TOC" do
         get path
         expect(response).to have_http_status(:ok)
