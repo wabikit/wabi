@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@vitest/coverage-v8": "^2.1.8",
     "@internationalized/date": "3.12.2",
+    "@vitest/coverage-v8": "^2.1.8",
     "@zag-js/accordion": "1.41.0",
     "@zag-js/checkbox": "1.41.0",
     "@zag-js/combobox": "1.41.0",
@@ -32,5 +32,10 @@
     "@zag-js/vanilla": "1.41.0",
     "jsdom": "^25.0.1",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@zag-js/hover-card": "1.41.0",
+    "@zag-js/rating-group": "1.41.0",
+    "@zag-js/tags-input": "1.41.0"
   }
 }
