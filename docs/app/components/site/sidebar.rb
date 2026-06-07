@@ -13,7 +13,7 @@ module Components
           { name: "Theming",      path: "/docs/theming" },
           { name: "Philosophy",   path: "/docs/philosophy" },
         ]},
-        { label: "Forms", items: %w[button checkbox combobox date_picker file_upload form input input_otp label number_input radio_group rating_group select slider switch textarea toggle toggle_group].map(&COMPONENT_LINK) },
+        { label: "Forms", items: %w[button checkbox combobox date_picker file_upload form input input_otp label number_input radio_group rating_group select slider switch tags_input textarea toggle toggle_group].map(&COMPONENT_LINK) },
         { label: "Layout & Display", items: %w[alert avatar badge card separator table skeleton data_table sidebar].map(&COMPONENT_LINK) },
         { label: "Overlays", items: %w[alert_dialog command dialog drawer hover_card popover tooltip].map(&COMPONENT_LINK) },
         { label: "Menus", items: [{ name: "Dropdown Menu", path: "/docs/components/dropdown_menu" }, { name: "Context Menu", path: "/docs/components/context_menu" }] },
