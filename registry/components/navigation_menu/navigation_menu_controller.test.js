@@ -67,4 +67,17 @@ describe("wabi--navigation-menu", () => {
     const products = contentByValue("products")
     expect(products.closest('[data-wabi--navigation-menu-target="item"]')).not.toBeNull()
   })
+
+  it("re-portals panels to <body> after a disconnect/connect cycle", async () => {
+    const h = mount(ID, Controller, HTML)
+    await tick()
+    const ctrl = controllerFor(h.application, ID, root())
+    ctrl.disconnect()
+    ctrl.connect()
+    await tick()
+    // Exactly two panels, both back at <body>, no duplicates left behind.
+    const panels = allByTarget(ID, "content")
+    expect(panels.length).toBe(2)
+    panels.forEach((p) => expect(p.parentNode).toBe(document.body))
+  })
 })

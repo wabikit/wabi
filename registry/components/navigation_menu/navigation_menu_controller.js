@@ -21,7 +21,6 @@ export default class extends Controller {
       orientation: this.orientationValue,
       onValueChange: ({ value }) => this.dispatch("change", { detail: { value } }),
     })
-    this.reposition = this.reposition.bind(this)
     window.addEventListener("scroll", this.reposition, true)
     window.addEventListener("resize", this.reposition)
     this.unsubscribe = this.machine.subscribe(() => this.render())
@@ -74,11 +73,14 @@ export default class extends Controller {
       left = Math.max(8, window.innerWidth - width - 8)
     }
     el.style.position = "fixed"
+    // Panels anchor below the trigger (top-nav use). Vertical viewport overflow
+    // is intentionally not flipped/clamped — out of scope for this fix.
     el.style.top = `${r.bottom + 6}px`
     el.style.left = `${left}px`
   }
 
-  reposition() {
+  // Bound as a field so the same reference is added and removed as a listener.
+  reposition = () => {
     const openPanel = this.panelEls.find((el) => el.getAttribute("data-state") === "open")
     if (openPanel) this.positionPanel(openPanel)
   }
