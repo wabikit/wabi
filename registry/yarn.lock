@@ -511,6 +511,11 @@
   resolved "https://registry.yarnpkg.com/@zag-js/anatomy/-/anatomy-1.41.0.tgz#af0d132a4470dcea93f857b1a12b6cc9c6d3b847"
   integrity sha512-0M/bWcYbWgM09HEhfU0GvpKgPt3I4vakjr21FHcjTNK2vYRC1oz2GHc/y9ArJa4jXe0piTiPbACzMK1/z2ukRw==
 
+"@zag-js/anatomy@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/anatomy/-/anatomy-1.41.2.tgz#16569b7eb743cb4459fbaf218bdcd5fd72cea32d"
+  integrity sha512-Fm9hqdrvaCzCsdcf19G8WZxYtHElKltkGHdhqMEt4XU+ULTr1DK7KbOtDDv9J27CuzqSLALUz5QfRjPftoKHwg==
+
 "@zag-js/aria-hidden@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/aria-hidden/-/aria-hidden-1.41.0.tgz#a4b26fd30290e70db9c64e0a2e264b40803c4537"
@@ -525,6 +530,18 @@
   dependencies:
     "@zag-js/dom-query" "1.41.0"
 
+"@zag-js/carousel@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/carousel/-/carousel-1.41.2.tgz#8cfa550fb03a74961ae6035fff6c82d6b1397a1d"
+  integrity sha512-H6sDxyWIzkvtHN4M/BYvFy7pi8j+kLEtfPZvgNl2+gRnfAHVK9/XqpoUsjw1DAo5Fh25pPuaTnh52Kml9OK0iA==
+  dependencies:
+    "@zag-js/anatomy" "1.41.2"
+    "@zag-js/core" "1.41.2"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/scroll-snap" "1.41.2"
+    "@zag-js/types" "1.41.2"
+    "@zag-js/utils" "1.41.2"
+
 "@zag-js/checkbox@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/checkbox/-/checkbox-1.41.0.tgz#551a95daf7c383b49367ac2c17972054a588b64f"
@@ -536,6 +553,17 @@
     "@zag-js/focus-visible" "1.41.0"
     "@zag-js/types" "1.41.0"
     "@zag-js/utils" "1.41.0"
+
+"@zag-js/collapsible@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/collapsible/-/collapsible-1.41.2.tgz#2d7f42a34da2e91a79be216f968be3a3841e8a44"
+  integrity sha512-uMIp4rqd3iI6VFPMAOcbu9dh9WV4l85nNPYQiBtMKRHgbkfaZdfzF+E+NX3KquIeHW6JiBFUiIyCU0Sf2Cscdw==
+  dependencies:
+    "@zag-js/anatomy" "1.41.2"
+    "@zag-js/core" "1.41.2"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/types" "1.41.2"
+    "@zag-js/utils" "1.41.2"
 
 "@zag-js/collection@1.41.0":
   version "1.41.0"
@@ -567,6 +595,14 @@
   dependencies:
     "@zag-js/dom-query" "1.41.0"
     "@zag-js/utils" "1.41.0"
+
+"@zag-js/core@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/core/-/core-1.41.2.tgz#d315e84ac55ec4038e5f40d870b3987613882fb3"
+  integrity sha512-xXTN3zKwOtMI4+5dG2cG+T1B4WR3X9alXiYaPJKaGd4N2eYRj9JEPte3Hv9gtFm+RM0b9VIwksHEg25rqE4apw==
+  dependencies:
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/utils" "1.41.2"
 
 "@zag-js/date-picker@1.41.0":
   version "1.41.0"
@@ -612,12 +648,28 @@
     "@zag-js/interact-outside" "1.41.0"
     "@zag-js/utils" "1.41.0"
 
+"@zag-js/dismissable@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/dismissable/-/dismissable-1.41.2.tgz#f13497165196c68f47dda9fbc80cc9adc93391ba"
+  integrity sha512-hO/tFhRZ7S+LOOljGOQJIubbc3MXg41+iWR1yUXKl76cAenbxaCit1LZmUCwQPvRN0GndK6bDQo5ETjHZz/k7A==
+  dependencies:
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/interact-outside" "1.41.2"
+    "@zag-js/utils" "1.41.2"
+
 "@zag-js/dom-query@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/dom-query/-/dom-query-1.41.0.tgz#5f434cf6cb6ccf524f479d4597c7b4f5ab3c561c"
   integrity sha512-10KVw1sZNKsiGcR9nC+xazn6r2hAijrJFcMJWWmtrXuskezV04/axCaWdEGHkPloddaoADecWwCAsD4+kOmKFg==
   dependencies:
     "@zag-js/types" "1.41.0"
+
+"@zag-js/dom-query@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/dom-query/-/dom-query-1.41.2.tgz#fad51d82f548a55c9116c76370224f0f3fc5f656"
+  integrity sha512-+eBk1nlJA312mNmY/GSThLRwcCRqMIL+A1pLsWvTlQLQjmH1/UxoAuv6l2yvRCT33XmC8FBlBIKnXhOCpDvIZA==
+  dependencies:
+    "@zag-js/types" "1.41.2"
 
 "@zag-js/file-upload@1.41.0":
   version "1.41.0"
@@ -681,6 +733,14 @@
     "@zag-js/dom-query" "1.41.0"
     "@zag-js/utils" "1.41.0"
 
+"@zag-js/interact-outside@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/interact-outside/-/interact-outside-1.41.2.tgz#c600e30133cb3d21873b510a5fa552d05b567708"
+  integrity sha512-dM4Fn9iyqQeqkCMRYZP+bAgWEPKRVQRqMmcPsN0OXBhhFKC31Em15LTIZXaOtVKAjH+iwx+UvSYFRiWwEjkOEA==
+  dependencies:
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/utils" "1.41.2"
+
 "@zag-js/live-region@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/live-region/-/live-region-1.41.0.tgz#840f34f0f6dc21aba1c3c2672ef25e072bbf1de0"
@@ -700,6 +760,18 @@
     "@zag-js/rect-utils" "1.41.0"
     "@zag-js/types" "1.41.0"
     "@zag-js/utils" "1.41.0"
+
+"@zag-js/navigation-menu@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/navigation-menu/-/navigation-menu-1.41.2.tgz#a25b35b11fb105f786a0900f90b0061fc9492cd6"
+  integrity sha512-aROB9CHzskZpnoFuGFkp7dbkZdsXvp2nxQgsgld02I1sDqiwcQd+YMdB0/6Ik0oz6X8I70RKdUuQM9WQFQfDnA==
+  dependencies:
+    "@zag-js/anatomy" "1.41.2"
+    "@zag-js/core" "1.41.2"
+    "@zag-js/dismissable" "1.41.2"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/types" "1.41.2"
+    "@zag-js/utils" "1.41.2"
 
 "@zag-js/number-input@1.41.0":
   version "1.41.0"
@@ -784,6 +856,13 @@
   dependencies:
     "@zag-js/dom-query" "1.41.0"
 
+"@zag-js/scroll-snap@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/scroll-snap/-/scroll-snap-1.41.2.tgz#d225f6c003934e521e2cadcbd08f47de14c3969b"
+  integrity sha512-+70Al6LSASyEZtFyyffUJlDbE88KgYJDud05z8oZTqyEOLlTqnlSNkXq/P3siO7r3sNykg9H+TmAKn+/dVSKuw==
+  dependencies:
+    "@zag-js/dom-query" "1.41.2"
+
 "@zag-js/select@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/select/-/select-1.41.0.tgz#fe61b1b29ebd3309c0f49cd05b275fe671b9b0cf"
@@ -809,6 +888,17 @@
     "@zag-js/dom-query" "1.41.0"
     "@zag-js/types" "1.41.0"
     "@zag-js/utils" "1.41.0"
+
+"@zag-js/splitter@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/splitter/-/splitter-1.41.2.tgz#8075dd2e2506492af1fcc52a89c5a3028aa9f845"
+  integrity sha512-Ubp4hkmzvVysU31jCINYbBXVqruu7rEPGqugWMzeXC5Hwda648aHpbg4Jix/wRtaGLjsyh6KOVEwAmoJU9NwhQ==
+  dependencies:
+    "@zag-js/anatomy" "1.41.2"
+    "@zag-js/core" "1.41.2"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/types" "1.41.2"
+    "@zag-js/utils" "1.41.2"
 
 "@zag-js/store@1.41.0":
   version "1.41.0"
@@ -896,10 +986,22 @@
   dependencies:
     csstype "3.2.3"
 
+"@zag-js/types@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/types/-/types-1.41.2.tgz#99e8eec960b6c6b5157e281be40cf380d0b7c8ed"
+  integrity sha512-L6CNvK06lIVpy0X8eG3kbDIx8Uuv+3KHElxXYSzRXSJ7/OLCv1sTRgEvnxNtdIWOrksGgxF4JtT7PXtoClGqNQ==
+  dependencies:
+    csstype "3.2.3"
+
 "@zag-js/utils@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/utils/-/utils-1.41.0.tgz#61639369aeadf26f91fe009b4ddce926c5ba607c"
   integrity sha512-WUCIw+W4MYKYfyKad0LLNNqhL58/cRAAAVjLqDch05c1dZ0yhZq3t81jWeYUwiPnprt9V+BtGJEFMnWhdfxsBA==
+
+"@zag-js/utils@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/utils/-/utils-1.41.2.tgz#1668137bc7b7bf5138203bac1feeeed0059c8e29"
+  integrity sha512-Yj8FSrR7vGA6ahUhjrThfHAF+PM2Y1Yv2lkXkqZZd60mPBhixcot1+SHOfEMV63JimQcWrmQ8QbeYYMmF+ZpLQ==
 
 "@zag-js/vanilla@1.41.0":
   version "1.41.0"
