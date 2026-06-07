@@ -2,6 +2,26 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.24.0 - 2026-06-06
+
+Four new components (43 → 47), all backed by Zag.js 1.41 via `@zag-js/vanilla`.
+
+### Added
+
+- **Collapsible** (`collapsible`, `@zag-js/collapsible`). Toggle the visibility of a content
+  region with a smooth height animation (the `grid-rows-[0fr]→[1fr]` trick, no keyframes;
+  respects `prefers-reduced-motion`). `open` / `disabled`.
+- **Splitter** (`splitter`, `@zag-js/splitter`). Resizable side-by-side panels with draggable
+  gutters, horizontal or vertical. Panels are configured via a `panels:` array
+  (`[{ id:, minSize?, maxSize? }]`); each gutter is a `role="separator"` keyboard-resizable
+  with arrow keys / Home / End. The Splitter fills its (sized) parent.
+- **Carousel** (`carousel`, `@zag-js/carousel`). Slideshow with snap scrolling, prev/next
+  controls, indicators, and optional autoplay. `slide_count` (required), `slides_per_page`,
+  `slides_per_move`, `loop`, `orientation`, `autoplay`.
+- **Navigation Menu** (`navigation_menu`, `@zag-js/navigation-menu`). Top-level site
+  navigation with per-item dropdown panels that open on hover and keyboard focus. Rendered
+  in-tree; closed panels are `inert` (removed from the tab order and a11y tree).
+
 ## 0.23.0 - 2026-06-06
 
 Three new components (40 → 43), all backed by Zag.js 1.41 via `@zag-js/vanilla`.
