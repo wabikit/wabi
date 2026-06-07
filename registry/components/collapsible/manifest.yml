@@ -1,0 +1,15 @@
+name: collapsible
+version: 0.1.0
+type: registry:ui
+description: Toggle the visibility of a content region with a smooth height animation.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/collapsible": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
