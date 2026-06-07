@@ -38,3 +38,5 @@ pin "@zag-js/hover-card", to: "https://cdn.jsdelivr.net/npm/@zag-js/hover-card@1
 pin "@zag-js/tags-input", to: "https://cdn.jsdelivr.net/npm/@zag-js/tags-input@1.41.0/+esm"
 pin "@zag-js/collapsible", to: "https://cdn.jsdelivr.net/npm/@zag-js/collapsible@1.41.2/+esm"
 pin "@zag-js/splitter", to: "https://cdn.jsdelivr.net/npm/@zag-js/splitter@1.41.2/+esm"
+pin "@zag-js/carousel", to: "https://cdn.jsdelivr.net/npm/@zag-js/carousel@1.41.2/+esm"
+pin "@zag-js/scroll-snap", to: "https://cdn.jsdelivr.net/npm/@zag-js/scroll-snap@1.41.2/+esm"

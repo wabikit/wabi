@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+require "date" # Phlex 2.4 references Date/Time constants lazily when rendering data:{} hashes
+
+module Components
+  module UI
+    class CarouselControl < Wabi::Base
+      def initialize(**attrs)
+        @attrs = attrs
+      end
+
+      def view_template(&block)
+        user_class = @attrs.delete(:class)
+        div(
+          data: { "wabi--carousel-target": "control" },
+          class: merge_class("mt-3 flex items-center justify-between gap-4", user_class)
+        ) do
+          yield if block_given?
+        end
+      end
+    end
+  end
+end
