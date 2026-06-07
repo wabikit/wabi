@@ -2,6 +2,14 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.24.1 - 2026-06-07
+
+### Fixed
+- **Navigation Menu:** dropdown panels now portal to `<body>` and are positioned
+  `fixed` under their trigger, so they are no longer clipped by `overflow-hidden`
+  or stacking-context ancestors (e.g. inside cards/previews). Hover-to-panel and
+  click-outside dismiss are unchanged. Component count unchanged (47).
+
 ## 0.24.0 - 2026-06-06
 
 Four new components (43 → 47), all backed by Zag.js 1.41 via `@zag-js/vanilla`.
