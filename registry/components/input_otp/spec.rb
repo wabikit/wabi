@@ -37,4 +37,9 @@ RSpec.describe "InputOtp" do
     expect(out).to include('id="otp1"')
     expect(out).to include("gap-3")
   end
+
+  it "names the slot group with an aria-label (default + override)" do
+    expect(Components::UI::InputOtp.new(name: "c").call).to include('aria-label="One-time passcode"')
+    expect(Components::UI::InputOtp.new(name: "c", label: "2FA code").call).to include('aria-label="2FA code"')
+  end
 end

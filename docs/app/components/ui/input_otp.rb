@@ -12,7 +12,8 @@ module Components
         "disabled:cursor-not-allowed disabled:opacity-50"
 
       def initialize(name:, length: 6, type: :numeric, mask: false, otp: true,
-                     default_value: nil, placeholder: "○", disabled: false, **attrs)
+                     default_value: nil, placeholder: "○", disabled: false,
+                     label: "One-time passcode", **attrs)
         @name          = name
         @length        = length
         @type          = type
@@ -21,6 +22,7 @@ module Components
         @default_value = default_value
         @placeholder   = placeholder
         @disabled      = disabled
+        @label         = label
         @attrs         = attrs
       end
 
@@ -37,7 +39,9 @@ module Components
           "wabi--input-otp-default-value-value": @default_value.to_s,
           "wabi--input-otp-disabled-value":      @disabled.to_s,
         }
-        div(**@attrs, data: user_data.merge(root_data),
+        # aria-label names the group of slots; each slot also gets a per-digit
+        # aria-label at runtime via the controller's Zag `translations.inputLabel`.
+        div(**@attrs, "aria-label": @label, data: user_data.merge(root_data),
             class: merge_class("inline-flex items-center gap-2", user_class)) do
           @length.times do
             input(

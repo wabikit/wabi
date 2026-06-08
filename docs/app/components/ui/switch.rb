@@ -6,10 +6,14 @@ module Components
   module UI
     class Switch < Wabi::Base
       variants do
-        base "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full " \
-             "border-2 border-transparent transition-colors focus-visible:outline-none " \
-             "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " \
-             "focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 " \
+        # The control span is aria-hidden and never itself focused — the sr-only
+        # <input> is. Zag spreads data-focus-visible onto this span when the input
+        # is keyboard-focused, so the focus ring must use data-[focus-visible]:
+        # variants (focus-visible: pseudo-class would never fire here).
+        base "inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full " \
+             "border-2 border-transparent transition-colors outline-none " \
+             "data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring data-[focus-visible]:ring-offset-2 " \
+             "data-[focus-visible]:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 " \
              "data-[state=checked]:bg-primary data-[state=unchecked]:bg-input"
       end
 

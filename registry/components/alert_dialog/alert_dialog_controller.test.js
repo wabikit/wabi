@@ -3,14 +3,12 @@ import Controller from "./alert_dialog_controller.js"
 import { mount, tick } from "../../test/support/mount.js"
 import { controllerFor, byTarget, root } from "../../test/support/overlay.js"
 
-// alert_dialog shares Zag's dialog machine but adds closeOnInteractOutside:false
-// and initialFocusEl → the Cancel button. The controller does NOT pass an
-// alertdialog role option to the machine, so Zag emits role="dialog" on the
-// content (the alertdialog distinction lives in config/markup, not the role
-// attribute — see discovery note below). Focus behavior is NOT faithfully
-// testable in jsdom; we assert config intent (the controller captures cancelEl)
-// + the emitted role + state wiring. jsdom asserts wiring only — NOT focus-trap
-// / positioning / scroll-lock.
+// alert_dialog shares Zag's dialog machine but adds closeOnInteractOutside:false,
+// initialFocusEl → the Cancel button, and role:"alertdialog" (so Zag emits
+// role="alertdialog" on the content and the controller overrides the trigger's
+// aria-haspopup to "alertdialog"). Focus behavior is NOT faithfully testable in
+// jsdom; we assert config intent (the controller captures cancelEl) + the emitted
+// role + state wiring. jsdom asserts wiring only — NOT focus-trap / positioning.
 const ID = "wabi--alert-dialog"
 
 const FIXTURE = `
@@ -39,12 +37,13 @@ describe("wabi--alert-dialog", () => {
     expect(ctrl.cancelEl.textContent).toContain("Cancel")
   })
 
-  it("content carries the dialog role (alertdialog distinction is config, not role)", () => {
-    // The controller doesn't request an alertdialog role from the Zag machine,
-    // so Zag decorates content with role="dialog". The alert-dialog semantics
-    // come from closeOnInteractOutside:false + initialFocusEl, not this attr.
-    expect(byTarget(ID, "content").getAttribute("role")).toBe("dialog")
+  it("content carries role=alertdialog and the trigger advertises aria-haspopup=alertdialog", () => {
+    // The controller passes role:"alertdialog" to the machine, so Zag decorates
+    // the content with role="alertdialog"; the trigger's aria-haspopup is
+    // corrected to match (Zag hardcodes "dialog" there).
+    expect(byTarget(ID, "content").getAttribute("role")).toBe("alertdialog")
     expect(byTarget(ID, "content").id).toBeTruthy()
+    expect(byTarget(ID, "trigger").getAttribute("aria-haspopup")).toBe("alertdialog")
   })
 
   it("starts closed; open() → data-state=open + inert cleared; close() → closed + inert", async () => {

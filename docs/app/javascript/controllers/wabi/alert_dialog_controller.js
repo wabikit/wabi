@@ -32,6 +32,7 @@ export default class extends Controller {
 
     this.machine = new VanillaMachine(dialog.machine, {
       id: this.element.id || crypto.randomUUID(),
+      role: "alertdialog",
       defaultOpen: this.openValue,
       modal: this.modalValue,
       closeOnInteractOutside: false,
@@ -74,7 +75,12 @@ export default class extends Controller {
     const api = this.api()
     if (!api) return
 
-    if (this.triggerEl)     spreadProps(this.triggerEl,    api.getTriggerProps())
+    if (this.triggerEl) {
+      spreadProps(this.triggerEl, api.getTriggerProps())
+      // Zag hardcodes aria-haspopup="dialog" in getTriggerProps regardless of the
+      // machine role, so correct it to match the alertdialog popup.
+      this.triggerEl.setAttribute("aria-haspopup", "alertdialog")
+    }
     if (this.positionerEl)  spreadProps(this.positionerEl, api.getPositionerProps())
     if (this.titleEl)       spreadProps(this.titleEl,       api.getTitleProps())
     if (this.descriptionEl) spreadProps(this.descriptionEl, api.getDescriptionProps())

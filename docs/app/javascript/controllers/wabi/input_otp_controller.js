@@ -25,6 +25,9 @@ export default class extends Controller {
       // defaultValue is an array of characters; split the string value when set.
       // Stimulus String values default to "" — treat empty string as unset.
       defaultValue: this.defaultValueValue !== "" ? this.defaultValueValue.split("") : undefined,
+      // Give each slot a distinct accessible name; without translations Zag emits
+      // aria-label: undefined on every input.
+      translations: { inputLabel: (index, length) => `Digit ${index + 1} of ${length}` },
       onValueChange: ({ valueAsString }) => {
         this.syncHidden(valueAsString)
         this.dispatch("change", { detail: { value: valueAsString } })

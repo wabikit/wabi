@@ -30,9 +30,10 @@ describe("wabi--input-otp", () => {
     await tick()
     const slots = root().querySelectorAll('[data-wabi--input-otp-target="slot"]')
     expect(slots.length).toBe(4)
-    // Zag spreads getRootProps onto the root and getInputProps onto each slot;
-    // a reliable indicator is data-part or aria-label applied by Zag.
-    expect(slots[0].getAttribute("aria-label") || slots[0].id || slots[0].getAttribute("data-part")).toBeTruthy()
+    // Each slot gets a distinct per-digit accessible name from the controller's
+    // translations.inputLabel (without it Zag emits aria-label: undefined).
+    expect(slots[0].getAttribute("aria-label")).toBe("Digit 1 of 4")
+    expect(slots[3].getAttribute("aria-label")).toBe("Digit 4 of 4")
   })
 
   it("syncs the concatenated value into the hidden input", async () => {
