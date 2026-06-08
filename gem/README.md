@@ -191,7 +191,7 @@ See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANG
 
 ## Contributing
 
-Wabi is in alpha and the API is still moving. Filing issues with concrete repros, suggestions for components, or theme palette ideas is the most useful kind of contribution right now. A `CONTRIBUTING.md` documenting the per-component anatomy and the Zag.js wiring conventions is still on the to-do list.
+Wabi is in alpha and the API is still moving. Filing issues with concrete repros, suggestions for components, or theme palette ideas is the most useful kind of contribution right now. See **[CONTRIBUTING.md](https://github.com/wabikit/wabi/blob/main/CONTRIBUTING.md)** for the monorepo layout, the per-component anatomy, the Zag.js wiring conventions, and how to add a component end to end.
 
 ---
 
