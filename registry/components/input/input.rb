@@ -2,6 +2,10 @@
 
 module Components
   module UI
+    # Accessibility: an <input> needs an accessible name. This primitive forwards
+    # all attrs, so callers MUST supply one of: an associated <label for=> (pass a
+    # matching `id:`), a wrapping <label>, or `aria_label:` / `aria-label:` directly.
+    # A bare Input with none of these is an unlabelled control (WCAG 4.1.2 fail).
     class Input < Wabi::Base
       variants do
         base "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 " \

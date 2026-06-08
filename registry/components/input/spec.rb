@@ -27,4 +27,8 @@ RSpec.describe Components::UI::Input do
     expect(output).to include("h-12")     # user wins for h-* group
     expect(output).to include("mt-2")     # non-conflict preserved
   end
+
+  it "forwards aria_label so callers can give the control an accessible name" do
+    expect(described_class.new(aria_label: "Email").call).to include('aria-label="Email"')
+  end
 end

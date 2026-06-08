@@ -40,4 +40,14 @@ RSpec.describe Components::UI::Checkbox do
     output = described_class.new(id: "terms").call
     expect(output).to match(/<input[^>]*type="checkbox"[^>]*id="terms"/)
   end
+
+  it "renders visible label text from a block (accessible name)" do
+    output = described_class.new.call { "I agree" }
+    expect(output).to include("I agree")
+  end
+
+  it "renders visible label text from the label: kwarg" do
+    output = described_class.new(label: "Subscribe").call
+    expect(output).to include("Subscribe")
+  end
 end

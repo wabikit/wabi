@@ -45,6 +45,13 @@ RSpec.describe "Command composition" do
       expect(output).to include('data-controller="wabi--combobox"')
       expect(output).to include('data-wabi--combobox-portal-value="false"')
     end
+
+    it "renders a visually-hidden dialog title target for the accessible name" do
+      output = described_class.new(label: "Search commands").call
+      expect(output).to include('data-wabi--dialog-target="title"')
+      expect(output).to include("Search commands")
+      expect(output).to match(/data-wabi--dialog-target="title"[^>]*class="sr-only"|class="sr-only"[^>]*>Search commands/)
+    end
   end
 
   describe Components::UI::CommandInput do

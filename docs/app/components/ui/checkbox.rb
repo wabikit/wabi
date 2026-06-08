@@ -13,16 +13,17 @@ module Components
              "inline-flex items-center justify-center"
       end
 
-      def initialize(id: nil, name: nil, value: "1", checked: false, disabled: false, **attrs)
+      def initialize(id: nil, name: nil, value: "1", checked: false, disabled: false, label: nil, **attrs)
         @id       = id
         @name     = name
         @value    = value
         @checked  = checked
         @disabled = disabled
+        @label    = label
         @attrs    = attrs
       end
 
-      def view_template
+      def view_template(&block)
         user_class = @attrs.delete(:class)
         label(
           data: {
@@ -58,8 +59,16 @@ module Components
               data: { "wabi--checkbox-target": "indicator" },
               hidden: !@checked
             ) do
-              raw(safe('<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>'))
+              raw(safe('<svg aria-hidden="true" focusable="false" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>'))
             end
+          end
+          # Visible label gives the checkbox its accessible name (Zag points the
+          # hidden input's aria-labelledby at this label). Provide via a block or
+          # the `label:` kwarg; without either the control is unnamed.
+          if block_given?
+            yield
+          elsif @label
+            span(class: "ml-2 text-sm") { @label }
           end
         end
       end

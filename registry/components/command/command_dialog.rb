@@ -19,7 +19,8 @@ module Components
 
       POSITIONER_CLASS = "fixed inset-0 z-50 pointer-events-none"
 
-      def initialize(**attrs)
+      def initialize(label: "Command palette", **attrs)
+        @label = label
         @attrs = attrs
       end
 
@@ -53,6 +54,13 @@ module Components
             data: { "wabi--dialog-target": "content" },
             class: merge_class(DIALOG_CLASS, user_class)
           ) do
+            # Visually-hidden title gives the role=dialog an accessible name:
+            # wabi--dialog spreads getTitleProps() (with an id) onto this target
+            # and Zag injects aria-labelledby on the content at runtime.
+            span(
+              data: { "wabi--dialog-target": "title" },
+              class: "sr-only"
+            ) { @label }
             div(
               data: {
                 controller: "wabi--combobox",
