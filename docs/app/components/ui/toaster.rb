@@ -43,6 +43,11 @@ module Components
           id: @id,
           role: "region",
           "aria-label": "Notifications",
+          # The <ol> is the live region: it pre-exists, so toast <li>s appended
+          # via Turbo Stream are announced. (Per-<li> live-region attrs do NOT
+          # announce — AT only reacts to mutations inside an existing live region.)
+          "aria-live": "polite",
+          "aria-atomic": "false",
           data: {
             controller: "wabi--toaster",
             # @id must be a simple alphanumeric/hyphen string; no CSS escaping is applied.

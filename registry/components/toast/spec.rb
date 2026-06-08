@@ -12,6 +12,8 @@ RSpec.describe "Toast composition" do
       expect(output).to include('id="wabi-toaster"')
       expect(output).to include('role="region"')
       expect(output).to include('aria-label="Notifications"')
+      # The <ol> is the live region so appended toasts are announced.
+      expect(output).to include('aria-live="polite"')
     end
 
     it "wires the wabi--toaster Stimulus controller for global registry" do
@@ -67,12 +69,13 @@ RSpec.describe "Toast composition" do
   end
 
   describe Components::UI::Toast do
-    it "renders an <li role=status aria-live=polite> with the controller wired" do
+    it "renders an <li> with the controller wired (live-region lives on the Toaster <ol>, not here)" do
       output = described_class.new(title: "Saved").call
       expect(output).to include('<li')
-      expect(output).to include('role="status"')
-      expect(output).to include('aria-live="polite"')
       expect(output).to include('data-controller="wabi--toast"')
+      # Per-<li> live-region attrs don't announce; they must NOT be here.
+      expect(output).not_to include('role="status"')
+      expect(output).not_to include('aria-live')
     end
 
     it "carries the duration in ms as a Stimulus Number value" do

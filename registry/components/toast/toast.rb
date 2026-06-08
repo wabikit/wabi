@@ -33,10 +33,9 @@ module Components
 
       def view_template
         user_class = @attrs.delete(:class)
+        # No per-<li> live-region attrs: announcement comes from the Toaster <ol>
+        # (the pre-existing aria-live region) when this <li> is appended into it.
         li(
-          role: "status",
-          "aria-live": "polite",
-          "aria-atomic": "true",
           "data-state": "open",
           data: {
             controller: "wabi--toast",
