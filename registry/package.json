@@ -13,6 +13,8 @@
     "@vitest/coverage-v8": "^2.1.8",
     "@zag-js/accordion": "1.41.0",
     "@zag-js/checkbox": "1.41.0",
+    "@zag-js/color-picker": "1.41.2",
+    "@zag-js/color-utils": "1.41.2",
     "@zag-js/combobox": "1.41.0",
     "@zag-js/date-picker": "1.41.0",
     "@zag-js/dialog": "1.41.0",

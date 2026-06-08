@@ -572,6 +572,27 @@
   dependencies:
     "@zag-js/utils" "1.41.0"
 
+"@zag-js/color-picker@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/color-picker/-/color-picker-1.41.2.tgz#abbe0d58ef1b9c6d564c9aea3a4f1ec953d1f4fc"
+  integrity sha512-UynyJ/bTBeSlq6ziHr9GVrFycDjVxfLFIb8Aivu/XvihrAAvkhXUxwy+1ax+hj7peGlTY590xoQAvQixV+McBA==
+  dependencies:
+    "@zag-js/anatomy" "1.41.2"
+    "@zag-js/color-utils" "1.41.2"
+    "@zag-js/core" "1.41.2"
+    "@zag-js/dismissable" "1.41.2"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/popper" "1.41.2"
+    "@zag-js/types" "1.41.2"
+    "@zag-js/utils" "1.41.2"
+
+"@zag-js/color-utils@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/color-utils/-/color-utils-1.41.2.tgz#8f94e6961fb36c6c614330c9a9da8ff2138f1562"
+  integrity sha512-Lsi5c2ztGZqud0oeDtAn3xFhgrYMaeaz1zi4p+mr0zXOuQNuZzfsrJ0stQ45s8L/xT8UJtGhYyEVy1+xjE4ARA==
+  dependencies:
+    "@zag-js/utils" "1.41.2"
+
 "@zag-js/combobox@1.41.0":
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/@zag-js/combobox/-/combobox-1.41.0.tgz#0f02e08b2af9575d4f77a274ef4cbf8e9023059a"
@@ -820,6 +841,15 @@
     "@floating-ui/dom" "^1.7.6"
     "@zag-js/dom-query" "1.41.0"
     "@zag-js/utils" "1.41.0"
+
+"@zag-js/popper@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/popper/-/popper-1.41.2.tgz#b8c738bc5ff6a73563b052a055adb716b4556d2c"
+  integrity sha512-Iz4D5YAIiIPn4IHGjhX3QatR/RyGaDt43lBSZv0RYcPQYtFg9sUuek3wizjW9qXgdvItevvNMqRdpl7f3es09g==
+  dependencies:
+    "@floating-ui/dom" "^1.7.6"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/utils" "1.41.2"
 
 "@zag-js/radio-group@1.41.0":
   version "1.41.0"
