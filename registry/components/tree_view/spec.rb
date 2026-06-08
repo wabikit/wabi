@@ -86,4 +86,21 @@ RSpec.describe Components::UI::TreeView do
     expect(out).to include('data-wabi-role="branch"')
     expect(out).to include('data-wabi-value="empty"')
   end
+
+  # Regression: Zag's getItemProps() returns style { --depth } and the controller
+  # spreads it onto the item element, REPLACING its style attribute. So the
+  # indentation custom property must NOT live on the Zag-managed row element
+  # (item / branchControl) — it must live on an inner [data-wabi-indent] wrapper
+  # that the controller never touches, or leaf items lose their indentation.
+  it "carries node indentation on an inner wrapper, not on the Zag-managed row" do
+    out = described_class.new(items: items).call
+    expect(out).to include("data-wabi-indent")
+
+    item_tag = out[/<div[^>]*data-wabi-role="item"[^>]*>/]
+    expect(item_tag).not_to include("--wabi-tv-pad")
+    expect(item_tag).not_to include("pl-[var(--wabi-tv-pad)]")
+
+    control_tag = out[/<div[^>]*data-wabi--tree-view-target="branchControl"[^>]*>/]
+    expect(control_tag).not_to include("--wabi-tv-pad")
+  end
 end

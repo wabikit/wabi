@@ -6,10 +6,15 @@ require "json"
 module Components
   module UI
     class TreeView < Wabi::Base
-      ROW_BASE = "group flex items-center gap-1.5 rounded-md px-2 py-1 cursor-pointer outline-none " \
+      # The row is the Zag-managed element (item / branchControl). Indentation must
+      # NOT live here: getItemProps() returns a style ({ --depth }) that the controller
+      # spreads, REPLACING the row's style attribute — so any inline --wabi-tv-pad here
+      # is wiped. Indentation lives on an inner [data-wabi-indent] wrapper instead.
+      ROW_BASE = "group rounded-md py-1 pr-2 cursor-pointer outline-none " \
                  "hover:bg-accent hover:text-accent-foreground " \
                  "data-[selected]:bg-accent data-[selected]:text-accent-foreground " \
                  "focus-visible:ring-2 focus-visible:ring-ring"
+      INDENT_BASE = "flex items-center gap-1.5 pl-[var(--wabi-tv-pad)]"
 
       def initialize(items:, label: nil, id: nil, selection_mode: "single",
                      with_checkboxes: false, default_expanded: [], default_selected: [], **attrs)
@@ -73,24 +78,26 @@ module Components
             "wabi-role":       "branch",
           }
         ) do
-          div(
-            data: { "wabi--tree-view-target": "branchControl" },
-            class: merge_class(ROW_BASE, "pl-[var(--wabi-tv-pad)]"),
-            style: depth_style(index_path, leaf: false)
-          ) do
-            node_checkbox if @with_checkboxes
-            button(
-              type: "button",
-              data: { "wabi--tree-view-target": "branchTrigger" },
-              class: "grid h-4 w-4 place-items-center text-muted-foreground"
+          div(data: { "wabi--tree-view-target": "branchControl" }, class: ROW_BASE) do
+            div(
+              data: { "wabi-indent": "" },
+              class: INDENT_BASE,
+              style: depth_style(index_path, leaf: false)
             ) do
-              span(
-                data: { "wabi--tree-view-target": "branchIndicator" },
-                class: "transition-transform group-data-[state=open]:rotate-90"
-              ) { chevron_icon }
+              node_checkbox if @with_checkboxes
+              button(
+                type: "button",
+                data: { "wabi--tree-view-target": "branchTrigger" },
+                class: "grid h-4 w-4 place-items-center text-muted-foreground"
+              ) do
+                span(
+                  data: { "wabi--tree-view-target": "branchIndicator" },
+                  class: "transition-transform group-data-[state=open]:rotate-90"
+                ) { chevron_icon }
+              end
+              node_icon(node)
+              span(data: { "wabi--tree-view-target": "branchText" }, class: "truncate") { node[:label].to_s }
             end
-            node_icon(node)
-            span(data: { "wabi--tree-view-target": "branchText" }, class: "truncate") { node[:label].to_s }
           end
           div(data: { "wabi--tree-view-target": "branchContent" }, class: "space-y-0.5") do
             node[:children].each_with_index { |child, i| render_node(child, index_path + [i]) }
@@ -106,16 +113,21 @@ module Components
             "wabi-index-path": index_path.to_json,
             "wabi-role":       "item",
           },
-          class: merge_class(ROW_BASE, "pl-[var(--wabi-tv-pad)]"),
-          style: depth_style(index_path, leaf: true)
+          class: ROW_BASE
         ) do
-          node_checkbox if @with_checkboxes
-          node_icon(node)
-          span(data: { "wabi--tree-view-target": "itemText" }, class: "truncate") { node[:label].to_s }
-          span(
-            data: { "wabi--tree-view-target": "itemIndicator" },
-            class: "ml-auto hidden text-foreground group-data-[selected]:block"
-          ) { check_icon }
+          div(
+            data: { "wabi-indent": "" },
+            class: INDENT_BASE,
+            style: depth_style(index_path, leaf: true)
+          ) do
+            node_checkbox if @with_checkboxes
+            node_icon(node)
+            span(data: { "wabi--tree-view-target": "itemText" }, class: "truncate") { node[:label].to_s }
+            span(
+              data: { "wabi--tree-view-target": "itemIndicator" },
+              class: "ml-auto hidden text-foreground group-data-[selected]:block"
+            ) { check_icon }
+          end
         end
       end
 

@@ -130,4 +130,32 @@ describe("wabi--tree-view", () => {
     expect(cb.getAttribute("data-state")).toBe("checked")
     expect(seen[seen.length - 1]).toContain("app.rb")
   })
+
+  // Regression: Zag's getItemProps() returns style { --depth }; spreadProps replaces
+  // the item element's style attribute. The indentation var therefore lives on an
+  // inner [data-wabi-indent] wrapper the controller never spreads onto, so it must
+  // survive a render. (Putting --wabi-tv-pad on the item element loses leaf indentation.)
+  it("preserves leaf indentation (inner [data-wabi-indent] keeps --wabi-tv-pad after render)", async () => {
+    const HTML_INDENT = `
+      <div data-controller="wabi--tree-view"
+           data-wabi--tree-view-items-value='[{"value":"README","label":"README.md"}]'
+           data-wabi--tree-view-selection-mode-value="single"
+           data-wabi--tree-view-with-checkboxes-value="false"
+           data-wabi--tree-view-default-expanded-value="[]"
+           data-wabi--tree-view-default-selected-value="[]">
+        <div data-wabi--tree-view-target="tree">
+          <div data-wabi--tree-view-target="item" data-wabi-value="README" data-wabi-index-path="[0]" data-wabi-role="item">
+            <div data-wabi-indent style="--wabi-tv-pad: calc(0 * 1rem + 1.75rem)">
+              <span data-wabi--tree-view-target="itemText">README.md</span>
+              <span data-wabi--tree-view-target="itemIndicator"></span>
+            </div>
+          </div>
+        </div>
+      </div>`
+    mount(ID, Controller, HTML_INDENT)
+    await tick()
+    const indent = byValue("README").querySelector("[data-wabi-indent]")
+    // Zag clobbers the item element's style; the inner wrapper must be untouched.
+    expect(indent.style.getPropertyValue("--wabi-tv-pad")).not.toBe("")
+  })
 })
