@@ -8,12 +8,12 @@ module Components
       DIALOG_CLASS = "fixed left-1/2 top-1/4 z-50 grid w-full max-w-2xl -translate-x-1/2 " \
                      "gap-0 border border-input bg-background shadow-lg sm:rounded-lg " \
                      "overflow-hidden " \
-                     "transition-opacity duration-200 ease-out " \
+                     "transition-opacity duration-200 ease-out motion-reduce:transition-none motion-reduce:duration-0 " \
                      "data-[state=open]:opacity-100 data-[state=open]:pointer-events-auto " \
                      "data-[state=closed]:opacity-0 data-[state=closed]:pointer-events-none"
 
       BACKDROP_CLASS = "fixed inset-0 z-40 bg-black/80 " \
-                       "transition-opacity duration-200 ease-out " \
+                       "transition-opacity duration-200 ease-out motion-reduce:transition-none motion-reduce:duration-0 " \
                        "data-[state=open]:opacity-100 data-[state=open]:pointer-events-auto " \
                        "data-[state=closed]:opacity-0 data-[state=closed]:pointer-events-none"
 

@@ -7,7 +7,7 @@ module Components
     # `href:` is the app-computed toggle target. No JS.
     class DataTableColumnHeader < Wabi::Base
       variants do
-        base "inline-flex items-center gap-1 transition-colors hover:text-foreground"
+        base "inline-flex items-center gap-1 transition-colors motion-reduce:transition-none hover:text-foreground"
       end
 
       ICONS = {

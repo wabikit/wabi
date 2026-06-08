@@ -4,7 +4,7 @@ module Components
   module UI
     class PaginationLink < Wabi::Base
       variants do
-        base "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring h-10 w-10"
+        base "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring h-10 w-10"
 
         variant :state, {
           active:   "border border-input bg-background hover:bg-accent hover:text-accent-foreground",

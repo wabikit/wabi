@@ -4,7 +4,7 @@ module Components
   module UI
     class BreadcrumbLink < Wabi::Base
       variants do
-        base "transition-colors hover:text-foreground"
+        base "transition-colors motion-reduce:transition-none hover:text-foreground"
       end
 
       def initialize(**attrs) = @attrs = attrs

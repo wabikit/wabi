@@ -37,7 +37,7 @@ module Components
       private
 
       def chevron
-        %(<svg class="chevron ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-[[open]]/collapsible:rotate-90" ) +
+        %(<svg class="chevron ml-auto h-4 w-4 shrink-0 transition-transform duration-200 motion-reduce:transition-none group-[[open]]/collapsible:rotate-90" ) +
           %(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ) +
           %(stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>)
       end

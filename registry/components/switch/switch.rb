@@ -11,14 +11,14 @@ module Components
         # is keyboard-focused, so the focus ring must use data-[focus-visible]:
         # variants (focus-visible: pseudo-class would never fire here).
         base "inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full " \
-             "border-2 border-transparent transition-colors outline-none " \
+             "border-2 border-transparent transition-colors motion-reduce:transition-none outline-none " \
              "data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring data-[focus-visible]:ring-offset-2 " \
              "data-[focus-visible]:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 " \
              "data-[state=checked]:bg-primary data-[state=unchecked]:bg-input"
       end
 
       THUMB_CLASS = "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg " \
-                    "ring-0 transition-transform data-[state=checked]:translate-x-5 " \
+                    "ring-0 transition-transform motion-reduce:transition-none data-[state=checked]:translate-x-5 " \
                     "data-[state=unchecked]:translate-x-0"
 
       def initialize(id: nil, name: nil, checked: false, disabled: false, **attrs)

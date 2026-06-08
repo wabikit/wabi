@@ -5,7 +5,7 @@ module Components
     class Badge < Wabi::Base
       variants do
         base "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs " \
-             "font-semibold transition-colors focus:outline-none focus:ring-2 " \
+             "font-semibold transition-colors motion-reduce:transition-none focus:outline-none focus:ring-2 " \
              "focus:ring-ring focus:ring-offset-2"
 
         variant :appearance, {

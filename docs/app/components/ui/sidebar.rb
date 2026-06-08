@@ -4,9 +4,9 @@ module Components
   module UI
     class Sidebar < Wabi::Base
       BASE = "flex flex-col bg-sidebar text-sidebar-foreground overflow-hidden " \
-             "fixed inset-y-0 z-50 w-64 transition-transform duration-200 ease-in-out " \
+             "fixed inset-y-0 z-50 w-64 transition-transform duration-200 ease-in-out motion-reduce:transition-none " \
              "group-data-[mobile=open]/sidebar:translate-x-0 " \
-             "lg:sticky lg:top-0 lg:z-auto lg:h-svh lg:translate-x-0 lg:transition-[width] " \
+             "lg:sticky lg:top-0 lg:z-auto lg:h-svh lg:translate-x-0 lg:transition-[width] lg:motion-reduce:transition-none " \
              "lg:w-64 group-data-[state=collapsed]/sidebar:lg:w-[3.25rem] " \
              "group-data-[variant=floating]/sidebar:m-2 " \
              "group-data-[variant=floating]/sidebar:h-[calc(100svh-1rem)] " \

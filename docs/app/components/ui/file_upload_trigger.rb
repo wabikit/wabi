@@ -12,7 +12,7 @@ module Components
         button(type: "button", **@attrs, data: { "wabi--file-upload-target": "trigger" },
                class: merge_class(
                  "inline-flex h-9 items-center justify-center rounded-md border border-input bg-background " \
-                 "px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground " \
+                 "px-4 text-sm font-medium shadow-sm transition-colors motion-reduce:transition-none hover:bg-accent hover:text-accent-foreground " \
                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                  user_class)) do
           yield if block

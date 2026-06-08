@@ -16,7 +16,7 @@ module Components
         div(
           data: { "wabi--splitter-target": "resizeTrigger", "wabi-id": @id.to_s },
           class: merge_class(
-            "group relative flex items-center justify-center bg-border transition-colors " \
+            "group relative flex items-center justify-center bg-border transition-colors motion-reduce:transition-none " \
             "hover:bg-primary/40 data-[focus]:bg-primary/40 " \
             "data-[orientation=horizontal]:w-1.5 data-[orientation=horizontal]:cursor-col-resize " \
             "data-[orientation=vertical]:h-1.5 data-[orientation=vertical]:cursor-row-resize",

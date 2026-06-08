@@ -64,7 +64,7 @@ module Components
 
       def nav_button_class
         "h-7 w-7 inline-flex items-center justify-center rounded-md text-muted-foreground " \
-          "transition-colors hover:bg-accent hover:text-accent-foreground"
+          "transition-colors motion-reduce:transition-none hover:bg-accent hover:text-accent-foreground"
       end
     end
   end

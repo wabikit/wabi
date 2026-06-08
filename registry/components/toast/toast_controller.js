@@ -23,7 +23,8 @@ export default class extends Controller {
     this.swiping = false
     this.remainingMs = null
 
-    this.element.style.transitionProperty = "transform, opacity"
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    this.element.style.transitionProperty = reduced ? "none" : "transform, opacity"
     this.element.style.willChange = "transform, opacity"
 
     this.boundDown = this.onPointerDown.bind(this)
@@ -165,7 +166,7 @@ export default class extends Controller {
     this.element.removeEventListener("pointercancel", this.boundUp)
     this.boundMove = null
     this.boundUp = null
-    this.element.style.transitionProperty = "transform, opacity"
+    this.element.style.transitionProperty = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "none" : "transform, opacity"
     this.swiping = false
     if (Math.abs(this.swipeDx) > SWIPE_THRESHOLD) {
       this.element.style.transform = `translateX(${Math.sign(this.swipeDx) * 400}px)`

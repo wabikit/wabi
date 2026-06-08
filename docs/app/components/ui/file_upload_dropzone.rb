@@ -13,7 +13,7 @@ module Components
             class: merge_class(
               "flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed " \
               "border-input bg-background px-6 py-10 text-center text-sm text-muted-foreground " \
-              "transition-colors cursor-pointer data-[dragging]:border-ring data-[dragging]:bg-accent",
+              "transition-colors motion-reduce:transition-none cursor-pointer data-[dragging]:border-ring data-[dragging]:bg-accent",
               user_class)) do
           yield if block
         end

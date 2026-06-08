@@ -5,7 +5,7 @@ import { parseDate } from "@internationalized/date"
 import { capturePortalRefs, attachToBody, restoreFromBody } from "controllers/wabi/_shared/overlay_portal"
 
 const DAY_CELL_CLASS =
-  "w-9 h-9 inline-flex items-center justify-center rounded-md text-sm transition-colors " +
+  "w-9 h-9 inline-flex items-center justify-center rounded-md text-sm transition-colors motion-reduce:transition-none " +
   "hover:bg-accent hover:text-accent-foreground " +
   "data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary " +
   "data-[today]:font-bold data-[outside-range]:text-muted-foreground/40 " +

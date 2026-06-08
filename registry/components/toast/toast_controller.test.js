@@ -20,6 +20,11 @@ const track = (h) => { harness = h; return h }
 
 beforeEach(() => {
   vi.stubGlobal("requestAnimationFrame", (cb) => { cb(0); return 0 })
+  vi.stubGlobal("matchMedia", (q) => ({
+    matches: false, media: q,
+    addEventListener() {}, removeEventListener() {},
+    addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false,
+  }))
   vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "Date"] })
 })
 afterEach(() => {

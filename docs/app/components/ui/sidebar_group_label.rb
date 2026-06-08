@@ -5,7 +5,7 @@ module Components
     class SidebarGroupLabel < Wabi::Base
       variants do
         base "flex h-8 shrink-0 items-center px-2 text-xs font-medium text-muted-foreground " \
-             "transition-[opacity,height] duration-200 " \
+             "transition-[opacity,height] duration-200 motion-reduce:transition-none " \
              "group-data-[state=collapsed]/sidebar:h-0 " \
              "group-data-[state=collapsed]/sidebar:opacity-0 " \
              "group-data-[state=collapsed]/sidebar:overflow-hidden"

@@ -4,7 +4,7 @@ module Components
   module UI
     class TableRow < Wabi::Base
       variants do
-        base "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+        base "border-b transition-colors motion-reduce:transition-none hover:bg-muted/50 data-[state=selected]:bg-muted"
       end
 
       def initialize(**attrs) = @attrs = attrs

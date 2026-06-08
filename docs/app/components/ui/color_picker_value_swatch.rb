@@ -13,6 +13,7 @@ module Components
         user_class = @attrs.delete(:class)
         span(
           data: { "wabi--color-picker-target": "valueSwatch" },
+          aria: { hidden: "true" },
           class: merge_class("h-4 w-4 rounded border border-input", user_class)
         )
       end

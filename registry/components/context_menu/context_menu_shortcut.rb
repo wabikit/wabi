@@ -16,7 +16,7 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        span(class: merge_class(tokens, user_class)) do
+        span(aria: { hidden: "true" }, class: merge_class(tokens, user_class)) do
           yield if block_given?
         end
       end

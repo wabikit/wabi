@@ -4,7 +4,7 @@ module Components
   module UI
     class Skeleton < Wabi::Base
       variants do
-        base "animate-pulse rounded-md bg-muted"
+        base "animate-pulse motion-reduce:animate-none rounded-md bg-muted"
       end
 
       def initialize(**attrs) = @attrs = attrs

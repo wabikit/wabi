@@ -13,7 +13,7 @@ module Components
                     "top-1/2 -translate-y-1/2 " \
                     "data-[orientation=vertical]:top-auto data-[orientation=vertical]:left-1/2 " \
                     "data-[orientation=vertical]:translate-y-0 data-[orientation=vertical]:-translate-x-1/2 " \
-                    "ring-offset-background transition-colors " \
+                    "ring-offset-background transition-colors motion-reduce:transition-none " \
                     "focus-visible:outline-none focus-visible:ring-2 " \
                     "focus-visible:ring-ring focus-visible:ring-offset-2 " \
                     "disabled:pointer-events-none disabled:opacity-50"

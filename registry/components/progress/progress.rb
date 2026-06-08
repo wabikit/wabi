@@ -25,7 +25,7 @@ module Components
           class: merge_class(tokens, user_class)
         ) do
           div(
-            class: "h-full w-full flex-1 bg-primary transition-all",
+            class: "h-full w-full flex-1 bg-primary transition-all motion-reduce:transition-none",
             style: "transform: translateX(-#{100 - pct}%)"
           )
         end

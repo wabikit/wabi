@@ -7,7 +7,7 @@ module Components
     class InputOtp < Wabi::Base
       SLOT_CLASS =
         "h-10 w-10 rounded-md border border-input bg-background text-center text-base " \
-        "shadow-sm transition-colors outline-none " \
+        "shadow-sm transition-colors motion-reduce:transition-none outline-none " \
         "focus:border-ring focus:ring-2 focus:ring-ring focus:ring-offset-2 ring-offset-background " \
         "disabled:cursor-not-allowed disabled:opacity-50"
 

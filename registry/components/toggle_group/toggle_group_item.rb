@@ -6,7 +6,7 @@ module Components
   module UI
     class ToggleGroupItem < Wabi::Base
       ITEM_CLASS = "inline-flex items-center justify-center rounded-md text-sm font-medium " \
-                   "h-9 px-2.5 transition-colors " \
+                   "h-9 px-2.5 transition-colors motion-reduce:transition-none " \
                    "hover:bg-muted hover:text-muted-foreground " \
                    "focus-visible:outline-none focus-visible:ring-2 " \
                    "focus-visible:ring-ring focus-visible:ring-offset-2 " \

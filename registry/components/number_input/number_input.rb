@@ -97,7 +97,7 @@ module Components
       def trigger_class
         width = { sm: "w-8", md: "w-10", lg: "w-11" }.fetch(@size, "w-10")
         "#{width} h-full shrink-0 inline-flex items-center justify-center select-none " \
-          "text-lg leading-none text-muted-foreground transition-colors " \
+          "text-lg leading-none text-muted-foreground transition-colors motion-reduce:transition-none " \
           "hover:bg-accent hover:text-accent-foreground active:bg-accent/80 " \
           "disabled:pointer-events-none disabled:opacity-50"
       end

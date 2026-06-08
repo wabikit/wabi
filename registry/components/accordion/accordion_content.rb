@@ -15,7 +15,7 @@ module Components
     # pattern Sprint 4 cleanup adopted for the overlays).
     class AccordionContent < Wabi::Base
       variants do
-        base "grid text-sm transition-[grid-template-rows] duration-200 ease-out " \
+        base "grid text-sm transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none " \
              "data-[state=closed]:grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]"
       end
 

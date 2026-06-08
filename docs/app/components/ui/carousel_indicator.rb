@@ -17,7 +17,7 @@ module Components
           "aria-label": "Go to slide #{@index.to_i + 1}",
           data: { "wabi--carousel-target": "indicator", "wabi-index": @index.to_s },
           class: merge_class(
-            "h-2 w-2 rounded-full bg-border transition-colors data-[current]:bg-primary",
+            "h-2 w-2 rounded-full bg-border transition-colors motion-reduce:transition-none data-[current]:bg-primary",
             user_class
           )
         )

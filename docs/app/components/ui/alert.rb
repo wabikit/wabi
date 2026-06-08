@@ -3,6 +3,9 @@
 module Components
   module UI
     class Alert < Wabi::Base
+      # Consumer note: if you pass a decorative SVG icon as a direct child,
+      # add aria-hidden="true" and focusable="false" to that SVG element so
+      # screen readers skip the unlabelled graphic (e.g. <svg aria-hidden="true" focusable="false" ...>).
       variants do
         base "relative w-full rounded-lg border p-4 " \
              "[&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] " \
