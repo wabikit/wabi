@@ -50,12 +50,40 @@ RSpec.describe Components::UI::Table do
     expect(output).to include("data-[state=selected]:bg-muted")
   end
 
+  # WCAG-AA: aria-selected="true" surfaces selection state to screen readers
+  it "renders TableRow without aria-selected when no data-state" do
+    output = Components::UI::TableRow.new.call { "x" }
+    expect(output).not_to include("aria-selected")
+  end
+
+  it "renders TableRow with aria-selected=\"true\" when data-state is selected" do
+    output = Components::UI::TableRow.new("data-state": "selected").call { "x" }
+    expect(output).to include('aria-selected="true"')
+  end
+
+  it "renders TableRow without aria-selected when data-state is not selected" do
+    output = Components::UI::TableRow.new("data-state": "other").call { "x" }
+    expect(output).not_to include("aria-selected")
+  end
+
   it "renders TableHead as a left-aligned muted th" do
     output = Components::UI::TableHead.new.call { "Name" }
     expect(output).to include("<th")
     expect(output).to include("text-left")
     expect(output).to include("text-muted-foreground")
     expect(output).to include(">Name</th>")
+  end
+
+  # WCAG-AA: scope="col" default so screen readers associate <th> with columns
+  it "renders TableHead with scope=\"col\" by default" do
+    output = Components::UI::TableHead.new.call { "Name" }
+    expect(output).to include('scope="col"')
+  end
+
+  it "allows TableHead scope to be overridden to 'row'" do
+    output = Components::UI::TableHead.new(scope: "row").call { "Label" }
+    expect(output).to include('scope="row"')
+    expect(output).not_to include('scope="col"')
   end
 
   it "renders TableCell as td" do

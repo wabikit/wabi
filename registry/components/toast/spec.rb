@@ -127,5 +127,14 @@ RSpec.describe "Toast composition" do
       expect(output).to include("data-[state=open]:opacity-100")
       expect(output).to include("data-[state=closed]:opacity-0")
     end
+
+    # WCAG fix (states): the toast <li> does NOT bake aria-hidden into the SSR
+    # markup; aria-hidden is toggled at runtime by toast_controller.js#position()
+    # when the toast is hidden beyond visibleCount. See toast_controller.test.js
+    # for the JS regression assertions.
+    it "does not render aria-hidden in the initial markup (managed at runtime by JS)" do
+      output = described_class.new(title: "x").call
+      expect(output).not_to include('aria-hidden')
+    end
   end
 end

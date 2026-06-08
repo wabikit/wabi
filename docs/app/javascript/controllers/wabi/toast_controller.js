@@ -63,6 +63,11 @@ export default class extends Controller {
     this.element.toggleAttribute("data-front", !!front)
     this.element.toggleAttribute("data-hidden", !!hidden)
     this.element.toggleAttribute("data-expanded", !!expanded)
+    // Keep AT from announcing invisible stacked toasts (WCAG 1.3.1 / 4.1.2).
+    // Set aria-hidden unconditionally (not gated by swipe) so a hidden toast
+    // remains aria-hidden=true even while the pointer is capturing on another
+    // element in the stack.
+    this.element.setAttribute("aria-hidden", hidden ? "true" : "false")
     // Don't disturb opacity/transform/pointer-events while the user is swiping.
     if (!this.swiping) {
       this.element.style.opacity = hidden ? "0" : ""

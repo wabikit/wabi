@@ -22,6 +22,7 @@ const HTML = `
       </div>
       <button data-wabi--carousel-target="nextTrigger"></button>
     </div>
+    <span role="status" aria-live="polite" aria-atomic="true" data-wabi--carousel-target="announcer" class="sr-only"></span>
   </div>`
 
 describe("wabi--carousel", () => {
@@ -58,5 +59,17 @@ describe("wabi--carousel", () => {
     carousel.connect(ctrl.machine.service, normalizeProps).scrollNext()
     await tick()
     expect(seen.length).toBeGreaterThan(0)
+  })
+
+  // a11y regression: announcer target gets "Slide X of N" text when the page changes.
+  it("updates the announcer live-region text on page change", async () => {
+    const h = mount(ID, Controller, HTML)
+    await tick()
+    const ctrl = controllerFor(h.application, ID, root())
+    const announcer = root().querySelector('[data-wabi--carousel-target="announcer"]')
+    expect(announcer).not.toBeNull()
+    carousel.connect(ctrl.machine.service, normalizeProps).scrollNext()
+    await tick()
+    expect(announcer.textContent).toMatch(/Slide \d+ of \d+/)
   })
 })

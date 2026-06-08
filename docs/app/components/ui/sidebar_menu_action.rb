@@ -12,11 +12,16 @@ module Components
              "group-data-[state=collapsed]/sidebar:hidden"
       end
 
-      def initialize(**attrs) = @attrs = attrs
+      # aria_label: accessible name for this icon-only action button.
+      # Callers should always provide a meaningful label (e.g. aria_label: "More options").
+      def initialize(aria_label: nil, **attrs)
+        @aria_label = aria_label
+        @attrs      = attrs
+      end
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        button(type: "button", **@attrs, class: merge_class(tokens, user_class)) { yield if block }
+        button(type: "button", "aria-label": @aria_label, **@attrs, class: merge_class(tokens, user_class)) { yield if block }
       end
     end
   end

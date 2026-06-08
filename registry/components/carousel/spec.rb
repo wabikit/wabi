@@ -31,6 +31,15 @@ RSpec.describe "Carousel composition" do
       output = described_class.new(slide_count: 3).call { "INNER" }
       expect(output).to include("INNER")
     end
+
+    it "renders a visually-hidden live-region announcer for screen readers (a11y fix)" do
+      output = described_class.new(slide_count: 3).call
+      expect(output).to include('role="status"')
+      expect(output).to include('aria-live="polite"')
+      expect(output).to include('aria-atomic="true"')
+      expect(output).to include('data-wabi--carousel-target="announcer"')
+      expect(output).to include('class="sr-only"')
+    end
   end
 
   describe Components::UI::CarouselItem do
@@ -51,6 +60,13 @@ RSpec.describe "Carousel composition" do
       output = described_class.new(index: 1).call
       expect(output).to include('data-wabi--carousel-target="indicator"')
       expect(output).to include('data-wabi-index="1"')
+    end
+    it "includes focus-visible ring classes (a11y fix)" do
+      output = described_class.new(index: 0).call
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:ring-offset-2")
+      expect(output).to include("focus-visible:outline-none")
     end
   end
 
@@ -85,6 +101,13 @@ RSpec.describe "Carousel composition" do
     it "renders without a block" do
       expect(described_class.new.call).to include('data-wabi--carousel-target="prevTrigger"')
     end
+    it "includes focus-visible ring classes (a11y fix)" do
+      output = described_class.new.call
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:ring-offset-2")
+      expect(output).to include("focus-visible:outline-none")
+    end
   end
 
   describe Components::UI::CarouselNextTrigger do
@@ -93,6 +116,13 @@ RSpec.describe "Carousel composition" do
     end
     it "renders without a block" do
       expect(described_class.new.call).to include('data-wabi--carousel-target="nextTrigger"')
+    end
+    it "includes focus-visible ring classes (a11y fix)" do
+      output = described_class.new.call
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:ring-offset-2")
+      expect(output).to include("focus-visible:outline-none")
     end
   end
 

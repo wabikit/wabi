@@ -22,7 +22,9 @@ module Components
       def view_template(&block)
         user_class = @attrs.delete(:class)
         unless @collapsible
-          return div(**@attrs, class: merge_class(tokens, user_class)) { yield if block }
+          # role="group" lets screen readers identify this as a named region when
+          # callers pair it with aria-labelledby pointing to their SidebarGroupLabel id.
+          return div(role: "group", **@attrs, class: merge_class(tokens, user_class)) { yield if block }
         end
 
         details(**@attrs, open: (@default_open ? true : nil),

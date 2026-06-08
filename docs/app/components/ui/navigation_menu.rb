@@ -5,9 +5,10 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class NavigationMenu < Wabi::Base
-      def initialize(id: nil, orientation: :horizontal, **attrs)
+      def initialize(id: nil, orientation: :horizontal, aria_label: nil, **attrs)
         @id          = id
         @orientation = orientation
+        @aria_label  = aria_label
         @attrs       = attrs
       end
 
@@ -15,6 +16,7 @@ module Components
         user_class = @attrs.delete(:class)
         nav(
           id: @id,
+          "aria-label": @aria_label,
           data: {
             controller: "wabi--navigation-menu",
             "wabi--navigation-menu-orientation-value": @orientation.to_s,

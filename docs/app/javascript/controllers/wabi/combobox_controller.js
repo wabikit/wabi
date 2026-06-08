@@ -165,8 +165,10 @@ export default class extends Controller {
       if (on) this.contentEl.setAttribute("data-wabi--combobox-loading", "true")
       else    this.contentEl.removeAttribute("data-wabi--combobox-loading")
     }
+    // Toggle sr-only instead of the `hidden` attribute so the aria-live region
+    // stays in the accessibility tree at all times (WCAG live-region requirement).
     const el = this._loadingEl()
-    if (el) { if (on) el.removeAttribute("hidden"); else el.setAttribute("hidden", "") }
+    if (el) { if (on) el.classList.remove("sr-only"); else el.classList.add("sr-only") }
   }
 
   _errorEl() {
@@ -178,9 +180,11 @@ export default class extends Controller {
     return el || null
   }
 
+  // Toggle sr-only instead of the `hidden` attribute so the aria-live region
+  // stays in the accessibility tree at all times (WCAG live-region requirement).
   showError(on) {
     const el = this._errorEl()
-    if (el) { if (on) el.removeAttribute("hidden"); else el.setAttribute("hidden", "") }
+    if (el) { if (on) el.classList.remove("sr-only"); else el.classList.add("sr-only") }
   }
 
   replaceItems(html) {

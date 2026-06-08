@@ -28,4 +28,9 @@ RSpec.describe "Alert composition" do
     expect(output).to include("<div")
     expect(output).to include("text-sm")
   end
+
+  it "includes aria-atomic=true so full message is read on live-region updates" do
+    output = Components::UI::Alert.new.call { "x" }
+    expect(output).to include('aria-atomic="true"')
+  end
 end

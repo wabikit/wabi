@@ -50,6 +50,22 @@ RSpec.describe "Popover composition" do
     expect(output).to include('data-wabi--popover-portal-value="false"')
   end
 
+  # Regression: @attrs passthrough — aria-label and other caller attrs must
+  # reach the <button> so icon-only triggers have an accessible name.
+  it "PopoverTrigger passes caller aria-label through to the button element" do
+    output = Components::UI::PopoverTrigger.new("aria-label": "Open settings").call { "" }
+    expect(output).to include('aria-label="Open settings"')
+    # Zag target wiring must still be present
+    expect(output).to include('data-wabi--popover-target="trigger"')
+  end
+
+  it "PopoverTrigger passes arbitrary attrs (e.g. id, tabindex) through to the button" do
+    output = Components::UI::PopoverTrigger.new(id: "my-trigger", tabindex: "0").call { "" }
+    expect(output).to include('id="my-trigger"')
+    expect(output).to include('tabindex="0"')
+    expect(output).to include('data-wabi--popover-target="trigger"')
+  end
+
   it "composes into a full popover" do
     composed = Class.new(Phlex::HTML) do
       def view_template

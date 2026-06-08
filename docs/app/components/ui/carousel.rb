@@ -31,6 +31,14 @@ module Components
           class: merge_class("relative w-full", user_class)
         ) do
           yield if block_given?
+          # Live-region announcer: screen readers hear "Slide X of N" on each transition.
+          span(
+            role: "status",
+            "aria-live": "polite",
+            "aria-atomic": "true",
+            data: { "wabi--carousel-target": "announcer" },
+            class: "sr-only"
+          )
         end
       end
     end

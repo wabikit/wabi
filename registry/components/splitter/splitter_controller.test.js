@@ -23,6 +23,22 @@ describe("wabi--splitter", () => {
     expect(panels.length).toBe(2)
     const gutter = r.querySelector('[data-wabi--splitter-target="resizeTrigger"]')
     expect(gutter.getAttribute("role")).toBe("separator")
+    // a11y: resize trigger must carry a default aria-label when no data-wabi-label is set
+    expect(gutter.getAttribute("aria-label")).toBe("Resize panels")
+  })
+
+  it("uses data-wabi-label as aria-label when provided on the resize trigger", async () => {
+    const customHTML = `
+      <div data-controller="wabi--splitter"
+           data-wabi--splitter-panels-value='[{"id":"a","minSize":20},{"id":"b","minSize":20}]'>
+        <div data-wabi--splitter-target="panel" data-wabi-id="a">Left</div>
+        <div data-wabi--splitter-target="resizeTrigger" data-wabi-id="a:b" data-wabi-label="Resize sidebar"></div>
+        <div data-wabi--splitter-target="panel" data-wabi-id="b">Right</div>
+      </div>`
+    mount(ID, Controller, customHTML)
+    await tick()
+    const gutter = root().querySelector('[data-wabi--splitter-target="resizeTrigger"]')
+    expect(gutter.getAttribute("aria-label")).toBe("Resize sidebar")
   })
 
   // Regression: Zag's syncSize bails at start() when the root has no layout yet

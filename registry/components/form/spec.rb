@@ -44,6 +44,12 @@ RSpec.describe "Form composition" do
       expect(output).to include('text-muted-foreground')
       expect(output).to include("Help text")
     end
+
+    # a11y: callers can pass id: for aria-describedby wiring (WCAG 1.3.1)
+    it "forwards id: so callers can wire aria-describedby on the adjacent input" do
+      output = described_class.new(id: "email_description").call { "Hint" }
+      expect(output).to include('id="email_description"')
+    end
   end
 
   describe Components::UI::FormMessage do
@@ -71,6 +77,18 @@ RSpec.describe "Form composition" do
     it "renders explicit text without any model" do
       output = described_class.new(text: "Standalone error").call
       expect(output).to include("Standalone error")
+    end
+
+    # a11y: role="alert" is present so live-region announces the error (WCAG 4.1.3)
+    it "includes role=\"alert\" on the error paragraph" do
+      output = described_class.new(text: "Required").call
+      expect(output).to include('role="alert"')
+    end
+
+    # a11y: callers can pass id: for aria-describedby wiring (WCAG 1.3.1)
+    it "forwards id: so callers can wire aria-describedby on the adjacent input" do
+      output = described_class.new(model: FakeModel.new({}, { email: ["can't be blank"] }), field: :email, id: "email_error").call
+      expect(output).to include('id="email_error"')
     end
   end
 end

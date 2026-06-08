@@ -76,4 +76,24 @@ describe("wabi--toast", () => {
     vi.advanceTimersByTime(3000 + 400) // dismiss + safety
     expect(el()).toBeNull()
   })
+
+  // WCAG 1.3.1 / 4.1.2: hidden toasts (beyond visibleCount) must carry
+  // aria-hidden="true" so AT cannot traverse invisible stack items.
+  it("position() sets aria-hidden=true when hidden=true", async () => {
+    const h = track(mount("wabi--toast", Controller, TOAST(5000)))
+    await flush()
+    const ctrl = h.application.getControllerForElementAndIdentifier(el(), "wabi--toast")
+    ctrl.position({ y: 0, scale: 1, zIndex: 1, front: false, hidden: true, expanded: false })
+    expect(el().getAttribute("aria-hidden")).toBe("true")
+  })
+
+  it("position() sets aria-hidden=false when hidden=false", async () => {
+    const h = track(mount("wabi--toast", Controller, TOAST(5000)))
+    await flush()
+    const ctrl = h.application.getControllerForElementAndIdentifier(el(), "wabi--toast")
+    // First mark hidden, then reveal
+    ctrl.position({ y: 0, scale: 1, zIndex: 1, front: false, hidden: true, expanded: false })
+    ctrl.position({ y: 0, scale: 1, zIndex: 1, front: true, hidden: false, expanded: false })
+    expect(el().getAttribute("aria-hidden")).toBe("false")
+  })
 })

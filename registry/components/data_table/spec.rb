@@ -47,5 +47,21 @@ RSpec.describe Components::UI::DataTable do
       expect(output).to include('value="42"')
       expect(output).to include("change->wabi--data-table#toggleRow")
     end
+
+    # WCAG-AA: each row checkbox must have a unique accessible name so screen
+    # reader users can distinguish rows (names-labels finding, data_table_checkbox.rb:33)
+    it "falls back to value in the aria-label so every row checkbox is uniquely named" do
+      output = described_class.new(value: "99").call
+      expect(output).to include('aria-label="Select row 99"')
+    end
+
+    it "uses row_label in aria-label when provided, giving a human-readable name" do
+      output = described_class.new(value: "1", row_label: "Jane Doe").call
+      expect(output).to include('aria-label="Select row Jane Doe"')
+    end
+
+    it "row_label is optional — omitting it does not break existing call sites" do
+      expect { described_class.new(value: "5").call }.not_to raise_error
+    end
   end
 end

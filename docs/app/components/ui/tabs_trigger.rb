@@ -9,7 +9,7 @@ module Components
         base "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 " \
              "text-sm font-medium transition-all motion-reduce:transition-none cursor-pointer focus-visible:outline-none " \
              "focus-visible:ring-2 focus-visible:ring-ring " \
-             "disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed " \
+             "aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:cursor-not-allowed " \
              "aria-selected:bg-background aria-selected:text-foreground aria-selected:shadow-sm " \
              "group-data-[variant=pill]/tabs:rounded-full " \
              "group-data-[variant=pill]/tabs:text-muted-foreground " \

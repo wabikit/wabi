@@ -7,9 +7,10 @@ module Components
         base "relative h-4 w-full overflow-hidden rounded-full bg-secondary"
       end
 
-      def initialize(value: 0, max: 100, **attrs)
+      def initialize(value: 0, max: 100, label: "Progress", **attrs)
         @value = value
         @max   = max
+        @label = label
         @attrs = attrs
       end
 
@@ -18,6 +19,7 @@ module Components
         pct = (@value.to_f / @max * 100).clamp(0, 100)
         div(
           role: "progressbar",
+          "aria-label": @label,
           "aria-valuemin": "0",
           "aria-valuemax": @max.to_s,
           "aria-valuenow": @value.to_s,

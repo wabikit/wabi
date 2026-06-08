@@ -23,6 +23,7 @@ module Components
         user_class = @attrs.delete(:class)
         button(
           type: "button",
+          **@attrs,
           "data-state": "off",
           data: {
             "wabi--toggle-group-target": "item",

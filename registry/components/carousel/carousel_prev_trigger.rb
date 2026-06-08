@@ -17,7 +17,8 @@ module Components
           data: { "wabi--carousel-target": "prevTrigger" },
           class: merge_class(
             "inline-flex h-8 w-8 items-center justify-center rounded-full border border-input " \
-            "disabled:pointer-events-none disabled:opacity-40",
+            "disabled:pointer-events-none disabled:opacity-40 " \
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             user_class
           )
         ) do

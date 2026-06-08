@@ -23,7 +23,7 @@ module Components
           )
           div(
             data: { "wabi--color-picker-target": "channelSliderThumb", "wabi-channel": @channel.to_s },
-            class: "absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow"
+            class: "absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow focus-visible:ring-2 focus-visible:ring-white"
           )
         end
       end

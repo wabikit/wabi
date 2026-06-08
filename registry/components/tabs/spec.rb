@@ -128,4 +128,17 @@ RSpec.describe "Tabs composition" do
     expect(output).to include("aria-selected:bg-background")
     expect(output).to include("aria-selected:shadow-sm")
   end
+
+  # WCAG-AA fix: Zag sets aria-disabled="true" on the button — never the HTML
+  # disabled attribute — so disabled visual styles must use aria-disabled: variants.
+  it "TabsTrigger disabled styles use aria-disabled: variants, not disabled: (CSS :disabled)" do
+    output = Components::UI::TabsTrigger.new(value: "tab1", disabled: true).call { "Tab 1" }
+    expect(output).to include("aria-disabled:pointer-events-none")
+    expect(output).to include("aria-disabled:opacity-50")
+    expect(output).to include("aria-disabled:cursor-not-allowed")
+    # The bare `disabled:` prefix (not preceded by aria-) must not appear
+    expect(output).not_to match(/(?<![a-z-])disabled:pointer-events-none/)
+    expect(output).not_to match(/(?<![a-z-])disabled:opacity-50/)
+    expect(output).not_to match(/(?<![a-z-])disabled:cursor-not-allowed/)
+  end
 end

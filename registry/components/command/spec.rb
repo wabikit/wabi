@@ -52,6 +52,20 @@ RSpec.describe "Command composition" do
       expect(output).to include("Search commands")
       expect(output).to match(/data-wabi--dialog-target="title"[^>]*class="sr-only"|class="sr-only"[^>]*>Search commands/)
     end
+
+    # WCAG fix: visually-hidden combobox label target so getLabelProps() wires
+    # aria-labelledby on the input (names-labels finding).
+    it "renders a visually-hidden combobox label target inside the combobox wrapper" do
+      output = described_class.new(label: "Search commands").call
+      expect(output).to include('data-wabi--combobox-target="label"')
+      expect(output).to include("Search commands")
+      expect(output).to match(/data-wabi--combobox-target="label"[^>]*class="sr-only"|class="sr-only"[^>]*data-wabi--combobox-target="label"/)
+    end
+
+    it "uses the default label text 'Command palette' when no label is given" do
+      output = described_class.new.call
+      expect(output).to include("Command palette")
+    end
   end
 
   describe Components::UI::CommandInput do
@@ -78,6 +92,13 @@ RSpec.describe "Command composition" do
       output = described_class.new.call { "No results found." }
       expect(output).to include('data-wabi-command-empty')
       expect(output).to include("No results found.")
+    end
+
+    # WCAG fix: role="status" so screen readers announce the no-results message
+    # when it becomes visible (live-regions finding).
+    it "carries role=\"status\" so screen readers announce no-results messages" do
+      output = described_class.new.call { "No results found." }
+      expect(output).to include('role="status"')
     end
   end
 end

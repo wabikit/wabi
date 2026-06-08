@@ -42,4 +42,20 @@ RSpec.describe "InputOtp" do
     expect(Components::UI::InputOtp.new(name: "c").call).to include('aria-label="One-time passcode"')
     expect(Components::UI::InputOtp.new(name: "c", label: "2FA code").call).to include('aria-label="2FA code"')
   end
+
+  it "emits invalid Stimulus value when invalid: true is passed" do
+    out = Components::UI::InputOtp.new(name: "c", invalid: true).call
+    expect(out).to include('data-wabi--input-otp-invalid-value="true"')
+  end
+
+  it "emits required Stimulus value when required: true is passed" do
+    out = Components::UI::InputOtp.new(name: "c", required: true).call
+    expect(out).to include('data-wabi--input-otp-required-value="true"')
+  end
+
+  it "defaults invalid and required to false (no validation flags without explicit opt-in)" do
+    out = Components::UI::InputOtp.new(name: "c").call
+    expect(out).to include('data-wabi--input-otp-invalid-value="false"')
+    expect(out).to include('data-wabi--input-otp-required-value="false"')
+  end
 end

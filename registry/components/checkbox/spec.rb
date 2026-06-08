@@ -50,4 +50,19 @@ RSpec.describe Components::UI::Checkbox do
     output = described_class.new(label: "Subscribe").call
     expect(output).to include("Subscribe")
   end
+
+  # WCAG 2.4.11 focus-appearance regression (focus ring fix)
+  it "label wrapper carries focus-within ring classes so keyboard focus is visible" do
+    output = described_class.new.call
+    expect(output).to include("focus-within:ring-2")
+    expect(output).to include("focus-within:ring-ring")
+    expect(output).to include("focus-within:ring-offset-2")
+  end
+
+  it "control span does NOT carry focus-visible:ring classes (it is aria-hidden and unfocusable)" do
+    output = described_class.new.call
+    # Extract just the control span's class to confirm focus-visible:ring is absent there
+    expect(output).not_to include("focus-visible:ring-2")
+    expect(output).not_to include("focus-visible:ring-ring")
+  end
 end

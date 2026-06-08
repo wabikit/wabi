@@ -9,7 +9,7 @@ const FIXTURE = `
   <div id="hc" data-controller="wabi--hover-card"
        data-wabi--hover-card-open-delay-value="700"
        data-wabi--hover-card-portal-value="false">
-    <a data-wabi--hover-card-target="trigger">@wabi</a>
+    <button type="button" data-wabi--hover-card-target="trigger">@wabi</button>
     <div data-wabi--hover-card-target="positioner">
       <div data-wabi--hover-card-target="content" data-state="closed" inert>Card body</div>
     </div>
@@ -29,5 +29,10 @@ describe("wabi--hover-card", () => {
   it("sets content.hidden = false after connect", () => {
     const content = byTarget(ID, "content")
     expect(content.hidden).toBe(false)
+  })
+
+  it("sets aria-expanded=false on the trigger when card is closed", () => {
+    const trigger = byTarget(ID, "trigger")
+    expect(trigger.getAttribute("aria-expanded")).toBe("false")
   })
 })

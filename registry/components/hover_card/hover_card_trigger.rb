@@ -11,9 +11,9 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        a(
+        button(
+          type: "button",
           **@attrs,
-          tabindex: "0",
           data: { "wabi--hover-card-target": "trigger" },
           class: merge_class("inline-flex items-center underline-offset-4 hover:underline cursor-pointer", user_class)
         ) do

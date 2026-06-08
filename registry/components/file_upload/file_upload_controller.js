@@ -91,7 +91,7 @@ export default class extends Controller {
       const del = document.createElement("button")
       del.type = "button"
       spreadProps(del, api.getItemDeleteTriggerProps({ file }))
-      del.className = "shrink-0 rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+      del.className = "shrink-0 rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       del.setAttribute("aria-label", `Remove ${file.name}`)
       del.textContent = "✕"
       li.appendChild(del)

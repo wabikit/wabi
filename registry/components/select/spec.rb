@@ -68,6 +68,17 @@ RSpec.describe "Select composition" do
     expect(output).to include("Pick")
   end
 
+  it "SelectTrigger uses focus-visible: ring classes (not focus:) so mouse clicks do not show the ring" do
+    output = Components::UI::SelectTrigger.new.call { "Pick" }
+    expect(output).to include("focus-visible:outline-none")
+    expect(output).to include("focus-visible:ring-2")
+    expect(output).to include("focus-visible:ring-ring")
+    expect(output).to include("focus-visible:ring-offset-2")
+    # Ensure the plain `focus:` variants are absent
+    expect(output).not_to match(/\bfocus:outline-none\b/)
+    expect(output).not_to match(/\bfocus:ring-2\b/)
+  end
+
   it "renders SelectValue as a span pointing at the valueText target" do
     output = Components::UI::SelectValue.new.call
     expect(output).to include('data-wabi--select-target="valueText"')

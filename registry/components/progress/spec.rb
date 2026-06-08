@@ -13,6 +13,16 @@ RSpec.describe Components::UI::Progress do
     expect(output).to include("bg-secondary")
   end
 
+  it "includes a default aria-label of 'Progress' for accessible name" do
+    output = described_class.new(value: 50).call
+    expect(output).to include('aria-label="Progress"')
+  end
+
+  it "accepts a custom label for contextual accessible name" do
+    output = described_class.new(value: 70, label: "File upload progress").call
+    expect(output).to include('aria-label="File upload progress"')
+  end
+
   it "translates the indicator by the remaining percentage" do
     output = described_class.new(value: 40).call
     expect(output).to include("translateX(-60")

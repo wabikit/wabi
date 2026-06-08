@@ -24,6 +24,16 @@ RSpec.describe "RadioGroup composition" do
       output = described_class.new(name: "plan", disabled: true).call
       expect(output).to include('data-wabi--radio-group-disabled-value="true"')
     end
+
+    it "renders aria-label when label: is supplied (accessible name for the radiogroup)" do
+      output = described_class.new(name: "plan", label: "Subscription plan").call
+      expect(output).to include('aria-label="Subscription plan"')
+    end
+
+    it "omits aria-label attribute when label: is nil (default)" do
+      output = described_class.new(name: "plan").call
+      expect(output).not_to include("aria-label")
+    end
   end
 
   describe Components::UI::RadioGroupItem do

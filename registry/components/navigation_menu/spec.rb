@@ -23,6 +23,16 @@ RSpec.describe "NavigationMenu composition" do
     it "yields its block" do
       expect(described_class.new.call { "INNER" }).to include("INNER")
     end
+
+    it "omits aria-label when not provided (default nil)" do
+      output = described_class.new.call
+      expect(output).not_to include("aria-label")
+    end
+
+    it "passes aria_label onto the <nav> element" do
+      output = described_class.new(aria_label: "Main navigation").call
+      expect(output).to include('aria-label="Main navigation"')
+    end
   end
 
   describe Components::UI::NavigationMenuList do

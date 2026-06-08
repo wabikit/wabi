@@ -3,7 +3,7 @@ import * as carousel from "@zag-js/carousel"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["itemGroup", "item", "control", "prevTrigger", "nextTrigger", "indicatorGroup", "indicator"]
+  static targets = ["itemGroup", "item", "control", "prevTrigger", "nextTrigger", "indicatorGroup", "indicator", "announcer"]
   static values  = {
     slideCount:    Number,
     slidesPerPage: { type: Number,  default: 1 },
@@ -22,7 +22,13 @@ export default class extends Controller {
       loop: this.loopValue,
       orientation: this.orientationValue,
       autoplay: this.autoplayValue || undefined,
-      onPageChange: ({ page }) => this.dispatch("change", { detail: { page } }),
+      onPageChange: ({ page }) => {
+        this.dispatch("change", { detail: { page } })
+        if (this.hasAnnouncerTarget) {
+          const total = Math.ceil(this.slideCountValue / this.slidesPerPageValue)
+          this.announcerTarget.textContent = `Slide ${page + 1} of ${total}`
+        }
+      },
     })
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()

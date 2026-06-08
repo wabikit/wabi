@@ -275,6 +275,50 @@ RSpec.describe "Sidebar structural pieces" do
     expect(Components::UI::SidebarGroup.new.call { "" }).to include("<div")
   end
 
+  # WCAG a11y regression: roles-semantics — non-collapsible SidebarGroup gets role=group
+  it "non-collapsible SidebarGroup has role=group so screen readers can identify the section" do
+    out = Components::UI::SidebarGroup.new.call { "" }
+    expect(out).to include('role="group"')
+  end
+
+  it "non-collapsible SidebarGroup accepts aria-labelledby to associate with a SidebarGroupLabel id" do
+    out = Components::UI::SidebarGroup.new("aria-labelledby": "platform-label").call { "" }
+    expect(out).to include('role="group"')
+    expect(out).to include('aria-labelledby="platform-label"')
+  end
+
+  it "collapsible SidebarGroup does not carry role=group (details/summary has native semantics)" do
+    out = Components::UI::SidebarGroup.new(collapsible: true, label: "Platform").call { "" }
+    expect(out).not_to include('role="group"')
+  end
+
+  # WCAG a11y regression: names-labels — SidebarMenuAction aria_label param
+  it "SidebarMenuAction accepts aria_label keyword param and renders it on the button" do
+    out = Components::UI::SidebarMenuAction.new(aria_label: "Delete item").call { "x" }
+    expect(out).to include('aria-label="Delete item"')
+  end
+
+  it "SidebarMenuAction with no aria_label does not render a spurious aria-label attr" do
+    out = Components::UI::SidebarMenuAction.new.call { "x" }
+    expect(out).not_to include('aria-label=')
+  end
+
+  # WCAG a11y regression: names-labels — SidebarInput aria_label param
+  it "SidebarInput defaults to aria-label=Search so the input has an accessible name" do
+    out = Components::UI::SidebarInput.new(placeholder: "Search").call
+    expect(out).to include('aria-label="Search"')
+  end
+
+  it "SidebarInput accepts a custom aria_label" do
+    out = Components::UI::SidebarInput.new(aria_label: "Filter results").call
+    expect(out).to include('aria-label="Filter results"')
+  end
+
+  it "SidebarInput can suppress aria-label when a visible label is present (aria_label: nil)" do
+    out = Components::UI::SidebarInput.new(aria_label: nil).call
+    expect(out).not_to include('aria-label=')
+  end
+
   it "SidebarGroup collapsible renders a details disclosure with the label as summary" do
     out = Components::UI::SidebarGroup.new(collapsible: true, label: "Platform").call { "" }
     expect(out).to include("<details")

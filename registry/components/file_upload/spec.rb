@@ -40,6 +40,13 @@ RSpec.describe "FileUpload" do
     expect(Components::UI::FileUploadList.new.call).to include('data-wabi--file-upload-target="list"')
   end
 
+  # a11y regressions — WCAG-AA fixes
+  it "FileUploadList has aria-live=polite and aria-atomic=false (live-region announcement)" do
+    out = Components::UI::FileUploadList.new.call
+    expect(out).to include('aria-live="polite"')
+    expect(out).to include('aria-atomic="false"')
+  end
+
   it "composes" do
     composed = Class.new(Phlex::HTML) do
       def view_template

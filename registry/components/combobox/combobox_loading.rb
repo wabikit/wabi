@@ -11,11 +11,14 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
+        # Always present in the DOM so the aria-live region is registered with
+        # the accessibility tree at page load. Visually hidden (sr-only) when
+        # inactive; the controller removes that class to reveal content.
         div(
-          hidden: true,
           "aria-live": "polite",
+          "aria-atomic": "true",
           data: { "wabi--combobox-target": "loading" },
-          class: merge_class("px-2 py-1.5 text-sm text-muted-foreground", user_class)
+          class: merge_class("sr-only px-2 py-1.5 text-sm text-muted-foreground", user_class)
         ) do
           yield if block_given?
         end

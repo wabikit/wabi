@@ -7,8 +7,7 @@ module Components
     class Checkbox < Wabi::Base
       variants do
         base "peer h-4 w-4 shrink-0 rounded-sm border border-primary " \
-             "ring-offset-background focus-visible:outline-none focus-visible:ring-2 " \
-             "focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed " \
+             "ring-offset-background disabled:cursor-not-allowed " \
              "disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground " \
              "inline-flex items-center justify-center"
       end
@@ -34,7 +33,9 @@ module Components
             "wabi--checkbox-name-value": @name,
             "wabi--checkbox-value-value": @value,
           },
-          class: "inline-flex items-center"
+          # focus-within:ring-* provides the visible focus ring when the sr-only
+          # <input> (the true focus receiver) is keyboard-focused (WCAG 2.4.11).
+          class: "inline-flex items-center rounded-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
         ) do
           # Native <input type=checkbox> is visually hidden but receives focus,
           # keyboard events, and is the source of truth for form submission.

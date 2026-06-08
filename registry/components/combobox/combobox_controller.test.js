@@ -24,6 +24,8 @@ const FIXTURE = `
     <input type="hidden" data-wabi--combobox-target="hiddenInput">
     <div data-wabi--combobox-target="positioner">
       <ul data-wabi--combobox-target="content">
+        <div aria-live="polite" aria-atomic="true" data-wabi--combobox-target="loading" class="sr-only px-2 py-1.5 text-sm text-muted-foreground">Loading…</div>
+        <div aria-live="polite" aria-atomic="true" data-wabi--combobox-target="error" class="sr-only px-2 py-1.5 text-sm text-destructive">Error</div>
         <li data-wabi--combobox-target="item" data-wabi-value="rb" data-wabi-label="Ruby">Ruby</li>
         <li data-wabi--combobox-target="item" data-wabi-value="js" data-wabi-label="JS">JS</li>
       </ul>
@@ -63,5 +65,40 @@ describe("wabi--combobox", () => {
     expect(ctrl.valueValue).toBe("js")
     expect(hidden().value).toBe("js")
     expect(seen).toEqual(["js"])
+  })
+
+  // WCAG live-region fix: showLoading/showError toggle `sr-only` CSS class
+  // instead of the `hidden` attribute so the aria-live region stays in the
+  // accessibility tree at all times, enabling screen-reader announcements.
+  // The loading/error elements live inside contentEl which is portaled to body,
+  // so we query document (not root()) to find them.
+  it("showLoading(true) removes sr-only from loading el; showLoading(false) restores it", async () => {
+    const loadingEl = document.querySelector('[data-wabi--combobox-target="loading"]')
+    // starts visually hidden
+    expect(loadingEl.classList.contains("sr-only")).toBe(true)
+    expect(loadingEl.hasAttribute("hidden")).toBe(false)
+
+    ctrl.showLoading(true)
+    expect(loadingEl.classList.contains("sr-only")).toBe(false)
+    expect(loadingEl.hasAttribute("hidden")).toBe(false)
+
+    ctrl.showLoading(false)
+    expect(loadingEl.classList.contains("sr-only")).toBe(true)
+    expect(loadingEl.hasAttribute("hidden")).toBe(false)
+  })
+
+  it("showError(true) removes sr-only from error el; showError(false) restores it", async () => {
+    const errorEl = document.querySelector('[data-wabi--combobox-target="error"]')
+    // starts visually hidden
+    expect(errorEl.classList.contains("sr-only")).toBe(true)
+    expect(errorEl.hasAttribute("hidden")).toBe(false)
+
+    ctrl.showError(true)
+    expect(errorEl.classList.contains("sr-only")).toBe(false)
+    expect(errorEl.hasAttribute("hidden")).toBe(false)
+
+    ctrl.showError(false)
+    expect(errorEl.classList.contains("sr-only")).toBe(true)
+    expect(errorEl.hasAttribute("hidden")).toBe(false)
   })
 })

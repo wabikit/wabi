@@ -50,6 +50,11 @@ export default class extends Controller {
     const api = splitter.connect(this.machine.service, normalizeProps)
     spreadProps(this.element, api.getRootProps())
     this.panelTargets.forEach((el) => spreadProps(el, api.getPanelProps({ id: el.dataset.wabiId })))
-    this.resizeTriggerTargets.forEach((el) => spreadProps(el, api.getResizeTriggerProps({ id: el.dataset.wabiId })))
+    this.resizeTriggerTargets.forEach((el) =>
+      spreadProps(el, {
+        ...api.getResizeTriggerProps({ id: el.dataset.wabiId }),
+        "aria-label": el.dataset.wabiLabel || "Resize panels",
+      })
+    )
   }
 }

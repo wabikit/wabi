@@ -75,6 +75,22 @@ RSpec.describe "Drawer composition" do
     expect(output).to include('data-wabi--dialog-target="closeTrigger"')
   end
 
+  # WCAG AA — 4.1.2 / 1.1.1: icon-only close button must have an accessible name
+  it "DrawerClose exposes aria-label='Close' by default for icon-only usage" do
+    output = Components::UI::DrawerClose.new.call
+    expect(output).to include('aria-label="Close"')
+  end
+
+  it "DrawerClose forwards a custom aria_label param" do
+    output = Components::UI::DrawerClose.new(aria_label: "Close settings drawer").call
+    expect(output).to include('aria-label="Close settings drawer"')
+  end
+
+  it "DrawerClose allows caller-supplied aria: hash to win over the default label" do
+    output = Components::UI::DrawerClose.new(aria: { label: "Dismiss panel" }).call
+    expect(output).to include('aria-label="Dismiss panel"')
+  end
+
   it "composes into a full drawer" do
     composed = Class.new(Phlex::HTML) do
       def view_template

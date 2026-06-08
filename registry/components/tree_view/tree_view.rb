@@ -87,6 +87,10 @@ module Components
               node_checkbox if @with_checkboxes
               button(
                 type: "button",
+                # aria-label gives the icon-only toggle button an accessible name.
+                # Zag's getBranchTriggerProps sets role/data-state/data-disabled/onClick only —
+                # it never injects aria-label, so we supply a static default here.
+                "aria-label": "Toggle branch",
                 data: { "wabi--tree-view-target": "branchTrigger" },
                 class: "grid h-4 w-4 place-items-center text-muted-foreground"
               ) do

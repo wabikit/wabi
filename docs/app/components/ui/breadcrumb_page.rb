@@ -11,8 +11,7 @@ module Components
 
       def view_template(&)
         user_class = @attrs.delete(:class)
-        span(role: "link", "aria-disabled": "true", "aria-current": "page",
-             **@attrs, class: merge_class(tokens, user_class), &)
+        span("aria-current": "page", **@attrs, class: merge_class(tokens, user_class), &)
       end
     end
   end

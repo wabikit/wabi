@@ -15,10 +15,11 @@ module Components
              "disabled:cursor-not-allowed disabled:opacity-50"
       end
 
-      def initialize(select_all: false, value: nil, checked: false, **attrs)
+      def initialize(select_all: false, value: nil, checked: false, row_label: nil, **attrs)
         @select_all = select_all
         @value      = value
         @checked    = checked
+        @row_label  = row_label
         @attrs      = attrs
       end
 
@@ -26,11 +27,14 @@ module Components
         user_class = @attrs.delete(:class)
         target = @select_all ? "selectAll" : "rowCheckbox"
         action = @select_all ? "change->wabi--data-table#toggleAll" : "change->wabi--data-table#toggleRow"
+        # Per-row label uses row_label (display name) or falls back to value so
+        # every checkbox has a unique accessible name — callers pass row_label: "Jane Doe"
+        # or the value itself provides uniqueness when it is a human-readable ID.
         input(
           type: "checkbox",
           value: @value,
           checked: @checked,
-          "aria-label": (@select_all ? "Select all rows" : "Select row"),
+          "aria-label": (@select_all ? "Select all rows" : "Select row #{@row_label || @value}"),
           data: { "wabi--data-table-target": target, action: action },
           **@attrs,
           class: merge_class(tokens, user_class)

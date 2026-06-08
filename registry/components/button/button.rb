@@ -33,6 +33,11 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
+        # WCAG AA (1.1.1 / 4.1.2): When size: :icon is used the button contains
+        # only an icon with no visible text. Callers MUST supply an accessible
+        # name via aria_label: (or aria: { label: "…" }) so screen readers can
+        # announce the button's purpose. Example:
+        #   Button.new(size: :icon, aria_label: "Close dialog") { close_icon }
         button(
           **@attrs,
           class: merge_class(tokens(appearance: @appearance, size: @size), user_class),

@@ -43,6 +43,21 @@ RSpec.describe "Tooltip composition" do
     expect(output).to include('data-wabi--tooltip-portal-value="false"')
   end
 
+  # WCAG-AA fix: names-labels — attrs passthrough so icon-only triggers can receive aria-label
+  it "TooltipTrigger forwards caller attrs (e.g. aria-label) to the button element" do
+    output = Components::UI::TooltipTrigger.new("aria-label": "More information").call { "" }
+    expect(output).to include('aria-label="More information"')
+    expect(output).to include('data-wabi--tooltip-target="trigger"')
+  end
+
+  it "TooltipTrigger does not forward :class as a separate attr (extracts it cleanly)" do
+    output = Components::UI::TooltipTrigger.new(class: "custom-class", "aria-label": "Help").call { "" }
+    expect(output).to include('class="custom-class"')
+    expect(output).to include('aria-label="Help"')
+    # :class must not appear twice or cause malformed markup
+    expect(output.scan('class=').size).to eq(1)
+  end
+
   it "composes into a full tooltip" do
     composed = Class.new(Phlex::HTML) do
       def view_template

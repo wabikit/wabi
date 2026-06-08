@@ -43,7 +43,12 @@ export default class extends Controller {
 
   render() {
     const api = hoverCard.connect(this.machine.service, normalizeProps)
-    if (this.triggerEl)    spreadProps(this.triggerEl,    api.getTriggerProps())
+    if (this.triggerEl) {
+      spreadProps(this.triggerEl, api.getTriggerProps())
+      // Zag sets data-state=open|closed but never aria-expanded; set it explicitly
+      // so screen reader users know whether the card is currently open.
+      this.triggerEl.setAttribute("aria-expanded", api.open ? "true" : "false")
+    }
     if (this.positionerEl) spreadProps(this.positionerEl, api.getPositionerProps())
     if (this.contentEl) {
       spreadProps(this.contentEl, api.getContentProps())

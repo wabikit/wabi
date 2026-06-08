@@ -57,6 +57,17 @@ RSpec.describe "ColorPicker composition" do
     it "renders without a block" do
       expect(described_class.new.call).to include('data-wabi--color-picker-target="trigger"')
     end
+
+    # WCAG-AA focus: trigger button must have a visible focus-visible ring so
+    # keyboard users see focus. Zag only wires tabindex/handlers via spreadProps
+    # — it never injects CSS class strings.
+    it "includes focus-visible ring classes on the trigger button" do
+      output = described_class.new.call
+      expect(output).to include("focus-visible:outline-none")
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:ring-offset-2")
+    end
   end
 
   describe Components::UI::ColorPickerValueSwatch do
@@ -114,6 +125,16 @@ RSpec.describe "ColorPicker composition" do
       expect(bg_tag).not_to include("absolute")
       expect(bg_tag).not_to include("inset-0")
     end
+
+    # WCAG-AA focus: areaThumb receives tabindex and keyboard handlers from Zag
+    # via spreadProps at runtime, but Zag never injects CSS class strings.
+    # The static class must include a focus-visible ring for keyboard users.
+    it "includes focus-visible ring classes on the areaThumb" do
+      output = described_class.new.call
+      thumb_tag = output[/<div[^>]*data-wabi--color-picker-target="areaThumb"[^>]*>/]
+      expect(thumb_tag).to include("focus-visible:ring-2")
+      expect(thumb_tag).to include("focus-visible:ring-white")
+    end
   end
 
   describe Components::UI::ColorPickerChannelSlider do
@@ -123,6 +144,16 @@ RSpec.describe "ColorPicker composition" do
       expect(output).to include('data-wabi--color-picker-target="channelSliderTrack"')
       expect(output).to include('data-wabi--color-picker-target="channelSliderThumb"')
       expect(output).to include('data-wabi-channel="hue"')
+    end
+
+    # WCAG-AA focus: channelSliderThumb receives tabindex and keyboard handlers
+    # from Zag via spreadProps at runtime, but Zag never injects CSS class strings.
+    # The static class must include a focus-visible ring for keyboard users.
+    it "includes focus-visible ring classes on the channelSliderThumb" do
+      output = described_class.new(channel: "hue").call
+      thumb_tag = output[/<div[^>]*data-wabi--color-picker-target="channelSliderThumb"[^>]*>/]
+      expect(thumb_tag).to include("focus-visible:ring-2")
+      expect(thumb_tag).to include("focus-visible:ring-white")
     end
   end
 

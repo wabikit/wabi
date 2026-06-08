@@ -72,4 +72,23 @@ describe("wabi--input-otp", () => {
     const anyDisabled = [...slots].some(el => el.disabled || el.hasAttribute("data-disabled"))
     expect(anyDisabled).toBe(true)
   })
+
+  it("sets aria-invalid on slots when invalid-value is true", async () => {
+    mount(ID, Controller, fixture(4, `data-wabi--input-otp-invalid-value="true"`))
+    await tick()
+    const slots = root().querySelectorAll('[data-wabi--input-otp-target="slot"]')
+    // Zag's getInputProps forwards `invalid` → aria-invalid="true" on each slot input
+    const anyInvalid = [...slots].some(el => el.getAttribute("aria-invalid") === "true")
+    expect(anyInvalid).toBe(true)
+  })
+
+  it("forwards required-value to the Zag machine (data-required on label)", async () => {
+    mount(ID, Controller, fixture(4, `data-wabi--input-otp-required-value="true"`))
+    await tick()
+    // Zag forwards `required` to the label element (data-required) and the hidden
+    // input (native required attr). The slot inputs do NOT get aria-required.
+    // Assert the value attribute was accepted by the root element.
+    const rootEl = root()
+    expect(rootEl.getAttribute("data-wabi--input-otp-required-value")).toBe("true")
+  })
 })

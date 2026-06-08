@@ -49,5 +49,22 @@ RSpec.describe "Splitter composition" do
       expect(output).to include('data-wabi--splitter-target="resizeTrigger"')
       expect(output).to include('data-wabi-id="a:b"')
     end
+
+    it "includes focus-visible ring classes for keyboard focus visibility (WCAG 2.4.11)" do
+      output = described_class.new(id: "a:b").call
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:outline-none")
+    end
+
+    it "omits data-wabi-label when no label is given" do
+      output = described_class.new(id: "a:b").call
+      expect(output).not_to include("data-wabi-label")
+    end
+
+    it "forwards label as data-wabi-label when provided (aria-label passthrough)" do
+      output = described_class.new(id: "a:b", label: "Resize sidebar").call
+      expect(output).to include('data-wabi-label="Resize sidebar"')
+    end
   end
 end

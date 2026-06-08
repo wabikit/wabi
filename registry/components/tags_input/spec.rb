@@ -77,5 +77,11 @@ RSpec.describe "TagsInput composition" do
     it "renders without a block" do
       expect(described_class.new.call).to include('data-wabi--tags-input-target="error"')
     end
+
+    # a11y: error message must be announced by screen readers via a live region
+    it "includes role=alert for screen reader announcement (WCAG live-region fix)" do
+      output = described_class.new.call { "Too many tags" }
+      expect(output).to include('role="alert"')
+    end
   end
 end

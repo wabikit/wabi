@@ -13,6 +13,7 @@ module Components
         user_class = @attrs.delete(:class)
         div(
           **@attrs,
+          role: "status",
           data: { "wabi-command-empty": "true" },
           class: merge_class("py-6 text-center text-sm text-muted-foreground", user_class)
         ) do

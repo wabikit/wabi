@@ -12,6 +12,8 @@ export default class extends Controller {
     otp:          { type: Boolean, default: true },
     defaultValue: String,
     disabled:     { type: Boolean, default: false },
+    invalid:      { type: Boolean, default: false },
+    required:     { type: Boolean, default: false },
   }
 
   connect() {
@@ -22,6 +24,8 @@ export default class extends Controller {
       mask: this.maskValue,
       otp: this.otpValue,
       disabled: this.disabledValue,
+      invalid: this.invalidValue,
+      required: this.requiredValue,
       // defaultValue is an array of characters; split the string value when set.
       // Stimulus String values default to "" — treat empty string as unset.
       defaultValue: this.defaultValueValue !== "" ? this.defaultValueValue.split("") : undefined,

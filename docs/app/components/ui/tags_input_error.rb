@@ -12,6 +12,7 @@ module Components
       def view_template(&block)
         user_class = @attrs.delete(:class)
         p(
+          role: "alert",
           data: { "wabi--tags-input-target": "error" },
           class: merge_class("text-sm font-medium text-destructive", user_class)
         ) do

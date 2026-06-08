@@ -54,5 +54,16 @@ RSpec.describe "ToggleGroup composition" do
       output = described_class.new(value: "left", disabled: true).call { "Left" }
       expect(output).to include('data-wabi-disabled="true"')
     end
+
+    it "forwards caller-supplied aria-label onto the button element (icon-only accessible name)" do
+      output = described_class.new(value: "bold", aria: { label: "Bold" }).call
+      expect(output).to include('aria-label="Bold"')
+    end
+
+    it "forwards arbitrary caller attrs without overriding data wiring" do
+      output = described_class.new(value: "italic", id: "italic-btn").call { "I" }
+      expect(output).to include('id="italic-btn"')
+      expect(output).to include('data-wabi--toggle-group-target="item"')
+    end
   end
 end

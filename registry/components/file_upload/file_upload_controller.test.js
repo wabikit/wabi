@@ -47,4 +47,19 @@ describe("wabi--file-upload", () => {
     expect(rows[0].textContent).toContain("photo.txt")
     expect(rows[0].querySelector("button")).toBeTruthy()
   })
+
+  // a11y regression — WCAG-AA: delete button must carry focus-visible ring classes
+  it("delete button has focus-visible ring classes", async () => {
+    const h = mount(ID, Controller, fixture())
+    await tick()
+    const ctrl = h.application.getControllerForElementAndIdentifier(root(), ID)
+    const f = new File(["x"], "report.pdf", { type: "application/pdf" })
+    ctrl.api.setFiles([f])
+    await tick()
+    const del = root().querySelector('[data-wabi--file-upload-target="list"] > li button')
+    expect(del).toBeTruthy()
+    expect(del.className).toContain("focus-visible:outline-none")
+    expect(del.className).toContain("focus-visible:ring-2")
+    expect(del.className).toContain("focus-visible:ring-ring")
+  })
 })

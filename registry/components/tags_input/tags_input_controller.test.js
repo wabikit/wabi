@@ -38,4 +38,16 @@ describe("wabi--tags-input", () => {
     expect(hiddens()[0].value).toBe("ruby")
     expect(tags().length).toBe(1)
   })
+
+  // a11y: edit-in-place input must have focus-visible ring instead of outline-none
+  it("renders edit-in-place inputs with focus-visible ring classes, not outline-none", async () => {
+    mount(ID, Controller, FIXTURE(`data-wabi--tags-input-name-value="tags" data-wabi--tags-input-value-value='["ruby"]' data-wabi--tags-input-editable-value="true"`))
+    await tick()
+    const tagNodes = tags()
+    expect(tagNodes.length).toBe(1)
+    const editInput = tagNodes[0].querySelector("input")
+    expect(editInput).not.toBeNull()
+    expect(editInput.className).toContain("focus-visible:outline")
+    expect(editInput.className).not.toContain("outline-none")
+  })
 })

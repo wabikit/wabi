@@ -27,8 +27,10 @@ RSpec.describe "HoverCard composition" do
   end
 
   describe Components::UI::HoverCardTrigger do
-    it "renders an anchor targeting the trigger" do
+    it "renders a <button> (not <a>) targeting the trigger" do
       output = described_class.new.call { "@wabi" }
+      expect(output).to include("<button")
+      expect(output).not_to include("<a ")
       expect(output).to include('data-wabi--hover-card-target="trigger"')
       expect(output).to include("@wabi")
     end
@@ -38,9 +40,14 @@ RSpec.describe "HoverCard composition" do
       expect(output).to include('data-wabi--hover-card-target="trigger"')
     end
 
-    it "is keyboard-focusable before hydration" do
+    it "has an implicit button role — no explicit tabindex needed" do
       output = described_class.new.call { "x" }
-      expect(output).to include('tabindex="0"')
+      expect(output).to include("<button")
+    end
+
+    it "forwards caller attrs including aria-label to the button" do
+      output = described_class.new("aria-label": "View @wabi profile").call { "@wabi" }
+      expect(output).to include('aria-label="View @wabi profile"')
     end
   end
 

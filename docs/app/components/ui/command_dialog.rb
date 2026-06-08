@@ -68,6 +68,15 @@ module Components
                 "wabi--combobox-items-value": "[]",
               }
             ) do
+              # Visually-hidden label gives the combobox input an accessible name.
+              # The combobox controller spreads getLabelProps() (for/id wiring)
+              # onto this element when hasLabelTarget is true, which in turn
+              # sets aria-labelledby on the input. Callers can override the text
+              # via the `label:` param on CommandDialog.
+              label(
+                data: { "wabi--combobox-target": "label" },
+                class: "sr-only"
+              ) { @label }
               yield if block_given?
             end
           end

@@ -87,6 +87,17 @@ RSpec.describe Components::UI::TreeView do
     expect(out).to include('data-wabi-value="empty"')
   end
 
+  # a11y regression: branchTrigger is icon-only (chevron SVG, no visible text).
+  # Zag's getBranchTriggerProps never injects aria-label, so we add a static
+  # default in the Ruby markup to satisfy WCAG 4.1.2 (Name, Role, Value).
+  it "renders branchTrigger button with a static aria-label for accessible name" do
+    out = described_class.new(items: items).call
+    # Find the branchTrigger button tag and confirm aria-label is present
+    trigger_tag = out[/<button[^>]*data-wabi--tree-view-target="branchTrigger"[^>]*>/]
+    expect(trigger_tag).not_to be_nil
+    expect(trigger_tag).to include('aria-label="Toggle branch"')
+  end
+
   # Regression: Zag's getItemProps() returns style { --depth } and the controller
   # spreads it onto the item element, REPLACING its style attribute. So the
   # indentation custom property must NOT live on the Zag-managed row element

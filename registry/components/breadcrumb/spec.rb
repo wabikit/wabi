@@ -37,6 +37,15 @@ RSpec.describe Components::UI::Breadcrumb do
     expect(output).to include(">Current</span>")
   end
 
+  # Regression: BreadcrumbPage must NOT carry role="link" or aria-disabled —
+  # the current-page crumb is not navigable and should expose only aria-current="page".
+  it "BreadcrumbPage has no role=link and no aria-disabled (WCAG roles-semantics fix)" do
+    output = Components::UI::BreadcrumbPage.new.call { "Current" }
+    expect(output).not_to include('role="link"')
+    expect(output).not_to include("aria-disabled")
+    expect(output).to include('aria-current="page"')
+  end
+
   it "renders BreadcrumbSeparator with a default chevron svg and aria-hidden" do
     output = Components::UI::BreadcrumbSeparator.new.call
     expect(output).to include("<li")

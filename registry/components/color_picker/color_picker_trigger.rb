@@ -16,7 +16,8 @@ module Components
           data: { "wabi--color-picker-target": "trigger" },
           class: merge_class(
             "inline-flex items-center gap-2 rounded-md border border-input bg-background " \
-            "px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground",
+            "px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground " \
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             user_class
           )
         ) do

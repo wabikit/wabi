@@ -36,4 +36,12 @@ RSpec.describe Components::UI::Button do
     expect(output).to include('aria-label="save"')
     expect(output).to include('data-test="btn"')
   end
+
+  # WCAG AA regression: size :icon buttons must carry an accessible name via
+  # aria-label so screen readers can announce the button's purpose.
+  it "passes aria-label through to the button element when size is :icon" do
+    output = described_class.new(size: :icon, aria_label: "Close dialog").call { "×" }
+    expect(output).to include('aria-label="Close dialog"')
+    expect(output).to include("h-10 w-10")
+  end
 end

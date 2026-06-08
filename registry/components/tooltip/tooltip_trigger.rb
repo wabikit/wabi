@@ -11,10 +11,13 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
+        # Spread remaining caller attrs (e.g. aria-label for icon-only triggers)
+        # after extracting :class so callers can pass aria-label: "…" etc.
         button(
           type: "button",
           data: { "wabi--tooltip-target": "trigger" },
-          class: user_class
+          class: user_class,
+          **@attrs
         ) do
           yield if block_given?
         end

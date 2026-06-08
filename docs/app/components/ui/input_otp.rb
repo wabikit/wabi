@@ -13,6 +13,7 @@ module Components
 
       def initialize(name:, length: 6, type: :numeric, mask: false, otp: true,
                      default_value: nil, placeholder: "○", disabled: false,
+                     invalid: false, required: false,
                      label: "One-time passcode", **attrs)
         @name          = name
         @length        = length
@@ -22,6 +23,8 @@ module Components
         @default_value = default_value
         @placeholder   = placeholder
         @disabled      = disabled
+        @invalid       = invalid
+        @required      = required
         @label         = label
         @attrs         = attrs
       end
@@ -38,6 +41,8 @@ module Components
           "wabi--input-otp-otp-value":           @otp.to_s,
           "wabi--input-otp-default-value-value": @default_value.to_s,
           "wabi--input-otp-disabled-value":      @disabled.to_s,
+          "wabi--input-otp-invalid-value":       @invalid.to_s,
+          "wabi--input-otp-required-value":      @required.to_s,
         }
         # aria-label names the group of slots; each slot also gets a per-digit
         # aria-label at runtime via the controller's Zag `translations.inputLabel`.

@@ -83,7 +83,7 @@ export default class extends Controller {
 
       // Edit-in-place input (Zag shows it when editable && the tag is double-clicked).
       const edit = document.createElement("input")
-      edit.className = "bg-transparent outline-none w-20"
+      edit.className = "bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring w-20"
       spreadProps(edit, api.getItemInputProps({ index, value }))
       item.appendChild(edit)
 

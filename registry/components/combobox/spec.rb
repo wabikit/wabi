@@ -59,21 +59,64 @@ RSpec.describe "Combobox composition" do
   end
 
   describe Components::UI::ComboboxLoading do
-    it "renders a hidden loading slot wired as the loading target" do
+    it "renders a loading slot wired as the loading target" do
       output = described_class.new.call { "Loading…" }
       expect(output).to include('data-wabi--combobox-target="loading"')
-      expect(output).to match(/<div[^>]*\shidden(\s|>|\/)/)
       expect(output).to include("Loading…")
+    end
+
+    # WCAG live-region fix: element must NOT carry the HTML hidden attribute so
+    # it stays in the accessibility tree at page load. A11y announcement fires
+    # when content changes; the `hidden` attr removes the node from the a11y tree.
+    it "does NOT use the hidden attribute (always in a11y tree for live-region)" do
+      output = described_class.new.call { "Loading…" }
+      expect(output).not_to match(/<div[^>]*\shidden(\s|>|\/)/)
+    end
+
+    it "includes aria-live polite for screen-reader announcements" do
+      output = described_class.new.call { "Loading…" }
+      expect(output).to include('aria-live="polite"')
+    end
+
+    it "includes aria-atomic true so the full message is read on update" do
+      output = described_class.new.call { "Loading…" }
+      expect(output).to include('aria-atomic="true"')
+    end
+
+    it "starts visually hidden via sr-only class so it is invisible until active" do
+      output = described_class.new.call { "Loading…" }
+      expect(output).to include("sr-only")
     end
   end
 
   describe Components::UI::ComboboxError do
-    it "renders a hidden, aria-live error slot wired as the error target" do
+    it "renders an error slot wired as the error target" do
       output = described_class.new.call { "Couldn't load results" }
       expect(output).to include('data-wabi--combobox-target="error"')
-      expect(output).to include('aria-live="polite"')
-      expect(output).to match(/<div[^>]*\shidden(\s|>|\/)/)
       expect(output).to include("Couldn&#39;t load results")
+    end
+
+    it "includes aria-live polite for screen-reader announcements" do
+      output = described_class.new.call { "Couldn't load results" }
+      expect(output).to include('aria-live="polite"')
+    end
+
+    # WCAG live-region fix: element must NOT carry the HTML hidden attribute so
+    # it stays in the accessibility tree at page load. A11y announcement fires
+    # when content changes; the `hidden` attr removes the node from the a11y tree.
+    it "does NOT use the hidden attribute (always in a11y tree for live-region)" do
+      output = described_class.new.call { "Couldn't load results" }
+      expect(output).not_to match(/<div[^>]*\shidden(\s|>|\/)/)
+    end
+
+    it "includes aria-atomic true so the full message is read on update" do
+      output = described_class.new.call { "Couldn't load results" }
+      expect(output).to include('aria-atomic="true"')
+    end
+
+    it "starts visually hidden via sr-only class so it is invisible until active" do
+      output = described_class.new.call { "Couldn't load results" }
+      expect(output).to include("sr-only")
     end
   end
 

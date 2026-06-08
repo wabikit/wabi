@@ -11,7 +11,13 @@ module Components
 
       def view_template(&)
         user_class = @attrs.delete(:class)
-        tr(**@attrs, class: merge_class(tokens, user_class), &)
+        # Reflect selection state programmatically so AT users know when a row
+        # is selected (data-state="selected" drives the visual via Tailwind;
+        # aria-selected carries the same signal to screen readers).
+        # Callers mark rows with data-state: "selected"; parent containers
+        # should carry role="grid" or rows role="row" per ARIA grid pattern.
+        aria_selected = @attrs[:'data-state'] == "selected" ? "true" : nil
+        tr(aria_selected: aria_selected, **@attrs, class: merge_class(tokens, user_class), &)
       end
     end
   end
