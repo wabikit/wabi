@@ -101,6 +101,19 @@ RSpec.describe "ColorPicker composition" do
       expect(output).to include('data-wabi--color-picker-target="areaBackground"')
       expect(output).to include('data-wabi--color-picker-target="areaThumb"')
     end
+
+    # Regression: Zag's getAreaBackgroundProps() returns style { position: relative },
+    # which overrides Tailwind `absolute`, so `inset-0` no longer stretches the
+    # background — it collapses to height 0 and the gradient is invisible. Size the
+    # background with h-full/w-full so it fills the area regardless of position.
+    it "sizes the area background to fill the area independently of position" do
+      output = described_class.new.call
+      bg_tag = output[/<div[^>]*data-wabi--color-picker-target="areaBackground"[^>]*>/]
+      expect(bg_tag).to include("h-full")
+      expect(bg_tag).to include("w-full")
+      expect(bg_tag).not_to include("absolute")
+      expect(bg_tag).not_to include("inset-0")
+    end
   end
 
   describe Components::UI::ColorPickerChannelSlider do

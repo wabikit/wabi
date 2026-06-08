@@ -15,9 +15,13 @@ module Components
           data: { "wabi--color-picker-target": "area" },
           class: merge_class("relative h-40 w-full rounded-md", user_class)
         ) do
+          # Fill the area with h-full/w-full, NOT `absolute inset-0`: Zag's
+          # getAreaBackgroundProps() sets an inline `position: relative` that
+          # overrides Tailwind `absolute`, so `inset-0` would no longer stretch
+          # this element and it collapses to height 0 (gradient invisible).
           div(
             data: { "wabi--color-picker-target": "areaBackground" },
-            class: "absolute inset-0 rounded-md"
+            class: "h-full w-full rounded-md"
           )
           div(
             data: { "wabi--color-picker-target": "areaThumb" },
