@@ -41,3 +41,5 @@ pin "@zag-js/splitter", to: "https://cdn.jsdelivr.net/npm/@zag-js/splitter@1.41.
 pin "@zag-js/carousel", to: "https://cdn.jsdelivr.net/npm/@zag-js/carousel@1.41.2/+esm"
 pin "@zag-js/scroll-snap", to: "https://cdn.jsdelivr.net/npm/@zag-js/scroll-snap@1.41.2/+esm"
 pin "@zag-js/navigation-menu", to: "https://cdn.jsdelivr.net/npm/@zag-js/navigation-menu@1.41.2/+esm"
+pin "@zag-js/color-picker", to: "https://cdn.jsdelivr.net/npm/@zag-js/color-picker@1.41.2/+esm"
+pin "@zag-js/color-utils",  to: "https://cdn.jsdelivr.net/npm/@zag-js/color-utils@1.41.2/+esm"

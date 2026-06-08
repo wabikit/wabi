@@ -1,0 +1,18 @@
+name: color_picker
+version: 0.1.0
+type: registry:ui
+description: Popover color picker with a saturation/lightness area, hue and alpha sliders, a hex input, and preset swatches.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/color-picker": "^1.41"
+  "@zag-js/color-utils": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+shared_files:
+  - "_shared/overlay_portal.js"
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"
