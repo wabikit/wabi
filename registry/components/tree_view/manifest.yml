@@ -1,0 +1,17 @@
+name: tree_view
+version: 0.1.0
+type: registry:ui
+description: Data-driven tree view with expand/collapse, single or multiple selection, keyboard navigation, optional checkboxes, and folder/file icons.
+registry_dependencies: []
+ruby_dependencies: []
+js_dependencies:
+  "@zag-js/tree-view": "^1.41"
+  "@zag-js/collection": "^1.41"
+  "@zag-js/vanilla": "^1.41"
+shared_files: []
+tailwind:
+  extend: {}
+metadata:
+  a11y: WCAG-AA
+  rails_min: "8.0"
+  phlex_min: "1.11"

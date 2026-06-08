@@ -43,3 +43,5 @@ pin "@zag-js/scroll-snap", to: "https://cdn.jsdelivr.net/npm/@zag-js/scroll-snap
 pin "@zag-js/navigation-menu", to: "https://cdn.jsdelivr.net/npm/@zag-js/navigation-menu@1.41.2/+esm"
 pin "@zag-js/color-picker", to: "https://cdn.jsdelivr.net/npm/@zag-js/color-picker@1.41.2/+esm"
 pin "@zag-js/color-utils",  to: "https://cdn.jsdelivr.net/npm/@zag-js/color-utils@1.41.2/+esm"
+pin "@zag-js/tree-view",  to: "https://cdn.jsdelivr.net/npm/@zag-js/tree-view@1.41.2/+esm"
+pin "@zag-js/collection", to: "https://cdn.jsdelivr.net/npm/@zag-js/collection@1.41.2/+esm"
