@@ -27,9 +27,24 @@ export default class extends Controller {
     this.unsubscribe = this.machine.subscribe(() => this.render())
     this.machine.start()
     this.render()
+
+    // Zag computes scroll-snap points right after start(), but if the carousel isn't
+    // laid out yet — inside a not-yet-active tab panel, below the fold, in a closed
+    // overlay — the item group has no size, so the points collapse to ~0 and prev/next
+    // change the page state (indicators) without scrolling the view. Recompute once the
+    // carousel is actually visible and laid out.
+    if ("IntersectionObserver" in window) {
+      this.visibilityObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          carousel.connect(this.machine.service, normalizeProps).refresh()
+        }
+      })
+      this.visibilityObserver.observe(this.element)
+    }
   }
 
   disconnect() {
+    this.visibilityObserver?.disconnect()
     this.unsubscribe?.()
     this.machine?.stop()
   }

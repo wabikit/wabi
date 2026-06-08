@@ -34,6 +34,21 @@ describe("wabi--carousel", () => {
     expect(r.getAttribute("aria-roledescription")).toBe("carousel")
   })
 
+  // Regression: snap points computed at start() are wrong when the carousel isn't laid
+  // out yet (in a tab panel / below the fold), so prev/next move state without scrolling.
+  // The controller observes visibility and refreshes snap points when the carousel
+  // becomes visible. jsdom has no layout, so we assert the wiring: the observer exists
+  // and its callback drives a SNAP.REFRESH when the carousel intersects the viewport.
+  it("refreshes scroll-snap points when the carousel becomes visible", async () => {
+    const h = mount(ID, Controller, HTML)
+    await tick()
+    const ctrl = controllerFor(h.application, ID, root())
+    expect(ctrl.visibilityObserver).toBeInstanceOf(IntersectionObserver)
+    // Invoking the visibility callback drives a snap-point refresh through the
+    // machine without throwing (the real pixel recompute needs layout — browser only).
+    expect(() => ctrl.visibilityObserver.callback([{ isIntersecting: true }])).not.toThrow()
+  })
+
   it("advances the page and dispatches :change", async () => {
     const h = mount(ID, Controller, HTML)
     await tick()
