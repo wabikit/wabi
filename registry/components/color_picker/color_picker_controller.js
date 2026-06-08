@@ -58,7 +58,10 @@ export default class extends Controller {
     if (this.hasLabelTarget) spreadProps(this.labelTarget, api.getLabelProps())
     if (this.hasControlTarget) spreadProps(this.controlTarget, api.getControlProps())
     if (this.hasTriggerTarget) spreadProps(this.triggerTarget, api.getTriggerProps())
-    if (this.hasValueTextTarget) spreadProps(this.valueTextTarget, api.getValueTextProps())
+    if (this.hasValueTextTarget) {
+      spreadProps(this.valueTextTarget, api.getValueTextProps())
+      this.valueTextTarget.textContent = api.valueAsString
+    }
     if (this.hasValueSwatchTarget) this.valueSwatchTarget.style.background = api.valueAsString
     if (this.hasHiddenInputTarget) {
       spreadProps(this.hiddenInputTarget, api.getHiddenInputProps())
