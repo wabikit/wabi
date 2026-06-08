@@ -89,6 +89,11 @@ RSpec.describe "DropdownMenu composition" do
     expect(output).to include("Actions")
   end
 
+  it "DropdownMenuLabel carries role=none so it is a valid child of role=menu" do
+    output = Components::UI::DropdownMenuLabel.new.call { "My Section" }
+    expect(output).to include('role="none"')
+  end
+
   it "DropdownMenuSeparator emits role=separator" do
     output = Components::UI::DropdownMenuSeparator.new.call
     expect(output).to include('role="separator"')

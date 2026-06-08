@@ -7,7 +7,8 @@ module Components
     class CommandTrigger < Wabi::Base
       TRIGGER_CLASS = "inline-flex items-center justify-between h-10 px-4 rounded-md " \
                       "border border-input bg-background text-sm text-muted-foreground " \
-                      "hover:bg-accent hover:text-accent-foreground transition-colors"
+                      "hover:bg-accent hover:text-accent-foreground transition-colors " \
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 
       def initialize(**attrs)
         @attrs = attrs

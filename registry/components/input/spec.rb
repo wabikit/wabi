@@ -31,4 +31,12 @@ RSpec.describe Components::UI::Input do
   it "forwards aria_label so callers can give the control an accessible name" do
     expect(described_class.new(aria_label: "Email").call).to include('aria-label="Email"')
   end
+
+  it "sets aria-invalid=true when invalid: true" do
+    expect(described_class.new(invalid: true).call).to include('aria-invalid="true"')
+  end
+
+  it "omits aria-invalid by default" do
+    expect(described_class.new.call).not_to include("aria-invalid")
+  end
 end

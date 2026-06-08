@@ -16,6 +16,11 @@ export default class extends Controller {
     this.#syncGlobalState()
     // Give the panel a stable id so triggers can point aria-controls at it.
     if (this.hasPanelTarget && !this.panelTarget.id) this.panelTarget.id = `wabi-sidebar-${++panelUid}`
+    // On mobile the panel starts off-canvas (data-mobile=closed); mark it inert so its
+    // contents are not keyboard-reachable until the user opens it.
+    if (!this.isDesktop() && this.hasPanelTarget && this.element.dataset.mobile !== "open") {
+      this.panelTarget.setAttribute("inert", "")
+    }
     this.#syncTriggers()
     this._onKeydown = (e) => {
       if (e.key === "Escape" && this.element.dataset.mobile === "open") this.closeMobile()
@@ -108,6 +113,12 @@ export default class extends Controller {
       if (skip.has(child)) continue
       if (on) child.setAttribute("inert", "")
       else child.removeAttribute("inert")
+    }
+    // On mobile, also inert the panel when it is off-canvas so its contents are
+    // not keyboard-reachable while hidden (WCAG 2.1 — keyboard trap / focus management).
+    if (!this.isDesktop() && this.hasPanelTarget) {
+      if (on) this.panelTarget.removeAttribute("inert")  // panel is open → remove inert
+      else this.panelTarget.setAttribute("inert", "")    // panel is closed → add inert
     }
   }
 }

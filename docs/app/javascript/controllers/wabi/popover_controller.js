@@ -14,10 +14,7 @@ export default class extends Controller {
 
   connect() {
     capturePortalRefs(this)
-    this.triggerEl    = this.hasTriggerTarget    ? this.triggerTarget    : null
-    this.closeTriggerEls = this.contentEl
-      ? Array.from(this.contentEl.querySelectorAll('[data-wabi--popover-target="closeTrigger"]'))
-      : []
+    this.triggerEl = this.hasTriggerTarget ? this.triggerTarget : null
 
     this.portaled = this.portalValue
     this.isModalOverlay = this.modalValue
@@ -61,7 +58,11 @@ export default class extends Controller {
     if (this.contentEl) {
       spreadProps(this.contentEl, api.getContentProps())
       this.contentEl.hidden = false
+      // Re-query on every render so dynamically-added PopoverClose elements
+      // (e.g. injected by Turbo Streams) are always wired.
+      Array.from(
+        this.contentEl.querySelectorAll('[data-wabi--popover-target="closeTrigger"]')
+      ).forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
     }
-    this.closeTriggerEls.forEach((el) => spreadProps(el, api.getCloseTriggerProps()))
   }
 }

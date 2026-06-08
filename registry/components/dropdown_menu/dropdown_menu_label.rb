@@ -13,7 +13,7 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        div(class: merge_class(tokens, user_class)) do
+        div(role: "none", class: merge_class(tokens, user_class)) do
           yield if block_given?
         end
       end

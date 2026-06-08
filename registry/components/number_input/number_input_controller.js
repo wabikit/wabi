@@ -14,6 +14,7 @@ export default class extends Controller {
     allowMouseWheel: { type: Boolean, default: false },
     invalid:         { type: Boolean, default: false },
     disabled:        { type: Boolean, default: false },
+    ariaLabel:       String,
   }
 
   connect() {
@@ -34,6 +35,9 @@ export default class extends Controller {
       allowMouseWheel: this.allowMouseWheelValue,
       invalid: this.invalidValue,
       disabled: this.disabledValue,
+      // Forward caller-supplied label as the spinbutton's aria-label so AT announces
+      // a meaningful name instead of Zag's generic default ("Enter number").
+      "aria-label": this.ariaLabelValue !== "" ? this.ariaLabelValue : undefined,
       onValueChange: ({ value, valueAsNumber }) => {
         this.dispatch("change", { detail: { value, valueAsNumber } })
       },

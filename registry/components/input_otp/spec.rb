@@ -58,4 +58,12 @@ RSpec.describe "InputOtp" do
     expect(out).to include('data-wabi--input-otp-invalid-value="false"')
     expect(out).to include('data-wabi--input-otp-required-value="false"')
   end
+
+  # WCAG 2.4.11: focus ring must only appear on keyboard focus, not mouse click
+  it "slot class uses focus-visible: ring utilities (not focus:)" do
+    expect(Components::UI::InputOtp::SLOT_CLASS).to include("focus-visible:ring-2")
+    expect(Components::UI::InputOtp::SLOT_CLASS).to include("focus-visible:ring-ring")
+    expect(Components::UI::InputOtp::SLOT_CLASS).to include("focus-visible:ring-offset-2")
+    expect(Components::UI::InputOtp::SLOT_CLASS).not_to include("focus:ring-")
+  end
 end

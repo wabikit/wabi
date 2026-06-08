@@ -8,7 +8,7 @@ module Components
       SLOT_CLASS =
         "h-10 w-10 rounded-md border border-input bg-background text-center text-base " \
         "shadow-sm transition-colors motion-reduce:transition-none outline-none " \
-        "focus:border-ring focus:ring-2 focus:ring-ring focus:ring-offset-2 ring-offset-background " \
+        "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background " \
         "disabled:cursor-not-allowed disabled:opacity-50"
 
       def initialize(name:, length: 6, type: :numeric, mask: false, otp: true,

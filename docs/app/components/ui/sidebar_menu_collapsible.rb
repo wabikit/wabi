@@ -25,7 +25,7 @@ module Components
         details(**@attrs, open: (@default_open ? true : nil),
                 data: { **user_data, controller: "wabi--sidebar-flyout" },
                 class: merge_class("group/collapsible wabi-collapsible", user_class)) do
-          summary(class: SUMMARY) do
+          summary("aria-haspopup": "true", class: SUMMARY) do
             raw(safe(@icon)) if @icon
             span { @label }
             raw(safe(chevron))

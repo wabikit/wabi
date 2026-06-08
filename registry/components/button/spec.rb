@@ -37,6 +37,13 @@ RSpec.describe Components::UI::Button do
     expect(output).to include('data-test="btn"')
   end
 
+  # WCAG AA regression (focus): ring-offset-2 must be present so the focus ring
+  # is visible on colored backgrounds (WCAG 2.4.11).
+  it "includes focus-visible:ring-offset-2 in the base token string" do
+    output = described_class.new.call { "Click me" }
+    expect(output).to include("focus-visible:ring-offset-2")
+  end
+
   # WCAG AA regression: size :icon buttons must carry an accessible name via
   # aria-label so screen readers can announce the button's purpose.
   it "passes aria-label through to the button element when size is :icon" do

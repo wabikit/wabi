@@ -89,6 +89,23 @@ RSpec.describe "ContextMenu composition" do
     expect(output).to include("Actions")
   end
 
+  # a11y regression: label must be aria-hidden so AT skips the unlabelled boundary
+  it "ContextMenuLabel carries aria-hidden=true" do
+    output = Components::UI::ContextMenuLabel.new.call { "File" }
+    expect(output).to include('aria-hidden="true"')
+  end
+
+  # a11y regression: radio group with an optional accessible name
+  it "ContextMenuRadioGroup emits aria-label when label: is provided" do
+    output = Components::UI::ContextMenuRadioGroup.new(name: "theme", label: "Theme").call { "" }
+    expect(output).to include('aria-label="Theme"')
+  end
+
+  it "ContextMenuRadioGroup omits aria-label when label: is absent" do
+    output = Components::UI::ContextMenuRadioGroup.new(name: "theme").call { "" }
+    expect(output).not_to include("aria-label")
+  end
+
   it "ContextMenuSeparator emits role=separator" do
     output = Components::UI::ContextMenuSeparator.new.call
     expect(output).to include('role="separator"')

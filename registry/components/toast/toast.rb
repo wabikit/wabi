@@ -52,7 +52,7 @@ module Components
               type: "button",
               "aria-label": "Dismiss",
               data: { action: "click->wabi--toast#dismiss" },
-              class: "shrink-0 rounded-md p-1 text-current opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
+              class: "shrink-0 rounded-md p-1 text-current opacity-70 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             ) { "×" }
           end
         end

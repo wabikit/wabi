@@ -22,7 +22,7 @@ module Components
       def initialize(name:, value: nil, min: nil, max: nil, step: 1,
                      precision: nil, format: :decimal, currency: "USD",
                      size: :md, allow_mouse_wheel: false, invalid: false,
-                     disabled: false, **attrs)
+                     disabled: false, label: nil, **attrs)
         @name              = name
         @value             = value
         @min               = min
@@ -35,6 +35,10 @@ module Components
         @allow_mouse_wheel = allow_mouse_wheel
         @invalid           = invalid
         @disabled          = disabled
+        # Optional accessible name forwarded to the Zag machine's aria-label option
+        # so screen readers announce a meaningful spinbutton label instead of the
+        # generic Zag default ("Enter number").  Pass label: "Quantity" (for example).
+        @label             = label
         @attrs             = attrs
       end
 
@@ -57,6 +61,7 @@ module Components
             "wabi--number-input-allow-mouse-wheel-value": @allow_mouse_wheel.to_s,
             "wabi--number-input-invalid-value":           @invalid.to_s,
             "wabi--number-input-disabled-value":          @disabled.to_s,
+            "wabi--number-input-aria-label-value":        @label.nil? ? "" : @label.to_s,
           },
           class: merge_class("inline-flex w-fit", user_class)
         ) do

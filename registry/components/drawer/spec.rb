@@ -35,6 +35,17 @@ RSpec.describe "Drawer composition" do
     expect(output).to include('data-wabi--dialog-target="trigger"')
   end
 
+  # WCAG AA — 4.1.2 / 1.1.1: icon-only trigger must be nameable via aria_label
+  it "DrawerTrigger omits aria-label when not supplied (text-labelled usage)" do
+    output = Components::UI::DrawerTrigger.new.call { "Open" }
+    expect(output).not_to include('aria-label')
+  end
+
+  it "DrawerTrigger forwards aria_label to the button element" do
+    output = Components::UI::DrawerTrigger.new(aria_label: "Open navigation menu").call
+    expect(output).to include('aria-label="Open navigation menu"')
+  end
+
   it "DrawerContent positions per side (default right)" do
     expected = {
       top:    "inset-x-0 top-0",

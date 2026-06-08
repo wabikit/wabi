@@ -45,6 +45,20 @@ RSpec.describe "Dialog composition" do
     expect(output).to include('aria-modal="true"')
   end
 
+  it "DialogContent defaults to role=dialog and data-wabi--dialog-alert=false" do
+    output = Components::UI::DialogContent.new.call { "" }
+    expect(output).to include('role="dialog"')
+    expect(output).not_to include('role="alertdialog"')
+    expect(output).to include('data-wabi--dialog-alert="false"')
+  end
+
+  it "DialogContent with alert: true renders role=alertdialog and signals the controller" do
+    output = Components::UI::DialogContent.new(alert: true).call { "" }
+    expect(output).to include('role="alertdialog"')
+    expect(output).not_to include('role="dialog"')
+    expect(output).to include('data-wabi--dialog-alert="true"')
+  end
+
   it "starts backdrop and content with data-state=closed, content also inert" do
     # v0.1.x: visibility moved off the `hidden` attribute and onto `data-state`.
     # Closed state -> CSS opacity-0 (transition runs); the controller toggles
@@ -54,7 +68,7 @@ RSpec.describe "Dialog composition" do
     output = Components::UI::DialogContent.new.call { "" }
     expect(output).to include('data-wabi--dialog-target="backdrop" data-state="closed"')
     expect(output).to include('data-state="closed" data-wabi--dialog-target="content"')
-    expect(output).to match(/data-wabi--dialog-target="content"\s+inert\b/)
+    expect(output).to match(/data-wabi--dialog-target="content"[^>]*\binert\b/)
   end
 
   it "DialogContent includes motion-reduce:transition-none for prefers-reduced-motion support" do

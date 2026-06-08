@@ -48,6 +48,7 @@ export default class extends Controller {
     if (!this.isActive()) return
     this.cancelClose()
     this.panel.dataset.flyout = "open"
+    this.trigger.setAttribute("aria-expanded", "true")
     this.#position()
     document.addEventListener("keydown", this._onEscape)
   }
@@ -65,6 +66,7 @@ export default class extends Controller {
     this.panel.dataset.flyout = "closed"
     this.panel.style.top = ""
     this.panel.style.left = ""
+    if (this.trigger) this.trigger.setAttribute("aria-expanded", "false")
     document.removeEventListener("keydown", this._onEscape)
   }
 

@@ -398,4 +398,19 @@ RSpec.describe "Sidebar structural pieces" do
     expect(out).to include('data-foo="bar"')
     expect(out).to include('data-action="wabi--sidebar#toggle"')
   end
+
+  # WCAG a11y regression: focus — backdrop is decorative; must not be announced by AT
+  it "SidebarProvider backdrop div carries aria-hidden=true" do
+    out = Components::UI::SidebarProvider.new.call { "" }
+    expect(out).to include('aria-hidden="true"')
+    # The aria-hidden must be on the backdrop element (same node as the backdrop target)
+    expect(out).to match(/aria-hidden="true"[^>]*wabi--sidebar-target="backdrop"|wabi--sidebar-target="backdrop"[^>]*aria-hidden="true"/)
+  end
+
+  # WCAG a11y regression: states — flyout summary exposes aria-haspopup
+  it "SidebarMenuCollapsible summary carries aria-haspopup=true for flyout disclosure" do
+    out = Components::UI::SidebarMenuCollapsible.new(label: "Projects").call { "" }
+    expect(out).to include('<summary')
+    expect(out).to include('aria-haspopup="true"')
+  end
 end

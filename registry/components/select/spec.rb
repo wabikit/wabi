@@ -115,6 +115,11 @@ RSpec.describe "Select composition" do
     expect(output).to include("Fruits")
   end
 
+  it "SelectLabel carries role=presentation so it is a valid listbox child (WCAG roles-semantics)" do
+    output = Components::UI::SelectLabel.new.call { "Group" }
+    expect(output).to include('role="presentation"')
+  end
+
   it "composes into a full select" do
     composed = Class.new(Phlex::HTML) do
       def view_template

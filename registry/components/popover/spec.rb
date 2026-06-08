@@ -84,4 +84,14 @@ RSpec.describe "Popover composition" do
     expect(composed).to include('data-wabi--popover-target="content"')
     expect(composed).to include("Popover body content.")
   end
+
+  # Regression: PopoverClose must carry the closeTrigger target so the
+  # controller can re-query and wire getCloseTriggerProps() on every render
+  # (dynamic wiring — not a one-time connect()-time snapshot).
+  it "PopoverClose carries the closeTrigger target attribute for dynamic render wiring" do
+    output = Components::UI::PopoverClose.new.call { "Close" }
+    expect(output).to include('data-wabi--popover-target="closeTrigger"')
+    # Must be a <button> so Zag can wire aria-controls etc.
+    expect(output).to include("<button")
+  end
 end

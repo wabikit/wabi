@@ -12,6 +12,15 @@ RSpec.describe Components::UI::DataTable do
     expect(output).to include('data-controller="wabi--data-table"')
   end
 
+  # WCAG-AA (live-regions): a visually-hidden role=status span must be present so
+  # screen readers announce row-selection changes without requiring the caller to add one.
+  it "includes a sr-only role=status live region wired to the statusAnnouncer target" do
+    output = described_class.new.call { "x" }
+    expect(output).to include('role="status"')
+    expect(output).to include('class="sr-only"')
+    expect(output).to include('data-wabi--data-table-target="statusAnnouncer"')
+  end
+
   describe Components::UI::DataTableColumnHeader do
     it "renders a sort link with the label and a neutral indicator when unsorted" do
       output = described_class.new(href: "?sort=name&direction=asc").call { "Name" }

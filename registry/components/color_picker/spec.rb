@@ -80,6 +80,15 @@ RSpec.describe "ColorPicker composition" do
     it "renders the value text target" do
       expect(described_class.new.call).to include('data-wabi--color-picker-target="valueText"')
     end
+
+    # WCAG-AA live-region: the span's textContent is updated on every color change
+    # by the controller. aria-live="polite" + aria-atomic="true" ensure screen
+    # readers announce the updated value string after the user settles on a color.
+    it "announces color value changes to assistive technology" do
+      output = described_class.new.call
+      expect(output).to include('aria-live="polite"')
+      expect(output).to include('aria-atomic="true"')
+    end
   end
 
   describe Components::UI::ColorPickerLabel do

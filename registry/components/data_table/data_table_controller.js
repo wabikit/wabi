@@ -6,7 +6,7 @@ import { Controller } from "@hotwired/stimulus"
 // the select-all checked/indeterminate in sync, and dispatches
 // `wabi--data-table:change` with the selected row values for app-side bulk actions.
 export default class extends Controller {
-  static targets = ["selectAll", "rowCheckbox"]
+  static targets = ["selectAll", "rowCheckbox", "statusAnnouncer"]
 
   connect() {
     this.rowCheckboxTargets.forEach((cb) => this.syncRow(cb))
@@ -46,6 +46,12 @@ export default class extends Controller {
 
   emitChange() {
     const values = this.rowCheckboxTargets.filter((cb) => cb.checked).map((cb) => cb.value)
-    this.dispatch("change", { detail: { values, count: values.length } })
+    const count = values.length
+    this.dispatch("change", { detail: { values, count } })
+    // Update the live region so screen readers announce selection changes (WCAG 4.1.3).
+    if (this.hasStatusAnnouncerTarget) {
+      this.statusAnnouncerTarget.textContent =
+        count === 0 ? "No rows selected" : `${count} row${count === 1 ? "" : "s"} selected`
+    }
   }
 }

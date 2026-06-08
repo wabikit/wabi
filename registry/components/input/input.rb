@@ -15,14 +15,20 @@ module Components
              "focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       end
 
-      def initialize(type: "text", **attrs)
-        @type  = type
-        @attrs = attrs
+      def initialize(type: "text", invalid: false, **attrs)
+        @type    = type
+        @invalid = invalid
+        @attrs   = attrs
       end
 
       def view_template
         user_class = @attrs.delete(:class)
-        input(type: @type, **@attrs, class: merge_class(tokens, user_class))
+        input(
+          type: @type,
+          aria_invalid: (@invalid ? "true" : nil),
+          **@attrs,
+          class: merge_class(tokens, user_class)
+        )
       end
     end
   end

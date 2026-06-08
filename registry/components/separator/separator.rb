@@ -21,12 +21,23 @@ module Components
       def view_template
         user_class = @attrs.delete(:class)
         aria_orientation = @orientation == :vertical ? "vertical" : "horizontal"
-        div(
-          role: @decorative ? "none" : "separator",
-          "aria-orientation": (@decorative ? nil : aria_orientation),
-          **@attrs,
-          class: merge_class(tokens(orientation: @orientation), user_class)
-        )
+        if @decorative
+          div(
+            role: "none",
+            **@attrs,
+            class: merge_class(tokens(orientation: @orientation), user_class)
+          )
+        else
+          # Use the native <hr> element which carries role=separator implicitly,
+          # avoiding the need for an explicit role attribute and satisfying WCAG semantics.
+          # border-0 neutralizes Tailwind preflight's default hr border-top so the
+          # bg-border line renders identically to the decorative <div> variant.
+          hr(
+            "aria-orientation": aria_orientation,
+            **@attrs,
+            class: merge_class(tokens(orientation: @orientation), "border-0", user_class)
+          )
+        end
       end
     end
   end

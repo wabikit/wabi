@@ -49,6 +49,11 @@ RSpec.describe "HoverCard composition" do
       output = described_class.new("aria-label": "View @wabi profile").call { "@wabi" }
       expect(output).to include('aria-label="View @wabi profile"')
     end
+
+    it "sets aria-haspopup=true on the trigger button (Zag never provides this)" do
+      output = described_class.new.call { "@wabi" }
+      expect(output).to include('aria-haspopup="true"')
+    end
   end
 
   describe Components::UI::HoverCardContent do

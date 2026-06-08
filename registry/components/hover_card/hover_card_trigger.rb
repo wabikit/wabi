@@ -13,6 +13,10 @@ module Components
         user_class = @attrs.delete(:class)
         button(
           type: "button",
+          # aria-haspopup signals to AT that this trigger opens a popup panel.
+          # Zag never supplies this attribute via getTriggerProps(), so we set
+          # it statically here. Callers may override via attrs if needed.
+          "aria-haspopup": "true",
           **@attrs,
           data: { "wabi--hover-card-target": "trigger" },
           class: merge_class("inline-flex items-center underline-offset-4 hover:underline cursor-pointer", user_class)

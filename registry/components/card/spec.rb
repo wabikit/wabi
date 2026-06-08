@@ -24,6 +24,19 @@ RSpec.describe Components::UI::Card do
     expect(output).to include(">Title</h3>")
   end
 
+  it "CardTitle respects level: keyword — emits the matching heading tag" do
+    expect(Components::UI::CardTitle.new(level: 2).call { "T" }).to include("<h2")
+    expect(Components::UI::CardTitle.new(level: 2).call { "T" }).to include(">T</h2>")
+    expect(Components::UI::CardTitle.new(level: 1).call { "T" }).to include("<h1")
+    expect(Components::UI::CardTitle.new(level: 3).call { "T" }).to include("<h3") # default unchanged
+  end
+
+  it "CardTitle level: defaults to h3 when omitted (no breaking change)" do
+    output = Components::UI::CardTitle.new.call { "Default" }
+    expect(output).to include("<h3")
+    expect(output).to include(">Default</h3>")
+  end
+
   it "renders CardDescription as p with text-muted-foreground" do
     output = Components::UI::CardDescription.new.call { "Desc" }
     expect(output).to include("<p")

@@ -13,7 +13,11 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        div(class: merge_class(tokens, user_class)) do
+        # aria-hidden: "true" marks this label as decorative so screen readers
+        # skip it rather than announcing an unlabelled group boundary. If you
+        # need AT to announce the group name, pair this element's id with a
+        # surrounding <div role="group" aria-labelledby="<id>"> instead.
+        div(aria_hidden: "true", class: merge_class(tokens, user_class)) do
           yield if block_given?
         end
       end

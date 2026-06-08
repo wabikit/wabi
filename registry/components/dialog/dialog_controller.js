@@ -84,6 +84,11 @@ export default class extends Controller {
     if (this.contentEl) {
       spreadProps(this.contentEl, api.getContentProps())
       this.contentEl.hidden = false
+      // Zag hardcodes role="dialog" in getContentProps regardless of the machine
+      // role prop. Re-apply role="alertdialog" when the Ruby component set alert=true.
+      if (this.contentEl.dataset.wabiDialogAlert === "true") {
+        this.contentEl.setAttribute("role", "alertdialog")
+      }
     }
   }
 }

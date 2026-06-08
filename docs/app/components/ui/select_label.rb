@@ -13,7 +13,10 @@ module Components
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        li(class: merge_class(tokens, user_class)) do
+        # role="presentation" is required: the parent <ul> carries role="listbox"
+        # (set by Zag at runtime), and a bare <li> is not a valid listbox child.
+        # Permitted owned elements are option, group, or presentation/none.
+        li(role: "presentation", class: merge_class(tokens, user_class)) do
           yield if block_given?
         end
       end

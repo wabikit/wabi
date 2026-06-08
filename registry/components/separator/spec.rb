@@ -16,10 +16,18 @@ RSpec.describe Components::UI::Separator do
     expect(output).to include("w-[1px]")
   end
 
-  it "applies role=separator and aria-orientation when not decorative" do
+  it "emits <hr> (native role=separator) with aria-orientation when not decorative" do
     output = described_class.new(decorative: false).call
-    expect(output).to include('role="separator"')
+    # <hr> carries role=separator natively — no explicit role attribute needed
+    expect(output).to include("<hr")
+    expect(output).not_to include('role="separator"')
     expect(output).to include('aria-orientation="horizontal"')
+  end
+
+  it "emits <hr> with aria-orientation=vertical when not decorative and vertical" do
+    output = described_class.new(decorative: false, orientation: :vertical).call
+    expect(output).to include("<hr")
+    expect(output).to include('aria-orientation="vertical"')
   end
 
   it "applies role=none when decorative (default)" do

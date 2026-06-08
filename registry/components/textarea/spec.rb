@@ -21,4 +21,16 @@ RSpec.describe Components::UI::Textarea do
     expect(output).to include('cols="40"')
     expect(output).to include('name="bio"')
   end
+
+  # Regression: label association attrs must pass through so callers can
+  # satisfy WCAG 1.3.1 / 4.1.2 without a visible label (finding: names-labels).
+  it "passes aria-label through to the textarea element" do
+    output = described_class.new(aria_label: "Biography").call
+    expect(output).to include('aria-label="Biography"')
+  end
+
+  it "passes aria-labelledby through to the textarea element" do
+    output = described_class.new(aria_labelledby: "bio-label").call
+    expect(output).to include('aria-labelledby="bio-label"')
+  end
 end

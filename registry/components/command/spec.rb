@@ -36,6 +36,17 @@ RSpec.describe "Command composition" do
       expect(output).to include('data-wabi--dialog-target="trigger"')
       expect(output).to include("Search... ⌘K")
     end
+
+    # WCAG fix: focus-visible ring so keyboard users get a visible focus indicator
+    # (Tailwind preflight resets the native button outline; hover styles alone are
+    # insufficient — WCAG 2.4.11 Focus Appearance).
+    it "includes focus-visible ring utilities for keyboard focus visibility" do
+      output = described_class.new.call { "Search..." }
+      expect(output).to include("focus-visible:outline-none")
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:ring-offset-2")
+    end
   end
 
   describe Components::UI::CommandDialog do

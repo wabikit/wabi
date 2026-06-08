@@ -12,6 +12,8 @@ module Components
       def view_template
         user_class = @attrs.delete(:class)
         span(
+          aria_live: "polite",
+          aria_atomic: "true",
           data: { "wabi--color-picker-target": "valueText" },
           class: merge_class("text-sm tabular-nums", user_class)
         )

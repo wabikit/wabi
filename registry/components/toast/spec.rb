@@ -136,5 +136,20 @@ RSpec.describe "Toast composition" do
       output = described_class.new(title: "x").call
       expect(output).not_to include('aria-hidden')
     end
+
+    # WCAG 2.4.11 fix: dismiss button uses focus-visible: so keyboard focus shows
+    # full opacity + ring without firing on mouse clicks; ring-offset-2 ensures
+    # the ring is distinguishable on all backgrounds.
+    it "dismiss button uses focus-visible: ring utilities (not focus:) and shows full opacity on keyboard focus" do
+      output = described_class.new(title: "Saved").call
+      expect(output).to include("focus-visible:opacity-100")
+      expect(output).to include("focus-visible:outline-none")
+      expect(output).to include("focus-visible:ring-2")
+      expect(output).to include("focus-visible:ring-ring")
+      expect(output).to include("focus-visible:ring-offset-2")
+      # Must NOT use bare focus: ring utilities (would fire on mouse click too)
+      expect(output).not_to include("focus:ring-2")
+      expect(output).not_to include("focus:outline-none")
+    end
   end
 end

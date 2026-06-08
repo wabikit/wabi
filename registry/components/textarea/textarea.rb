@@ -10,6 +10,9 @@ module Components
              "focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       end
 
+      # Callers are responsible for label association (WCAG 1.3.1 / 4.1.2).
+      # Pass `id:` and pair with `<label for="...">`, or supply `aria_label:` /
+      # `aria_labelledby:` via attrs when no visible label is present.
       def initialize(**attrs)
         @attrs = attrs
       end

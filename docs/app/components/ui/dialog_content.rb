@@ -27,7 +27,13 @@ module Components
 
       POSITIONER_CLASS = "fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
 
-      def initialize(**attrs)
+      # alert: [Boolean] optional, default false.
+      #   Pass `alert: true` for destructive or confirmation dialogs that require
+      #   an immediate user response. Renders `role="alertdialog"` instead of
+      #   `role="dialog"` per ARIA 1.2. The JS controller will re-apply the
+      #   correct role after Zag's spreadProps (which always emits "dialog").
+      def initialize(alert: false, **attrs)
+        @alert = alert
         @attrs = attrs
       end
 
@@ -49,10 +55,15 @@ module Components
           class: POSITIONER_CLASS
         ) do
           div(
-            role: "dialog",
+            role: (@alert ? "alertdialog" : "dialog"),
             "aria-modal": "true",
             "data-state": "closed",
-            data: { "wabi--dialog-target": "content" },
+            data: {
+              "wabi--dialog-target": "content",
+              # Signal the controller to re-apply role="alertdialog" after
+              # Zag's spreadProps overwrites it with its hardcoded "dialog".
+              "wabi--dialog-alert": @alert.to_s
+            },
             inert: true,
             class: merge_class(tokens, user_class)
           ) do

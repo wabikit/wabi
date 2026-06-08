@@ -29,6 +29,7 @@ module Components
           class: merge_class(tokens, (@variant == :inset ? "bg-sidebar" : nil), user_class)
         ) do
           div(
+            "aria-hidden": "true",
             data: {
               "wabi--sidebar-target": "backdrop",
               action: "click->wabi--sidebar#closeMobile",
