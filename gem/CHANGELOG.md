@@ -2,6 +2,18 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.24.3 - 2026-06-07
+
+### Fixed
+- **Splitter:** dragging the gutter now resizes the panels. Zag initializes panel
+  sizes (`syncSize`) at start, but bails when the root has no layout yet — inside an
+  inactive tab panel, below the fold, or a closed overlay — leaving the sizes empty
+  so a drag had no base to resize from (the gutter showed a resize cursor but
+  nothing moved). The controller now re-syncs sizes via `IntersectionObserver` once
+  the splitter is visible. Same class of fix as Carousel in 0.24.2.
+
+Component count unchanged (47).
+
 ## 0.24.2 - 2026-06-07
 
 ### Fixed
