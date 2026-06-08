@@ -29,6 +29,24 @@ describe("wabi--collapsible", () => {
     expect(content.getAttribute("data-state")).toBe("open")
   })
 
+  // Regression: once open + settled, Zag's getContentProps sets data-state to
+  // undefined (skip = !initial && open) — the grid-rows animation needs it to
+  // PERSIST as "open". The controller re-asserts it from api.open on every render.
+  // We force the skip condition by flipping the machine's `initial` context to false.
+  it("keeps content data-state=open after Zag drops it (skip case)", async () => {
+    const h = mount(ID, Controller, HTML())
+    await tick()
+    const ctrl = controllerFor(h.application, ID, root())
+    const content = root().querySelector('[data-wabi--collapsible-target="content"]')
+    api(ctrl).setOpen(true)
+    await tick()
+    expect(content.getAttribute("data-state")).toBe("open")
+    // Simulate the post-measurement render where Zag would null data-state.
+    ctrl.machine.service.context.set("initial", false)
+    ctrl.render()
+    expect(content.getAttribute("data-state")).toBe("open")
+  })
+
   it("dispatches :change with the open state", async () => {
     const h = mount(ID, Controller, HTML())
     await tick()

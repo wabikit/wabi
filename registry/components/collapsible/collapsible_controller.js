@@ -36,6 +36,10 @@ export default class extends Controller {
     if (this.hasContentTarget) {
       spreadProps(this.contentTarget, api.getContentProps())
       this.contentTarget.hidden = false
+      // Zag nulls data-state once open + settled (skip = !initial && open) because
+      // its canonical animation keys off the --height var. Our grid-rows transition
+      // needs data-state to PERSIST as "open" while open, so re-assert it from api.open.
+      this.contentTarget.setAttribute("data-state", api.open ? "open" : "closed")
     }
   }
 }
