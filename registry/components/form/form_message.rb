@@ -17,7 +17,9 @@ module Components
         return unless msg
 
         user_class = @attrs.delete(:class)
-        p(**@attrs, class: merge_class("text-sm font-medium text-destructive", user_class)) { msg }
+        # role="alert" so screen readers announce the validation error when it
+        # appears; callers can override via attrs (e.g. role: "status").
+        p(role: "alert", **@attrs, class: merge_class("text-sm font-medium text-destructive", user_class)) { msg }
       end
     end
   end

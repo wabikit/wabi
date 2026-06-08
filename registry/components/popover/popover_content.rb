@@ -22,7 +22,11 @@ module Components
           data: { "wabi--popover-target": "positioner" },
           class: "z-50 pointer-events-none"
         ) do
+          # Spread @attrs FIRST so caller aria-label/aria-labelledby reach the
+          # role=dialog content (Zag's getContentProps doesn't set a name); the
+          # explicit target/data-state/inert below still win the wiring.
           div(
+            **@attrs,
             data: { "wabi--popover-target": "content" },
             "data-state": "closed",
             inert: true,

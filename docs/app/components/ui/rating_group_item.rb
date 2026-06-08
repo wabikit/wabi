@@ -22,7 +22,8 @@ module Components
           class: merge_class(
             "group relative inline-block h-6 w-6 cursor-pointer text-muted-foreground " \
             "transition-colors data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 " \
-            "data-[readonly]:cursor-default",
+            "data-[readonly]:cursor-default rounded-sm outline-none " \
+            "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             user_class
           )
         ) do
