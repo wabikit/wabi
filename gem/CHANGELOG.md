@@ -2,6 +2,22 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.24.2 - 2026-06-07
+
+### Fixed
+- **Collapsible:** the content now actually expands/collapses. Zag nulls the
+  content's `data-state` once open + settled (its canonical animation keys off a
+  `--height` variable), which left our `grid-rows` height transition stuck closed;
+  the controller now re-asserts `data-state` from the open state so the animation
+  runs.
+- **Carousel:** prev/next now scroll the slides. Zag computes scroll-snap points
+  right after start, but when the carousel isn't laid out yet (inside an inactive
+  tab panel, below the fold, or a closed overlay) the points collapsed to ~0 and
+  navigation moved only the indicators. The controller now refreshes the snap
+  points via `IntersectionObserver` once the carousel becomes visible.
+
+Component count unchanged (47).
+
 ## 0.24.1 - 2026-06-07
 
 ### Fixed
