@@ -572,6 +572,13 @@
   dependencies:
     "@zag-js/utils" "1.41.0"
 
+"@zag-js/collection@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/collection/-/collection-1.41.2.tgz#78b5f72c620e0a6315107c0fffcc6764b7e71343"
+  integrity sha512-ZZWuvfPZI8ccWd4aLpuU47k1jSc9eO+F3FM3iBJuvgegCH6g3+HDEwGN6wdePHnYfv7zyIKCGKr816zXcIWQbw==
+  dependencies:
+    "@zag-js/utils" "1.41.2"
+
 "@zag-js/color-picker@1.41.2":
   version "1.41.2"
   resolved "https://registry.yarnpkg.com/@zag-js/color-picker/-/color-picker-1.41.2.tgz#abbe0d58ef1b9c6d564c9aea3a4f1ec953d1f4fc"
@@ -1008,6 +1015,18 @@
     "@zag-js/popper" "1.41.0"
     "@zag-js/types" "1.41.0"
     "@zag-js/utils" "1.41.0"
+
+"@zag-js/tree-view@1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@zag-js/tree-view/-/tree-view-1.41.2.tgz#199b3d64f58bd9b88fc0a791fc628082b70189ad"
+  integrity sha512-QNi0VpV+RyzF4NP72+kSleUpauF9SMAzOAe59nxvs8jAUHqV5diDCInnbQos4+cyFDXFzGq3lElot26A1yI+7Q==
+  dependencies:
+    "@zag-js/anatomy" "1.41.2"
+    "@zag-js/collection" "1.41.2"
+    "@zag-js/core" "1.41.2"
+    "@zag-js/dom-query" "1.41.2"
+    "@zag-js/types" "1.41.2"
+    "@zag-js/utils" "1.41.2"
 
 "@zag-js/types@1.41.0":
   version "1.41.0"
