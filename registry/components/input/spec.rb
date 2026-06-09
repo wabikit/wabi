@@ -36,6 +36,10 @@ RSpec.describe Components::UI::Input do
     expect(described_class.new(invalid: true).call).to include('aria-invalid="true"')
   end
 
+  it "carries the invalid red-border styling keyed off aria-invalid" do
+    expect(described_class.new.call).to include("aria-[invalid=true]:border-destructive")
+  end
+
   it "omits aria-invalid by default" do
     expect(described_class.new.call).not_to include("aria-invalid")
   end

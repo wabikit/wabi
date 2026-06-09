@@ -7,7 +7,8 @@ module Components
         base "flex min-h-[80px] w-full rounded-md border border-input bg-background " \
              "px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground " \
              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring " \
-             "focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+             "focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 " \
+             "aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive"
       end
 
       # Callers are responsible for label association (WCAG 1.3.1 / 4.1.2).
