@@ -13,7 +13,11 @@ module Components
 
         variant :appearance, {
           default:     "bg-background text-foreground",
-          destructive: "border-destructive/50 text-destructive [&>svg]:text-destructive"
+          # Body text stays at `foreground` (always AA on `background` in every theme
+          # + dark mode); the destructive cue is the red border + red icon. Using
+          # `text-destructive` for the body failed WCAG 1.4.3 in dark mode (the
+          # button-tuned destructive red is too dark as text on a dark surface, ~2:1).
+          destructive: "bg-background text-foreground border-destructive/50 [&>svg]:text-destructive"
         }, default: :default
       end
 

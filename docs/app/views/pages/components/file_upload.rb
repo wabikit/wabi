@@ -89,6 +89,7 @@ module Views
                 li { "The underlying <input type=\"file\"> is tabindex=-1 and aria-hidden (out of the tab order and the accessibility tree); the dropzone and the Browse button are the accessible surfaces." }
                 li { "File list renders accepted files; each entry can expose a remove button wired to the controller." }
                 li { "max_files > 1 automatically appends [] to the field name and enables the multiple attribute." }
+                li { "The dropzone is keyboard-focusable and contains the browse button (Zag's file-upload structure); automated tools may flag this as nested-interactive, but both the dropzone (drag/drop + Enter/Space) and the button are independently operable." }
               end
             end
           end

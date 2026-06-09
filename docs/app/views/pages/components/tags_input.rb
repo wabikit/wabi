@@ -98,6 +98,7 @@ module Views
                 li { "Backspace on an empty input removes the last tag; arrow keys move between tags." }
                 li { "Each tag exposes a labelled delete button." }
                 li { "Submits as an array: params[:tags] # => [\"ruby\", \"rails\"]." }
+                li { "Disabled tags render with muted text; per WCAG 1.4.3 inactive/disabled UI components are exempt from the contrast minimum." }
               end
             end
           end

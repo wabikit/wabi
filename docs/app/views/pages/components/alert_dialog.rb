@@ -84,6 +84,7 @@ module Views
                 li { "Focus trap keeps Tab inside the dialog while open." }
                 li { "Content carries inert when closed — keeps out of tab order + a11y tree." }
                 li { "Scroll lock applied to <body> while modal is open." }
+                li { "The trigger's aria-controls points to the dialog content, which is portaled and only present in the DOM while open; automated tools may flag the reference as invalid when the dialog is closed." }
               end
             end
           end

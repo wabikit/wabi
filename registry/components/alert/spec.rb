@@ -12,9 +12,16 @@ RSpec.describe "Alert composition" do
     expect(output).to include("rounded-lg")
   end
 
-  it "applies destructive appearance" do
+  it "applies destructive appearance with readable body text + red accents (WCAG 1.4.3)" do
     output = Components::UI::Alert.new(appearance: :destructive).call { "x" }
-    expect(output).to include("text-destructive")
+    # Body text stays foreground (AA in light + dark); destructive cue = red border + red icon.
+    expect(output).to include("text-foreground")
+    expect(output).to include("border-destructive/50")
+    expect(output).to include("[&>svg]:text-destructive")
+    # The body itself must NOT be the (button-tuned, dark-mode-failing) destructive red:
+    # a bare `text-destructive` utility is space/quote-prefixed; the allowed icon form
+    # is `[&>svg]:text-destructive` (colon-prefixed), which this does not match.
+    expect(output).not_to match(/[ "]text-destructive\b/)
   end
 
   it "renders AlertTitle as h5" do

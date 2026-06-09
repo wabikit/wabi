@@ -103,6 +103,7 @@ module Views
                 li { "Full keyboard navigation: arrow keys move focus and expand/collapse, typeahead jumps to a node by typing." }
                 li { "Nodes expose treeitem roles with aria-selected / aria-expanded; set selection_mode: :multiple for multi-select." }
                 li { "Set with_checkboxes: true to add per-node tri-state checkboxes." }
+                li { "Branch rows are buttons that contain the optional selection checkbox (Zag's tree structure); automated tools may flag this as nested-interactive. Expansion (the branch) and selection (the checkbox) are each operable by keyboard." }
               end
             end
           end
