@@ -35,9 +35,6 @@ export default class extends Controller {
       allowMouseWheel: this.allowMouseWheelValue,
       invalid: this.invalidValue,
       disabled: this.disabledValue,
-      // Forward caller-supplied label as the spinbutton's aria-label so AT announces
-      // a meaningful name instead of Zag's generic default ("Enter number").
-      "aria-label": this.ariaLabelValue !== "" ? this.ariaLabelValue : undefined,
       onValueChange: ({ value, valueAsNumber }) => {
         this.dispatch("change", { detail: { value, valueAsNumber } })
       },
@@ -56,7 +53,13 @@ export default class extends Controller {
     const api = numberInput.connect(this.machine.service, normalizeProps)
     spreadProps(this.element, api.getRootProps())
     if (this.hasControlTarget)   spreadProps(this.controlTarget,   api.getControlProps())
-    if (this.hasInputTarget)     spreadProps(this.inputTarget,     api.getInputProps())
+    if (this.hasInputTarget) {
+      spreadProps(this.inputTarget, api.getInputProps())
+      // Zag's getInputProps() does not put aria-label on the spinbutton input
+      // (only the +/- buttons get one), so apply the caller-supplied name directly.
+      if (this.ariaLabelValue) this.inputTarget.setAttribute("aria-label", this.ariaLabelValue)
+      else this.inputTarget.removeAttribute("aria-label")
+    }
     if (this.hasDecrementTarget) spreadProps(this.decrementTarget, api.getDecrementTriggerProps())
     if (this.hasIncrementTarget) spreadProps(this.incrementTarget, api.getIncrementTriggerProps())
   }
