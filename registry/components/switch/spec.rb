@@ -60,4 +60,8 @@ RSpec.describe Components::UI::Switch do
     expect(output).not_to include("aria-labelledby")
     expect(output).not_to include('data-wabi--switch-target="label"')
   end
+
+  it "label wrapper is content-width (w-fit) so empty space beside it doesn't toggle" do
+    expect(described_class.new(name: "x").call).to include("w-fit")
+  end
 end

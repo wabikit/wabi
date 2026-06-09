@@ -59,6 +59,12 @@ RSpec.describe Components::UI::Checkbox do
     expect(output).to include("focus-within:ring-offset-2")
   end
 
+  # The clickable label must stay sized to its content; without w-fit it stretches
+  # full-width inside a flex/grid parent and the empty space beside the text toggles.
+  it "label wrapper is content-width (w-fit) so only the box + text are clickable" do
+    expect(described_class.new(label: "x").call).to include("w-fit")
+  end
+
   it "control span does NOT carry focus-visible:ring classes (it is aria-hidden and unfocusable)" do
     output = described_class.new.call
     # Extract just the control span's class to confirm focus-visible:ring is absent there

@@ -5,7 +5,10 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class RadioGroupItem < Wabi::Base
-      ITEM_CLASS = "inline-flex items-center gap-2 cursor-pointer " \
+      # w-fit keeps the clickable label sized to its content — without it, as a
+      # flex/grid item the <label> stretches full-width and the empty space beside
+      # the text becomes a click target that selects the radio.
+      ITEM_CLASS = "inline-flex w-fit items-center gap-2 cursor-pointer " \
                    "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
 
       CONTROL_CLASS = "aspect-square h-4 w-4 rounded-full border border-primary " \

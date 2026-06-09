@@ -68,4 +68,8 @@ RSpec.describe "RadioGroup composition" do
       expect(output).to include('data-state="unchecked"')
     end
   end
+
+  it "RadioGroupItem label is content-width (w-fit) so empty space beside it doesn't select" do
+    expect(Components::UI::RadioGroupItem.new(value: "a").call { "A" }).to include("w-fit")
+  end
 end

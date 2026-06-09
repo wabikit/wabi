@@ -47,7 +47,10 @@ module Components
             "wabi--switch-input-id-value": @id,
             "wabi--switch-name-value": @name,
           },
-          class: "inline-flex items-center gap-2"
+          # w-fit keeps the clickable label sized to its content — without it, as a
+          # flex/grid item the <label> stretches full-width and the empty space beside
+          # the text becomes a click target that toggles the switch.
+          class: "inline-flex w-fit items-center gap-2"
         ) do
           input(
             type: "checkbox",
