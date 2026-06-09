@@ -11,7 +11,9 @@ name: gem-release
 on:
   push:
     tags:
-      - "v*"
+      # Match the vX.Y.Z release contract only — a stray tag like `v1` or
+      # `vbeta` is ignored rather than triggering a confusing version-guard fail.
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   release:
