@@ -16,7 +16,7 @@ module Components
                  "focus-visible:ring-2 focus-visible:ring-ring"
       INDENT_BASE = "flex items-center gap-1.5 pl-[var(--wabi-tv-pad)]"
 
-      def initialize(items:, label: nil, id: nil, selection_mode: "single",
+      def initialize(items:, label: nil, id: nil, selection_mode: :single,
                      with_checkboxes: false, default_expanded: [], default_selected: [], **attrs)
         @items            = items
         @label            = label

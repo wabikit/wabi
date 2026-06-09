@@ -21,8 +21,12 @@ RSpec.describe Components::UI::TreeView do
     expect(described_class.new(items: items).call).to include('data-controller="wabi--tree-view"')
   end
 
+  it "defaults selection_mode to single" do
+    expect(described_class.new(items: items).call).to include('data-wabi--tree-view-selection-mode-value="single"')
+  end
+
   it "serializes items as JSON and the selection/checkbox/default values" do
-    out = described_class.new(items: items, selection_mode: "multiple", with_checkboxes: true,
+    out = described_class.new(items: items, selection_mode: :multiple, with_checkboxes: true,
                               default_expanded: ["src"], default_selected: ["README"]).call
     expect(out).to include('data-wabi--tree-view-selection-mode-value="multiple"')
     expect(out).to include('data-wabi--tree-view-with-checkboxes-value="true"')

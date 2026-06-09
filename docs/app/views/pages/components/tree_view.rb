@@ -67,7 +67,7 @@ module Views
               h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
               ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
                 li { "Full keyboard navigation: arrow keys move focus and expand/collapse, typeahead jumps to a node by typing." }
-                li { "Nodes expose treeitem roles with aria-selected / aria-expanded; set selection_mode: \"multiple\" for multi-select." }
+                li { "Nodes expose treeitem roles with aria-selected / aria-expanded; set selection_mode: :multiple for multi-select." }
                 li { "Set with_checkboxes: true to add per-node tri-state checkboxes." }
               end
             end
