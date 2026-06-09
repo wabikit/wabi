@@ -4,7 +4,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.24.3 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 47 components, 8 theme palettes, WCAG-AA targeted, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
+🎉 **Status:** v0.25.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 49 components, 8 theme palettes, WCAG-AA audited, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
 
 ---
 
@@ -31,15 +31,15 @@ Then add `@import "./wabi/tokens.css";` AFTER `@import "tailwindcss";` in your `
 
 ## What's in the box
 
-### 47 components
+### 49 components
 
 | Group | Components |
 |---|---|
-| **Forms** (19) | Button, Input, NumberInput, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form, DatePicker, InputOTP, FileUpload, RatingGroup, TagsInput |
+| **Forms** (20) | Button, Input, NumberInput, Textarea, Label, Checkbox, Switch, Select, RadioGroup, Slider, Toggle, ToggleGroup, Combobox, Form, DatePicker, InputOTP, FileUpload, RatingGroup, TagsInput, ColorPicker |
 | **Layout & Display** (11) | Card, Badge, Separator, Alert, Avatar, Table, DataTable, Skeleton, Sidebar, Carousel, Splitter |
 | **Overlays** (7) | Dialog, AlertDialog, Drawer (4 sides), Tooltip, Popover, Command, HoverCard |
 | **Menus** (2) | DropdownMenu (nested submenus, checkbox + radio items), ContextMenu |
-| **Navigation** (6) | Accordion, Tabs, Breadcrumb, Pagination, Collapsible, NavigationMenu |
+| **Navigation** (7) | Accordion, Tabs, Breadcrumb, Pagination, Collapsible, NavigationMenu, TreeView |
 | **Feedback** (2) | Toast + Toaster, Progress |
 
 Compound components (Card, Alert, Avatar, Dialog, Drawer, Table, Form, Combobox, …) ship as composable sub-component sets. All interactive components wire through **Zag.js 1.x** state machines for WAI-ARIA roles, keyboard semantics, and focus management. Toast is the one exception: it uses a custom Stimulus coordinator for Sonner-style stacking, group pause-on-hover, and swipe-to-dismiss — `@zag-js/toast`'s imperative DOM-creation model conflicts with Wabi's SSR + Turbo Stream append.
@@ -183,6 +183,7 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 | v0.11 | Table component (shadcn parity); ClassMerge text-align fix | ✅ shipped 2026-06-01 |
 | v0.12 | Skeleton, Breadcrumb, Pagination, Progress, AlertDialog | ✅ shipped 2026-06-01 |
 | v0.13 | DataTable (server-driven: sortable headers + row selection) | ✅ shipped 2026-06-01 |
+| v0.14–0.25 | JS test suite + coverage floors; +29 components (Sidebar, Carousel, Splitter, NavigationMenu, RatingGroup, HoverCard, TagsInput, Collapsible, ColorPicker, TreeView, …); full WCAG-AA audit | ✅ shipped 2026-06-08 |
 | v1.0 | API stability; external a11y audit | 2027-04 target |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.

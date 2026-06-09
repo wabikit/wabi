@@ -2,6 +2,49 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.25.0 - 2026-06-08
+
+Component count 47 → **49**. Two new components, a project-wide WCAG-AA accessibility audit, and the first `CONTRIBUTING.md`.
+
+### Added
+- **Color Picker** (`color_picker`) — popover picker with a 2D saturation/value
+  area, hue + alpha channel sliders, a hex input, and preset swatches. Backed by
+  `@zag-js/color-picker`; portals to `<body>`; submit with `name:` for a hidden form field.
+- **Tree View** (`tree_view`) — data-driven, accessible tree (pass a nested `items:`
+  array): expand/collapse, single/multiple selection, keyboard nav + typeahead,
+  optional per-node checkboxes, folder/file icons. Backed by `@zag-js/tree-view`.
+- **`CONTRIBUTING.md`** — monorepo layout, per-component anatomy (Wabi::Base +
+  variants DSL + merge_class), the Zag.js wiring pattern, the docs↔registry
+  byte-identical rule, testing (RSpec + Vitest + headless-Chrome), and how to add a
+  component end to end.
+
+### Accessibility (WCAG-AA audit)
+A full audit of all 49 components fixed 100+ findings across roles/semantics,
+keyboard, focus, accessible names, states, live regions, motion, and contrast:
+- **Motion:** `motion-reduce:` guards on every transition/animation (and
+  `prefers-reduced-motion` guards in the toast/date-picker controllers).
+- **Decorative icons:** `aria-hidden` on decorative SVGs/indicators.
+- **Names:** accessible names for icon-only triggers and form controls (optional
+  `aria_label:`/`label:` params — no breaking changes); `aria-label` passthrough.
+- **Roles/states:** `alert_dialog` now `role="alertdialog"`; `aria-expanded`/
+  `aria-selected`/`aria-sort`/`aria-disabled`/`aria-invalid` wired where missing;
+  breadcrumb current-page and hover-card trigger semantics corrected; separator
+  emits a native `<hr>` when non-decorative.
+- **Focus:** visible `focus-visible` rings on previously-unindicated controls;
+  `switch`/`checkbox` rings moved to the element that actually receives focus.
+- **Live regions:** carousel slide announcer, toaster `<ol>` live region, form/
+  command/file-upload/tags-input status & error regions.
+- **Contrast:** `muted-foreground`, `destructive`, and weak focus rings darkened to
+  meet AA across all 8 themes (light + dark); subtle borders documented as
+  decorative-exempt (WCAG 1.4.11).
+
+### Fixed
+- **Color Picker:** the saturation/value spectrum now renders (the area background
+  no longer collapses to height 0 under Zag's inline `position`); the value text
+  shows the current color.
+- **Tree View:** leaf rows now indent by depth (indentation moved off the
+  Zag-managed row, whose `style` Zag overwrites, onto an inner wrapper).
+
 ## 0.24.3 - 2026-06-07
 
 ### Fixed
