@@ -1,0 +1,67 @@
+name: gem-release
+
+# Publishes the `wabi` gem to RubyGems.org via Trusted Publishing (OIDC) when a
+# version tag (vX.Y.Z) is pushed. No long-lived credentials are stored — a
+# short-lived token is minted from GitHub's OIDC provider at publish time.
+#
+# ONE-TIME SETUP (see RELEASING.md): register a Trusted Publisher for the `wabi`
+# gem on rubygems.org (owner: wabikit, repo: wabi, workflow: gem-release.yml,
+# environment: release) and create a GitHub environment named `release`.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    environment: release
+    permissions:
+      id-token: write   # required: mint the OIDC token for trusted publishing
+      contents: write   # required: create the GitHub Release for the tag
+    defaults:
+      run:
+        working-directory: gem
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0.5"
+          bundler-cache: true
+          working-directory: gem
+
+      - name: Verify the gem version matches the pushed tag
+        run: |
+          gem_version="$(ruby -Ilib -e 'require "wabi/version"; print Wabi::VERSION')"
+          tag_version="${GITHUB_REF_NAME#v}"
+          echo "Pushed tag: ${GITHUB_REF_NAME} (version ${tag_version}) — Wabi::VERSION: ${gem_version}"
+          if [ "${gem_version}" != "${tag_version}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match Wabi::VERSION (${gem_version}). Bump gem/lib/wabi/version.rb to ${tag_version} (or push the matching tag)."
+            exit 1
+          fi
+
+      - name: Run the gem test suite (release gate)
+        run: bundle exec rspec
+
+      - name: Configure RubyGems trusted-publishing credentials (OIDC)
+        uses: rubygems/configure-rubygems-credentials@v2.0.0
+
+      - name: Build and push the gem
+        run: |
+          gem build wabi.gemspec
+          gem push "wabi-${GITHUB_REF_NAME#v}.gem"
+
+      - name: Create the GitHub Release
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            --verify-tag
