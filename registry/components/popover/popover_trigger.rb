@@ -17,7 +17,7 @@ module Components
           type: "button",
           **@attrs,
           data: { "wabi--popover-target": "trigger" },
-          class: user_class
+          class: merge_class(user_class)
         ) do
           yield if block_given?
         end

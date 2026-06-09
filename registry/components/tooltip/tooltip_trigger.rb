@@ -16,7 +16,7 @@ module Components
         button(
           type: "button",
           data: { "wabi--tooltip-target": "trigger" },
-          class: user_class,
+          class: merge_class(user_class),
           **@attrs
         ) do
           yield if block_given?

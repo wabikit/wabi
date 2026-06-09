@@ -7,7 +7,7 @@ module Components
 
       def view_template(&)
         user_class = @attrs.delete(:class)
-        nav("aria-label": "breadcrumb", **@attrs, class: user_class, &)
+        nav("aria-label": "breadcrumb", **@attrs, class: merge_class(user_class), &)
       end
     end
   end

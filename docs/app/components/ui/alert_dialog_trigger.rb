@@ -14,7 +14,7 @@ module Components
         button(
           type: "button",
           data: { "wabi--alert-dialog-target": "trigger" },
-          class: user_class
+          class: merge_class(user_class)
         ) do
           yield if block_given?
         end
