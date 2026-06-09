@@ -88,6 +88,28 @@ if (!Element.prototype.__wabiScopePatched) {
   Element.prototype.__wabiScopePatched = true
 }
 
+// jsdom gives every element zero layout (offsetWidth/offsetHeight = 0 and
+// getClientRects() = []), so @zag-js/dom-query's visibility check
+// (`offsetWidth > 0 || offsetHeight > 0 || getClientRects().length > 0`) treats
+// EVERY node as hidden. For a modal dialog that means Zag's focus-trap finds zero
+// tabbable nodes and throws "Your focus-trap needs to have at least one focusable
+// element" — thrown asynchronously during the trap's teardown (which stacks across
+// tests because focus-trap defers deactivation), surfacing as an uncaught error
+// that fails the whole run. Report a non-zero client rect for connected elements
+// so the visibility check passes and the trap resolves a focus node. These tests
+// assert wiring, not geometry; getBoundingClientRect (used by floating-ui
+// positioning) is left untouched.
+if (!Element.prototype.__wabiRectsPatched) {
+  const realGetClientRects = Element.prototype.getClientRects
+  Element.prototype.getClientRects = function () {
+    if (this.isConnected) {
+      return [{ x: 0, y: 0, width: 1, height: 1, top: 0, left: 0, right: 1, bottom: 1 }]
+    }
+    return realGetClientRects ? realGetClientRects.call(this) : []
+  }
+  Element.prototype.__wabiRectsPatched = true
+}
+
 // Global teardown: stop any Stimulus Applications a test started, so controllers
 // never leak across test files.
 afterEach(() => stopAll())
