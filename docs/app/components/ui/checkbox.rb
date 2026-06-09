@@ -33,12 +33,13 @@ module Components
             "wabi--checkbox-name-value": @name,
             "wabi--checkbox-value-value": @value,
           },
-          # focus-within:ring-* provides the visible focus ring when the sr-only
-          # <input> (the true focus receiver) is keyboard-focused (WCAG 2.4.11).
+          # has-[:focus-visible] shows the ring only when the sr-only <input> (the true
+          # focus receiver) is KEYBOARD-focused (WCAG 2.4.11) — not on mouse click, where
+          # focus-within would otherwise draw the ring around the whole label.
           # w-fit keeps the clickable label sized to its content (box + text) — without
           # it, as a flex/grid item the <label> stretches full-width and the empty
           # space beside the text becomes a click target that toggles the checkbox.
-          class: "inline-flex w-fit items-center rounded-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+          class: "inline-flex w-fit items-center rounded-sm has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2"
         ) do
           # Native <input type=checkbox> is visually hidden but receives focus,
           # keyboard events, and is the source of truth for form submission.

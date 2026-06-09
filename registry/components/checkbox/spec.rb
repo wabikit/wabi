@@ -51,12 +51,14 @@ RSpec.describe Components::UI::Checkbox do
     expect(output).to include("Subscribe")
   end
 
-  # WCAG 2.4.11 focus-appearance regression (focus ring fix)
-  it "label wrapper carries focus-within ring classes so keyboard focus is visible" do
+  # WCAG 2.4.11 focus-appearance: the ring shows on KEYBOARD focus only (has-[:focus-visible]),
+  # not on mouse click — focus-within would draw it around the label on every click.
+  it "label wrapper shows the focus ring only on keyboard focus (has-[:focus-visible])" do
     output = described_class.new.call
-    expect(output).to include("focus-within:ring-2")
-    expect(output).to include("focus-within:ring-ring")
-    expect(output).to include("focus-within:ring-offset-2")
+    expect(output).to include("has-[:focus-visible]:ring-2")
+    expect(output).to include("has-[:focus-visible]:ring-ring")
+    expect(output).to include("has-[:focus-visible]:ring-offset-2")
+    expect(output).not_to include("focus-within:ring")
   end
 
   # The clickable label must stay sized to its content; without w-fit it stretches
