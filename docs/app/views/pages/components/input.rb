@@ -30,6 +30,17 @@ module Views
                 render ::Components::UI::Input.new(name: "email", placeholder: "you@example.com", type: "email")
               end
 
+              h2(id: "invalid", class: "text-2xl font-semibold mt-8 mb-4") { "Invalid state" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                "Pass invalid: true to render aria-invalid=\"true\", which assistive tech announces " \
+                "and styles can target via aria-[invalid]:."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Input.new(name: "email", value: "not-an-email", type: "email", invalid: true, aria_label: "Email")
+              RUBY
+                render ::Components::UI::Input.new(name: "email", value: "not-an-email", type: "email", invalid: true, aria_label: "Email")
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

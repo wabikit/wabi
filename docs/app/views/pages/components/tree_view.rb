@@ -58,6 +58,40 @@ module Views
                 render ::Components::UI::TreeView.new(label: "Files", default_expanded: ["src"], items: TREE)
               end
 
+              h2(id: "multi-select", class: "text-2xl font-semibold mt-8 mb-4") { "Multi-select with checkboxes" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "selection_mode: :multiple" }
+                plain " to allow selecting several nodes, and "
+                code(class: "font-mono text-foreground") { "with_checkboxes: true" }
+                plain " to render per-node tri-state checkboxes."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::TreeView.new(
+                  label: "Files",
+                  selection_mode: :multiple,
+                  with_checkboxes: true,
+                  default_expanded: ["src"],
+                  items: [
+                    { value: "src", label: "src", icon: "folder", children: [
+                      { value: "app.rb", label: "app.rb", icon: "file" },
+                      { value: "lib", label: "lib", icon: "folder", children: [
+                        { value: "util.rb", label: "util.rb", icon: "file" }
+                      ] }
+                    ] },
+                    { value: "README", label: "README.md", icon: "file" }
+                  ]
+                )
+              RUBY
+                render ::Components::UI::TreeView.new(
+                  label: "Files",
+                  selection_mode: :multiple,
+                  with_checkboxes: true,
+                  default_expanded: ["src"],
+                  items: TREE
+                )
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }

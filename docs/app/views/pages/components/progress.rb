@@ -32,6 +32,27 @@ module Views
                 render ::Components::UI::Progress.new(value: 60, class: "max-w-md")
               end
 
+              h2(id: "labeled", class: "text-2xl font-semibold mt-8 mb-4") { "Labeled progress" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                "Pass a contextual aria_label: so screen readers announce what is progressing. " \
+                "max: defaults to 100 but can be set to any scale."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Progress.new(
+                  value: 70,
+                  max: 100,
+                  aria_label: "File upload progress",
+                  class: "max-w-md"
+                )
+              RUBY
+                render ::Components::UI::Progress.new(
+                  value: 70,
+                  max: 100,
+                  aria_label: "File upload progress",
+                  class: "max-w-md"
+                )
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

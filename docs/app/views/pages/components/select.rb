@@ -78,6 +78,95 @@ module Views
                 end
               end
 
+              h2(id: "disabled", class: "text-2xl font-semibold mt-8 mb-4") { "Disabled" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "disabled: true" }
+                plain " to disable the whole control, or mark a single entry in "
+                code(class: "font-mono text-foreground") { "items:" }
+                plain " with "
+                code(class: "font-mono text-foreground") { "disabled: true" }
+                plain " to skip just that option."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                PLANS = [
+                  { value: "free",  label: "Free"  },
+                  { value: "pro",   label: "Pro"   },
+                  { value: "team",  label: "Team", disabled: true },
+                ]
+
+                # A single disabled option
+                render Components::UI::Select.new(
+                  name: "plan",
+                  placeholder: "Choose a plan",
+                  items: PLANS
+                ) do
+                  render Components::UI::SelectTrigger.new do
+                    render Components::UI::SelectValue.new
+                  end
+                  render Components::UI::SelectContent.new do
+                    PLANS.each do |plan|
+                      render Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                    end
+                  end
+                end
+
+                # The whole control disabled
+                render Components::UI::Select.new(
+                  name: "plan_locked",
+                  placeholder: "Unavailable",
+                  items: PLANS,
+                  disabled: true
+                ) do
+                  render Components::UI::SelectTrigger.new do
+                    render Components::UI::SelectValue.new
+                  end
+                  render Components::UI::SelectContent.new do
+                    PLANS.each do |plan|
+                      render Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                    end
+                  end
+                end
+              RUBY
+                plans = [
+                  { value: "free",  label: "Free"  },
+                  { value: "pro",   label: "Pro"   },
+                  { value: "team",  label: "Team", disabled: true },
+                ]
+                render ::Components::UI::Select.new(
+                  name: "plan",
+                  placeholder: "Choose a plan",
+                  items: plans
+                ) do
+                  render ::Components::UI::SelectTrigger.new do
+                    render ::Components::UI::SelectValue.new
+                  end
+                  render ::Components::UI::SelectContent.new do
+                    plans.each do |plan|
+                      render ::Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                    end
+                  end
+                end
+
+                div(class: "h-4")
+
+                render ::Components::UI::Select.new(
+                  name: "plan_locked",
+                  placeholder: "Unavailable",
+                  items: plans,
+                  disabled: true
+                ) do
+                  render ::Components::UI::SelectTrigger.new do
+                    render ::Components::UI::SelectValue.new
+                  end
+                  render ::Components::UI::SelectContent.new do
+                    plans.each do |plan|
+                      render ::Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                    end
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

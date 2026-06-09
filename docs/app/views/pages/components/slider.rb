@@ -9,6 +9,7 @@ module Views
         SOURCE_PATHS = %w[
           app/components/ui/slider.rb
           app/components/ui/slider_label.rb
+          app/components/ui/slider_control.rb
           app/components/ui/slider_track.rb
           app/components/ui/slider_range.rb
           app/components/ui/slider_thumb.rb

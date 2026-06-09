@@ -8,8 +8,11 @@ module Views
       class NavigationMenu < Views::Base
         SOURCE_PATHS = %w[
           app/components/ui/navigation_menu.rb
+          app/components/ui/navigation_menu_list.rb
+          app/components/ui/navigation_menu_item.rb
           app/components/ui/navigation_menu_trigger.rb
           app/components/ui/navigation_menu_content.rb
+          app/components/ui/navigation_menu_link.rb
         ].freeze
 
         def view_template

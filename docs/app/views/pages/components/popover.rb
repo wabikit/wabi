@@ -35,9 +35,13 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Popover.new do
-                  render Components::UI::PopoverTrigger.new(class: "...") { "More info" }
+                  render Components::UI::PopoverTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \\
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \\
+                           "h-10 px-4 py-2"
+                  ) { "More info" }
                   render Components::UI::PopoverContent.new do
-                    p(class: "text-sm") { "This is a floating panel anchored to the trigger." }
+                    p(class: "text-sm mb-3") { "This is a floating panel anchored to the trigger." }
                     render Components::UI::PopoverClose.new { "Close" }
                   end
                 end

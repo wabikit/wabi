@@ -12,12 +12,12 @@ module Views
         ].freeze
 
         def view_template
-          render ::Components::Site::Layout.new(title: "ToggleGroup", chrome: :full) do
+          render ::Components::Site::Layout.new(title: "Toggle Group", chrome: :full) do
             main(class: "container mx-auto py-12 px-4 max-w-3xl") do
               p(class: "text-sm text-muted-foreground mb-2") do
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
-              h1(class: "text-4xl font-bold mb-2") { "ToggleGroup" }
+              h1(class: "text-4xl font-bold mb-2") { "Toggle Group" }
               p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }

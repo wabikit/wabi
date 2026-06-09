@@ -8,8 +8,17 @@ module Views
       class ColorPicker < Views::Base
         SOURCE_PATHS = %w[
           app/components/ui/color_picker.rb
+          app/components/ui/color_picker_label.rb
+          app/components/ui/color_picker_control.rb
+          app/components/ui/color_picker_trigger.rb
+          app/components/ui/color_picker_value_swatch.rb
+          app/components/ui/color_picker_value_text.rb
           app/components/ui/color_picker_content.rb
+          app/components/ui/color_picker_area.rb
           app/components/ui/color_picker_channel_slider.rb
+          app/components/ui/color_picker_channel_input.rb
+          app/components/ui/color_picker_swatch_group.rb
+          app/components/ui/color_picker_swatch.rb
         ].freeze
 
         PRESETS = %w[#ef4444 #f59e0b #10b981 #3b82f6 #8b5cf6].freeze

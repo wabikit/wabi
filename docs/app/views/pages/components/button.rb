@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -13,9 +15,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Button" }
-              p(class: "text-muted-foreground mb-8") do
-                "A clickable button with appearance and size variants."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -42,6 +42,21 @@ module Views
                 end
               end
 
+              h2(id: "sizes", class: "text-2xl font-semibold mt-8 mb-4") { "Sizes" }
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Button.new(size: :sm) { "Small" }
+                render Components::UI::Button.new(size: :md) { "Medium" }
+                render Components::UI::Button.new(size: :lg) { "Large" }
+                render Components::UI::Button.new(size: :icon, aria_label: "Add item") { "+" }
+              RUBY
+                div(class: "flex flex-wrap items-center gap-2") do
+                  render ::Components::UI::Button.new(size: :sm) { "Small" }
+                  render ::Components::UI::Button.new(size: :md) { "Medium" }
+                  render ::Components::UI::Button.new(size: :lg) { "Large" }
+                  render ::Components::UI::Button.new(size: :icon, aria_label: "Add item") { "+" }
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               render ::Components::Site::CodeBlock.new(source: File.read(SOURCE_PATH))
 
@@ -50,9 +65,18 @@ module Views
                 li { "Native <button> element — keyboard accessible by default." }
                 li { "focus-visible:ring-2 ring keeps focus state visible without polluting click affordance." }
                 li { "Disabled state honored via disabled:pointer-events-none + opacity-50." }
+                li { "size: :icon buttons are icon-only — pass aria_label: so screen readers announce their purpose." }
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "button", "manifest.yml").realpath
+          )["description"]
         end
       end
     end

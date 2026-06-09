@@ -29,9 +29,17 @@ module Views
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                render Components::UI::Checkbox.new(name: "terms")
+                div(class: "flex flex-col gap-3") do
+                  render Components::UI::Checkbox.new(name: "terms", label: "Accept terms and conditions")
+                  render Components::UI::Checkbox.new(name: "newsletter", checked: true, label: "Subscribe to newsletter")
+                  render Components::UI::Checkbox.new(name: "disabled", disabled: true, label: "Unavailable option")
+                end
               RUBY
-                render ::Components::UI::Checkbox.new(name: "terms")
+                div(class: "flex flex-col gap-3") do
+                  render ::Components::UI::Checkbox.new(name: "terms", label: "Accept terms and conditions")
+                  render ::Components::UI::Checkbox.new(name: "newsletter", checked: true, label: "Subscribe to newsletter")
+                  render ::Components::UI::Checkbox.new(name: "disabled", disabled: true, label: "Unavailable option")
+                end
               end
 
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }

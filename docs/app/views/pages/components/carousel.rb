@@ -8,8 +8,13 @@ module Views
       class Carousel < Views::Base
         SOURCE_PATHS = %w[
           app/components/ui/carousel.rb
+          app/components/ui/carousel_item_group.rb
           app/components/ui/carousel_item.rb
           app/components/ui/carousel_control.rb
+          app/components/ui/carousel_prev_trigger.rb
+          app/components/ui/carousel_next_trigger.rb
+          app/components/ui/carousel_indicator_group.rb
+          app/components/ui/carousel_indicator.rb
         ].freeze
 
         def view_template
@@ -42,6 +47,39 @@ module Views
                 end
               RUBY
                 render ::Components::UI::Carousel.new(slide_count: 3, loop: true) do
+                  render ::Components::UI::CarouselItemGroup.new do
+                    3.times do |i|
+                      render ::Components::UI::CarouselItem.new(index: i, class: "grid h-40 place-items-center rounded-md bg-muted text-2xl font-semibold") { "Slide #{i + 1}" }
+                    end
+                  end
+                  render ::Components::UI::CarouselControl.new do
+                    render ::Components::UI::CarouselPrevTrigger.new
+                    render ::Components::UI::CarouselIndicatorGroup.new do
+                      3.times { |i| render ::Components::UI::CarouselIndicator.new(index: i) }
+                    end
+                    render ::Components::UI::CarouselNextTrigger.new
+                  end
+                end
+              end
+
+              h2(id: "autoplay", class: "text-2xl font-semibold mt-8 mb-4") { "Autoplay" }
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Carousel.new(slide_count: 3, loop: true, autoplay: true) do
+                  render Components::UI::CarouselItemGroup.new do
+                    3.times do |i|
+                      render Components::UI::CarouselItem.new(index: i, class: "grid h-40 place-items-center rounded-md bg-muted text-2xl font-semibold") { "Slide \#{i + 1}" }
+                    end
+                  end
+                  render Components::UI::CarouselControl.new do
+                    render Components::UI::CarouselPrevTrigger.new
+                    render Components::UI::CarouselIndicatorGroup.new do
+                      3.times { |i| render Components::UI::CarouselIndicator.new(index: i) }
+                    end
+                    render Components::UI::CarouselNextTrigger.new
+                  end
+                end
+              RUBY
+                render ::Components::UI::Carousel.new(slide_count: 3, loop: true, autoplay: true) do
                   render ::Components::UI::CarouselItemGroup.new do
                     3.times do |i|
                       render ::Components::UI::CarouselItem.new(index: i, class: "grid h-40 place-items-center rounded-md bg-muted text-2xl font-semibold") { "Slide #{i + 1}" }

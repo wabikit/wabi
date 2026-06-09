@@ -16,6 +16,8 @@ module Views
           app/components/ui/combobox_content.rb
           app/components/ui/combobox_item.rb
           app/components/ui/combobox_item_indicator.rb
+          app/components/ui/combobox_loading.rb
+          app/components/ui/combobox_error.rb
         ].freeze
 
         FRAMEWORKS = [

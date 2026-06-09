@@ -43,6 +43,27 @@ module Views
                 end
               end
 
+              h2(id: "custom-delays", class: "text-2xl font-semibold mt-8 mb-4") { "Custom delays" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                "Tune open_delay: and close_delay: (milliseconds) to make the card appear " \
+                "or dismiss faster. Defaults are 700 / 300."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::HoverCard.new(open_delay: 100, close_delay: 100) do
+                  render Components::UI::HoverCardTrigger.new { "@wabi (snappy)" }
+                  render Components::UI::HoverCardContent.new do
+                    plain "Opens and closes almost instantly."
+                  end
+                end
+              RUBY
+                render ::Components::UI::HoverCard.new(open_delay: 100, close_delay: 100) do
+                  render ::Components::UI::HoverCardTrigger.new { "@wabi (snappy)" }
+                  render ::Components::UI::HoverCardContent.new do
+                    plain "Opens and closes almost instantly."
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

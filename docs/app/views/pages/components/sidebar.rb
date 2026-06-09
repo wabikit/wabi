@@ -9,8 +9,25 @@ module Views
         SOURCE_PATHS = %w[
           app/components/ui/sidebar_provider.rb
           app/components/ui/sidebar.rb
-          app/components/ui/sidebar_menu_button.rb
+          app/components/ui/sidebar_header.rb
+          app/components/ui/sidebar_content.rb
+          app/components/ui/sidebar_footer.rb
+          app/components/ui/sidebar_group.rb
+          app/components/ui/sidebar_group_label.rb
+          app/components/ui/sidebar_input.rb
+          app/components/ui/sidebar_inset.rb
+          app/components/ui/sidebar_rail.rb
           app/components/ui/sidebar_trigger.rb
+          app/components/ui/sidebar_menu.rb
+          app/components/ui/sidebar_menu_item.rb
+          app/components/ui/sidebar_menu_button.rb
+          app/components/ui/sidebar_menu_action.rb
+          app/components/ui/sidebar_menu_badge.rb
+          app/components/ui/sidebar_menu_skeleton.rb
+          app/components/ui/sidebar_menu_collapsible.rb
+          app/components/ui/sidebar_menu_sub.rb
+          app/components/ui/sidebar_menu_sub_item.rb
+          app/components/ui/sidebar_menu_sub_button.rb
           app/javascript/controllers/wabi/sidebar_controller.js
         ].freeze
 

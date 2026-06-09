@@ -43,7 +43,10 @@ module Views
               h3(id: "example-right", class: "text-lg font-semibold mt-6 mb-3") { "Right (default)" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Drawer.new(side: :right) do
-                  render Components::UI::DrawerTrigger.new(class: "...") { "Open (right)" }
+                  render Components::UI::DrawerTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                  ) { "Open (right)" }
                   render Components::UI::DrawerContent.new(side: :right) do
                     render Components::UI::DrawerHeader.new do
                       render Components::UI::DrawerTitle.new       { "Settings" }
@@ -78,7 +81,11 @@ module Views
               h3(id: "example-left", class: "text-lg font-semibold mt-6 mb-3") { "Left" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Drawer.new(side: :left) do
-                  render Components::UI::DrawerTrigger.new(class: "...") { "Open (left)" }
+                  render Components::UI::DrawerTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Open (left)" }
                   render Components::UI::DrawerContent.new(side: :left) do
                     render Components::UI::DrawerHeader.new do
                       render Components::UI::DrawerTitle.new       { "Navigation" }
@@ -114,7 +121,11 @@ module Views
               h3(id: "example-top", class: "text-lg font-semibold mt-6 mb-3") { "Top" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Drawer.new(side: :top) do
-                  render Components::UI::DrawerTrigger.new(class: "...") { "Open (top)" }
+                  render Components::UI::DrawerTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Open (top)" }
                   render Components::UI::DrawerContent.new(side: :top) do
                     render Components::UI::DrawerHeader.new do
                       render Components::UI::DrawerTitle.new       { "Notifications" }
@@ -150,7 +161,11 @@ module Views
               h3(id: "example-bottom", class: "text-lg font-semibold mt-6 mb-3") { "Bottom" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Drawer.new(side: :bottom) do
-                  render Components::UI::DrawerTrigger.new(class: "...") { "Open (bottom)" }
+                  render Components::UI::DrawerTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Open (bottom)" }
                   render Components::UI::DrawerContent.new(side: :bottom) do
                     render Components::UI::DrawerHeader.new do
                       render Components::UI::DrawerTitle.new       { "Share" }

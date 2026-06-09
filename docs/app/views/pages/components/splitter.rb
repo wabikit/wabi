@@ -44,6 +44,30 @@ module Views
                 end
               end
 
+              h2(id: "vertical", class: "text-2xl font-semibold mt-8 mb-4") { "Vertical orientation" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "orientation: :vertical" }
+                plain " to stack panels top-to-bottom; the resize trigger then drags up/down."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                div(class: "h-64 overflow-hidden rounded-md border border-input") do
+                  render Components::UI::Splitter.new(orientation: :vertical, panels: [{ id: "top", minSize: 20 }, { id: "bottom", minSize: 20 }]) do
+                    render Components::UI::SplitterPanel.new(id: "top", class: "grid place-items-center text-sm") { "Top" }
+                    render Components::UI::SplitterResizeTrigger.new(id: "top:bottom", aria_label: "Resize panels")
+                    render Components::UI::SplitterPanel.new(id: "bottom", class: "grid place-items-center text-sm") { "Bottom" }
+                  end
+                end
+              RUBY
+                div(class: "h-64 overflow-hidden rounded-md border border-input") do
+                  render ::Components::UI::Splitter.new(orientation: :vertical, panels: [{ id: "top", minSize: 20 }, { id: "bottom", minSize: 20 }]) do
+                    render ::Components::UI::SplitterPanel.new(id: "top", class: "grid place-items-center text-sm") { "Top" }
+                    render ::Components::UI::SplitterResizeTrigger.new(id: "top:bottom", aria_label: "Resize panels")
+                    render ::Components::UI::SplitterPanel.new(id: "bottom", class: "grid place-items-center text-sm") { "Bottom" }
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }

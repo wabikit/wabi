@@ -34,7 +34,11 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Tooltip.new do
-                  render Components::UI::TooltipTrigger.new(class: "...") { "Hover me" }
+                  render Components::UI::TooltipTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Hover me" }
                   render Components::UI::TooltipContent.new { "Helpful hint displayed on hover or focus." }
                 end
               RUBY
@@ -45,6 +49,34 @@ module Views
                            "h-10 px-4 py-2"
                   ) { "Hover me" }
                   render ::Components::UI::TooltipContent.new { "Helpful hint displayed on hover or focus." }
+                end
+              end
+
+              h2(id: "delays", class: "text-2xl font-semibold mt-8 mb-4") { "Custom delays" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Tune "
+                code(class: "font-mono text-foreground") { "open_delay:" }
+                plain " and "
+                code(class: "font-mono text-foreground") { "close_delay:" }
+                plain " (milliseconds; defaults 700 / 300) to make the tooltip appear and dismiss faster."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Tooltip.new(open_delay: 150, close_delay: 0) do
+                  render Components::UI::TooltipTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Hover me" }
+                  render Components::UI::TooltipContent.new { "Appears quickly, dismisses instantly." }
+                end
+              RUBY
+                render ::Components::UI::Tooltip.new(open_delay: 150, close_delay: 0) do
+                  render ::Components::UI::TooltipTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Hover me" }
+                  render ::Components::UI::TooltipContent.new { "Appears quickly, dismisses instantly." }
                 end
               end
 

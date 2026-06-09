@@ -46,6 +46,13 @@ module Views
                    class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
                 render ::Components::Site::CodeBlock.new(source: File.read(Rails.root.join(relpath)))
               end
+
+              h2(id: "accessibility", class: "text-2xl font-semibold mt-8 mb-4") { "Accessibility" }
+              ul(class: "list-disc pl-5 space-y-1 text-sm text-muted-foreground") do
+                li { "It's a decorative placeholder: the root sets aria-busy=\"true\" and a default aria-label=\"Loading…\" (override via aria_label:) so assistive tech knows the region is loading rather than empty." }
+                li { "Mark the surrounding region that swaps in the real content with role=\"status\" or aria-live=\"polite\" so screen readers announce when loading completes." }
+                li { "The animate-pulse animation is paired with motion-reduce:animate-none, so it stops for users who prefer reduced motion." }
+              end
             end
           end
         end

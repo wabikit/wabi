@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -23,10 +25,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Dialog" }
-              p(class: "text-muted-foreground mb-8") do
-                "Modal dialog with backdrop, focus trap, scroll lock, click-outside and Escape dismiss. " \
-                "Built on @zag-js/dialog."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -41,15 +40,18 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::Dialog.new do
-                  render Components::UI::DialogTrigger.new(class: "...") { "Open dialog" }
+                  render Components::UI::DialogTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                  ) { "Open dialog" }
                   render Components::UI::DialogContent.new do
                     render Components::UI::DialogHeader.new do
                       render Components::UI::DialogTitle.new       { "Delete account" }
-                      render Components::UI::DialogDescription.new { "This cannot be undone." }
+                      render Components::UI::DialogDescription.new { "This action cannot be undone." }
                     end
                     render Components::UI::DialogFooter.new do
                       render Components::UI::DialogCancel.new { "Cancel" }
-                      render Components::UI::DialogAction.new(appearance: :destructive) { "Delete" }
+                      render Components::UI::DialogAction.new(appearance: :destructive, data: { action: "click->wabi--dialog#close" }) { "Delete" }
                     end
                   end
                 end
@@ -89,6 +91,14 @@ module Views
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "dialog", "manifest.yml").realpath
+          )["description"]
         end
       end
     end

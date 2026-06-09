@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -16,11 +18,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Input OTP" }
-              p(class: "text-muted-foreground mb-8") do
-                "An accessible one-time-password input that wires individual character slots " \
-                "into a single hidden field, powered by @zag-js/pin-input. " \
-                "Supports numeric and alphanumeric modes, masking, and configurable length."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -66,6 +64,14 @@ module Views
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "input_otp", "manifest.yml").realpath
+          )["description"]
         end
       end
     end

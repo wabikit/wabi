@@ -10,6 +10,8 @@ module Views
           app/components/ui/tags_input.rb
           app/components/ui/tags_input_control.rb
           app/components/ui/tags_input_input.rb
+          app/components/ui/tags_input_error.rb
+          app/components/ui/tags_input_label.rb
         ].freeze
 
         def view_template
@@ -31,6 +33,27 @@ module Views
                 render Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], placeholder: "Add a tag…")
               RUBY
                 render ::Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], placeholder: "Add a tag…")
+              end
+
+              h2(id: "max-tags", class: "text-2xl font-semibold mt-8 mb-4") { "Limiting tags" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Cap the number of tags with "
+                code(class: "font-mono text-foreground") { "max:" }
+                plain ". Pass "
+                code(class: "font-mono text-foreground") { "editable: false" }
+                plain " to prevent editing existing tags in place."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::TagsInput.new(name: "topics", value: %w[ruby rails], max: 3, editable: false, placeholder: "Up to 3 topics…")
+              RUBY
+                render ::Components::UI::TagsInput.new(name: "topics", value: %w[ruby rails], max: 3, editable: false, placeholder: "Up to 3 topics…")
+              end
+
+              h2(id: "disabled", class: "text-2xl font-semibold mt-8 mb-4") { "Disabled" }
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], disabled: true)
+              RUBY
+                render ::Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], disabled: true)
               end
 
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }

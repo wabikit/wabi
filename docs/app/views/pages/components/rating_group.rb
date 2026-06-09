@@ -8,6 +8,7 @@ module Views
       class RatingGroup < Views::Base
         SOURCE_PATHS = %w[
           app/components/ui/rating_group.rb
+          app/components/ui/rating_group_label.rb
           app/components/ui/rating_group_control.rb
           app/components/ui/rating_group_item.rb
         ].freeze

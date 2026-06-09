@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -18,10 +20,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Tabs" }
-              p(class: "text-muted-foreground mb-8") do
-                "Tab list with keyboard arrow navigation. Supports automatic (default) and " \
-                "manual activation modes via @zag-js/tabs."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -146,6 +145,14 @@ module Views
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "tabs", "manifest.yml").realpath
+          )["description"]
         end
       end
     end

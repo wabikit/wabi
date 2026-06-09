@@ -34,6 +34,50 @@ module Views
                 render ::Components::UI::Toggle.new { "Bold" }
               end
 
+              h2(id: "appearance", class: "text-2xl font-semibold mt-8 mb-4") { "Appearance" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "appearance: :outline" }
+                plain " for a bordered variant. The default is borderless."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                div(class: "flex items-center gap-2") do
+                  render Components::UI::Toggle.new(appearance: :default) { "Default" }
+                  render Components::UI::Toggle.new(appearance: :outline) { "Outline" }
+                end
+              RUBY
+                div(class: "flex items-center gap-2") do
+                  render ::Components::UI::Toggle.new(appearance: :default) { "Default" }
+                  render ::Components::UI::Toggle.new(appearance: :outline) { "Outline" }
+                end
+              end
+
+              h2(id: "sizes", class: "text-2xl font-semibold mt-8 mb-4") { "Sizes" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Use "
+                code(class: "font-mono text-foreground") { "size:" }
+                plain " to pick "
+                code(class: "font-mono text-foreground") { ":sm" }
+                plain ", "
+                code(class: "font-mono text-foreground") { ":default" }
+                plain ", or "
+                code(class: "font-mono text-foreground") { ":lg" }
+                plain "."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                div(class: "flex items-center gap-2") do
+                  render Components::UI::Toggle.new(appearance: :outline, size: :sm)      { "Small" }
+                  render Components::UI::Toggle.new(appearance: :outline, size: :default) { "Default" }
+                  render Components::UI::Toggle.new(appearance: :outline, size: :lg)      { "Large" }
+                end
+              RUBY
+                div(class: "flex items-center gap-2") do
+                  render ::Components::UI::Toggle.new(appearance: :outline, size: :sm)      { "Small" }
+                  render ::Components::UI::Toggle.new(appearance: :outline, size: :default) { "Default" }
+                  render ::Components::UI::Toggle.new(appearance: :outline, size: :lg)      { "Large" }
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -18,10 +20,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Date Picker" }
-              p(class: "text-muted-foreground mb-8") do
-                "A localized date field (input + popover calendar) and a standalone inline calendar, " \
-                "powered by @zag-js/date-picker. Single and range selection; submits ISO dates via hidden inputs."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -75,6 +74,14 @@ module Views
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "date_picker", "manifest.yml").realpath
+          )["description"]
         end
       end
     end

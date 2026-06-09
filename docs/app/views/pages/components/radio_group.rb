@@ -34,15 +34,15 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::RadioGroup.new(name: "plan", value: "pro") do
-                  render Components::UI::RadioGroupItem.new(value: "free")       { "Free" }
-                  render Components::UI::RadioGroupItem.new(value: "pro")        { "Pro" }
-                  render Components::UI::RadioGroupItem.new(value: "enterprise") { "Enterprise" }
+                  render Components::UI::RadioGroupItem.new(value: "free")                       { "Free" }
+                  render Components::UI::RadioGroupItem.new(value: "pro")                        { "Pro" }
+                  render Components::UI::RadioGroupItem.new(value: "enterprise", disabled: true) { "Enterprise" }
                 end
               RUBY
                 render ::Components::UI::RadioGroup.new(name: "plan", value: "pro") do
-                  render ::Components::UI::RadioGroupItem.new(value: "free")       { "Free" }
-                  render ::Components::UI::RadioGroupItem.new(value: "pro")        { "Pro" }
-                  render ::Components::UI::RadioGroupItem.new(value: "enterprise") { "Enterprise" }
+                  render ::Components::UI::RadioGroupItem.new(value: "free")                       { "Free" }
+                  render ::Components::UI::RadioGroupItem.new(value: "pro")                        { "Pro" }
+                  render ::Components::UI::RadioGroupItem.new(value: "enterprise", disabled: true) { "Enterprise" }
                 end
               end
 

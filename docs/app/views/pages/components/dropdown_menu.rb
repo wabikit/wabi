@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -9,6 +11,12 @@ module Views
           app/components/ui/dropdown_menu_trigger.rb
           app/components/ui/dropdown_menu_content.rb
           app/components/ui/dropdown_menu_item.rb
+          app/components/ui/dropdown_menu_label.rb
+          app/components/ui/dropdown_menu_separator.rb
+          app/components/ui/dropdown_menu_shortcut.rb
+          app/components/ui/dropdown_menu_checkbox_item.rb
+          app/components/ui/dropdown_menu_radio_group.rb
+          app/components/ui/dropdown_menu_radio_item.rb
           app/components/ui/dropdown_menu_sub.rb
           app/components/ui/dropdown_menu_sub_trigger.rb
           app/components/ui/dropdown_menu_sub_content.rb
@@ -21,10 +29,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "DropdownMenu" }
-              p(class: "text-muted-foreground mb-8") do
-                "Floating menu with keyboard navigation, type-ahead, click/Escape dismiss, " \
-                "multi-level submenus, and option (checkbox/radio) items."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -39,7 +44,11 @@ module Views
               h2(id: "composition-with-submenu", class: "text-2xl font-semibold mt-8 mb-4") { "Composition with submenu" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::DropdownMenu.new do
-                  render Components::UI::DropdownMenuTrigger.new(class: "...") { "Actions ▾" }
+                  render Components::UI::DropdownMenuTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Actions ▾" }
                   render Components::UI::DropdownMenuContent.new do
                     render Components::UI::DropdownMenuItem.new(value: "edit") { "Edit" }
                     render Components::UI::DropdownMenuSeparator.new
@@ -80,7 +89,11 @@ module Views
               end
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 render Components::UI::DropdownMenu.new do
-                  render Components::UI::DropdownMenuTrigger.new(class: "...") { "Actions ▾" }
+                  render Components::UI::DropdownMenuTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "Actions ▾" }
                   render Components::UI::DropdownMenuContent.new do
                     render Components::UI::DropdownMenuItem.new(value: "edit") { "Edit" }
                     render Components::UI::DropdownMenuSub.new do
@@ -124,6 +137,54 @@ module Views
                 end
               end
 
+              h2(id: "checkbox-and-radio-items", class: "text-2xl font-semibold mt-8 mb-4") { "Checkbox and radio items" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                "Use DropdownMenuCheckboxItem for independent toggles and DropdownMenuRadioGroup " \
+                "+ DropdownMenuRadioItem for a mutually-exclusive set. Give the radio group an " \
+                "aria_label: so screen readers announce what the options control."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::DropdownMenu.new do
+                  render Components::UI::DropdownMenuTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "View ▾" }
+                  render Components::UI::DropdownMenuContent.new do
+                    render Components::UI::DropdownMenuLabel.new { "Appearance" }
+                    render Components::UI::DropdownMenuCheckboxItem.new(value: "sidebar", checked: true) { "Show sidebar" }
+                    render Components::UI::DropdownMenuCheckboxItem.new(value: "statusbar") { "Show status bar" }
+                    render Components::UI::DropdownMenuSeparator.new
+                    render Components::UI::DropdownMenuLabel.new { "Theme" }
+                    render Components::UI::DropdownMenuRadioGroup.new(name: "theme", value: "light", aria_label: "Theme") do
+                      render Components::UI::DropdownMenuRadioItem.new(value: "light", name: "theme", checked: true) { "Light" }
+                      render Components::UI::DropdownMenuRadioItem.new(value: "dark", name: "theme") { "Dark" }
+                      render Components::UI::DropdownMenuRadioItem.new(value: "system", name: "theme") { "System" }
+                    end
+                  end
+                end
+              RUBY
+                render ::Components::UI::DropdownMenu.new do
+                  render ::Components::UI::DropdownMenuTrigger.new(
+                    class: "inline-flex items-center justify-center rounded-md text-sm font-medium " \
+                           "border border-input bg-background hover:bg-accent hover:text-accent-foreground " \
+                           "h-10 px-4 py-2"
+                  ) { "View ▾" }
+                  render ::Components::UI::DropdownMenuContent.new do
+                    render ::Components::UI::DropdownMenuLabel.new { "Appearance" }
+                    render ::Components::UI::DropdownMenuCheckboxItem.new(value: "sidebar", checked: true) { "Show sidebar" }
+                    render ::Components::UI::DropdownMenuCheckboxItem.new(value: "statusbar") { "Show status bar" }
+                    render ::Components::UI::DropdownMenuSeparator.new
+                    render ::Components::UI::DropdownMenuLabel.new { "Theme" }
+                    render ::Components::UI::DropdownMenuRadioGroup.new(name: "theme", value: "light", aria_label: "Theme") do
+                      render ::Components::UI::DropdownMenuRadioItem.new(value: "light", name: "theme", checked: true) { "Light" }
+                      render ::Components::UI::DropdownMenuRadioItem.new(value: "dark", name: "theme") { "Dark" }
+                      render ::Components::UI::DropdownMenuRadioItem.new(value: "system", name: "theme") { "System" }
+                    end
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
@@ -140,6 +201,14 @@ module Views
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "dropdown_menu", "manifest.yml").realpath
+          )["description"]
         end
       end
     end

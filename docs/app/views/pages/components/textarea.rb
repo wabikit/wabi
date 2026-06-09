@@ -30,6 +30,20 @@ module Views
                 render ::Components::UI::Textarea.new(name: "feedback", placeholder: "What's on your mind?", rows: 4)
               end
 
+              h2(id: "invalid", class: "text-2xl font-semibold mt-8 mb-4") { "Invalid" }
+              p(class: "text-muted-foreground mb-4 text-sm") do
+                plain "Pass "
+                code(class: "font-mono text-foreground") { "invalid: true" }
+                plain " to render "
+                code(class: "font-mono text-foreground") { 'aria-invalid="true"' }
+                plain " for assistive tech."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::Textarea.new(name: "bio", invalid: true, placeholder: "This field has an error", rows: 4)
+              RUBY
+                render ::Components::UI::Textarea.new(name: "bio", invalid: true, placeholder: "This field has an error", rows: 4)
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",

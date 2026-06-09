@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Views
   module Pages
     module Components
@@ -28,11 +30,7 @@ module Views
                 a(href: "/docs/components", class: "hover:text-foreground") { "← Components" }
               end
               h1(class: "text-4xl font-bold mb-2") { "Context Menu" }
-              p(class: "text-muted-foreground mb-8") do
-                "A right-click triggered floating menu with keyboard navigation, type-ahead, " \
-                "Escape dismiss, checkbox and radio items, and multi-level submenus, " \
-                "powered by @zag-js/menu."
-              end
+              p(class: "text-muted-foreground mb-8") { description }
 
               h2(id: "installation", class: "text-2xl font-semibold mt-8 mb-4") { "Installation" }
               render ::Components::Site::CodeBlock.new(
@@ -91,6 +89,43 @@ module Views
                 end
               end
 
+              h2(id: "radio-group", class: "text-2xl font-semibold mt-8 mb-4") { "Radio group" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                "Wrap mutually-exclusive options in a ContextMenuRadioGroup. Selecting one item " \
+                "unselects its siblings; pass aria_label: to name the group for screen readers."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                render Components::UI::ContextMenu.new do
+                  render Components::UI::ContextMenuTrigger.new(
+                    class: "flex items-center justify-center w-64 h-24 rounded-lg border-2 border-dashed " \
+                           "border-muted-foreground/40 text-sm text-muted-foreground select-none"
+                  ) { "Right-click here" }
+                  render Components::UI::ContextMenuContent.new do
+                    render Components::UI::ContextMenuLabel.new { "Theme" }
+                    render Components::UI::ContextMenuRadioGroup.new(name: "theme", value: "system", aria_label: "Theme") do
+                      render Components::UI::ContextMenuRadioItem.new(value: "light", name: "theme") { "Light" }
+                      render Components::UI::ContextMenuRadioItem.new(value: "dark", name: "theme") { "Dark" }
+                      render Components::UI::ContextMenuRadioItem.new(value: "system", name: "theme", checked: true) { "System" }
+                    end
+                  end
+                end
+              RUBY
+                render ::Components::UI::ContextMenu.new do
+                  render ::Components::UI::ContextMenuTrigger.new(
+                    class: "flex items-center justify-center w-64 h-24 rounded-lg border-2 border-dashed " \
+                           "border-muted-foreground/40 text-sm text-muted-foreground select-none"
+                  ) { "Right-click here" }
+                  render ::Components::UI::ContextMenuContent.new do
+                    render ::Components::UI::ContextMenuLabel.new { "Theme" }
+                    render ::Components::UI::ContextMenuRadioGroup.new(name: "theme", value: "system", aria_label: "Theme") do
+                      render ::Components::UI::ContextMenuRadioItem.new(value: "light", name: "theme") { "Light" }
+                      render ::Components::UI::ContextMenuRadioItem.new(value: "dark", name: "theme") { "Dark" }
+                      render ::Components::UI::ContextMenuRadioItem.new(value: "system", name: "theme", checked: true) { "System" }
+                    end
+                  end
+                end
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}", class: "text-base font-medium mt-6 mb-2 font-mono") { relpath }
@@ -108,6 +143,14 @@ module Views
               end
             end
           end
+        end
+
+        private
+
+        def description
+          @description ||= YAML.safe_load_file(
+            Rails.root.join("..", "registry", "components", "context_menu", "manifest.yml").realpath
+          )["description"]
         end
       end
     end
