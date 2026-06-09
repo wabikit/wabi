@@ -45,7 +45,8 @@ module Views
                 render Components::UI::Select.new(
                   name: "fruit",
                   placeholder: "Choose a fruit",
-                  items: FRUITS
+                  items: FRUITS,
+                  class: "w-72"
                 ) do
                   render Components::UI::SelectTrigger.new(aria_label: "Choose a fruit") do
                     render Components::UI::SelectValue.new
@@ -62,17 +63,20 @@ module Views
                   { value: "banana", label: "Banana" },
                   { value: "cherry", label: "Cherry" },
                 ]
-                render ::Components::UI::Select.new(
-                  name: "fruit",
-                  placeholder: "Choose a fruit",
-                  items: fruits
-                ) do
-                  render ::Components::UI::SelectTrigger.new(aria_label: "Choose a fruit") do
-                    render ::Components::UI::SelectValue.new
-                  end
-                  render ::Components::UI::SelectContent.new do
-                    fruits.each do |fruit|
-                      render ::Components::UI::SelectItem.new(value: fruit[:value]) { fruit[:label] }
+                div(class: "flex justify-center") do
+                  render ::Components::UI::Select.new(
+                    name: "fruit",
+                    placeholder: "Choose a fruit",
+                    items: fruits,
+                    class: "w-72"
+                  ) do
+                    render ::Components::UI::SelectTrigger.new(aria_label: "Choose a fruit") do
+                      render ::Components::UI::SelectValue.new
+                    end
+                    render ::Components::UI::SelectContent.new do
+                      fruits.each do |fruit|
+                        render ::Components::UI::SelectItem.new(value: fruit[:value]) { fruit[:label] }
+                      end
                     end
                   end
                 end
