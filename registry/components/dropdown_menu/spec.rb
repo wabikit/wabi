@@ -128,6 +128,16 @@ RSpec.describe "DropdownMenu composition" do
     expect(output).to include('data-wabi-name="sort"')
   end
 
+  it "renders aria-label on the radio group when aria_label: is given" do
+    out = Components::UI::DropdownMenuRadioGroup.new(name: "sort", aria_label: "Sort order").call { "" }
+    expect(out).to include('aria-label="Sort order"')
+  end
+
+  it "omits aria-label when aria_label: is nil" do
+    out = Components::UI::DropdownMenuRadioGroup.new(name: "sort").call { "" }
+    expect(out).not_to include("aria-label")
+  end
+
   it "DropdownMenuRadioItem renders role=menuitemradio carrying name + value" do
     output = Components::UI::DropdownMenuRadioItem.new(value: "asc", name: "sort", checked: true).call { "Ascending" }
     expect(output).to include('role="menuitemradio"')

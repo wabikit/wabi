@@ -33,4 +33,12 @@ RSpec.describe Components::UI::Textarea do
     output = described_class.new(aria_labelledby: "bio-label").call
     expect(output).to include('aria-labelledby="bio-label"')
   end
+
+  it "sets aria-invalid when invalid: true" do
+    expect(described_class.new(invalid: true).call).to include('aria-invalid="true"')
+  end
+
+  it "omits aria-invalid by default" do
+    expect(described_class.new.call).not_to include("aria-invalid")
+  end
 end

@@ -9,15 +9,21 @@ module Components
     # this `name` via `<div role="group">` ancestry (the controller reads
     # `data-wabi-name` from the radio item ancestor).
     class DropdownMenuRadioGroup < Wabi::Base
-      def initialize(name:, value: nil, **attrs)
-        @name  = name
-        @value = value
-        @attrs = attrs
+      # aria_label: optional accessible name for the radio group. When provided,
+      # aria-label is added to the group div so screen readers announce the
+      # group name (e.g. aria_label: "Theme"). Alternatively, pair a DropdownMenuLabel
+      # id with aria-labelledby on this element for a visible label association.
+      def initialize(name:, value: nil, aria_label: nil, **attrs)
+        @name       = name
+        @value      = value
+        @aria_label = aria_label
+        @attrs      = attrs
       end
 
       def view_template(&block)
         div(
           role: "group",
+          aria_label: @aria_label,
           data: {
             "wabi--dropdown-menu-target": "radioGroup",
             "wabi-name":  @name,
