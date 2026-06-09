@@ -100,6 +100,7 @@ export default class extends Controller {
   }
 
   disconnect() {
+    cancelAnimationFrame(this.rangeInputRaf)
     this.unsubscribe?.()
     this.machine?.stop()
     if (this.portaled) restoreFromBody(this)
@@ -115,9 +116,18 @@ export default class extends Controller {
       spreadProps(this.inputEl, api.getInputProps())
       // getInputProps() reflects only index 0 (the start date), so a single
       // collapsed field would hide the end of a range. Show the whole selection
-      // joined as "start – end".
+      // joined as "start – end". Zag ALSO re-syncs this input to the start inside
+      // a requestAnimationFrame that lands AFTER this synchronous render — so on
+      // the first range pick the field would flash to start-only until the next
+      // render. Re-assert the full range on the next frame too: this rAF is
+      // registered after Zag's (render runs after the machine reaction), so it wins.
       if (this.selectionModeValue === "range") {
-        this.inputEl.value = (api.valueAsString || []).filter(Boolean).join(" – ")
+        const rangeText = (api.valueAsString || []).filter(Boolean).join(" – ")
+        this.inputEl.value = rangeText
+        cancelAnimationFrame(this.rangeInputRaf)
+        this.rangeInputRaf = requestAnimationFrame(() => {
+          if (this.inputEl) this.inputEl.value = rangeText
+        })
       }
     }
     if (this.triggerEl) spreadProps(this.triggerEl, api.getTriggerProps())
