@@ -111,7 +111,15 @@ export default class extends Controller {
     const api = this.api
     spreadProps(this.element, api.getRootProps())
     if (this.controlEl) spreadProps(this.controlEl, api.getControlProps())
-    if (this.inputEl)   spreadProps(this.inputEl,   api.getInputProps())
+    if (this.inputEl) {
+      spreadProps(this.inputEl, api.getInputProps())
+      // getInputProps() reflects only index 0 (the start date), so a single
+      // collapsed field would hide the end of a range. Show the whole selection
+      // joined as "start – end".
+      if (this.selectionModeValue === "range") {
+        this.inputEl.value = (api.valueAsString || []).filter(Boolean).join(" – ")
+      }
+    }
     if (this.triggerEl) spreadProps(this.triggerEl, api.getTriggerProps())
     if (this.positionerEl) spreadProps(this.positionerEl, api.getPositionerProps())
     if (this.contentEl) { spreadProps(this.contentEl, api.getContentProps()); this.contentEl.hidden = false }

@@ -150,3 +150,53 @@ describe("wabi--date-picker (range)", () => {
     expect(end).toBe("2026-06-14")
   })
 })
+
+function rangeFieldFixture(attrs = "") {
+  return `
+    <div data-controller="wabi--date-picker"
+         data-wabi--date-picker-name-value="stay"
+         data-wabi--date-picker-selection-mode-value="range"
+         data-wabi--date-picker-locale-value="en-US"
+         data-wabi--date-picker-num-of-months-value="2"
+         data-wabi--date-picker-portal-value="false"
+         ${attrs}>
+      <div data-wabi--date-picker-target="control">
+        <input data-wabi--date-picker-target="input" />
+        <button data-wabi--date-picker-target="trigger">cal</button>
+      </div>
+      <div data-wabi--date-picker-target="positioner">
+        <div data-wabi--date-picker-target="content" data-state="closed" inert hidden>
+          <div data-wabi--date-picker-target="viewControl">
+            <button data-wabi--date-picker-target="prev">‹</button>
+            <button data-wabi--date-picker-target="viewTrigger"></button>
+            <button data-wabi--date-picker-target="next">›</button>
+          </div>
+          <table><thead><tr data-wabi--date-picker-target="gridHead"></tr></thead>
+            <tbody data-wabi--date-picker-target="grid"></tbody></table>
+        </div>
+      </div>
+      <input type="hidden" name="stay[start]" data-wabi--date-picker-target="hiddenStart" />
+      <input type="hidden" name="stay[end]" data-wabi--date-picker-target="hiddenEnd" />
+    </div>`
+}
+
+describe("wabi--date-picker (range field display)", () => {
+  // Regression: a single collapsed field showed only the start date because
+  // Zag's getInputProps() reflects index 0. The field must show the whole range.
+  it("shows both endpoints joined (start – end) in the single input", async () => {
+    const h = mount(ID, Controller, rangeFieldFixture(`data-wabi--date-picker-default-value-value="2026-06-10,2026-06-14"`))
+    await tick()
+    const input = root().querySelector('[data-wabi--date-picker-target="input"]')
+    const api = ctrlOf(h).api
+    expect(api.valueAsString.length).toBe(2)                 // two formatted dates exist
+    expect(input.value).toBe(api.valueAsString.join(" – "))  // both shown, not start-only
+  })
+
+  it("shows only the start while a range is half-picked", async () => {
+    const h = mount(ID, Controller, rangeFieldFixture(`data-wabi--date-picker-default-value-value="2026-06-10"`))
+    await tick()
+    const input = root().querySelector('[data-wabi--date-picker-target="input"]')
+    const api = ctrlOf(h).api
+    expect(input.value).toBe(api.valueAsString.filter(Boolean).join(" – "))
+  })
+})
