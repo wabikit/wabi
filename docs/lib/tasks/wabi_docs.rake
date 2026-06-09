@@ -18,7 +18,8 @@ namespace :wabi do
 
       puts "Running pagefind -> #{output_dir}"
       FileUtils.rm_rf(output_dir)
-      system!("npx pagefind --site \"#{input_dir}\" --output-path \"#{output_dir}\"")
+      # -y: non-interactive (auto-installs pagefind in CI/Render builds without a prompt).
+      system!("npx -y pagefind --site \"#{input_dir}\" --output-path \"#{output_dir}\"")
       puts "  OK — commit #{output_dir}"
     end
 

@@ -24,6 +24,11 @@ services:
       ( cd ../registry && BUNDLE_GEMFILE="$PWD/Gemfile" bundle install && BUNDLE_GEMFILE="$PWD/Gemfile" bundle exec ./bin/build )
       bin/rails tailwindcss:build
       bin/rails assets:precompile
+      # Rebuild the Pagefind search index from the current components every deploy,
+      # so search is always up to date without anyone remembering to regenerate +
+      # commit it. Best-effort: if it fails (e.g. npx/pagefind unavailable), fall
+      # back to the committed docs/public/pagefind/ so the deploy still ships.
+      bin/rails wabi:docs:index || echo "WARN: pagefind reindex failed — serving the committed index"
     startCommand: bin/rails server -p $PORT -b 0.0.0.0
     autoDeploy: true
     envVars:
