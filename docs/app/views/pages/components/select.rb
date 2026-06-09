@@ -103,7 +103,8 @@ module Views
                 render Components::UI::Select.new(
                   name: "plan",
                   placeholder: "Choose a plan",
-                  items: PLANS
+                  items: PLANS,
+                  class: "w-72"
                 ) do
                   render Components::UI::SelectTrigger.new(aria_label: "Choose a plan") do
                     render Components::UI::SelectValue.new
@@ -120,7 +121,8 @@ module Views
                   name: "plan_locked",
                   placeholder: "Unavailable",
                   items: PLANS,
-                  disabled: true
+                  disabled: true,
+                  class: "w-72"
                 ) do
                   render Components::UI::SelectTrigger.new(aria_label: "Plan (unavailable)") do
                     render Components::UI::SelectValue.new
@@ -137,35 +139,37 @@ module Views
                   { value: "pro",   label: "Pro"   },
                   { value: "team",  label: "Team", disabled: true },
                 ]
-                render ::Components::UI::Select.new(
-                  name: "plan",
-                  placeholder: "Choose a plan",
-                  items: plans
-                ) do
-                  render ::Components::UI::SelectTrigger.new(aria_label: "Choose a plan") do
-                    render ::Components::UI::SelectValue.new
-                  end
-                  render ::Components::UI::SelectContent.new do
-                    plans.each do |plan|
-                      render ::Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                div(class: "flex flex-col items-center gap-4") do
+                  render ::Components::UI::Select.new(
+                    name: "plan",
+                    placeholder: "Choose a plan",
+                    items: plans,
+                    class: "w-72"
+                  ) do
+                    render ::Components::UI::SelectTrigger.new(aria_label: "Choose a plan") do
+                      render ::Components::UI::SelectValue.new
+                    end
+                    render ::Components::UI::SelectContent.new do
+                      plans.each do |plan|
+                        render ::Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                      end
                     end
                   end
-                end
 
-                div(class: "h-4")
-
-                render ::Components::UI::Select.new(
-                  name: "plan_locked",
-                  placeholder: "Unavailable",
-                  items: plans,
-                  disabled: true
-                ) do
-                  render ::Components::UI::SelectTrigger.new(aria_label: "Plan (unavailable)") do
-                    render ::Components::UI::SelectValue.new
-                  end
-                  render ::Components::UI::SelectContent.new do
-                    plans.each do |plan|
-                      render ::Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                  render ::Components::UI::Select.new(
+                    name: "plan_locked",
+                    placeholder: "Unavailable",
+                    items: plans,
+                    disabled: true,
+                    class: "w-72"
+                  ) do
+                    render ::Components::UI::SelectTrigger.new(aria_label: "Plan (unavailable)") do
+                      render ::Components::UI::SelectValue.new
+                    end
+                    render ::Components::UI::SelectContent.new do
+                      plans.each do |plan|
+                        render ::Components::UI::SelectItem.new(value: plan[:value]) { plan[:label] }
+                      end
                     end
                   end
                 end
