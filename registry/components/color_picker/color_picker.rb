@@ -5,7 +5,7 @@ require "date"
 module Components
   module UI
     class ColorPicker < Wabi::Base
-      def initialize(id: nil, value: "#000000", format: "rgba", name: nil, **attrs)
+      def initialize(id: nil, value: "#000000", format: :rgba, name: nil, **attrs)
         @id     = id
         @value  = value
         @format = format

@@ -21,8 +21,12 @@ RSpec.describe "ColorPicker composition" do
       expect(output).to include('data-controller="wabi--color-picker"')
     end
 
+    it "defaults format to rgba" do
+      expect(described_class.new.call).to include('data-wabi--color-picker-format-value="rgba"')
+    end
+
     it "serializes value and format" do
-      output = described_class.new(value: "#3b82f6", format: "hsla").call
+      output = described_class.new(value: "#3b82f6", format: :hsla).call
       expect(output).to include('data-wabi--color-picker-value-value="#3b82f6"')
       expect(output).to include('data-wabi--color-picker-format-value="hsla"')
     end
