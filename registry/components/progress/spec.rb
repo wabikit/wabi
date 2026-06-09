@@ -19,7 +19,7 @@ RSpec.describe Components::UI::Progress do
   end
 
   it "accepts a custom label for contextual accessible name" do
-    output = described_class.new(value: 70, label: "File upload progress").call
+    output = described_class.new(value: 70, aria_label: "File upload progress").call
     expect(output).to include('aria-label="File upload progress"')
   end
 

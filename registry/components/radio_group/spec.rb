@@ -26,7 +26,7 @@ RSpec.describe "RadioGroup composition" do
     end
 
     it "renders aria-label when label: is supplied (accessible name for the radiogroup)" do
-      output = described_class.new(name: "plan", label: "Subscription plan").call
+      output = described_class.new(name: "plan", aria_label: "Subscription plan").call
       expect(output).to include('aria-label="Subscription plan"')
     end
 

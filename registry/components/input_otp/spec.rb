@@ -40,7 +40,7 @@ RSpec.describe "InputOtp" do
 
   it "names the slot group with an aria-label (default + override)" do
     expect(Components::UI::InputOtp.new(name: "c").call).to include('aria-label="One-time passcode"')
-    expect(Components::UI::InputOtp.new(name: "c", label: "2FA code").call).to include('aria-label="2FA code"')
+    expect(Components::UI::InputOtp.new(name: "c", aria_label: "2FA code").call).to include('aria-label="2FA code"')
   end
 
   it "emits invalid Stimulus value when invalid: true is passed" do

@@ -9,21 +9,21 @@ module Components
     # this `name` via `<div role="group">` ancestry (the controller reads
     # `data-wabi-name` from the radio item ancestor).
     class ContextMenuRadioGroup < Wabi::Base
-      # label: optional accessible name for the radio group. When provided,
+      # aria_label: optional accessible name for the radio group. When provided,
       # aria-label is added to the group div so screen readers announce the
-      # group name (e.g. label: "Theme"). Alternatively, pair a ContextMenuLabel
+      # group name (e.g. aria_label: "Theme"). Alternatively, pair a ContextMenuLabel
       # id with aria-labelledby on this element for a visible label association.
-      def initialize(name:, value: nil, label: nil, **attrs)
-        @name  = name
-        @value = value
-        @label = label
-        @attrs = attrs
+      def initialize(name:, value: nil, aria_label: nil, **attrs)
+        @name       = name
+        @value      = value
+        @aria_label = aria_label
+        @attrs      = attrs
       end
 
       def view_template(&block)
         div(
           role: "group",
-          aria_label: @label,
+          aria_label: @aria_label,
           data: {
             "wabi--context-menu-target": "radioGroup",
             "wabi-name":  @name,

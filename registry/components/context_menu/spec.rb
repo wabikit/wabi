@@ -97,7 +97,7 @@ RSpec.describe "ContextMenu composition" do
 
   # a11y regression: radio group with an optional accessible name
   it "ContextMenuRadioGroup emits aria-label when label: is provided" do
-    output = Components::UI::ContextMenuRadioGroup.new(name: "theme", label: "Theme").call { "" }
+    output = Components::UI::ContextMenuRadioGroup.new(name: "theme", aria_label: "Theme").call { "" }
     expect(output).to include('aria-label="Theme"')
   end
 

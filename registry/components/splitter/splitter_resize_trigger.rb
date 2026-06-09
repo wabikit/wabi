@@ -6,19 +6,19 @@ module Components
   module UI
     class SplitterResizeTrigger < Wabi::Base
       # id is the "<beforePanelId>:<afterPanelId>" pair Zag expects, e.g. "a:b".
-      # label: optional accessible name for the resize handle (e.g. "Resize sidebar").
+      # aria_label: optional accessible name for the resize handle (e.g. "Resize sidebar").
       # The controller reads data-wabi-label at runtime and forwards it as aria-label,
       # falling back to "Resize panels" when nil.
-      def initialize(id:, label: nil, **attrs)
-        @id    = id
-        @label = label
-        @attrs = attrs
+      def initialize(id:, aria_label: nil, **attrs)
+        @id         = id
+        @aria_label = aria_label
+        @attrs      = attrs
       end
 
       def view_template
         user_class = @attrs.delete(:class)
         data = { "wabi--splitter-target": "resizeTrigger", "wabi-id": @id.to_s }
-        data[:"wabi-label"] = @label if @label
+        data[:"wabi-label"] = @aria_label if @aria_label
         div(
           data: data,
           class: merge_class(

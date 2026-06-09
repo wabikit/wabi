@@ -83,7 +83,7 @@ RSpec.describe Components::UI::NumberInput do
 
   # a11y: label param passes an accessible name to the Zag machine via data-value
   it "emits the aria-label data-value when label: is supplied" do
-    html = render_html(name: "qty", label: "Quantity")
+    html = render_html(name: "qty", aria_label: "Quantity")
     expect(html).to include('data-wabi--number-input-aria-label-value="Quantity"')
   end
 

@@ -14,7 +14,7 @@ module Components
       def initialize(name:, length: 6, type: :numeric, mask: false, otp: true,
                      default_value: nil, placeholder: "○", disabled: false,
                      invalid: false, required: false,
-                     label: "One-time passcode", **attrs)
+                     aria_label: "One-time passcode", **attrs)
         @name          = name
         @length        = length
         @type          = type
@@ -25,7 +25,7 @@ module Components
         @disabled      = disabled
         @invalid       = invalid
         @required      = required
-        @label         = label
+        @aria_label    = aria_label
         @attrs         = attrs
       end
 
@@ -46,7 +46,7 @@ module Components
         }
         # aria-label names the group of slots; each slot also gets a per-digit
         # aria-label at runtime via the controller's Zag `translations.inputLabel`.
-        div(**@attrs, "aria-label": @label, data: user_data.merge(root_data),
+        div(**@attrs, "aria-label": @aria_label, data: user_data.merge(root_data),
             class: merge_class("inline-flex items-center gap-2", user_class)) do
           @length.times do
             input(
