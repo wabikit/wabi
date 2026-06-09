@@ -39,7 +39,9 @@ module Components
           # button so long code lines scroll horizontally WITHOUT sliding
           # under it. `overflow-x-auto` keeps the rest of the line clipped
           # to the visible area.
-          pre(class: "overflow-x-auto p-4 pr-12 text-sm leading-relaxed") do
+          # tabindex=0 makes the horizontally-scrollable code region reachable by
+          # keyboard (WCAG 2.1.1 / axe scrollable-region-focusable).
+          pre(tabindex: "0", class: "overflow-x-auto p-4 pr-12 text-sm leading-relaxed") do
             code(class: "font-mono") { raw safe(highlighted) }
           end
           button(

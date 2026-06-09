@@ -22,7 +22,7 @@ module Components
 
       def view_template(&block)
         doctype
-        html(data: { controller: "wabi--theme" }) do
+        html(lang: "en", data: { controller: "wabi--theme" }) do
           head do
             title { "#{@title} — Wabi" }
             meta(name: "viewport", content: "width=device-width, initial-scale=1")

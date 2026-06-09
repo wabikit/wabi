@@ -6,7 +6,8 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "a11y": "node scripts/a11y-audit.mjs"
   },
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
@@ -35,7 +36,9 @@
     "@zag-js/tooltip": "1.41.0",
     "@zag-js/tree-view": "1.41.2",
     "@zag-js/vanilla": "1.41.0",
+    "axe-core": "^4.12.0",
     "jsdom": "^25.0.1",
+    "puppeteer-core": "^25.1.0",
     "vitest": "^2.1.8"
   },
   "dependencies": {
