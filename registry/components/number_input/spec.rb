@@ -87,7 +87,7 @@ RSpec.describe Components::UI::NumberInput do
     expect(html).to include('data-wabi--number-input-aria-label-value="Quantity"')
   end
 
-  it "emits an empty aria-label data-value when label: is omitted" do
+  it "emits an empty aria-label data-value when aria_label: is omitted" do
     html = render_html(name: "qty")
     expect(html).to include('data-wabi--number-input-aria-label-value=""')
   end

@@ -101,7 +101,7 @@ RSpec.describe "ContextMenu composition" do
     expect(output).to include('aria-label="Theme"')
   end
 
-  it "ContextMenuRadioGroup omits aria-label when label: is absent" do
+  it "ContextMenuRadioGroup omits aria-label when aria_label: is absent" do
     output = Components::UI::ContextMenuRadioGroup.new(name: "theme").call { "" }
     expect(output).not_to include("aria-label")
   end

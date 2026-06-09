@@ -30,7 +30,7 @@ RSpec.describe "RadioGroup composition" do
       expect(output).to include('aria-label="Subscription plan"')
     end
 
-    it "omits aria-label attribute when label: is nil (default)" do
+    it "omits aria-label attribute when aria_label: is nil (default)" do
       output = described_class.new(name: "plan").call
       expect(output).not_to include("aria-label")
     end
