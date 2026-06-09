@@ -60,6 +60,20 @@ RSpec.describe "Accordion composition" do
     expect(div_output).to include('data-wabi--accordion-target="trigger"')
   end
 
+  it "AccordionTrigger clamps and coerces the level (load-bearing 1.0 safety)" do
+    # level: 7 clamps to the max valid heading level (h6)
+    over_max = Components::UI::AccordionTrigger.new(value: "q1", level: 7).call { "Q" }
+    expect(over_max).to include('<h6')
+
+    # level: 0 clamps to the min valid heading level (h1)
+    under_min = Components::UI::AccordionTrigger.new(value: "q1", level: 0).call { "Q" }
+    expect(under_min).to include('<h1')
+
+    # string levels are coerced via to_i ("2" => h2)
+    coerced = Components::UI::AccordionTrigger.new(value: "q1", level: "2").call { "Q" }
+    expect(coerced).to include('<h2')
+  end
+
   it "AccordionContent emits data-state=closed initial + content target" do
     output = Components::UI::AccordionContent.new(value: "q1").call { "Answer" }
     expect(output).to include('data-state="closed"')
