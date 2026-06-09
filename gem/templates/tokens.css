@@ -83,6 +83,13 @@
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+  /* --border / --input render intentionally subtle (~1.2–1.4:1 vs background).
+   * Per WCAG 1.4.11, decorative borders that are not the SOLE means of
+   * identifying a component or its state are exempt from the 3:1 UI-contrast
+   * requirement — Wabi components convey structure/state via fill, text, and
+   * focus rings, not the border alone. --ring (the focus indicator) IS held to
+   * >=3:1 against background in every theme; --muted-foreground and
+   * --destructive meet AA 4.5:1 for text. See the a11y audit notes. */
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -114,10 +121,10 @@
   --secondary: 240 4.8% 95.9%;
   --secondary-foreground: 240 5.9% 10%;
   --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
+  --muted-foreground: 240 3.8% 45.1%;
   --accent: 240 4.8% 95.9%;
   --accent-foreground: 240 5.9% 10%;
-  --destructive: 0 84.2% 60.2%;
+  --destructive: 0 84.2% 48.6%;
   --destructive-foreground: 0 0% 98%;
   --border: 240 5.9% 90%;
   --input: 240 5.9% 90%;
