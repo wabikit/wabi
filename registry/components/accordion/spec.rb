@@ -41,20 +41,21 @@ RSpec.describe "Accordion composition" do
     expect(output).to include('<svg')
   end
 
-  it "AccordionTrigger defaults to h3 wrapper and accepts custom heading_level" do
+  it "AccordionTrigger defaults to h3 wrapper and accepts custom level" do
     # default heading level is h3
     default_output = Components::UI::AccordionTrigger.new(value: "q1").call { "Q" }
     expect(default_output).to include('<h3')
     expect(default_output).not_to include('<h2')
 
-    # heading_level: :h2 switches to h2
-    h2_output = Components::UI::AccordionTrigger.new(value: "q1", heading_level: :h2).call { "Q" }
+    # level: 2 switches to h2
+    h2_output = Components::UI::AccordionTrigger.new(value: "q1", level: 2).call { "Q" }
     expect(h2_output).to include('<h2')
     expect(h2_output).not_to include('<h3')
 
-    # heading_level: :div opts out of heading semantics
-    div_output = Components::UI::AccordionTrigger.new(value: "q1", heading_level: :div).call { "Q" }
+    # level: nil opts out of heading semantics (plain div wrapper, no <h tag)
+    div_output = Components::UI::AccordionTrigger.new(value: "q1", level: nil).call { "Q" }
     expect(div_output).to include('<div')
+    expect(div_output).not_to match(/<h[1-6]/)
     # button and trigger target are still present regardless of heading level
     expect(div_output).to include('data-wabi--accordion-target="trigger"')
   end

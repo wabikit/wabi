@@ -12,19 +12,19 @@ module Components
              "[&[data-state=open]>svg]:rotate-180"
       end
 
-      # heading_level: controls the heading element wrapping the trigger button.
-      # Defaults to :h3. Pass e.g. heading_level: :h2 when the accordion lives
-      # inside a section that already establishes h3 headings, or
-      # heading_level: :div to opt out of heading semantics entirely.
-      def initialize(value:, heading_level: :h3, **attrs)
-        @value         = value
-        @heading_level = heading_level
-        @attrs         = attrs
+      # level: (Integer 1-6, default 3) controls the heading element wrapping the
+      # trigger button, mirroring CardTitle. Pass level: nil to opt out of heading
+      # semantics entirely (renders a plain <div> wrapper).
+      def initialize(value:, level: 3, **attrs)
+        @value = value
+        @level = level.nil? ? nil : level.to_i.clamp(1, 6)
+        @attrs = attrs
       end
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
-        send(@heading_level, class: "flex") do
+        wrapper = @level.nil? ? :div : :"h#{@level}"
+        send(wrapper, class: "flex") do
           button(
             type: "button",
             data: {
