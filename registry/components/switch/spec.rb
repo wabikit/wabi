@@ -39,4 +39,25 @@ RSpec.describe Components::UI::Switch do
     output = described_class.new(id: "notifications").call
     expect(output).to match(/<input[^>]*type="checkbox"[^>]*id="notifications"/)
   end
+
+  it "forwards aria_label: to the hidden input as its accessible name" do
+    output = described_class.new(name: "notif", aria_label: "Notifications").call
+    expect(output).to match(/<input[^>]*type="checkbox"[^>]*aria-label="Notifications"/)
+  end
+
+  it "renders a visible label part wired to the controller when given a block" do
+    output = described_class.new(name: "notif").call { "Email me" }
+    expect(output).to include('data-wabi--switch-target="label"')
+    expect(output).to include("Email me")
+  end
+
+  it "does not server-render a dangling aria-labelledby on the hidden input (no label part)" do
+    # Zag's getHiddenInputProps points aria-labelledby at the label part id; with
+    # no label rendered the controller strips it client-side. The server output
+    # must never emit it so there is no empty/dangling reference, and no label
+    # part is rendered when no block is given.
+    output = described_class.new(name: "notif").call
+    expect(output).not_to include("aria-labelledby")
+    expect(output).not_to include('data-wabi--switch-target="label"')
+  end
 end

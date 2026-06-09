@@ -79,6 +79,21 @@ RSpec.describe "Select composition" do
     expect(output).not_to match(/\bfocus:ring-2\b/)
   end
 
+  it "SelectTrigger emits an aria-label on the button when aria_label: is supplied (button-name a11y)" do
+    # axe-core button-name: the trigger renders role=combobox with no text label
+    # (SelectValue is empty until a value is chosen), so it needs an accessible
+    # name. aria_label: is OPTIONAL and non-breaking (defaults to nil = no attr).
+    output = Components::UI::SelectTrigger.new(aria_label: "Choose a fruit").call do
+      Components::UI::SelectValue.new.call
+    end
+    expect(output).to include('aria-label="Choose a fruit"')
+  end
+
+  it "SelectTrigger omits aria-label by default (non-breaking)" do
+    output = Components::UI::SelectTrigger.new.call { "Pick" }
+    expect(output).not_to include("aria-label")
+  end
+
   it "renders SelectValue as a span pointing at the valueText target" do
     output = Components::UI::SelectValue.new.call
     expect(output).to include('data-wabi--select-target="valueText"')

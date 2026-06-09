@@ -12,14 +12,19 @@ module Components
              "focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       end
 
-      def initialize(**attrs)
-        @attrs = attrs
+      def initialize(aria_label: nil, **attrs)
+        @aria_label = aria_label
+        @attrs      = attrs
       end
 
       def view_template(&block)
         user_class = @attrs.delete(:class)
         button(
           type: "button",
+          # OPTIONAL accessible name for the combobox trigger. The button's only
+          # child is SelectValue, which is empty until a value is chosen, so axe
+          # (button-name) flags it as unnamed. Set aria_label: to fix it.
+          "aria-label": @aria_label,
           data: { "wabi--select-target": "trigger" },
           class: merge_class(tokens, user_class)
         ) do

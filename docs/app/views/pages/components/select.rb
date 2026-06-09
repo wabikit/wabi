@@ -47,7 +47,7 @@ module Views
                   placeholder: "Choose a fruit",
                   items: FRUITS
                 ) do
-                  render Components::UI::SelectTrigger.new do
+                  render Components::UI::SelectTrigger.new(aria_label: "Choose a fruit") do
                     render Components::UI::SelectValue.new
                   end
                   render Components::UI::SelectContent.new do
@@ -67,7 +67,7 @@ module Views
                   placeholder: "Choose a fruit",
                   items: fruits
                 ) do
-                  render ::Components::UI::SelectTrigger.new do
+                  render ::Components::UI::SelectTrigger.new(aria_label: "Choose a fruit") do
                     render ::Components::UI::SelectValue.new
                   end
                   render ::Components::UI::SelectContent.new do
@@ -101,7 +101,7 @@ module Views
                   placeholder: "Choose a plan",
                   items: PLANS
                 ) do
-                  render Components::UI::SelectTrigger.new do
+                  render Components::UI::SelectTrigger.new(aria_label: "Choose a plan") do
                     render Components::UI::SelectValue.new
                   end
                   render Components::UI::SelectContent.new do
@@ -118,7 +118,7 @@ module Views
                   items: PLANS,
                   disabled: true
                 ) do
-                  render Components::UI::SelectTrigger.new do
+                  render Components::UI::SelectTrigger.new(aria_label: "Plan (unavailable)") do
                     render Components::UI::SelectValue.new
                   end
                   render Components::UI::SelectContent.new do
@@ -138,7 +138,7 @@ module Views
                   placeholder: "Choose a plan",
                   items: plans
                 ) do
-                  render ::Components::UI::SelectTrigger.new do
+                  render ::Components::UI::SelectTrigger.new(aria_label: "Choose a plan") do
                     render ::Components::UI::SelectValue.new
                   end
                   render ::Components::UI::SelectContent.new do
@@ -156,7 +156,7 @@ module Views
                   items: plans,
                   disabled: true
                 ) do
-                  render ::Components::UI::SelectTrigger.new do
+                  render ::Components::UI::SelectTrigger.new(aria_label: "Plan (unavailable)") do
                     render ::Components::UI::SelectValue.new
                   end
                   render ::Components::UI::SelectContent.new do

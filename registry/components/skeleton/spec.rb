@@ -20,6 +20,11 @@ RSpec.describe Components::UI::Skeleton do
   end
 
   # a11y regression: WCAG-AA live-regions fix
+  it "includes role=status so aria-label is valid and loading is announced to AT" do
+    output = described_class.new.call
+    expect(output).to include('role="status"')
+  end
+
   it "includes aria-busy=true to signal loading state to assistive technologies" do
     output = described_class.new.call
     expect(output).to include('aria-busy="true"')

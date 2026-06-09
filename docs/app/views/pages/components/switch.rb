@@ -30,15 +30,15 @@ module Views
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
                 div(class: "flex items-center gap-6") do
-                  render Components::UI::Switch.new(name: "notif")
-                  render Components::UI::Switch.new(name: "sub", checked: true)
-                  render Components::UI::Switch.new(name: "off", disabled: true)
+                  render Components::UI::Switch.new(name: "notif") { "Notifications" }
+                  render Components::UI::Switch.new(name: "sub", checked: true, aria_label: "Subscribe")
+                  render Components::UI::Switch.new(name: "off", disabled: true, aria_label: "Disabled option")
                 end
               RUBY
                 div(class: "flex items-center gap-6") do
-                  render ::Components::UI::Switch.new(name: "notif")
-                  render ::Components::UI::Switch.new(name: "sub", checked: true)
-                  render ::Components::UI::Switch.new(name: "off", disabled: true)
+                  render ::Components::UI::Switch.new(name: "notif") { "Notifications" }
+                  render ::Components::UI::Switch.new(name: "sub", checked: true, aria_label: "Subscribe")
+                  render ::Components::UI::Switch.new(name: "off", disabled: true, aria_label: "Disabled option")
                 end
               end
 

@@ -84,7 +84,7 @@ module Components
               class: INDENT_BASE,
               style: depth_style(index_path, leaf: false)
             ) do
-              node_checkbox if @with_checkboxes
+              node_checkbox(node) if @with_checkboxes
               button(
                 type: "button",
                 # aria-label gives the icon-only toggle button an accessible name.
@@ -124,7 +124,7 @@ module Components
             class: INDENT_BASE,
             style: depth_style(index_path, leaf: true)
           ) do
-            node_checkbox if @with_checkboxes
+            node_checkbox(node) if @with_checkboxes
             node_icon(node)
             span(data: { "wabi--tree-view-target": "itemText" }, class: "truncate") { node[:label].to_s }
             span(
@@ -135,9 +135,13 @@ module Components
         end
       end
 
-      def node_checkbox
+      def node_checkbox(node)
         span(
           data: { "wabi--tree-view-target": "nodeCheckbox" },
+          # role="checkbox" (set by Zag's getNodeCheckboxProps) has no visible text,
+          # so we supply the node label as its accessible name (WCAG 4.1.2 / axe
+          # aria-toggle-field-name).
+          "aria-label": node[:label].to_s,
           class: "grid h-4 w-4 shrink-0 place-items-center rounded border border-input text-primary-foreground " \
                  "group/cb data-[state=checked]:bg-primary data-[state=checked]:border-primary " \
                  "data-[state=indeterminate]:bg-primary data-[state=indeterminate]:border-primary"

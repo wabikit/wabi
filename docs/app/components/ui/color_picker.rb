@@ -31,6 +31,7 @@ module Components
               type: "hidden",
               name: @name,
               value: @value.to_s,
+              "aria-label": "Color value",
               data: { "wabi--color-picker-target": "hiddenInput" }
             )
           end

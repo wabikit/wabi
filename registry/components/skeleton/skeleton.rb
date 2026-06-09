@@ -11,11 +11,12 @@ module Components
 
       def view_template(&)
         user_class = @attrs.delete(:class)
-        # aria-busy signals loading state to AT; aria-label provides a default description.
-        # Callers can override either via **attrs (e.g. aria_label: "Loading avatar").
-        # The parent container or the content that replaces this skeleton should carry
-        # role="status" or aria-live="polite" so AT announces when loading completes.
+        # role="status" is a live region that legitimately supports an accessible name,
+        # so aria-label is valid here (a bare <div> is role=generic and prohibits it) and
+        # AT announces the loading state. aria-busy signals loading; aria-label describes it.
+        # Callers can override any of these via **attrs (e.g. aria_label: "Loading avatar").
         div(
+          role: "status",
           "aria-busy": "true",
           "aria-label": "Loading…",
           **@attrs,

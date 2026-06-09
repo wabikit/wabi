@@ -30,9 +30,19 @@ module Views
 
               h2(id: "example", class: "text-2xl font-semibold mt-8 mb-4") { "Example" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                render Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], placeholder: "Add a tag…")
+                render Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails]) do
+                  render Components::UI::TagsInputLabel.new { "Tags" }
+                  render Components::UI::TagsInputControl.new do
+                    render Components::UI::TagsInputInput.new(placeholder: "Add a tag…")
+                  end
+                end
               RUBY
-                render ::Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], placeholder: "Add a tag…")
+                render ::Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails]) do
+                  render ::Components::UI::TagsInputLabel.new { "Tags" }
+                  render ::Components::UI::TagsInputControl.new do
+                    render ::Components::UI::TagsInputInput.new(placeholder: "Add a tag…")
+                  end
+                end
               end
 
               h2(id: "max-tags", class: "text-2xl font-semibold mt-8 mb-4") { "Limiting tags" }
@@ -44,16 +54,36 @@ module Views
                 plain " to prevent editing existing tags in place."
               end
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                render Components::UI::TagsInput.new(name: "topics", value: %w[ruby rails], max: 3, editable: false, placeholder: "Up to 3 topics…")
+                render Components::UI::TagsInput.new(name: "topics", value: %w[ruby rails], max: 3, editable: false) do
+                  render Components::UI::TagsInputLabel.new { "Topics" }
+                  render Components::UI::TagsInputControl.new do
+                    render Components::UI::TagsInputInput.new(placeholder: "Up to 3 topics…")
+                  end
+                end
               RUBY
-                render ::Components::UI::TagsInput.new(name: "topics", value: %w[ruby rails], max: 3, editable: false, placeholder: "Up to 3 topics…")
+                render ::Components::UI::TagsInput.new(name: "topics", value: %w[ruby rails], max: 3, editable: false) do
+                  render ::Components::UI::TagsInputLabel.new { "Topics" }
+                  render ::Components::UI::TagsInputControl.new do
+                    render ::Components::UI::TagsInputInput.new(placeholder: "Up to 3 topics…")
+                  end
+                end
               end
 
               h2(id: "disabled", class: "text-2xl font-semibold mt-8 mb-4") { "Disabled" }
               render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
-                render Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], disabled: true)
+                render Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], disabled: true) do
+                  render Components::UI::TagsInputLabel.new { "Tags" }
+                  render Components::UI::TagsInputControl.new do
+                    render Components::UI::TagsInputInput.new
+                  end
+                end
               RUBY
-                render ::Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], disabled: true)
+                render ::Components::UI::TagsInput.new(name: "tags", value: %w[ruby rails], disabled: true) do
+                  render ::Components::UI::TagsInputLabel.new { "Tags" }
+                  render ::Components::UI::TagsInputControl.new do
+                    render ::Components::UI::TagsInputInput.new
+                  end
+                end
               end
 
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }

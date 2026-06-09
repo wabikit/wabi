@@ -3,7 +3,7 @@ import * as switchMachine from "@zag-js/switch"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
 
 export default class extends Controller {
-  static targets = ["control", "thumb", "hiddenInput"]
+  static targets = ["control", "thumb", "hiddenInput", "label"]
   static values  = {
     checked:  { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
@@ -38,6 +38,15 @@ export default class extends Controller {
     spreadProps(this.element,           api.getRootProps())
     if (this.hasControlTarget)     spreadProps(this.controlTarget,     api.getControlProps())
     if (this.hasThumbTarget)       spreadProps(this.thumbTarget,       api.getThumbProps())
-    if (this.hasHiddenInputTarget) spreadProps(this.hiddenInputTarget, api.getHiddenInputProps())
+    if (this.hasLabelTarget)       spreadProps(this.labelTarget,       api.getLabelProps())
+    if (this.hasHiddenInputTarget) {
+      spreadProps(this.hiddenInputTarget, api.getHiddenInputProps())
+      // Zag's getHiddenInputProps always points aria-labelledby at the label
+      // part. With no visible label rendered that id is dangling (empty target,
+      // no accessible name). Drop it so a caller-supplied aria-label wins.
+      if (!this.hasLabelTarget) {
+        this.hiddenInputTarget.removeAttribute("aria-labelledby")
+      }
+    }
   }
 }

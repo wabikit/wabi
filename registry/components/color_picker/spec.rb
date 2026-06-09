@@ -36,6 +36,14 @@ RSpec.describe "ColorPicker composition" do
       expect(described_class.new.call).not_to include('data-wabi--color-picker-target="hiddenInput"')
     end
 
+    # WCAG-AA (axe `label`, critical): the controller may re-render this value
+    # holder as a visually-clipped type="text" input with tabindex=-1. As a real
+    # form field it must have an accessible name — give it an aria-label so it is
+    # never an unlabeled text input.
+    it "gives the hidden value input an accessible name" do
+      expect(described_class.new(name: "brand").call).to include('aria-label="Color value"')
+    end
+
     it "yields its block" do
       expect(described_class.new.call { "INNER" }).to include("INNER")
     end

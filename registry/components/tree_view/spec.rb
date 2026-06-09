@@ -79,6 +79,17 @@ RSpec.describe Components::UI::TreeView do
     expect(described_class.new(items: items).call).not_to include('data-wabi--tree-view-target="nodeCheckbox"')
   end
 
+  # a11y regression (axe aria-toggle-field-name, serious): the node checkbox is a
+  # role="checkbox" span with no visible text, so it must carry an aria-label.
+  # We set aria-label to the node's label text on each nodeCheckbox span.
+  it "gives each node checkbox an aria-label set to the node label" do
+    out = described_class.new(items: items, with_checkboxes: true).call
+    checkbox_tag = out[/<span[^>]*data-wabi--tree-view-target="nodeCheckbox"[^>]*>/]
+    expect(checkbox_tag).not_to be_nil
+    expect(checkbox_tag).to include('aria-label="src"')
+    expect(out).to include('aria-label="README.md"')
+  end
+
   it "renders folder and file icons from the node icon field" do
     out = described_class.new(items: items).call
     expect(out).to include('data-wabi-icon="folder"')

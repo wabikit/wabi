@@ -21,15 +21,23 @@ module Components
                     "ring-0 transition-transform motion-reduce:transition-none data-[state=checked]:translate-x-5 " \
                     "data-[state=unchecked]:translate-x-0"
 
-      def initialize(id: nil, name: nil, checked: false, disabled: false, **attrs)
-        @id       = id
-        @name     = name
-        @checked  = checked
-        @disabled = disabled
-        @attrs    = attrs
+      LABEL_CLASS = "text-sm font-medium leading-none"
+
+      # aria_label: gives the switch an accessible name when no visible label
+      # (block) is rendered. It is forwarded to the hidden <input>; the
+      # controller strips Zag's dangling aria-labelledby in that case so the
+      # aria-label is the effective accessible name. Pass a block to render a
+      # visible label instead (which Zag wires via aria-labelledby).
+      def initialize(id: nil, name: nil, checked: false, disabled: false, aria_label: nil, **attrs)
+        @id         = id
+        @name       = name
+        @checked    = checked
+        @disabled   = disabled
+        @aria_label = aria_label
+        @attrs      = attrs
       end
 
-      def view_template
+      def view_template(&block)
         user_class = @attrs.delete(:class)
         label(
           data: {
@@ -39,7 +47,7 @@ module Components
             "wabi--switch-input-id-value": @id,
             "wabi--switch-name-value": @name,
           },
-          class: "inline-flex items-center"
+          class: "inline-flex items-center gap-2"
         ) do
           input(
             type: "checkbox",
@@ -47,6 +55,7 @@ module Components
             name: @name,
             checked: @checked,
             disabled: @disabled,
+            "aria-label": @aria_label,
             data: { "wabi--switch-target": "hiddenInput" },
             class: "sr-only"
           )
@@ -61,6 +70,9 @@ module Components
               data: { "wabi--switch-target": "thumb" },
               class: THUMB_CLASS
             )
+          end
+          if block
+            span(data: { "wabi--switch-target": "label" }, class: LABEL_CLASS, &block)
           end
         end
       end
