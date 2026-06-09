@@ -8,7 +8,7 @@ module Components
     class Calendar < Wabi::Base
       include DatePickerView
 
-      def initialize(name:, selection_mode: :single, default_value: nil,
+      def initialize(name: nil, selection_mode: :single, default_value: nil,
                      min: nil, max: nil, locale: "en-US", num_of_months: nil,
                      disabled: false, readonly: false, **attrs)
         @name           = name

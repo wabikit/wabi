@@ -68,6 +68,12 @@ RSpec.describe "Date Picker" do
       expect(out).to include('id="cal1"')
       expect(out).to include("shadow-lg")
     end
+
+    it "renders without a name: and omits the name attribute on the hidden input" do
+      out = Components::UI::Calendar.new.call
+      expect(out).to match(/<input[^>]*type="hidden"[^>]*data-wabi--date-picker-target="hiddenStart"/)
+      expect(out).not_to include('name="')
+    end
   end
 
   describe "DatePicker (field)" do
