@@ -21,6 +21,13 @@ RSpec.describe "Popover composition" do
     expect(output).to include('data-wabi--popover-target="trigger"')
   end
 
+  # Regression: base-class-less trigger calls merge_class(user_class) with no
+  # :class, which must omit the attribute (no spurious class="").
+  it "PopoverTrigger omits class when none is passed" do
+    output = Components::UI::PopoverTrigger.new.call { "Open" }
+    expect(output).not_to include('class=""')
+  end
+
   it "PopoverContent starts with data-state=closed + inert on content" do
     output = Components::UI::PopoverContent.new.call { "" }
     expect(output).to include('data-wabi--popover-target="positioner"')

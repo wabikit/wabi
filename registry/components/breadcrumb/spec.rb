@@ -16,6 +16,14 @@ RSpec.describe Components::UI::Breadcrumb do
     expect(output).to include('aria-label="breadcrumb"')
   end
 
+  # Regression: a base-class-less root that calls merge_class(user_class) with
+  # no :class must NOT emit a spurious empty class="" attribute (ClassMerge
+  # returns nil for an empty merge so Phlex omits the attribute).
+  it "omits the class attribute when no class is passed" do
+    output = described_class.new.call
+    expect(output).not_to include('class=""')
+  end
+
   it "renders BreadcrumbList as an ol" do
     output = Components::UI::BreadcrumbList.new.call { "x" }
     expect(output).to include("<ol")

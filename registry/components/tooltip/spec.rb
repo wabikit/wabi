@@ -13,6 +13,13 @@ RSpec.describe "Tooltip composition" do
     expect(output).to include('data-wabi--tooltip-close-delay-value="200"')
   end
 
+  # Regression: base-class-less trigger calls merge_class(user_class) with no
+  # :class, which must omit the attribute (no spurious class="").
+  it "TooltipTrigger omits class when none is passed" do
+    output = Components::UI::TooltipTrigger.new.call { "Info" }
+    expect(output).not_to include('class=""')
+  end
+
   it "TooltipTrigger emits <button> with the trigger target" do
     output = Components::UI::TooltipTrigger.new.call { "Info" }
     expect(output).to include('<button')

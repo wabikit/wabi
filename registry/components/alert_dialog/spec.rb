@@ -18,6 +18,13 @@ RSpec.describe Components::UI::AlertDialog do
     expect(output).to include('data-controller="wabi--alert-dialog"')
   end
 
+  # Regression: base-class-less trigger calls merge_class(user_class) with no
+  # :class, which must omit the attribute (no spurious class="").
+  it "AlertDialogTrigger omits class when none is passed" do
+    output = Components::UI::AlertDialogTrigger.new.call { "Delete" }
+    expect(output).not_to include('class=""')
+  end
+
   it "renders content with role=alertdialog and aria-modal" do
     output = Components::UI::AlertDialogContent.new.call { "body" }
     expect(output).to include('role="alertdialog"')

@@ -21,6 +21,16 @@ RSpec.describe Wabi::ClassMerge do
       expect(described_class.call(nil, "btn", "")).to eq("btn")
     end
 
+    it "returns nil (not empty string) when the merged result is empty, so the class attr is omitted" do
+      expect(described_class.call).to be_nil
+      expect(described_class.call(nil)).to be_nil
+      expect(described_class.call(nil, "")).to be_nil
+    end
+
+    it "still merges non-empty classes normally" do
+      expect(described_class.call("a", "b")).to eq("a b")
+    end
+
     it "preserves non-conflicting utilities" do
       expect(described_class.call("flex items-center", "justify-between p-4"))
         .to eq("flex items-center justify-between p-4")

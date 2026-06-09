@@ -25,7 +25,13 @@ module Wabi
       tokens.each do |token|
         seen[group_key(token)] = token
       end
-      seen.values.join(" ")
+      merged = seen.values.join(" ")
+      # Return nil (not "") for an all-empty merge so Phlex omits the attribute
+      # entirely instead of emitting a spurious `class=""`. Base-class-less
+      # components (e.g. breadcrumb root, popover/alert_dialog/tooltip triggers)
+      # call merge_class(user_class) with no class, and would otherwise render
+      # `class=""`. Non-empty results are unaffected.
+      merged.empty? ? nil : merged
     end
 
     def group_key(token)
