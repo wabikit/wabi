@@ -6,7 +6,7 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class Combobox < Wabi::Base
-      def initialize(name:, items:, value: nil, placeholder: "Select an option...", disabled: false, portal: true, url: nil, param: "q", debounce: 250, min_length: 1, **attrs)
+      def initialize(name: nil, items:, value: nil, placeholder: "Select an option...", disabled: false, portal: true, url: nil, param: "q", debounce: 250, min_length: 1, **attrs)
         @name        = name
         @items       = items
         @value       = value

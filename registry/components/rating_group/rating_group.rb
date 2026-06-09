@@ -5,7 +5,7 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class RatingGroup < Wabi::Base
-      def initialize(name:, value: 0, count: 5, allow_half: false, read_only: false, disabled: false, **attrs)
+      def initialize(name: nil, value: 0, count: 5, allow_half: false, read_only: false, disabled: false, **attrs)
         # value: 0 (or any <= 0) means "unrated" — Zag treats it as empty; the JS controller uses -1 as its sentinel.
         @name       = name
         @value      = value

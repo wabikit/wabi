@@ -6,7 +6,7 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class TagsInput < Wabi::Base
-      def initialize(name:, value: [], max: nil, editable: true, disabled: false, placeholder: nil, **attrs)
+      def initialize(name: nil, value: [], max: nil, editable: true, disabled: false, placeholder: nil, **attrs)
         @name        = name
         @value       = Array(value)
         @max         = max

@@ -56,6 +56,11 @@ RSpec.describe "Combobox composition" do
       output = described_class.new(name: "f", items: []).call
       expect(output).not_to include('wabi--combobox-url-value')
     end
+
+    it "renders without a name: and omits the name attribute on the hidden input" do
+      out = described_class.new(items: []).call
+      expect(out).not_to include('name="')
+    end
   end
 
   describe Components::UI::ComboboxLoading do

@@ -19,7 +19,7 @@ module Components
         }, default: :md
       end
 
-      def initialize(name:, value: nil, min: nil, max: nil, step: 1,
+      def initialize(name: nil, value: nil, min: nil, max: nil, step: 1,
                      precision: nil, format: :decimal, currency: "USD",
                      size: :md, allow_mouse_wheel: false, invalid: false,
                      disabled: false, aria_label: nil, **attrs)

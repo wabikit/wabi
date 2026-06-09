@@ -91,4 +91,9 @@ RSpec.describe Components::UI::NumberInput do
     html = render_html(name: "qty")
     expect(html).to include('data-wabi--number-input-aria-label-value=""')
   end
+
+  it "renders without a name: and omits the name attribute on the input" do
+    html = render_html
+    expect(html).not_to include('name="')
+  end
 end

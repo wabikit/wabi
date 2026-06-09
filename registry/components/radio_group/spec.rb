@@ -34,6 +34,11 @@ RSpec.describe "RadioGroup composition" do
       output = described_class.new(name: "plan").call
       expect(output).not_to include("aria-label")
     end
+
+    it "renders without a name: and omits the name attribute" do
+      out = described_class.new.call
+      expect(out).not_to include('name="')
+    end
   end
 
   describe Components::UI::RadioGroupItem do

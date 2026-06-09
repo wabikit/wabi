@@ -6,7 +6,7 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class Slider < Wabi::Base
-      def initialize(name:, value:, min: 0, max: 100, step: 1, orientation: :horizontal, disabled: false, **attrs)
+      def initialize(name: nil, value:, min: 0, max: 100, step: 1, orientation: :horizontal, disabled: false, **attrs)
         @name        = name
         @value       = Array(value).compact
         @min         = min

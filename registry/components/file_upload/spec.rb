@@ -47,6 +47,11 @@ RSpec.describe "FileUpload" do
     expect(out).to include('aria-atomic="false"')
   end
 
+  it "renders without a name: and omits the name attribute" do
+    out = Components::UI::FileUpload.new.call
+    expect(out).not_to include('name="')
+  end
+
   it "composes" do
     composed = Class.new(Phlex::HTML) do
       def view_template

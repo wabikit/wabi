@@ -5,7 +5,7 @@ require "date"
 module Components
   module UI
     class FileUpload < Wabi::Base
-      def initialize(name:, accept: nil, max_files: 1, max_size: nil, disabled: false, **attrs)
+      def initialize(name: nil, accept: nil, max_files: 1, max_size: nil, disabled: false, **attrs)
         @name      = name
         @accept    = accept
         @max_files = max_files
@@ -18,7 +18,7 @@ module Components
         user_class = @attrs.delete(:class)
         user_data  = @attrs.delete(:data) || {}
         multiple   = @max_files > 1
-        field_name = multiple && !@name.end_with?("[]") ? "#{@name}[]" : @name
+        field_name = @name && multiple && !@name.end_with?("[]") ? "#{@name}[]" : @name
         root_data = {
           controller: "wabi--file-upload",
           "wabi--file-upload-name-value":      field_name,

@@ -38,6 +38,11 @@ RSpec.describe "ToggleGroup composition" do
       output = described_class.new(type: :single, name: "align").call
       expect(output).to include('data-wabi--toggle-group-name-value="align"')
     end
+
+    it "renders without a type: and defaults to single (multiple-value false)" do
+      output = described_class.new.call
+      expect(output).to include('data-wabi--toggle-group-multiple-value="false"')
+    end
   end
 
   describe Components::UI::ToggleGroupItem do

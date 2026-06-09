@@ -113,5 +113,10 @@ RSpec.describe "Date Picker" do
       expect(out).to include('data-testid="picker"')
       expect(out).to include('data-controller="wabi--date-picker"')
     end
+
+    it "renders without a name: and omits the name attribute on the hidden input" do
+      out = Components::UI::DatePicker.new.call
+      expect(out).not_to include('name="')
+    end
   end
 end

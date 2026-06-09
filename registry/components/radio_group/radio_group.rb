@@ -10,7 +10,7 @@ module Components
       # <tt>aria_label: "Subscription plan"</tt>. Alternatively pass
       # <tt>aria_labelledby: "some-heading-id"</tt> via **attrs to reference
       # an existing heading; callers must supply at least one of the two.
-      def initialize(name:, value: nil, disabled: false, aria_label: nil, **attrs)
+      def initialize(name: nil, value: nil, disabled: false, aria_label: nil, **attrs)
         @name       = name
         @value      = value
         @disabled   = disabled

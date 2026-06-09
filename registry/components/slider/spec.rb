@@ -49,6 +49,11 @@ RSpec.describe "Slider composition" do
       output = described_class.new(name: "vol", value: 50).call
       expect(output).not_to include('data-wabi--slider-target="marker"')
     end
+
+    it "renders without a name: and omits the name attribute" do
+      out = described_class.new(value: 50).call
+      expect(out).not_to include('name="')
+    end
   end
 
   describe Components::UI::SliderControl do

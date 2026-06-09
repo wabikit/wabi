@@ -6,7 +6,7 @@ require "date" # Phlex 2.4 references Date/Time constants lazily when rendering 
 module Components
   module UI
     class ToggleGroup < Wabi::Base
-      def initialize(type:, value: nil, name: nil, disabled: false, **attrs)
+      def initialize(type: :single, value: nil, name: nil, disabled: false, **attrs)
         @type     = type
         @value    = Array(value).compact
         @name     = name

@@ -11,7 +11,7 @@ module Components
         "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background " \
         "disabled:cursor-not-allowed disabled:opacity-50"
 
-      def initialize(name:, length: 6, type: :numeric, mask: false, otp: true,
+      def initialize(name: nil, length: 6, type: :numeric, mask: false, otp: true,
                      default_value: nil, placeholder: "○", disabled: false,
                      invalid: false, required: false,
                      aria_label: "One-time passcode", **attrs)

@@ -59,6 +59,11 @@ RSpec.describe "InputOtp" do
     expect(out).to include('data-wabi--input-otp-required-value="false"')
   end
 
+  it "renders without a name: and omits the name attribute on the hidden input" do
+    out = Components::UI::InputOtp.new.call
+    expect(out).not_to include('name="')
+  end
+
   # WCAG 2.4.11: focus ring must only appear on keyboard focus, not mouse click
   it "slot class uses focus-visible: ring utilities (not focus:)" do
     expect(Components::UI::InputOtp::SLOT_CLASS).to include("focus-visible:ring-2")
