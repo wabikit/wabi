@@ -26,8 +26,11 @@ services:
       bin/rails assets:precompile
       # Rebuild the Pagefind search index from the current components every deploy,
       # so search is always up to date without anyone remembering to regenerate +
-      # commit it. Best-effort: if it fails (e.g. npx/pagefind unavailable), fall
-      # back to the committed docs/public/pagefind/ so the deploy still ships.
+      # commit it. The rake task runs `pnpm dlx pagefind`, so make pnpm available
+      # first (Render's Ruby runtime ships Node but not pnpm). Best-effort: if it
+      # fails (pnpm/pagefind unavailable), fall back to the committed
+      # docs/public/pagefind/ so the deploy still ships.
+      corepack enable pnpm 2>/dev/null || npm install -g pnpm@10
       bin/rails wabi:docs:index || echo "WARN: pagefind reindex failed — serving the committed index"
     startCommand: bin/rails server -p $PORT -b 0.0.0.0
     autoDeploy: true
