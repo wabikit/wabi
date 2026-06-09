@@ -2,6 +2,7 @@
   "name": "wabi-registry-tests",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.34.1",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",

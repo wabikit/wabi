@@ -19,10 +19,15 @@ jobs:
         working-directory: registry
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: registry/package.json
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npm ci
+          cache: "pnpm"
+          cache-dependency-path: registry/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
       # test:coverage (not bare test) so the coverage thresholds in
       # vitest.config.js gate CI — the run fails if coverage drops below the floor.
-      - run: npm run test:coverage
+      - run: pnpm run test:coverage

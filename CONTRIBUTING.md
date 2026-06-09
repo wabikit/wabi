@@ -40,7 +40,7 @@ with `mise exec --`** so it runs under the pinned toolchain:
 
 ```bash
 cd registry && mise exec -- bundle install        # registry Ruby deps
-cd registry && mise exec -- yarn install           # registry JS deps (Zag, vitest)
+cd registry && mise exec -- pnpm install           # registry JS deps (Zag, vitest)
 cd docs     && mise exec -- bundle install          # docs app
 ```
 
@@ -268,7 +268,7 @@ The builder embeds every `.rb`/`.js` file as a content string in `dist/r/<name>.
 | Layer | Command (from `registry/`) | Covers |
 |---|---|---|
 | **RSpec** | `mise exec -- bundle exec rspec components/<name>/spec.rb` | rendered HTML, targets, data attrs |
-| **Vitest** | `mise exec -- yarn test components/<name>/<name>_controller.test.js` | controller wiring (state, events, DOM decoration) |
+| **Vitest** | `mise exec -- pnpm test components/<name>/<name>_controller.test.js` | controller wiring (state, events, DOM decoration) |
 | **Docs smoke** (from `docs/`) | `mise exec -- bundle exec rspec spec/requests/docs_smoke_spec.rb` | every component page returns 200 |
 
 - **Coverage floors are enforced.** Vitest has `coverage.thresholds` in
