@@ -42,7 +42,11 @@ module Components
               render ::Components::UI::TabsTrigger.new(value: "code",    class: trigger_class) { "Code" }
             end
             render ::Components::UI::TabsContent.new(value: "preview", class: "mt-0 p-8 bg-background") do
-              raw safe(block_content) if block_content
+              # Demos aren't real navigation: site--preview swallows link clicks so a
+              # breadcrumb "Home"/pagination/sidebar link doesn't leave the docs page.
+              div(data: { controller: "site--preview", action: "click->site--preview#block" }) do
+                raw safe(block_content) if block_content
+              end
             end
             render ::Components::UI::TabsContent.new(value: "code", class: "mt-0 bg-background") do
               render Components::Site::CodeBlock.new(source: @source, language: @language)
