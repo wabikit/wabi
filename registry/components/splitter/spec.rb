@@ -62,7 +62,7 @@ RSpec.describe "Splitter composition" do
       expect(output).not_to include("data-wabi-label")
     end
 
-    it "forwards label as data-wabi-label when provided (aria-label passthrough)" do
+    it "forwards aria_label as data-wabi-label when provided (aria-label passthrough)" do
       output = described_class.new(id: "a:b", aria_label: "Resize sidebar").call
       expect(output).to include('data-wabi-label="Resize sidebar"')
     end

@@ -25,7 +25,7 @@ RSpec.describe "RadioGroup composition" do
       expect(output).to include('data-wabi--radio-group-disabled-value="true"')
     end
 
-    it "renders aria-label when label: is supplied (accessible name for the radiogroup)" do
+    it "renders aria-label when aria_label: is supplied (accessible name for the radiogroup)" do
       output = described_class.new(name: "plan", aria_label: "Subscription plan").call
       expect(output).to include('aria-label="Subscription plan"')
     end
