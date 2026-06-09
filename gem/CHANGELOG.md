@@ -2,6 +2,33 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.26.0 - 2026-06-09
+
+An API-standardization pass ahead of 1.0, a documentation consistency sweep across all 49 component pages, and automated gem releases. **This release contains breaking API changes** (allowed pre-1.0 per SemVer) — they close the last naming/typing inconsistencies before the public API freezes at 1.0.
+
+### Breaking changes
+- **accordion** — `AccordionTrigger`'s `heading_level:` (symbol, e.g. `:h3`) is now `level:` (Integer 1-6, default `3`), mirroring `CardTitle`. Pass `level: nil` to opt out of heading semantics (renders a `<div>` wrapper).
+- **`aria_label:` rename** — the keyword that maps to the HTML `aria-label` attribute is now `aria_label:` (was `label:`) in: `progress`, `radio_group`, `number_input`, `input_otp`, `splitter` (resize trigger), and `context_menu` (radio group). Components that render a real `<label>` element keep `label:` (`checkbox`, `command`, `tree_view`).
+
+### Added
+- `invalid:` on **textarea** (parity with `input`) → emits `aria-invalid="true"`.
+- `aria_label:` on **dropdown_menu** radio group (parity with `context_menu`).
+
+### Changed (non-breaking)
+- Relaxed the required `name:` keyword to optional across form inputs (`combobox`, `radio_group`, `rating_group`, `slider`, `tags_input`, `input_otp`, `number_input`, `file_upload`, `date_picker` incl. `Calendar`); **toggle_group** `type:` now defaults to `:single`. Callers that already pass these are unaffected.
+- Enum defaults are now symbols: `tree_view` `selection_mode: :single`, `color_picker` `format: :rgba` (strings are still accepted — output is unchanged).
+- User `class:` routes uniformly through `merge_class` in the breadcrumb/popover/alert_dialog/tooltip triggers.
+
+### Fixed
+- `Wabi::ClassMerge.call` returns `nil` (not `""`) for an empty result, so components never emit a spurious empty `class=""` attribute.
+- **date_picker** range mode no longer emits malformed `name="[start]"`/`name="[end]"` hidden inputs when `name:` is omitted.
+
+### Docs
+- Consistency sweep across all 49 component pages: descriptions sourced from the component manifests, complete `SOURCE_PATHS` (the Source section now shows every file you install), copy-pasteable example code (no placeholders), richer variant coverage, and a missing accessibility section added to `skeleton`.
+
+### Tooling
+- Automated gem publishing via **RubyGems Trusted Publishing (OIDC)** on `vX.Y.Z` tags — see `.github/workflows/gem-release.yml` and `RELEASING.md`. No stored credentials.
+
 ## 0.25.0 - 2026-06-08
 
 Component count 47 → **49**. Two new components, a project-wide WCAG-AA accessibility audit, and the first `CONTRIBUTING.md`.
