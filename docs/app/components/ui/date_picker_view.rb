@@ -55,8 +55,8 @@ module Components
 
       def render_hidden_inputs
         if @selection_mode == :range
-          input(type: "hidden", name: "#{@name}[start]", data: { "wabi--date-picker-target": "hiddenStart" })
-          input(type: "hidden", name: "#{@name}[end]",   data: { "wabi--date-picker-target": "hiddenEnd" })
+          input(type: "hidden", name: (@name ? "#{@name}[start]" : nil), data: { "wabi--date-picker-target": "hiddenStart" })
+          input(type: "hidden", name: (@name ? "#{@name}[end]" : nil),   data: { "wabi--date-picker-target": "hiddenEnd" })
         else
           input(type: "hidden", name: @name, data: { "wabi--date-picker-target": "hiddenStart" })
         end

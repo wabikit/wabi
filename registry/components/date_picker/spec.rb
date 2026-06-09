@@ -39,6 +39,12 @@ RSpec.describe "Date Picker" do
       expect(out).to include('name="stay[end]"')
     end
 
+    it "omits range hidden-input names when no name: is given" do
+      out = Components::UI::Calendar.new(selection_mode: :range).call
+      expect(out).not_to include('name="[start]"')
+      expect(out).not_to include('name="[end]"')
+    end
+
     it "accepts an explicit num_of_months override" do
       out = Components::UI::Calendar.new(name: "d", num_of_months: 2).call
       expect(out).to include('data-wabi--date-picker-num-of-months-value="2"')
