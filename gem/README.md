@@ -114,7 +114,7 @@ That's a fully-accessible modal with focus trap, scroll lock, backdrop click, Es
 
 ## Compatibility
 
-- **Ruby**: 3.4 or later
+- **Ruby**: 4.0 or later
 - **Rails**: 8.0 or later
 - **Tailwind**: 4.x (native `@theme inline`, no `tailwind.config.js`/`preset.js`)
 - **Phlex**: 2.4 or later

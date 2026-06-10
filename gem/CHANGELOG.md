@@ -5,6 +5,7 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
 ## Unreleased
 
 ### Breaking changes
+- **Ruby >= 4.0 required** (was >= 3.4), matching what CI actually tests.
 - **date_picker / calendar** — `readonly:` is now `read_only:`, matching the Ruby snake_case convention used everywhere else (e.g. `rating_group`). The rendered markup is unchanged.
 
 ### Fixed
