@@ -28,6 +28,10 @@ export function attachToBody(c) {
   if (c.backdropEl && c.backdropEl.parentNode !== document.body) {
     document.body.appendChild(c.backdropEl)
   }
+  bindBeforeCache(c, () => {
+    closeOverlay(c)
+    restoreFromBody(c)
+  })
 }
 
 export function restoreFromBody(c) {
@@ -39,6 +43,39 @@ export function restoreFromBody(c) {
   if (c.backdropEl && c.originalParents?.backdrop) {
     c.originalParents.backdrop.appendChild(c.backdropEl)
   }
+  unbindBeforeCache(c)
+}
+
+// Turbo snapshots the page on turbo:before-cache, BEFORE controllers
+// disconnect — so an open portaled overlay would be cached at <body> with
+// data-state=open. On a back-navigation restore those nodes would sit outside
+// the controller subtree, targets would never resolve, and the user would see
+// an orphaned open overlay (plus a stuck backdrop for modals). Close + restore
+// before the snapshot so cached pages always hold a clean closed overlay.
+function bindBeforeCache(c, handler) {
+  if (c._wabiBeforeCache) return
+  c._wabiBeforeCache = handler
+  document.addEventListener("turbo:before-cache", c._wabiBeforeCache)
+}
+
+function unbindBeforeCache(c) {
+  if (!c._wabiBeforeCache) return
+  document.removeEventListener("turbo:before-cache", c._wabiBeforeCache)
+  c._wabiBeforeCache = null
+}
+
+function closeOverlay(c) {
+  if (typeof c.close === "function") {
+    c.close()
+    return
+  }
+  // Controllers without a public close() (popover, select, tooltip, …):
+  // normalize the DOM back to the server-rendered closed state so the cached
+  // snapshot looks like a fresh page (data-state=closed + inert content).
+  if ("openValue" in c) c.openValue = false
+  const els = [c.positionerEl, c.backdropEl, c.contentEl, ...(c.panelEls || [])]
+  els.forEach((el) => el?.setAttribute("data-state", "closed"))
+  c.contentEl?.setAttribute("inert", "")
 }
 
 // Multi-panel variant for overlays that own several content panels (one open at
@@ -54,8 +91,13 @@ export function attachPanelsToBody(c) {
   c.panelEls?.forEach((el) => {
     if (el.parentNode !== document.body) document.body.appendChild(el)
   })
+  bindBeforeCache(c, () => {
+    closeOverlay(c)
+    restorePanelsFromBody(c)
+  })
 }
 
 export function restorePanelsFromBody(c) {
   c.panelEls?.forEach((el, i) => c.panelParents?.[i]?.appendChild(el))
+  unbindBeforeCache(c)
 }

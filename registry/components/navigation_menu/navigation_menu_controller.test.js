@@ -80,4 +80,18 @@ describe("wabi--navigation-menu", () => {
     expect(panels.length).toBe(2)
     panels.forEach((p) => expect(p.parentNode).toBe(document.body))
   })
+
+  it("turbo:before-cache closes the open panel and restores all panels", async () => {
+    const h = mount(ID, Controller, HTML)
+    await tick()
+    const ctrl = controllerFor(h.application, ID, root())
+    navigationMenu.connect(ctrl.machine.service, normalizeProps).setValue("products")
+    await tick()
+    document.dispatchEvent(new Event("turbo:before-cache"))
+    await tick()
+    const products = contentByValue("products")
+    expect(products.closest('[data-wabi--navigation-menu-target="item"]')).not.toBeNull()
+    expect(products.getAttribute("data-state")).toBe("closed")
+    expect(contentByValue("company").parentNode).not.toBe(document.body)
+  })
 })

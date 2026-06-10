@@ -57,6 +57,17 @@ describe("wabi--combobox", () => {
     expect(content.hasAttribute("inert")).toBe(true)
   })
 
+  it("turbo:before-cache closes it and restores the portal", async () => {
+    ctrl.open(); await tick()
+    document.dispatchEvent(new Event("turbo:before-cache"))
+    await tick()
+    const content = byTarget(ID, "content")
+    // Zag rewrites the root id (cbx → combobox:cbx), so assert containment on
+    // the controller element rather than the original selector.
+    expect(root().contains(content)).toBe(true)
+    expect(content.getAttribute("data-state")).toBe("closed")
+  })
+
   it("selecting a value mirrors it into the hidden input + dispatches :change (teeth)", async () => {
     const seen = []
     document.addEventListener("wabi--combobox:change", (e) => seen.push(e.detail.value))

@@ -88,6 +88,34 @@ describe("wabi--dialog", () => {
   })
 })
 
+describe("turbo:before-cache (Turbo snapshot hygiene)", () => {
+  // Turbo snapshots the page BEFORE controllers disconnect, so an open portaled
+  // overlay would be cached at <body> with data-state=open — on a back-navigation
+  // restore the nodes sit outside the controller subtree and targets never
+  // resolve (orphaned open overlay + stuck backdrop).
+  it("closes the overlay and restores the portal nodes before Turbo snapshots", async () => {
+    ctrl.open()
+    await tick()
+    document.dispatchEvent(new Event("turbo:before-cache"))
+    await tick()
+    const content = byTarget(ID, "content")
+    expect(content.closest("#dlg")).not.toBeNull()
+    expect(content.getAttribute("data-state")).toBe("closed")
+    expect(byTarget(ID, "backdrop").closest("#dlg")).not.toBeNull()
+  })
+
+  it("stops listening once the controller disconnects", async () => {
+    const el = root()
+    el.remove() // Stimulus disconnects → restoreFromBody already ran
+    await tick()
+    const content = el.querySelector('[data-wabi--dialog-target="content"]')
+    document.body.appendChild(content.parentElement) // simulate an unrelated move
+    document.dispatchEvent(new Event("turbo:before-cache"))
+    await tick()
+    expect(content.closest("#dlg")).toBeNull() // a dead controller must not pull it back
+  })
+})
+
 describe("wabi--dialog via the drawer markup (drawer reuses this controller)", () => {
   const DRAWER = `
     <div id="drw" data-controller="wabi--dialog"

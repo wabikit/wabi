@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import * as combobox from "@zag-js/combobox"
 import { VanillaMachine, normalizeProps, spreadProps } from "@zag-js/vanilla"
+import { attachToBody, restoreFromBody } from "controllers/wabi/_shared/overlay_portal"
 
 export default class extends Controller {
   static targets = ["label", "control", "input", "trigger", "positioner", "content", "item", "itemIndicator", "hiddenInput", "loading", "error"]
@@ -35,7 +36,7 @@ export default class extends Controller {
     }
 
     this.portaled = this.portalValue
-    if (this.portaled) this.attachToBody()
+    if (this.portaled) attachToBody(this)
 
     // When items-value is empty (e.g. Command palette renders items as static
     // HTML rather than passing a JSON array), build the collection from the
@@ -96,7 +97,7 @@ export default class extends Controller {
     clearTimeout(this.debounceTimer)
     this.unsubscribe?.()
     this.machine?.stop()
-    if (this.portaled) this.restoreFromBody()
+    if (this.portaled) restoreFromBody(this)
   }
 
   // Imperative open/close actions, used by sibling controllers (e.g. the
@@ -212,18 +213,6 @@ export default class extends Controller {
     })
     this.machine.updateProps({ collection })
     this.render()
-  }
-
-  attachToBody() {
-    if (this.positionerEl && this.positionerEl.parentNode !== document.body) {
-      document.body.appendChild(this.positionerEl)
-    }
-  }
-
-  restoreFromBody() {
-    if (this.positionerEl && this.originalParents.positioner) {
-      this.originalParents.positioner.appendChild(this.positionerEl)
-    }
   }
 
   render() {

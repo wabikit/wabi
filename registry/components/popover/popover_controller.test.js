@@ -58,6 +58,18 @@ describe("wabi--popover", () => {
     expect(trigger.getAttribute("aria-controls")).toBe(content.id)
   })
 
+  it("turbo:before-cache closes it and restores the portal (no public close())", async () => {
+    byTarget(ID, "trigger").click()
+    await tick()
+    document.dispatchEvent(new Event("turbo:before-cache"))
+    await tick()
+    const content = byTarget(ID, "content")
+    expect(content.closest("#pop")).not.toBeNull()
+    expect(content.getAttribute("data-state")).toBe("closed")
+    expect(content.hasAttribute("inert")).toBe(true)
+    expect(ctrl.openValue).toBe(false)
+  })
+
   it("dispatches wabi--popover:change on open then close (teeth)", async () => {
     const seen = []
     // Popover is non-modal (no focus-trap), so the close :change dispatch is
