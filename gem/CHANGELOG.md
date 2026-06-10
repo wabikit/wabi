@@ -2,6 +2,18 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Breaking changes
+- **date_picker / calendar** — `readonly:` is now `read_only:`, matching the Ruby snake_case convention used everywhere else (e.g. `rating_group`). The rendered markup is unchanged.
+
+### Fixed
+- **Portaled overlays now survive the Turbo page cache.** Turbo snapshots the page *before* controllers disconnect, so an open dialog/popover/select/etc. was cached portaled at `<body>` with `data-state="open"` — restoring that snapshot (back button) left an orphaned open overlay the controller could no longer reach (plus a stuck backdrop for modals). The shared portal helpers now close the overlay and restore its nodes on `turbo:before-cache`, so cached snapshots always hold a clean closed overlay. Applies to dialog, alert_dialog, drawer, popover, select, combobox, command, dropdown_menu, context_menu, tooltip, hover_card, date_picker, color_picker and navigation_menu.
+
+### Changed (non-breaking)
+- All `@zag-js/*` packages aligned on **1.41.2** (the registry mixed 1.41.0/1.41.2; mismatched Zag patch versions across machines can cause subtle bugs).
+- Gem metadata: homepage points at the live docs (https://wabi-docs.onrender.com) until wabikit.dev is wired; `rubygems_mfa_required` declared; CI now tests Ruby 3.4 (oldest supported) alongside 4.0.
+
 ## 0.26.0 - 2026-06-09
 
 An API-standardization pass ahead of 1.0, a documentation consistency sweep across all 49 component pages, and automated gem releases. **This release contains breaking API changes** (allowed pre-1.0 per SemVer) — they close the last naming/typing inconsistencies before the public API freezes at 1.0.

@@ -10,7 +10,7 @@ module Components
 
       def initialize(name: nil, selection_mode: :single, default_value: nil,
                      min: nil, max: nil, locale: "en-US", num_of_months: nil,
-                     disabled: false, readonly: false, **attrs)
+                     disabled: false, read_only: false, **attrs)
         @name           = name
         @selection_mode = selection_mode
         @default_value  = default_value
@@ -19,7 +19,7 @@ module Components
         @locale         = locale
         @num_of_months  = num_of_months
         @disabled       = disabled
-        @readonly       = readonly
+        @read_only      = read_only
         @attrs          = attrs
       end
 

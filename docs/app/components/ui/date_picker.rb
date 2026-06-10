@@ -11,7 +11,7 @@ module Components
 
       def initialize(name: nil, selection_mode: :single, default_value: nil,
                      min: nil, max: nil, locale: "en-US", num_of_months: nil,
-                     placeholder: nil, aria_label: "Choose date", disabled: false, readonly: false,
+                     placeholder: nil, aria_label: "Choose date", disabled: false, read_only: false,
                      portal: true, **attrs)
         @name           = name
         @selection_mode = selection_mode
@@ -23,7 +23,7 @@ module Components
         @placeholder    = placeholder
         @aria_label     = aria_label
         @disabled       = disabled
-        @readonly       = readonly
+        @read_only      = read_only
         @portal         = portal
         @attrs          = attrs
       end

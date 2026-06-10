@@ -23,7 +23,7 @@ module Components
           "wabi--date-picker-max-value":            @max ? iso(@max) : "",
           "wabi--date-picker-num-of-months-value":  num_of_months.to_s,
           "wabi--date-picker-disabled-value":       @disabled.to_s,
-          "wabi--date-picker-readonly-value":       @readonly.to_s,
+          "wabi--date-picker-readonly-value":       @read_only.to_s,
         }
       end
 

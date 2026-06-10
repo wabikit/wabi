@@ -64,7 +64,7 @@ RSpec.describe "Date Picker" do
     end
 
     it "casts disabled/readonly booleans to string data-values" do
-      out = Components::UI::Calendar.new(name: "d", disabled: true, readonly: true).call
+      out = Components::UI::Calendar.new(name: "d", disabled: true, read_only: true).call
       expect(out).to include('data-wabi--date-picker-disabled-value="true"')
       expect(out).to include('data-wabi--date-picker-readonly-value="true"')
     end
