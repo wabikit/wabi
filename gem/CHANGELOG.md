@@ -12,7 +12,7 @@ All notable changes to Wabi land here. Format follows [Keep a Changelog](https:/
 
 ### Changed (non-breaking)
 - All `@zag-js/*` packages aligned on **1.41.2** (the registry mixed 1.41.0/1.41.2; mismatched Zag patch versions across machines can cause subtle bugs).
-- Gem metadata: homepage points at the live docs (https://wabi-docs.onrender.com) until wabikit.dev is wired; `rubygems_mfa_required` declared; CI now tests Ruby 3.4 (oldest supported) alongside 4.0.
+- Gem metadata: homepage points at the live docs (https://wabi-docs.onrender.com) until wabikit.dev is wired; `rubygems_mfa_required` declared.
 
 ## 0.26.0 - 2026-06-09
 

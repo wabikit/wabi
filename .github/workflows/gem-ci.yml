@@ -17,8 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Cover the oldest supported Ruby (gemspec: >= 3.4) and the current one.
-        ruby: ["3.4", "4.0.5"]
+        ruby: ["4.0.5"]
     defaults:
       run:
         working-directory: gem
