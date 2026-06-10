@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wabikit/wabi/main/docs/public/icon.png" width="84" height="84" alt="Wabi logo — a faceted gem with a chipped edge">
+</p>
+
 # Wabi
 
 > Beautifully imperfect components for Rails.

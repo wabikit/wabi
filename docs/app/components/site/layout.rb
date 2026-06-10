@@ -26,6 +26,10 @@ module Components
           head do
             title { "#{@title} — Wabi" }
             meta(name: "viewport", content: "width=device-width, initial-scale=1")
+            link(rel: "icon", href: "/favicon.ico", sizes: "32x32")
+            link(rel: "icon", href: "/icon.svg", type: "image/svg+xml")
+            link(rel: "icon", href: "/icon.png", type: "image/png")
+            link(rel: "apple-touch-icon", href: "/icon.png")
             stylesheet_link_tag("tailwind", "data-turbo-track": "reload")
             javascript_importmap_tags
           end
@@ -44,7 +48,20 @@ module Components
           div(class: "container mx-auto flex h-14 items-center justify-between px-4") do
             div(class: "flex items-center gap-2") do
               render ::Components::Site::SidebarToggle.new if @chrome != :bare
-              a(href: "/", class: "font-bold text-lg") { "Wabi" }
+              a(href: "/", class: "flex items-center gap-2 font-bold text-lg") do
+                # Wabi gem mark — inherits the link's text color via currentColor.
+                raw safe(<<~SVG)
+                  <svg viewBox="0 0 32 32" width="22" height="22" class="shrink-0" aria-hidden="true">
+                    <path d="M9 6.5 L22.5 6 L26 10 L24.5 11.2 L28 13 L16 28 L4 13 Z" fill="currentColor"/>
+                    <path d="M9 6.5 L22.5 6 L21.5 13 L10.5 13 Z" fill="#fff" fill-opacity="0.13"/>
+                    <path d="M22.5 6 L26 10 L24.5 11.2 L28 13 L21.5 13 Z" fill="#fff" fill-opacity="0.20"/>
+                    <path d="M21.5 13 L28 13 L16 28 Z" fill="#fff" fill-opacity="0.10"/>
+                    <path d="M9 6.5 L10.5 13 L4 13 Z" fill="#000" fill-opacity="0.18"/>
+                    <path d="M4 13 L10.5 13 L16 28 Z" fill="#000" fill-opacity="0.12"/>
+                  </svg>
+                SVG
+                span { "Wabi" }
+              end
             end
             div(class: "flex items-center gap-2") do
               render ::Components::Site::SearchBox.new if @chrome != :bare
