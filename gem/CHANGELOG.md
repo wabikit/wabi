@@ -2,7 +2,9 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.30.0 - 2026-06-09
+
+Pre-1.0 hardening: a Turbo-cache fix for every portaled overlay, dependency alignment, and release-metadata polish. Version jumps 0.26 → 0.30 to mark the start of the 0.3x pre-1.0 series.
 
 ### Breaking changes
 - **Ruby >= 4.0 required** (was >= 3.4), matching what CI actually tests.
