@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+# Load phlex-rails before anything else: it gives Phlex components render_in /
+# the Rails integration. Without this require, apps that only `bundle add wabi`
+# get a Phlex::HTML with no Rails support and `render Components::UI::X` fails
+# with "must implement #to_partial_path". Guarded because phlex/rails needs
+# ActiveSupport (absent in the bare gem test env).
+require "phlex/rails" if defined?(Rails)
+
 require_relative "wabi/version"
 require_relative "wabi/base"
 require_relative "wabi/class_merge"

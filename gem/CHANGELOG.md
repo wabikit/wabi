@@ -2,6 +2,17 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.30.1 - 2026-06-09
+
+Fresh-install fix, found by following the README in a brand-new Rails app.
+
+### Fixed
+- **`require "phlex/rails"` from the gem entrypoint** (when Rails is defined). Apps that only `bundle add wabi` previously got Phlex without the Rails integration — the first `render Components::UI::X` failed with "must implement #to_partial_path". The docs app masked this by depending on phlex-rails directly.
+- `wabi:install` now warns when Phlex isn't set up (no `config/initializers/phlex.rb`) and points at `bin/rails g phlex:install`, which creates the `Components::`/`Views::` namespaces components autoload under.
+
+### Docs
+- README quick start gains the `phlex:install` step, the importmap-pins note for interactive components, and the `--css tailwind` prerequisite; CLI table documents `wabi:update`; stale counts/roadmap refreshed. Getting-started page updated to match.
+
 ## 0.30.0 - 2026-06-09
 
 Pre-1.0 hardening: a Turbo-cache fix for every portaled overlay, dependency alignment, and release-metadata polish. Version jumps 0.26 → 0.30 to mark the start of the 0.3x pre-1.0 series.

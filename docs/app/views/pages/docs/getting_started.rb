@@ -9,19 +9,29 @@ module Views
             main(class: "container mx-auto py-12 px-4 max-w-3xl") do
               h1(class: "text-4xl font-bold mb-4") { "Getting started" }
               p(class: "text-muted-foreground mb-8") do
-                "Add Wabi to a Rails 8 app in four steps."
+                "Add Wabi to a Rails 8 app (created with --css tailwind) in a few steps."
               end
 
               h2(id: "install-the-gem", class: "text-2xl font-semibold mt-8 mb-3") { "1. Install the gem" }
               render ::Components::Site::CodeBlock.new(language: "shell", source: "bundle add wabi")
 
-              h2(id: "run-the-installer", class: "text-2xl font-semibold mt-8 mb-3") { "2. Run the installer" }
+              h2(id: "set-up-phlex", class: "text-2xl font-semibold mt-8 mb-3") { "2. Set up Phlex" }
+              render ::Components::Site::CodeBlock.new(language: "shell", source: "bin/rails g phlex:install")
+              p(class: "text-sm text-muted-foreground mt-2") do
+                plain "Creates the "
+                code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "Components::" }
+                plain " and "
+                code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "Views::" }
+                plain " namespaces Wabi components autoload under. Skip if your app already uses phlex-rails."
+              end
+
+              h2(id: "run-the-installer", class: "text-2xl font-semibold mt-8 mb-3") { "3. Run the installer" }
               render ::Components::Site::CodeBlock.new(language: "shell", source: "bin/rails g wabi:install")
               p(class: "text-sm text-muted-foreground mt-2") do
                 "Copies the default tokens.css, the theme controller, and initializes config/wabi.lock.json."
               end
 
-              h2(id: "wire-tailwind-4", class: "text-2xl font-semibold mt-8 mb-3") { "3. Wire Tailwind 4" }
+              h2(id: "wire-tailwind-4", class: "text-2xl font-semibold mt-8 mb-3") { "4. Wire Tailwind 4" }
               p(class: "text-sm mb-2") do
                 plain "In "
                 code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "app/assets/tailwind/application.css" }
@@ -37,7 +47,7 @@ module Views
                 plain ' (not "application") so the compiled output is what loads.'
               end
 
-              h2(id: "mount-the-theme-controller", class: "text-2xl font-semibold mt-8 mb-3") { "4. Mount the theme controller" }
+              h2(id: "mount-the-theme-controller", class: "text-2xl font-semibold mt-8 mb-3") { "5. Mount the theme controller" }
               p(class: "text-sm mb-2") do
                 plain "On your "
                 code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "<html>" }
@@ -49,8 +59,13 @@ module Views
                 end
               RUBY
 
-              h2(id: "add-components", class: "text-2xl font-semibold mt-8 mb-3") { "5. Add components" }
+              h2(id: "add-components", class: "text-2xl font-semibold mt-8 mb-3") { "6. Add components" }
               render ::Components::Site::CodeBlock.new(language: "shell", source: "bin/rails g wabi:add button dialog card")
+              p(class: "text-sm text-muted-foreground mt-2") do
+                plain "Interactive components print the Zag.js "
+                code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "pin" }
+                plain " lines to paste into config/importmap.rb — follow the generator output, then restart the server."
+              end
               p(class: "text-sm text-muted-foreground mt-2") do
                 plain "Components autoload under "
                 code(class: "px-1 py-0.5 rounded bg-muted text-sm") { "Components::UI::*" }

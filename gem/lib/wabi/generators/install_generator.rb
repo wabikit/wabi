@@ -49,6 +49,17 @@ module Wabi
         RUBY
       end
 
+      # Wabi components autoload under Components::UI — that namespace comes
+      # from phlex-rails's own installer (config/initializers/phlex.rb pushes
+      # app/components under Components). Warn when it's missing, otherwise the
+      # first `render Components::UI::X` raises uninitialized constant.
+      def check_phlex_setup
+        return if File.exist?(File.join(destination_root, "config/initializers/phlex.rb"))
+        say "\n  ⚠ Phlex doesn't look set up in this app (no config/initializers/phlex.rb).", :yellow
+        say "    Run `bin/rails g phlex:install` to create the Components::/Views:: namespaces"
+        say "    Wabi components rely on — without it Components::UI::* won't resolve."
+      end
+
       def print_next_steps
         say "\n  Wabi installed. Next steps:", :green
         say ""

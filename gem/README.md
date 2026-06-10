@@ -4,28 +4,35 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.30.0 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 49 components, 8 theme palettes, WCAG-AA audited, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
+🎉 **Status:** v0.30.1 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 49 components, 8 theme palettes, WCAG-AA audited, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
 
 ---
 
 ## Quick start
 
+Wabi expects a Rails 8 app with Tailwind 4 and importmap (`rails new myapp --css tailwind` gives you both).
+
 ```bash
 # 1. Add the gem
 bundle add wabi
 
-# 2. Run the installer (copies tokens.css + theme controller + lockfile)
+# 2. Set up Phlex (skip if your app already uses phlex-rails) —
+#    creates the Components::/Views:: namespaces components autoload under
+bin/rails g phlex:install
+
+# 3. Run the Wabi installer (copies tokens.css + theme controller + lockfile)
 bin/rails g wabi:install
 
-# 3. Add components from the registry
+# 4. Add components from the registry
 bin/rails g wabi:add button card dialog
 
-# 4. Render
-# In any Phlex view:
+# 5. Render — in any Phlex view or ERB template:
 #   render Components::UI::Button.new(appearance: :primary) { "Click me" }
 ```
 
 Then add `@import "./wabi/tokens.css";` AFTER `@import "tailwindcss";` in your `app/assets/tailwind/application.css`, and mount `data-controller="wabi--theme"` on `<html>` in your layout.
+
+Interactive components (dialog, select, …) need their Zag.js importmap pins — `wabi:add` prints the exact `pin` lines to paste into `config/importmap.rb`. Restart the server after adding initializers or pins.
 
 ---
 
@@ -105,6 +112,7 @@ That's a fully-accessible modal with focus trap, scroll lock, backdrop click, Es
 |---|---|
 | `wabi:install [--force]` | Copies `tokens.css`, the `wabi--theme` Stimulus controller, and initializes `config/wabi.lock.json`. `--force` re-copies tokens/controller on gem upgrades (lockfile is preserved). |
 | `wabi:add <name…>` | Copies one or more component source files from the registry into `app/components/ui/` and their controllers into `app/javascript/controllers/wabi/`. Updates the lockfile. |
+| `wabi:update <name…>` | Re-fetches installed components and 3-way merges registry changes with your local edits (conflict markers on overlap). |
 | `wabi:list` | Lists all available components in the configured registry. |
 | `wabi:registry <url>` | Switches the active registry origin (default: `https://wabi-docs.onrender.com/r`). |
 | `wabi:theme <slug>` | Swaps `tokens.css` for the requested palette. Run `bin/rails tailwindcss:build` after. |
@@ -135,11 +143,11 @@ bin/dev      # starts registry watcher + tailwind watcher + docs server on :3000
 
 Then visit:
 - `/` — marketing landing
-- `/docs/components` — index of all 36 components
+- `/docs/components` — index of all 49 components
 - `/docs/components/{button,dropdown_menu,dialog,tabs}` — detailed pages with live preview + source
 - `/docs/themes` — all 8 palettes side-by-side
 - `/docs/getting-started`, `/docs/theming`, `/docs/philosophy` — prose docs
-- `/preview` — the Sprint 1-6 kitchen sink (every component on one page)
+- `/preview` — kitchen sink (every component on one page)
 
 ---
 
@@ -184,7 +192,9 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 | v0.12 | Skeleton, Breadcrumb, Pagination, Progress, AlertDialog | ✅ shipped 2026-06-01 |
 | v0.13 | DataTable (server-driven: sortable headers + row selection) | ✅ shipped 2026-06-01 |
 | v0.14–0.25 | JS test suite + coverage floors; +29 components (Sidebar, Carousel, Splitter, NavigationMenu, RatingGroup, HoverCard, TagsInput, Collapsible, ColorPicker, TreeView, …); full WCAG-AA audit | ✅ shipped 2026-06-08 |
-| v1.0 | API stability; external a11y audit | 2027-04 target |
+| v0.26 | API-standardization pass (frozen contract for 1.0); docs consistency sweep; automated OIDC gem releases | ✅ shipped 2026-06-09 |
+| v0.30 | Pre-1.0 hardening: Turbo-cache overlay fix, Zag 1.41.2 alignment, Ruby >= 4.0 | ✅ shipped 2026-06-09 |
+| v1.0 | API stability; external a11y audit | next up |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.
 
