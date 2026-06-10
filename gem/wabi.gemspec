@@ -11,7 +11,9 @@ Gem::Specification.new do |spec|
   spec.summary       = "Beautifully imperfect components for Rails."
   spec.description   = "An OSS UI component library for Rails 8 — Phlex-native, " \
                        "Tailwind-themed, accessible, with 'you own the code' philosophy."
-  spec.homepage      = "https://wabikit.dev"
+  # Live docs URL until the wabikit.dev DNS is wired — the RubyGems homepage
+  # link must not 404 at launch.
+  spec.homepage      = "https://wabi-docs.onrender.com"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 3.4"
 
@@ -19,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/wabikit/wabi"
   spec.metadata["bug_tracker_uri"] = "https://github.com/wabikit/wabi/issues"
   spec.metadata["changelog_uri"]   = "https://github.com/wabikit/wabi/blob/main/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir["lib/**/*", "templates/**/*", "LICENSE", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
