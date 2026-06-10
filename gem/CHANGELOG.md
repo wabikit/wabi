@@ -2,6 +2,11 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.30.2 - 2026-06-10
+
+### Docs
+- Brand identity: a wabi-sabi gem icon (a faceted gem with a chipped edge) replaces Rails' default red-circle favicon — adaptive `icon.svg`, `icon.png`, and `favicon.ico`, plus the gem next to the "Wabi" wordmark in the docs header and above the README title.
+
 ## 0.30.1 - 2026-06-09
 
 Fresh-install fix, found by following the README in a brand-new Rails app.
