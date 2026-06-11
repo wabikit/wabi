@@ -71,6 +71,7 @@ module Components
                 class: "text-sm text-muted-foreground hover:text-foreground px-2") { "Themes" }
               render ::Components::Site::ModeToggle.new
               render ::Components::Site::ThemePicker.new
+              render ::Components::Site::GithubStar.new
             end
           end
         end
