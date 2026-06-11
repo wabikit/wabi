@@ -41,6 +41,32 @@ module Views
                 render ::Components::UI::Input.new(name: "email", value: "not-an-email", type: "email", invalid: true, aria_label: "Email")
               end
 
+              h2(id: "search", class: "text-2xl font-semibold mt-8 mb-4") { "Search" }
+              p(class: "text-sm text-muted-foreground mb-4") do
+                plain "No separate component needed — a search field is "
+                code(class: "px-1 py-0.5 rounded bg-muted text-sm") { 'Input type="search"' }
+                plain " with a leading icon. "
+                code(class: "px-1 py-0.5 rounded bg-muted text-sm") { 'type="search"' }
+                plain " also gives you the browser's native clear (×) button while typing — no JavaScript."
+              end
+              render ::Components::Site::ComponentPreview.new(source: <<~RUBY) do
+                div(class: "relative w-full max-w-sm") do
+                  # decorative magnifying glass — doesn't capture clicks
+                  raw safe(%(<svg class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>))
+                  render Components::UI::Input.new(type: "search", placeholder: "Search components…", aria_label: "Search", class: "pl-9")
+                end
+              RUBY
+                div(class: "relative w-full max-w-sm") do
+                  raw safe(%(<svg class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>))
+                  render ::Components::UI::Input.new(type: "search", placeholder: "Search components…", aria_label: "Search", class: "pl-9")
+                end
+              end
+              p(class: "text-sm text-muted-foreground mt-4") do
+                plain "Need search-as-you-type with a suggestions dropdown? Use the "
+                a(href: "/docs/components/combobox", class: "underline hover:text-foreground") { "async Combobox" }
+                plain " instead — it wires the debounced fetch and result list for you."
+              end
+
               h2(id: "source", class: "text-2xl font-semibold mt-8 mb-4") { "Source" }
               SOURCE_PATHS.each do |relpath|
                 h3(id: "source-#{File.basename(relpath, '.rb')}",
