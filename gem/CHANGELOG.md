@@ -2,6 +2,21 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.0 - 2026-06-11
+
+First stable release. The public API is now frozen under [Semantic Versioning](https://semver.org/) — no more breaking changes without a major bump.
+
+Wabi ships **49 components** (Phlex + Tailwind 4 + Stimulus + Zag.js), **8 theme palettes** with light and dark variants, and a "you own the code" registry installer (`wabi:add` copies the source into your app). Interactive components wire through Zag.js state machines for WAI-ARIA roles, keyboard semantics, and focus management.
+
+### Stability
+- The component API — parameter names, value types, and the `Wabi::Base` / variants DSL / `merge_class` surface — is frozen. The standardization that got us here shipped in **0.26.0** (parameter naming/typing) and **0.30.0** (`read_only:`, Ruby >= 4.0); see those entries for the pre-1.0 breaking changes. Nothing breaking is introduced at 1.0 itself.
+
+### Accessibility
+- Every component has had an **internal WCAG 2.1 Level AA audit** — a manual screen-reader + keyboard protocol (`A11Y-TESTING.md`) plus an axe-core regression gate across all 49 docs pages. Wabi *targets* WCAG 2.1 AA; it has **not** yet had a third-party audit. Accessibility reports and feedback are explicitly welcome and treated as priority issues — see the Accessibility issue template, or open an issue at https://github.com/wabikit/wabi/issues.
+
+### Requirements
+- Ruby >= 4.0 · Rails >= 8.0 · Tailwind 4.x · Phlex >= 2.4 · Stimulus 3.x
+
 ## 0.30.2 - 2026-06-10
 
 ### Docs

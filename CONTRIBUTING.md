@@ -4,12 +4,16 @@ Thanks for your interest in Wabi! Wabi is **beautifully imperfect components for
 Rails** — Phlex + Tailwind 4 + Stimulus + Hotwire, inspired by shadcn/ui:
 components are *copied* into your app, so you own the code.
 
-Wabi is in **alpha** and the API is still moving. The most useful contributions
-right now:
+As of **1.0**, the public API is stable (Semantic Versioning) — breaking changes
+wait for a major bump. The most useful contributions:
 
 - **Issues with concrete repros** — the fastest way to get something fixed.
+- **Accessibility reports** — Wabi targets WCAG 2.1 AA but has only had an internal
+  audit, so real-world assistive-tech feedback is high-value. Use the
+  [Accessibility issue template](.github/ISSUE_TEMPLATE/accessibility.md); these
+  are treated as priority.
 - **New components** — toward shadcn parity (see [ROADMAP.md](ROADMAP.md)).
-- **Theme palettes** and accessibility fixes.
+- **Theme palettes** and other accessibility fixes.
 - **Docs** corrections and examples.
 
 This document covers how the monorepo is laid out, the per-component anatomy,

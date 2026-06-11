@@ -8,7 +8,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v0.30.2 alpha — [available on RubyGems](https://rubygems.org/gems/wabi). 49 components, 8 theme palettes, WCAG-AA audited, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
+🎉 **Status:** v1.0.0 — [available on RubyGems](https://rubygems.org/gems/wabi). Stable, frozen public API. 49 components, 8 theme palettes, internally audited for WCAG 2.1 AA, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
 
 ---
 
@@ -198,15 +198,24 @@ Requires Node 20+ in PATH (Pagefind is fetched via `npx` on demand).
 | v0.14–0.25 | JS test suite + coverage floors; +29 components (Sidebar, Carousel, Splitter, NavigationMenu, RatingGroup, HoverCard, TagsInput, Collapsible, ColorPicker, TreeView, …); full WCAG-AA audit | ✅ shipped 2026-06-08 |
 | v0.26 | API-standardization pass (frozen contract for 1.0); docs consistency sweep; automated OIDC gem releases | ✅ shipped 2026-06-09 |
 | v0.30 | Pre-1.0 hardening: Turbo-cache overlay fix, Zag 1.41.2 alignment, Ruby >= 4.0 | ✅ shipped 2026-06-09 |
-| v1.0 | API stability; external a11y audit | next up |
+| **v1.0** | **Stable, frozen public API; internal WCAG 2.1 AA audit** | ✅ **shipped 2026-06-11** |
+| post-1.0 | Community feedback, third-party a11y review, `wabikit.dev` | ongoing |
 
 See [ROADMAP.md](./ROADMAP.md) for the long-term view and [CHANGELOG.md](./CHANGELOG.md) for the per-release detail.
 
 ---
 
+## Accessibility
+
+Wabi **targets WCAG 2.1 Level AA**. Every component has been through an internal audit: a manual screen-reader + keyboard protocol (see [`A11Y-TESTING.md`](https://github.com/wabikit/wabi/blob/main/A11Y-TESTING.md)) and an axe-core regression gate across all 49 docs pages. Interactive components inherit WAI-ARIA roles, keyboard navigation, and focus management from Zag.js; overlays toggle `inert` when closed so they leave the tab order and the a11y tree.
+
+It has **not** had a third-party audit — so if you use assistive technology and something behaves wrong, that's the most valuable bug report Wabi can get. Open one with the [**Accessibility issue template**](https://github.com/wabikit/wabi/issues/new?template=accessibility.md) (or any issue tagged `a11y`); these are treated as priority.
+
+---
+
 ## Contributing
 
-Wabi is in alpha and the API is still moving. Filing issues with concrete repros, suggestions for components, or theme palette ideas is the most useful kind of contribution right now. See **[CONTRIBUTING.md](https://github.com/wabikit/wabi/blob/main/CONTRIBUTING.md)** for the monorepo layout, the per-component anatomy, the Zag.js wiring conventions, and how to add a component end to end.
+The public API is stable as of 1.0 (Semantic Versioning). Issues with concrete repros, accessibility reports, component suggestions, and theme palette ideas are all welcome. See **[CONTRIBUTING.md](https://github.com/wabikit/wabi/blob/main/CONTRIBUTING.md)** for the monorepo layout, the per-component anatomy, the Zag.js wiring conventions, and how to add a component end to end.
 
 ---
 
