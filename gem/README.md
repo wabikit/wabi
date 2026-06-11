@@ -8,7 +8,7 @@
 
 Wabi is an open-source UI component library for **Ruby on Rails 8**, built on **Phlex + Tailwind 4 + Stimulus + Hotwire**. Inspired by shadcn/ui, components are *copied* into your app — you own the code, customize freely, no upstream API to drift away from.
 
-🎉 **Status:** v1.0.0 — [available on RubyGems](https://rubygems.org/gems/wabi). Stable, frozen public API. 49 components, 8 theme palettes, internally audited for WCAG 2.1 AA, live docs + registry at [wabi-docs.onrender.com](https://wabi-docs.onrender.com).
+🎉 **Status:** v1.0.1 — [available on RubyGems](https://rubygems.org/gems/wabi). Stable, frozen public API. 49 components, 8 theme palettes, internally audited for WCAG 2.1 AA, live docs + registry at [wabikit.dev](https://wabikit.dev).
 
 ---
 
@@ -118,7 +118,7 @@ That's a fully-accessible modal with focus trap, scroll lock, backdrop click, Es
 | `wabi:add <name…>` | Copies one or more component source files from the registry into `app/components/ui/` and their controllers into `app/javascript/controllers/wabi/`. Updates the lockfile. |
 | `wabi:update <name…>` | Re-fetches installed components and 3-way merges registry changes with your local edits (conflict markers on overlap). |
 | `wabi:list` | Lists all available components in the configured registry. |
-| `wabi:registry <url>` | Switches the active registry origin (default: `https://wabi-docs.onrender.com/r`). |
+| `wabi:registry <url>` | Switches the active registry origin (default: `https://wabikit.dev/r`). |
 | `wabi:theme <slug>` | Swaps `tokens.css` for the requested palette. Run `bin/rails tailwindcss:build` after. |
 | `wabi:vendor [pkg…]` | **Offline / strict-CSP.** Downloads the Zag `+esm` dependency graph for your jsDelivr-pinned packages into `vendor/javascript/` and repins `config/importmap.rb` at the local copies, so no controller loads from the CDN at runtime. Default: every jsDelivr `+esm` pin in the importmap. |
 
@@ -137,7 +137,7 @@ That's a fully-accessible modal with focus trap, scroll lock, backdrop click, Es
 
 ## Documentation
 
-The full docs site is at the GitHub repo's `docs/` Rails app (also planned to host at https://wabikit.dev when DNS is wired). Locally:
+The full docs site is live at **[wabikit.dev](https://wabikit.dev)**. To run it locally:
 
 ```bash
 git clone https://github.com/wabikit/wabi

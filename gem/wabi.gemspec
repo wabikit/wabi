@@ -11,9 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Beautifully imperfect components for Rails."
   spec.description   = "An OSS UI component library for Rails 8 — Phlex-native, " \
                        "Tailwind-themed, accessible, with 'you own the code' philosophy."
-  # Live docs URL until the wabikit.dev DNS is wired — the RubyGems homepage
-  # link must not 404 at launch.
-  spec.homepage      = "https://wabi-docs.onrender.com"
+  spec.homepage      = "https://wabikit.dev"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 4.0"
 

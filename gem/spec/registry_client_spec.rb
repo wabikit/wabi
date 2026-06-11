@@ -4,9 +4,9 @@ require "wabi/registry_client"
 
 RSpec.describe Wabi::RegistryClient do
   describe ".new" do
-    it "defaults to https://wabi-docs.onrender.com/r" do
+    it "defaults to https://wabikit.dev/r" do
       client = described_class.new
-      expect(client.base_url).to eq("https://wabi-docs.onrender.com/r")
+      expect(client.base_url).to eq("https://wabikit.dev/r")
     end
 
     it "accepts a custom base url" do
@@ -29,7 +29,7 @@ RSpec.describe Wabi::RegistryClient do
     end
 
     it "fetches JSON from the registry and returns the parsed hash" do
-      stub_request(:get, "https://wabi-docs.onrender.com/r/button.json")
+      stub_request(:get, "https://wabikit.dev/r/button.json")
         .to_return(status: 200, body: json_body, headers: { "Content-Type" => "application/json" })
 
       client = described_class.new
@@ -38,7 +38,7 @@ RSpec.describe Wabi::RegistryClient do
     end
 
     it "caches the response to disk on first fetch" do
-      stub_request(:get, "https://wabi-docs.onrender.com/r/button.json")
+      stub_request(:get, "https://wabikit.dev/r/button.json")
         .to_return(status: 200, body: json_body)
 
       client = described_class.new
@@ -55,7 +55,7 @@ RSpec.describe Wabi::RegistryClient do
       # Encoding::UndefinedConversionError and parsed content stays binary.
       binary_body = '{"name":"card","files":[{"path":"card.rb","content":"# an em-dash — here"}]}'
                     .dup.force_encoding("ASCII-8BIT")
-      stub_request(:get, "https://wabi-docs.onrender.com/r/card.json")
+      stub_request(:get, "https://wabikit.dev/r/card.json")
         .to_return(status: 200, body: binary_body)
 
       client = described_class.new
@@ -67,7 +67,7 @@ RSpec.describe Wabi::RegistryClient do
     end
 
     it "returns cached value on second fetch without hitting network" do
-      stub_request(:get, "https://wabi-docs.onrender.com/r/button.json")
+      stub_request(:get, "https://wabikit.dev/r/button.json")
         .to_return(status: 200, body: json_body)
 
       client = described_class.new
@@ -76,11 +76,11 @@ RSpec.describe Wabi::RegistryClient do
       WebMock.reset_executed_requests!
       result = client.fetch("button")
       expect(result["name"]).to eq("button")
-      expect(WebMock).not_to have_requested(:get, "https://wabi-docs.onrender.com/r/button.json")
+      expect(WebMock).not_to have_requested(:get, "https://wabikit.dev/r/button.json")
     end
 
     it "raises Wabi::Error on non-200 response" do
-      stub_request(:get, "https://wabi-docs.onrender.com/r/nonexistent.json")
+      stub_request(:get, "https://wabikit.dev/r/nonexistent.json")
         .to_return(status: 404, body: "Not Found")
 
       client = described_class.new
@@ -149,10 +149,10 @@ RSpec.describe Wabi::RegistryClient do
     end
 
     it "still uses cache for production https:// URLs" do
-      stub_request(:get, "https://wabi-docs.onrender.com/r/button.json")
+      stub_request(:get, "https://wabikit.dev/r/button.json")
         .to_return(status: 200, body: '{"name":"button","version":"0.1.0"}')
 
-      client = described_class.new  # default base_url = "https://wabi-docs.onrender.com/r"
+      client = described_class.new  # default base_url = "https://wabikit.dev/r"
       client.fetch("button")
 
       expect(File.exist?(File.join(client.cache_dir, "button.json"))).to be true

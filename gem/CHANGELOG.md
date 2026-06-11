@@ -2,6 +2,11 @@
 
 All notable changes to Wabi land here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.1 - 2026-06-11
+
+### Changed
+- **Custom domain live: docs + registry now at https://wabikit.dev.** The default registry URL used by `wabi:install`/`wabi:add` moved from the Render hostname to `https://wabikit.dev/r`, and the gem homepage + docs links point there. Apps that already have the old URL in `config/wabi.lock.json` keep working unchanged; to switch, run `bin/rails g wabi:registry https://wabikit.dev/r`.
+
 ## 1.0.0 - 2026-06-11
 
 First stable release. The public API is now frozen under [Semantic Versioning](https://semver.org/) — no more breaking changes without a major bump.

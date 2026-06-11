@@ -8,7 +8,7 @@ require_relative "version"
 
 module Wabi
   class RegistryClient
-    DEFAULT_BASE_URL = "https://wabi-docs.onrender.com/r"
+    DEFAULT_BASE_URL = "https://wabikit.dev/r"
     DEFAULT_TTL = 24 * 60 * 60
 
     attr_reader :base_url

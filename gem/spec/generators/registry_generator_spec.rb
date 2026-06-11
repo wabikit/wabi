@@ -10,7 +10,7 @@ RSpec.describe Wabi::Generators::RegistryGenerator do
     FileUtils.rm_rf(destination)
     FileUtils.mkdir_p(File.join(destination, "config"))
     File.write(File.join(destination, "config/wabi.lock.json"), JSON.generate({
-      "registry"   => "https://wabi-docs.onrender.com/r",
+      "registry"   => "https://wabikit.dev/r",
       "components" => {}
     }))
   end
