@@ -28,9 +28,13 @@ services:
       # so search is always up to date without anyone remembering to regenerate +
       # commit it. The rake task runs `pnpm dlx pagefind`, so make pnpm available
       # first (Render's Ruby runtime ships Node but not pnpm). Best-effort: if it
-      # fails (pnpm/pagefind unavailable), fall back to the committed
-      # docs/public/pagefind/ so the deploy still ships.
-      corepack enable pnpm 2>/dev/null || npm install -g pnpm@10
+      # fails, fall back to the committed docs/public/pagefind/ so the deploy ships.
+      #
+      # Render's build image has a read-only /usr, so a global pnpm install
+      # (corepack symlink into /usr/bin, or npm -g into /usr/lib/node_modules)
+      # fails with EROFS. Guard the whole step with `|| true` so a read-only FS
+      # can never fail the deploy — the committed index is the fallback.
+      ( corepack enable pnpm 2>/dev/null || npm install -g pnpm@10 ) || true
       bin/rails wabi:docs:index || echo "WARN: pagefind reindex failed — serving the committed index"
     startCommand: bin/rails server -p $PORT -b 0.0.0.0
     autoDeploy: true
