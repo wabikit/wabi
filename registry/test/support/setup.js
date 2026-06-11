@@ -112,4 +112,18 @@ if (!Element.prototype.__wabiRectsPatched) {
 
 // Global teardown: stop any Stimulus Applications a test started, so controllers
 // never leak across test files.
-afterEach(() => stopAll())
+//
+// Before stopping, flush pending rAFs. @zag-js/focus-trap defers trap activation
+// to a rAF and keeps a module-level stack of active traps shared across the whole
+// run. If a modal test ends with an activation still queued, stopAll() clears the
+// DOM before that trap deactivates, leaving a half-activated trap on the shared
+// stack. The NEXT test's trap deactivation then unpauses that stale trap, whose
+// containers are gone, and getInitialFocusNode throws "needs at least one
+// focusable element" — an async unhandled error that fails the whole CI run
+// (jsdom only; real browsers deactivate promptly while the DOM is still present).
+// Letting the rAF run first means every trap is fully on its stack and gets
+// cleanly deactivated + popped (DOM still connected) when its app stops.
+afterEach(async () => {
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+  stopAll()
+})
